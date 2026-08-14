@@ -1,27 +1,27 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Code on Hoàng Dương</title><link>https://tech.nguuyen.io.vn/tags/code/</link><description>Recent content in Code on Hoàng Dương</description><generator>Hugo -- gohugo.io</generator><language>vi</language><lastBuildDate>Fri, 21 Feb 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/code/index.xml" rel="self" type="application/rss+xml"/><item><title>Chọn ngôn ngữ lập trình</title><link>https://tech.nguuyen.io.vn/posts/devops/devops-step-one/</link><pubDate>Fri, 21 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/devops/devops-step-one/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-one.webp" alt="Featured image of post Chọn ngôn ngữ lập trình" /&gt;&lt;h2 id="tại-sao-cần-chọn-ngôn-ngữ-lập-trình"&gt;Tại sao cần chọn ngôn ngữ lập trình?
-&lt;/h2&gt;&lt;p&gt;Trong DevOps, bạn sẽ cần sử dụng ngôn ngữ lập trình để:&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Code on Hoang Duong</title><link>https://tech.nguuyen.io.vn/tags/code/</link><description>Recent content in Code on Hoang Duong</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Thu, 05 Feb 2026 10:29:10 +0700</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/code/index.xml" rel="self" type="application/rss+xml"/><item><title>Choosing a Programming Language</title><link>https://tech.nguuyen.io.vn/posts/devops/devops-step-one/</link><pubDate>Fri, 21 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/devops/devops-step-one/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-one.webp" alt="Featured image of post Choosing a Programming Language" /&gt;&lt;h2 id="why-do-you-need-to-choose-a-programming-language"&gt;Why do you need to choose a programming language?
+&lt;/h2&gt;&lt;p&gt;In DevOps, you will need to use programming languages to:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;✅ Viết script tự động hóa.&lt;/li&gt;
-&lt;li&gt;✅ Quản lý server và cloud.&lt;/li&gt;
-&lt;li&gt;✅ Tạo tool hỗ trợ CI/CD.&lt;/li&gt;
-&lt;li&gt;✅ Xây dựng và triển khai hạ tầng dưới dạng code (Infrastructure as Code - IaC).&lt;/li&gt;
+&lt;li&gt;✅ Write automation scripts.&lt;/li&gt;
+&lt;li&gt;✅ Manage servers and cloud.&lt;/li&gt;
+&lt;li&gt;✅ Create tools to support CI/CD.&lt;/li&gt;
+&lt;li&gt;✅ Build and deploy Infrastructure as Code (IaC).&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Việc chọn ngôn ngữ phù hợp giúp bạn làm việc hiệu quả hơn với hệ thống, tự động hóa nhiều quy trình và cải thiện tốc độ phát triển phần mềm.&lt;/p&gt;
-&lt;h2 id="ngôn-ngữ-phù-hợp-cho-devops"&gt;Ngôn ngữ phù hợp cho DevOps
-&lt;/h2&gt;&lt;h3 id="python-khuyến-nghị-chính"&gt;Python (Khuyến nghị chính)
-&lt;/h3&gt;&lt;h4 id="-lý-do-chọn-python"&gt;** Lý do chọn Python:**
+&lt;p&gt;Choosing the right language helps you work more efficiently with systems, automate many processes, and improve software development speed.&lt;/p&gt;
+&lt;h2 id="suitable-languages-for-devops"&gt;Suitable languages for DevOps
+&lt;/h2&gt;&lt;h3 id="python-main-recommendation"&gt;Python (Main recommendation)
+&lt;/h3&gt;&lt;h4 id="-reasons-to-choose-python"&gt;** Reasons to choose Python:**
 &lt;/h4&gt;&lt;ul&gt;
-&lt;li&gt;Cú pháp dễ đọc, dễ học.&lt;/li&gt;
-&lt;li&gt;Thư viện phong phú hỗ trợ tự động hóa như &lt;code&gt;fabric&lt;/code&gt;, &lt;code&gt;paramiko&lt;/code&gt;, &lt;code&gt;boto3&lt;/code&gt; (AWS SDK), &lt;code&gt;pyinfra&lt;/code&gt;.&lt;/li&gt;
-&lt;li&gt;Hỗ trợ mạnh mẽ trong quản lý Cloud (AWS, GCP, Azure).&lt;/li&gt;
+&lt;li&gt;Easy-to-read syntax, easy to learn.&lt;/li&gt;
+&lt;li&gt;Rich libraries supporting automation like &lt;code&gt;fabric&lt;/code&gt;, &lt;code&gt;paramiko&lt;/code&gt;, &lt;code&gt;boto3&lt;/code&gt; (AWS SDK), &lt;code&gt;pyinfra&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Strong support in Cloud management (AWS, GCP, Azure).&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id="-ứng-dụng-thực-tế"&gt;** Ứng dụng thực tế:**
+&lt;h4 id="-practical-applications"&gt;** Practical applications:**
 &lt;/h4&gt;&lt;ul&gt;
-&lt;li&gt;Viết script deploy code tự động.&lt;/li&gt;
-&lt;li&gt;Tạo bot quản lý server.&lt;/li&gt;
-&lt;li&gt;Xây dựng API quản lý hệ thống.&lt;/li&gt;
+&lt;li&gt;Write automated code deployment scripts.&lt;/li&gt;
+&lt;li&gt;Create server management bots.&lt;/li&gt;
+&lt;li&gt;Build system management APIs.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id="-ví-dụ-script-ssh-tự-động-deploy-với-paramiko"&gt;** Ví dụ: Script SSH tự động deploy với Paramiko**
+&lt;h4 id="-example-automated-ssh-deployment-script-with-paramiko"&gt;** Example: Automated SSH deployment script with Paramiko**
 &lt;/h4&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -51,20 +51,20 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
-&lt;h3 id="bash-cần-biết-cơ-bản"&gt;Bash (Cần biết cơ bản)
-&lt;/h3&gt;&lt;h4 id="-lý-do-chọn-bash"&gt;** Lý do chọn Bash:**
+&lt;h3 id="bash-need-to-know-basics"&gt;Bash (Need to know basics)
+&lt;/h3&gt;&lt;h4 id="-reasons-to-choose-bash"&gt;** Reasons to choose Bash:**
 &lt;/h4&gt;&lt;ul&gt;
-&lt;li&gt;Là shell script phổ biến nhất trên Linux.&lt;/li&gt;
-&lt;li&gt;Giúp bạn thao tác nhanh với hệ thống.&lt;/li&gt;
-&lt;li&gt;Tối ưu cho quản lý server và tự động hóa task nhỏ.&lt;/li&gt;
+&lt;li&gt;The most popular shell script on Linux.&lt;/li&gt;
+&lt;li&gt;Helps you work quickly with the system.&lt;/li&gt;
+&lt;li&gt;Optimized for server management and small task automation.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id="-ứng-dụng-thực-tế-1"&gt;** Ứng dụng thực tế:**
+&lt;h4 id="-practical-applications-1"&gt;** Practical applications:**
 &lt;/h4&gt;&lt;ul&gt;
-&lt;li&gt;Viết script tự động update server.&lt;/li&gt;
-&lt;li&gt;Tạo cron job chạy định kỳ.&lt;/li&gt;
-&lt;li&gt;Quản lý user và permission trên Linux.&lt;/li&gt;
+&lt;li&gt;Write automated server update scripts.&lt;/li&gt;
+&lt;li&gt;Create periodic cron jobs.&lt;/li&gt;
+&lt;li&gt;Manage users and permissions on Linux.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id="-ví-dụ-script-tự-động-update-server"&gt;** Ví dụ: Script tự động update server**
+&lt;h4 id="-example-automated-server-update-script"&gt;** Example: Automated server update script**
 &lt;/h4&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -76,19 +76,19 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
-&lt;h3 id="go-golang-nếu-làm-với-kubernetes"&gt;Go (Golang) (Nếu làm với Kubernetes)
-&lt;/h3&gt;&lt;h4 id="-lý-do-chọn-go"&gt;** Lý do chọn Go:**
+&lt;h3 id="go-golang-if-working-with-kubernetes"&gt;Go (Golang) (If working with Kubernetes)
+&lt;/h3&gt;&lt;h4 id="-reasons-to-choose-go"&gt;** Reasons to choose Go:**
 &lt;/h4&gt;&lt;ul&gt;
-&lt;li&gt;Hiệu suất cao, dễ dàng biên dịch thành binary nhỏ gọn.&lt;/li&gt;
-&lt;li&gt;Kubernetes và nhiều công cụ DevOps như Terraform được viết bằng Go.&lt;/li&gt;
+&lt;li&gt;High performance, easy to compile into compact binaries.&lt;/li&gt;
+&lt;li&gt;Kubernetes and many DevOps tools like Terraform are written in Go.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id="-ứng-dụng-thực-tế-2"&gt;** Ứng dụng thực tế:**
+&lt;h4 id="-practical-applications-2"&gt;** Practical applications:**
 &lt;/h4&gt;&lt;ul&gt;
-&lt;li&gt;Viết tool quản lý container.&lt;/li&gt;
-&lt;li&gt;Tạo plugin cho Kubernetes.&lt;/li&gt;
-&lt;li&gt;Xây dựng các công cụ DevOps riêng.&lt;/li&gt;
+&lt;li&gt;Write container management tools.&lt;/li&gt;
+&lt;li&gt;Create plugins for Kubernetes.&lt;/li&gt;
+&lt;li&gt;Build custom DevOps tools.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id="-ví-dụ-in-ra-thông-tin-hệ-thống-bằng-go"&gt;** Ví dụ: In ra thông tin hệ thống bằng Go**
+&lt;h4 id="-example-display-system-information-with-go"&gt;** Example: Display system information with Go**
 &lt;/h4&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -116,19 +116,19 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
-&lt;h3 id="groovy-nếu-làm-việc-với-jenkins"&gt;Groovy (Nếu làm việc với Jenkins)
-&lt;/h3&gt;&lt;h4 id="-lý-do-chọn-groovy"&gt;** Lý do chọn Groovy:**
+&lt;h3 id="groovy-if-working-with-jenkins"&gt;Groovy (If working with Jenkins)
+&lt;/h3&gt;&lt;h4 id="-reasons-to-choose-groovy"&gt;** Reasons to choose Groovy:**
 &lt;/h4&gt;&lt;ul&gt;
-&lt;li&gt;Là ngôn ngữ chính để viết pipeline trong Jenkins.&lt;/li&gt;
-&lt;li&gt;Cú pháp linh hoạt, dễ dàng mở rộng và tích hợp với Java.&lt;/li&gt;
+&lt;li&gt;The main language for writing pipelines in Jenkins.&lt;/li&gt;
+&lt;li&gt;Flexible syntax, easy to extend and integrate with Java.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id="-ứng-dụng-thực-tế-3"&gt;** Ứng dụng thực tế:**
+&lt;h4 id="-practical-applications-3"&gt;** Practical applications:**
 &lt;/h4&gt;&lt;ul&gt;
-&lt;li&gt;Viết pipeline CI/CD cho Jenkins.&lt;/li&gt;
-&lt;li&gt;Tạo script quản lý hệ thống.&lt;/li&gt;
-&lt;li&gt;Tự động hóa các bước build, test, deploy.&lt;/li&gt;
+&lt;li&gt;Write CI/CD pipelines for Jenkins.&lt;/li&gt;
+&lt;li&gt;Create system management scripts.&lt;/li&gt;
+&lt;li&gt;Automate build, test, deploy steps.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h4 id="-ví-dụ-pipeline-cơ-bản-trong-jenkinsfile"&gt;** Ví dụ: Pipeline cơ bản trong Jenkinsfile**
+&lt;h4 id="-example-basic-pipeline-in-jenkinsfile"&gt;** Example: Basic pipeline in Jenkinsfile**
 &lt;/h4&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -182,10 +182,10 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
-&lt;h2 id="kết-luận"&gt;Kết luận
+&lt;h2 id="conclusion"&gt;Conclusion
 &lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;✅ &lt;strong&gt;Python + Bash&lt;/strong&gt; là lựa chọn tốt nhất để bắt đầu DevOps.&lt;/li&gt;
-&lt;li&gt;✅ Nếu làm việc với &lt;strong&gt;Kubernetes&lt;/strong&gt;, học thêm &lt;strong&gt;Go&lt;/strong&gt;.&lt;/li&gt;
-&lt;li&gt;✅ Nếu làm việc với &lt;strong&gt;Jenkins&lt;/strong&gt;, học &lt;strong&gt;Groovy&lt;/strong&gt; để viết pipeline.&lt;/li&gt;
+&lt;li&gt;✅ &lt;strong&gt;Python + Bash&lt;/strong&gt; is the best choice to start with DevOps.&lt;/li&gt;
+&lt;li&gt;✅ If working with &lt;strong&gt;Kubernetes&lt;/strong&gt;, learn &lt;strong&gt;Go&lt;/strong&gt; as well.&lt;/li&gt;
+&lt;li&gt;✅ If working with &lt;strong&gt;Jenkins&lt;/strong&gt;, learn &lt;strong&gt;Groovy&lt;/strong&gt; to write pipelines.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;👉 Bước tiếp theo:&lt;/strong&gt; Học cơ bản về &lt;em&gt;&lt;strong&gt;Linux &amp;amp; hệ điều hành&lt;/strong&gt;&lt;/em&gt;.&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;&lt;strong&gt;👉 Next step:&lt;/strong&gt; Learn the basics of &lt;em&gt;&lt;strong&gt;Linux &amp;amp; operating systems&lt;/strong&gt;&lt;/em&gt;.&lt;/p&gt;</description></item></channel></rss>

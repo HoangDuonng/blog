@@ -1,0 +1,361 @@
+<!doctype html><html lang=vi dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="Hướng dẫn quản lý biến trong Bash: biến cục bộ, export, env, set/unset, file .env, getopts, IFS và các biến đặc biệt thường dùng khi viết script DevOps."><title>Quản lý biến và môi trường trong Bash cho DevOps</title><link rel=canonical href=https://tech.nguuyen.io.vn/vi/posts/bash/bash-step-seven/><link rel=stylesheet href=/scss/style.min.fbf3f87cee1a2d6f23f6655f0af971c652e0e8528062e5eac89afc11052fa1dc.css><meta property='og:title' content="Quản lý biến và môi trường trong Bash cho DevOps"><meta property='og:description' content="Hướng dẫn quản lý biến trong Bash: biến cục bộ, export, env, set/unset, file .env, getopts, IFS và các biến đặc biệt thường dùng khi viết script DevOps."><meta property='og:url' content='https://tech.nguuyen.io.vn/vi/posts/bash/bash-step-seven/'><meta property='og:site_name' content='Hoàng Dương'><meta property='og:type' content='article'><meta property='article:section' content='Posts'><meta property='article:tag' content='bash'><meta property='article:tag' content='shell-script'><meta property='article:tag' content='devops'><meta property='article:tag' content='automation'><meta property='article:tag' content='linux'><meta property='article:tag' content='environment-variable'><meta property='article:published_time' content='2026-06-24T00:00:00+00:00'><meta property='article:modified_time' content='2026-06-24T00:00:00+00:00'><meta property='og:image' content='https://tech.nguuyen.io.vn/images/bash/bash-step-seven.jpg'><meta name=twitter:title content="Quản lý biến và môi trường trong Bash cho DevOps"><meta name=twitter:description content="Hướng dẫn quản lý biến trong Bash: biến cục bộ, export, env, set/unset, file .env, getopts, IFS và các biến đặc biệt thường dùng khi viết script DevOps."><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://tech.nguuyen.io.vn/images/bash/bash-step-seven.jpg'><link rel=icon type=image/x-icon href=/favicon.ico><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel=stylesheet></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><header class="amp-header is-article-header"><div class=amp-header-inner><div class=amp-brand><a href=/vi/ class=amp-logo-link><span class=amp-logo-text>Hoang Duong</span></a></div><div class=amp-header-divider aria-hidden=true></div><div class=amp-header-rail><a href=/vi/ class="header-rail-crumb header-rail-home">BÀI VIẾT
+</a><span class=header-rail-sep>//</span>
+<a href=/vi/categories/devops/ class="header-rail-crumb header-rail-cat">[DEVOPS]
+</a><span class=header-rail-title>Quản lý biến và môi trường trong Bash cho DevOps</span></div><div class=amp-header-spacer></div><nav class=amp-nav-links><button id=amp-menu-toggle class=amp-menu-trigger-fixed aria-label="Toggle Menu" title=Menu type=button>
+<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" class="chevron-icon"><polyline points="6 9 12 15 18 9"/></svg></button></nav></div></header><div id=amp-menu-dropdown class=amp-menu-popover aria-hidden=true><div class=amp-popover-inner><div class=amp-popover-nav><span class=popover-section-label>ĐIỀU HƯỚNG</span>
+<a href=/vi/ class=popover-item>Trang chủ</a>
+<a href=/vi/about/ class=popover-item>Về tôi</a>
+<a href=/vi/archives/ class=popover-item>Lưu trữ</a>
+<a href=/vi/links/ class=popover-item>Liên kết</a>
+<a href=/vi/categories/ class=popover-item>Chuyên mục</a></div><div class=amp-popover-footer><a href=/posts/bash/bash-step-seven/ class="popover-btn lang-btn" title=English><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>EN</span>
+</a><button class="popover-btn theme-btn dark-mode-toggle" data-toggle-theme title="Chế độ tối" type=button>
+<svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+</button>
+<button type=button class="popover-btn search-btn search-trigger-btn" data-open-search aria-label="Tìm kiếm (Cmd+K)" title="Tìm kiếm (Cmd+K)">
+<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<span class=search-kbd-badge>⌘K</span></button></div></div></div><div id=amp-menu-backdrop class=amp-menu-backdrop aria-hidden=true></div><div class=amp-site-wrapper><main class=amp-main><div class=amp-article-layout><div class=amp-hero-banner-wrap><div class=amp-hero-banner><img src=/images/bash/bash-step-seven.jpg alt="Quản lý biến và môi trường trong Bash cho DevOps" class=amp-hero-banner-img></div></div><div class=amp-article-container><div class=amp-article-grid><div class=amp-article-main><article class=amp-article-body><header class=amp-article-header><div class=amp-article-meta-top><time class=meta-date datetime=2026-06-24T00:00:00Z>JUNE 24, 2026
+</time><span class=meta-dot>&#183;</span>
+<span class=meta-reading-time>9 PHÚT ĐỌC</span>
+<span class=meta-dot>&#183;</span>
+<span class=meta-author>HOÀNG DƯƠNG</span>
+<span class=meta-dot>&#183;</span>
+<a href=/posts/bash/bash-step-seven/ class=meta-lang-switch><svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:3px"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>EN</span></a></div><h1 class=amp-article-title>Quản lý biến và môi trường trong Bash cho DevOps</h1><p class=amp-article-description>Hướng dẫn quản lý biến trong Bash: biến cục bộ, export, env, set/unset, file .env, getopts, IFS và các biến đặc biệt thường dùng khi viết script DevOps.</p><div class=amp-article-categories><a href=/vi/categories/devops/ class=amp-cat-pill>DEVOPS
+</a><a href=/vi/categories/bash/ class=amp-cat-pill>BASH</a></div></header><section class="article-content amp-prose"><h2 id=vì-sao-biến-môi-trường-quan-trọng-trong-bash>Vì sao biến môi trường quan trọng trong Bash</h2><p>Ở <a class=link href=/posts/bash/bash-step-six/>bài trước</a> chúng ta đã tách logic thành function để script dễ tái sử dụng hơn. Khi script bắt đầu chạy trong nhiều môi trường — local, staging, production, CI/CD runner — vấn đề tiếp theo là: <strong>cấu hình lấy từ đâu và truyền vào như thế nào?</strong></p><p>Biến trong Bash giúp lưu giá trị tạm thời trong script. Biến môi trường giúp truyền cấu hình cho process con như <code>docker</code>, <code>kubectl</code>, <code>aws</code>, <code>curl</code> hoặc ứng dụng mà script khởi chạy. Nếu quản lý biến không rõ ràng, script rất dễ deploy nhầm môi trường, lộ secret, hoặc chạy sai vì thiếu config.</p><hr><h2 id=biến-cục-bộ-và-cách-gán-giá-trị>Biến cục bộ và cách gán giá trị</h2><p>Cú pháp gán biến trong Bash không có khoảng trắng quanh dấu <code>=</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nv>APP_NAME</span><span class=o>=</span><span class=s2>&#34;blog-api&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>ENVIRONMENT</span><span class=o>=</span><span class=s2>&#34;staging&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>RETRY_COUNT</span><span class=o>=</span><span class=m>3</span>
+</span></span></code></pre></td></tr></table></div></div><p>Khi đọc biến, dùng <code>$VAR</code> hoặc <code>${VAR}</code>. Trong script thực tế, <code>${VAR}</code> thường rõ ràng hơn khi nối chuỗi:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Deploying </span><span class=si>${</span><span class=nv>APP_NAME</span><span class=si>}</span><span class=s2> to </span><span class=si>${</span><span class=nv>ENVIRONMENT</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>LOG_FILE</span><span class=o>=</span><span class=s2>&#34;/var/log/</span><span class=si>${</span><span class=nv>APP_NAME</span><span class=si>}</span><span class=s2>.log&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>Một lỗi rất phổ biến là thêm khoảng trắng:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nv>APP_NAME</span> <span class=o>=</span> <span class=s2>&#34;blog-api&#34;</span>   <span class=c1># sai: Bash hiểu APP_NAME là command</span>
+</span></span></code></pre></td></tr></table></div></div><p>Khi giá trị có khoảng trắng hoặc ký tự đặc biệt, luôn quote biến:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nv>BACKUP_DIR</span><span class=o>=</span><span class=s2>&#34;/opt/backups/blog api&#34;</span>
+</span></span><span class=line><span class=cl>mkdir -p <span class=s2>&#34;</span><span class=si>${</span><span class=nv>BACKUP_DIR</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>Không quote biến có thể làm path bị tách thành nhiều argument, gây lỗi khó đoán trong script vận hành.</p><hr><h2 id=export-khi-nào-biến-trở-thành-environment-variable><code>export</code>: khi nào biến trở thành environment variable</h2><p>Biến Bash bình thường chỉ tồn tại trong shell hiện tại. Process con không tự thấy biến đó:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nv>APP_ENV</span><span class=o>=</span><span class=s2>&#34;staging&#34;</span>
+</span></span><span class=line><span class=cl>bash -c <span class=s1>&#39;echo &#34;APP_ENV=$APP_ENV&#34;&#39;</span>   <span class=c1># rỗng</span>
+</span></span></code></pre></td></tr></table></div></div><p>Muốn process con đọc được, dùng <code>export</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nb>export</span> <span class=nv>APP_ENV</span><span class=o>=</span><span class=s2>&#34;staging&#34;</span>
+</span></span><span class=line><span class=cl>bash -c <span class=s1>&#39;echo &#34;APP_ENV=$APP_ENV&#34;&#39;</span>   <span class=c1># APP_ENV=staging</span>
+</span></span></code></pre></td></tr></table></div></div><p>Trong DevOps, <code>export</code> thường dùng khi gọi CLI hoặc chạy ứng dụng:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nb>export</span> <span class=nv>AWS_PROFILE</span><span class=o>=</span><span class=s2>&#34;staging&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>KUBECONFIG</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>HOME</span><span class=si>}</span><span class=s2>/.kube/staging-config&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>kubectl get pods
+</span></span></code></pre></td></tr></table></div></div><p>Bạn cũng có thể truyền biến chỉ cho một command:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nv>APP_ENV</span><span class=o>=</span><span class=s2>&#34;staging&#34;</span> ./run-migration.sh
+</span></span></code></pre></td></tr></table></div></div><p>Cách này gọn và an toàn hơn nếu biến chỉ cần tồn tại cho đúng một lệnh.</p><hr><h2 id=xem-đặt-và-xóa-biến-với-env-set-unset>Xem, đặt và xóa biến với <code>env</code>, <code>set</code>, <code>unset</code></h2><p>Một vài command hữu ích khi debug môi trường chạy script:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>env                  <span class=c1># in environment variables</span>
+</span></span><span class=line><span class=cl>printenv APP_ENV     <span class=c1># in một biến môi trường cụ thể</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span>                  <span class=c1># in cả shell variables, functions và environment variables</span>
+</span></span><span class=line><span class=cl><span class=nb>unset</span> APP_ENV        <span class=c1># xóa biến</span>
+</span></span></code></pre></td></tr></table></div></div><p><code>env</code> phù hợp để kiểm tra process con sẽ thấy gì. <code>set</code> chi tiết hơn, nhưng output dài và có thể chứa dữ liệu nhạy cảm, nên hạn chế paste nguyên output vào ticket hoặc log.</p><p>Ví dụ kiểm tra biến bắt buộc:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>require_env<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=nb>local</span> <span class=nv>name</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=o>[[</span> -z <span class=s2>&#34;</span><span class=si>${</span><span class=p>!name</span><span class=k>:-</span><span class=si>}</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;ERROR: missing required env </span><span class=si>${</span><span class=nv>name</span><span class=si>}</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>  <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>require_env <span class=s2>&#34;APP_ENV&#34;</span>
+</span></span><span class=line><span class=cl>require_env <span class=s2>&#34;DATABASE_URL&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>Cú pháp <code>${!name}</code> là indirect expansion: nếu <code>name="APP_ENV"</code>, Bash sẽ đọc giá trị của biến <code>APP_ENV</code>.</p><hr><h2 id=đọc-cấu-hình-từ-file-env>Đọc cấu hình từ file <code>.env</code></h2><p>File <code>.env</code> giúp tách config khỏi code:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nv>APP_ENV</span><span class=o>=</span>staging
+</span></span><span class=line><span class=cl><span class=nv>APP_PORT</span><span class=o>=</span><span class=m>8080</span>
+</span></span><span class=line><span class=cl><span class=nv>BACKUP_DIR</span><span class=o>=</span>/opt/backups/blog
+</span></span></code></pre></td></tr></table></div></div><p>Cách đơn giản để load file:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nb>set</span> -a
+</span></span><span class=line><span class=cl><span class=nb>source</span> .env
+</span></span><span class=line><span class=cl><span class=nb>set</span> +a
+</span></span></code></pre></td></tr></table></div></div><p><code>set -a</code> làm các biến được gán sau đó tự động export, nên process con có thể đọc được.</p><p>Tuy nhiên, <code>source .env</code> sẽ thực thi nội dung file như Bash code. Vì vậy chỉ dùng với file bạn kiểm soát, không source file upload từ user hoặc nguồn không tin cậy.</p><p>Một pattern an toàn hơn cho script deploy:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nv>ENV_FILE</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=p>.env</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[[</span> ! -f <span class=s2>&#34;</span><span class=si>${</span><span class=nv>ENV_FILE</span><span class=si>}</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;ERROR: env file not found: </span><span class=si>${</span><span class=nv>ENV_FILE</span><span class=si>}</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>  <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -a
+</span></span><span class=line><span class=cl><span class=nb>source</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>ENV_FILE</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> +a
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>: <span class=s2>&#34;</span><span class=si>${</span><span class=nv>APP_ENV</span><span class=p>:?APP_ENV is required</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>: <span class=s2>&#34;</span><span class=si>${</span><span class=nv>APP_PORT</span><span class=p>:?APP_PORT is required</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>Dòng <code>: "${VAR:?message}"</code> khiến script dừng ngay nếu biến chưa được set hoặc rỗng. Đây là cách fail-fast rất hữu ích trước khi chạy deploy.</p><hr><h2 id=nhận-tham-số-cli-bằng-getopts>Nhận tham số CLI bằng <code>getopts</code></h2><p>Không phải cấu hình nào cũng nên nằm trong <code>.env</code>. Những giá trị thay đổi theo lần chạy, như môi trường đích hoặc chế độ dry-run, nên nhận qua flag:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>ENVIRONMENT</span><span class=o>=</span><span class=s2>&#34;staging&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>DRY_RUN</span><span class=o>=</span><span class=s2>&#34;false&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>while</span> <span class=nb>getopts</span> <span class=s2>&#34;:e:n&#34;</span> opt<span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>  <span class=k>case</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>opt</span><span class=si>}</span><span class=s2>&#34;</span> in
+</span></span><span class=line><span class=cl>    e<span class=o>)</span>
+</span></span><span class=line><span class=cl>      <span class=nv>ENVIRONMENT</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>OPTARG</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>      <span class=p>;;</span>
+</span></span><span class=line><span class=cl>    n<span class=o>)</span>
+</span></span><span class=line><span class=cl>      <span class=nv>DRY_RUN</span><span class=o>=</span><span class=s2>&#34;true&#34;</span>
+</span></span><span class=line><span class=cl>      <span class=p>;;</span>
+</span></span><span class=line><span class=cl>    ?<span class=o>)</span>
+</span></span><span class=line><span class=cl>      <span class=nb>echo</span> <span class=s2>&#34;Usage: </span><span class=nv>$0</span><span class=s2> [-e environment] [-n]&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>      <span class=nb>exit</span> <span class=m>2</span>
+</span></span><span class=line><span class=cl>      <span class=p>;;</span>
+</span></span><span class=line><span class=cl>  <span class=k>esac</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;environment=</span><span class=si>${</span><span class=nv>ENVIRONMENT</span><span class=si>}</span><span class=s2> dry_run=</span><span class=si>${</span><span class=nv>DRY_RUN</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>Chạy thử:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>./deploy.sh -e production -n
+</span></span></code></pre></td></tr></table></div></div><p><code>getopts</code> phù hợp cho option ngắn như <code>-e production</code>, <code>-n</code>. Nếu cần long option như <code>--environment</code>, bạn có thể tự parse bằng <code>case</code>, nhưng nên giữ format đơn giản để script dễ bảo trì.</p><hr><h2 id=ifs-kiểm-soát-cách-bash-tách-chuỗi><code>$IFS</code>: kiểm soát cách Bash tách chuỗi</h2><p><code>IFS</code> là Internal Field Separator — tập ký tự Bash dùng để tách word khi xử lý một số expansion và lệnh <code>read</code>. Mặc định gồm space, tab và newline.</p><p>Khi đọc file từng dòng, dùng pattern này để giữ nguyên khoảng trắng đầu/cuối và không xử lý backslash đặc biệt:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=k>while</span> <span class=nv>IFS</span><span class=o>=</span> <span class=nb>read</span> -r server<span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>  <span class=o>[[</span> -z <span class=s2>&#34;</span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2>&#34;</span> <span class=o>||</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2>&#34;</span> <span class=o>==</span> <span class=se>\#</span>* <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=k>continue</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;Checking </span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>  ssh <span class=s2>&#34;deploy@</span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2>&#34;</span> <span class=s2>&#34;hostname &amp;&amp; uptime&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>done</span> &lt; servers.txt
+</span></span></code></pre></td></tr></table></div></div><p>Khi tách chuỗi CSV đơn giản:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nv>TARGETS</span><span class=o>=</span><span class=s2>&#34;web-01,web-02,web-03&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>IFS</span><span class=o>=</span><span class=s1>&#39;,&#39;</span> <span class=nb>read</span> -r -a servers <span class=o>&lt;&lt;&lt;</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>TARGETS</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> server in <span class=s2>&#34;</span><span class=si>${</span><span class=nv>servers</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;Deploy to </span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span></code></pre></td></tr></table></div></div><p>Tránh đổi <code>IFS</code> global nếu không cần. Nếu phải đổi, hãy giới hạn trong một dòng hoặc một scope nhỏ để không làm hỏng phần khác của script.</p><hr><h2 id=các-biến-đặc-biệt-thường-gặp>Các biến đặc biệt thường gặp</h2><p>Bash có nhiều biến đặc biệt rất hữu ích khi viết script vận hành:</p><div class=table-wrapper><table><thead><tr><th>Biến</th><th>Ý nghĩa</th></tr></thead><tbody><tr><td><code>$0</code></td><td>Tên script đang chạy</td></tr><tr><td><code>$1</code>, <code>$2</code></td><td>Tham số vị trí</td></tr><tr><td><code>$@</code></td><td>Toàn bộ tham số, nên dùng <code>"$@"</code></td></tr><tr><td><code>$#</code></td><td>Số lượng tham số</td></tr><tr><td><code>$?</code></td><td>Exit code của command vừa chạy</td></tr><tr><td><code>$$</code></td><td>PID của shell hiện tại</td></tr><tr><td><code>$!</code></td><td>PID của background process gần nhất</td></tr><tr><td><code>${BASH_SOURCE[0]}</code></td><td>Đường dẫn file script hiện tại trong Bash</td></tr></tbody></table></div><p>Ví dụ dùng <code>$!</code> và <code>wait</code> để theo dõi background job:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>./long-healthcheck.sh <span class=p>&amp;</span>
+</span></span><span class=line><span class=cl><span class=nv>healthcheck_pid</span><span class=o>=</span><span class=nv>$!</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Healthcheck PID: </span><span class=si>${</span><span class=nv>healthcheck_pid</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=nb>wait</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>healthcheck_pid</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;Healthcheck passed&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>else</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;Healthcheck failed&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>  <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span></code></pre></td></tr></table></div></div><p>Ví dụ lấy thư mục chứa script, không phụ thuộc bạn chạy script từ đâu:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nv>SCRIPT_DIR</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span><span class=nb>cd</span> <span class=s2>&#34;</span><span class=k>$(</span>dirname <span class=s2>&#34;</span><span class=si>${</span><span class=nv>BASH_SOURCE</span><span class=p>[0]</span><span class=si>}</span><span class=s2>&#34;</span><span class=k>)</span><span class=s2>&#34;</span> <span class=o>&amp;&amp;</span> <span class=nb>pwd</span><span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>source</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>SCRIPT_DIR</span><span class=si>}</span><span class=s2>/lib/log.sh&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>Pattern này rất hữu ích khi script cần load file config hoặc thư viện nằm cạnh nó.</p><hr><h2 id=ví-dụ-devops-script-deploy-đọc-env-nhận-flag-và-validate-biến>Ví dụ DevOps: script deploy đọc <code>.env</code>, nhận flag và validate biến</h2><p>Ví dụ dưới đây mô phỏng một script deploy nhỏ. Script nhận môi trường qua <code>-e</code>, hỗ trợ dry-run bằng <code>-n</code>, load file <code>.env.&lt;environment></code>, validate biến bắt buộc rồi chạy lệnh deploy.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>ENVIRONMENT</span><span class=o>=</span><span class=s2>&#34;staging&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>DRY_RUN</span><span class=o>=</span><span class=s2>&#34;false&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>usage<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;Usage: </span><span class=nv>$0</span><span class=s2> [-e staging|production] [-n]&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>while</span> <span class=nb>getopts</span> <span class=s2>&#34;:e:n&#34;</span> opt<span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>  <span class=k>case</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>opt</span><span class=si>}</span><span class=s2>&#34;</span> in
+</span></span><span class=line><span class=cl>    e<span class=o>)</span> <span class=nv>ENVIRONMENT</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>OPTARG</span><span class=si>}</span><span class=s2>&#34;</span> <span class=p>;;</span>
+</span></span><span class=line><span class=cl>    n<span class=o>)</span> <span class=nv>DRY_RUN</span><span class=o>=</span><span class=s2>&#34;true&#34;</span> <span class=p>;;</span>
+</span></span><span class=line><span class=cl>    ?<span class=o>)</span> usage<span class=p>;</span> <span class=nb>exit</span> <span class=m>2</span> <span class=p>;;</span>
+</span></span><span class=line><span class=cl>  <span class=k>esac</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>case</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>ENVIRONMENT</span><span class=si>}</span><span class=s2>&#34;</span> in
+</span></span><span class=line><span class=cl>  staging<span class=p>|</span>production<span class=o>)</span> <span class=p>;;</span>
+</span></span><span class=line><span class=cl>  *<span class=o>)</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;ERROR: unsupported environment: </span><span class=si>${</span><span class=nv>ENVIRONMENT</span><span class=si>}</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=nb>exit</span> <span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=p>;;</span>
+</span></span><span class=line><span class=cl><span class=k>esac</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>SCRIPT_DIR</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span><span class=nb>cd</span> <span class=s2>&#34;</span><span class=k>$(</span>dirname <span class=s2>&#34;</span><span class=si>${</span><span class=nv>BASH_SOURCE</span><span class=p>[0]</span><span class=si>}</span><span class=s2>&#34;</span><span class=k>)</span><span class=s2>&#34;</span> <span class=o>&amp;&amp;</span> <span class=nb>pwd</span><span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>ENV_FILE</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>SCRIPT_DIR</span><span class=si>}</span><span class=s2>/.env.</span><span class=si>${</span><span class=nv>ENVIRONMENT</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[[</span> ! -f <span class=s2>&#34;</span><span class=si>${</span><span class=nv>ENV_FILE</span><span class=si>}</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;ERROR: env file not found: </span><span class=si>${</span><span class=nv>ENV_FILE</span><span class=si>}</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>  <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -a
+</span></span><span class=line><span class=cl><span class=nb>source</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>ENV_FILE</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> +a
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>: <span class=s2>&#34;</span><span class=si>${</span><span class=nv>APP_NAME</span><span class=p>:?APP_NAME is required</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>: <span class=s2>&#34;</span><span class=si>${</span><span class=nv>IMAGE_TAG</span><span class=p>:?IMAGE_TAG is required</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>: <span class=s2>&#34;</span><span class=si>${</span><span class=nv>DEPLOY_HOST</span><span class=p>:?DEPLOY_HOST is required</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>cmd</span><span class=o>=(</span>ssh <span class=s2>&#34;deploy@</span><span class=si>${</span><span class=nv>DEPLOY_HOST</span><span class=si>}</span><span class=s2>&#34;</span> <span class=s2>&#34;docker service update --image </span><span class=si>${</span><span class=nv>APP_NAME</span><span class=si>}</span><span class=s2>:</span><span class=si>${</span><span class=nv>IMAGE_TAG</span><span class=si>}</span><span class=s2> </span><span class=si>${</span><span class=nv>APP_NAME</span><span class=si>}</span><span class=s2>&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>printf</span> <span class=s1>&#39;Environment: %s\n&#39;</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>ENVIRONMENT</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>printf</span> <span class=s1>&#39;Command: %q &#39;</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>cmd</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>printf</span> <span class=s1>&#39;\n&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[[</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>DRY_RUN</span><span class=si>}</span><span class=s2>&#34;</span> <span class=o>==</span> <span class=s2>&#34;true&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;Dry-run mode: command was not executed&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=nb>exit</span> <span class=m>0</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=s2>&#34;</span><span class=si>${</span><span class=nv>cmd</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>File <code>.env.staging</code> có thể như sau:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nv>APP_NAME</span><span class=o>=</span>blog-api
+</span></span><span class=line><span class=cl><span class=nv>IMAGE_TAG</span><span class=o>=</span>2026.06.24
+</span></span><span class=line><span class=cl><span class=nv>DEPLOY_HOST</span><span class=o>=</span>webserver-01
+</span></span></code></pre></td></tr></table></div></div><p>Điểm quan trọng trong ví dụ:</p><ul><li>Không hardcode host/image tag trong script.</li><li>Validate môi trường hợp lệ trước khi source file.</li><li>Dùng <code>set -a</code> để export config cho process con nếu cần.</li><li>Dùng dry-run để kiểm tra lệnh trước khi chạy thật.</li><li>Quote biến khi dựng path và argument.</li></ul><hr><h2 id=sai-sót-thường-gặp>Sai sót thường gặp</h2><ul><li><strong>Gán biến có khoảng trắng quanh <code>=</code>:</strong> <code>NAME = value</code> là sai trong Bash.</li><li><strong>Không quote biến:</strong> Path có khoảng trắng hoặc ký tự glob như <code>*</code> có thể làm script chạy sai.</li><li><strong>Export quá nhiều:</strong> Chỉ export biến mà process con cần đọc.</li><li><strong>Source <code>.env</code> không tin cậy:</strong> <code>.env</code> là Bash code khi dùng <code>source</code>, có thể thực thi lệnh.</li><li><strong>Đưa secret vào log:</strong> Tránh <code>set -x</code> quanh đoạn xử lý token/password.</li><li><strong>Dùng <code>$1</code> trực tiếp với <code>set -u</code>:</strong> Hãy dùng <code>${1:-}</code> hoặc validate trước.</li><li><strong>Đổi <code>IFS</code> global:</strong> Có thể làm hỏng loop hoặc parse argument ở đoạn sau.</li></ul><hr><h2 id=ghi-chú-triển-khai>Ghi chú triển khai</h2><ul><li><strong>Khi áp dụng vào dự án của bạn</strong>, hãy phân loại cấu hình:<ul><li>Giá trị cố định theo môi trường → <code>.env.staging</code>, <code>.env.production</code> hoặc config file riêng.</li><li>Giá trị thay đổi theo lần chạy → flag CLI qua <code>getopts</code>.</li><li>Secret → biến môi trường từ CI/CD secret store hoặc vault, không commit vào git.</li></ul></li><li><strong>Best practices:</strong><ul><li>Bật <code>set -u</code> để phát hiện biến chưa khai báo, nhưng dùng <code>${VAR:-}</code> khi biến optional.</li><li>Validate biến bắt buộc sớm bằng <code>: "${VAR:?message}"</code>.</li><li>Dùng <code>printenv VAR</code> để debug một biến thay vì in toàn bộ environment.</li><li>Prefix biến theo app, ví dụ <code>BLOG_APP_ENV</code>, để tránh trùng tên.</li><li>Không commit file <code>.env</code> chứa secret; chỉ commit <code>.env.example</code>.</li></ul></li><li><strong>Troubleshooting:</strong><ul><li>Process con không thấy biến? → Kiểm tra bạn đã <code>export</code> chưa.</li><li>Script chạy đúng local nhưng sai cron/CI? → Kiểm tra <code>PATH</code>, working directory và biến môi trường runner cung cấp.</li><li><code>.env</code> không load đúng? → Kiểm tra file có syntax Bash hợp lệ, không có khoảng trắng quanh <code>=</code>.</li></ul></li></ul><hr><h2 id=lời-kết>Lời kết</h2><p>Quản lý biến tốt giúp Bash script chạy ổn định hơn giữa nhiều môi trường. Hãy giữ code và config tách biệt, validate biến bắt buộc trước khi thao tác thật, quote biến khi dùng trong command, và chỉ export những gì process con cần.</p><p>Ở bài tiếp theo, chúng ta sẽ đi vào <strong>cron job với Bash</strong>: cú pháp lịch chạy, <code>crontab</code>, <code>@daily</code>, <code>@reboot</code>, log cron, vấn đề <code>PATH</code> và ví dụ backup/healthcheck tự động.</p><hr><h2 id=tài-liệu-tham-khảo>Tài liệu tham khảo</h2><ul><li><a class=link href=https://www.gnu.org/software/bash/manual/bash.html#Shell-Parameters target=_blank rel=noopener>GNU Bash Manual — Shell Parameters</a> — Tài liệu chính thức về positional parameters và special parameters.</li><li><a class=link href=https://www.gnu.org/software/bash/manual/bash.html#Bourne-Shell-Builtins target=_blank rel=noopener>GNU Bash Manual — Bourne Shell Builtins</a> — Tham khảo <code>export</code>, <code>set</code>, <code>unset</code>, <code>getopts</code>, <code>source</code>.</li><li><a class=link href=https://www.gnu.org/software/bash/manual/bash.html#Word-Splitting target=_blank rel=noopener>GNU Bash Manual — Word Splitting</a> — Giải thích vai trò của <code>IFS</code> trong word splitting.</li><li><a class=link href=https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html target=_blank rel=noopener>The Open Group — Shell Command Language</a> — Tham khảo chuẩn POSIX shell về biến, quoting và expansion.</li></ul></section><div class=amp-article-tags-wrap><span class=tags-label>THẺ:</span><div class=amp-article-tags><a href=/vi/tags/bash/ class=amp-tag-pill>#bash
+</a><a href=/vi/tags/shell-script/ class=amp-tag-pill>#shell-script
+</a><a href=/vi/tags/devops/ class=amp-tag-pill>#devops
+</a><a href=/vi/tags/automation/ class=amp-tag-pill>#automation
+</a><a href=/vi/tags/linux/ class=amp-tag-pill>#linux
+</a><a href=/vi/tags/environment-variable/ class=amp-tag-pill>#environment-variable</a></div></div><div class=amp-article-footer-box><div class=footer-box-item><span class=box-label>TÁC GIẢ</span>
+<span class=box-value>Hoàng Dương</span></div><div class=footer-box-item><span class=box-label>BẢN QUYỀN</span>
+<span class=box-value>CC BY-NC-SA 4.0</span></div></div><nav class=amp-post-nav><a href=/vi/posts/bash/bash-step-six/ class="post-nav-card nav-prev"><span class=nav-direction>&larr; BÀI TRƯỚC</span>
+<span class=nav-post-title>Function trong Bash: tái sử dụng code hiệu quả cho DevOps</span>
+</a><a href=/vi/posts/bash/bash-step-eight/ class="post-nav-card nav-next"><span class=nav-direction>BÀI TIẾP THEO &rarr;</span>
+<span class=nav-post-title>Cron Job với Bash: tự động hóa theo lịch cho DevOps</span></a></nav><section class=amp-comments-section><div class=comments-section-header><span class=mono-label>THẢO LUẬN & BÌNH LUẬN</span></div><div class=utterances-container><script>(function(){var t=document.documentElement.dataset.scheme||"light",n=t==="dark"?"github-dark":"github-light",e=document.createElement("script");e.src="https://utteranc.es/client.js",e.setAttribute("repo","hoangduonng/blog_comments"),e.setAttribute("issue-term","pathname"),e.setAttribute("label","comments"),e.setAttribute("theme",n),e.setAttribute("crossorigin","anonymous"),e.async=!0,document.currentScript.parentElement.appendChild(e)})()</script></div><style>.utterances-container{width:100%;margin-top:8px;position:relative}.utterances{max-width:100%!important;margin:0!important}[data-scheme=light] .utterances iframe,html:not([data-scheme=dark]) .utterances iframe{mix-blend-mode:multiply;transition:mix-blend-mode .2s ease}[data-scheme=dark] .utterances iframe{mix-blend-mode:normal}</style><script>let utterancesLoaded=!1;function setUtterancesTheme(e){let t=document.querySelector(".utterances iframe");if(t&&t.contentWindow){let n=e==="dark"?"github-dark":"github-light";t.contentWindow.postMessage({type:"set-theme",theme:n},"https://utteranc.es")}}addEventListener("message",e=>{if(e.origin!=="https://utteranc.es")return;utterancesLoaded=!0,setUtterancesTheme(document.documentElement.dataset.scheme||"light")}),window.addEventListener("onColorSchemeChange",e=>{if(!utterancesLoaded)return;setUtterancesTheme(e.detail)})</script></section></article></div><aside class=amp-article-sidebar><div class=amp-sticky-sidebar-inner><div class=amp-toc-card><div class=toc-header><span class=toc-title-label>MỤC LỤC</span></div><div class=toc-content id=toc-content><nav id=TableOfContents><ol><li><a href=#vì-sao-biến-môi-trường-quan-trọng-trong-bash>Vì sao biến môi trường quan trọng trong Bash</a></li><li><a href=#biến-cục-bộ-và-cách-gán-giá-trị>Biến cục bộ và cách gán giá trị</a></li><li><a href=#export-khi-nào-biến-trở-thành-environment-variable><code>export</code>: khi nào biến trở thành environment variable</a></li><li><a href=#xem-đặt-và-xóa-biến-với-env-set-unset>Xem, đặt và xóa biến với <code>env</code>, <code>set</code>, <code>unset</code></a></li><li><a href=#đọc-cấu-hình-từ-file-env>Đọc cấu hình từ file <code>.env</code></a></li><li><a href=#nhận-tham-số-cli-bằng-getopts>Nhận tham số CLI bằng <code>getopts</code></a></li><li><a href=#ifs-kiểm-soát-cách-bash-tách-chuỗi><code>$IFS</code>: kiểm soát cách Bash tách chuỗi</a></li><li><a href=#các-biến-đặc-biệt-thường-gặp>Các biến đặc biệt thường gặp</a></li><li><a href=#ví-dụ-devops-script-deploy-đọc-env-nhận-flag-và-validate-biến>Ví dụ DevOps: script deploy đọc <code>.env</code>, nhận flag và validate biến</a></li><li><a href=#sai-sót-thường-gặp>Sai sót thường gặp</a></li><li><a href=#ghi-chú-triển-khai>Ghi chú triển khai</a></li><li><a href=#lời-kết>Lời kết</a></li><li><a href=#tài-liệu-tham-khảo>Tài liệu tham khảo</a></li></ol></nav></div><div class=toc-scroll-indicator id=toc-indicator style=display:none></div></div><div class=amp-sidebar-callout><div class=callout-badge>BÀI VIẾT LIÊN QUAN</div><a href=/vi/posts/bash/bash-step-eight/ class=callout-image-link><img src=/images/bash/bash-step-eight.jpg alt="Cron Job với Bash: tự động hóa theo lịch cho DevOps" class=callout-image></a><div class=callout-body><h4 class=callout-title><a href=/vi/posts/bash/bash-step-eight/>Cron Job với Bash: tự động hóa theo lịch cho DevOps</a></h4><p class=callout-excerpt>Cron job trong Bash cho DevOps Ở bài trước chúng ta đã quản lý biến, .env, tham số …</p><a href=/vi/posts/bash/bash-step-eight/ class=callout-link-btn>ĐỌC TIẾP &rarr;</a></div></div></div></aside></div></div></div><script>document.addEventListener("DOMContentLoaded",function(){var e=document.getElementById("toc-content"),t=document.getElementById("toc-indicator");if(e&&t){function n(){var s,o,n=e.scrollHeight-e.clientHeight;if(n<=2){t.style.display="none";return}t.style.display="block",s=e.scrollTop/n,o=e.clientHeight-32,t.style.top=e.offsetTop+s*o+"px"}e.addEventListener("scroll",n,{passive:!0}),n(),window.addEventListener("resize",n,{passive:!0}),window.addEventListener("load",n,{passive:!0})}})</script><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><div id=amp-search-overlay class=amp-search-overlay aria-hidden=true data-index-url=/vi/search/index.json data-lang=vi data-no-results="Không tìm thấy kết quả phù hợp" data-no-results-sub="Hãy thử với từ khóa khác hoặc kiểm tra lại chính tả" data-initial-hint="Nhập từ khoá để tìm kiếm bài viết..." data-results-count="kết quả"><div class=amp-search-backdrop id=amp-search-backdrop tabindex=-1></div><div class=amp-search-dialog role=dialog aria-modal=true aria-label="Tìm kiếm bài viết"><div class=amp-search-header><div class=amp-search-input-wrapper><svg class="amp-search-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<input id=amp-search-input class=amp-search-input type=text placeholder="Tìm kiếm bài viết, chuyên mục, chủ đề..." autocomplete=off autocorrect=off autocapitalize=off spellcheck=false aria-autocomplete=list aria-controls=amp-search-results>
+<button id=amp-search-clear class=amp-search-clear type=button aria-label="Xóa từ khóa" style=display:none>
+<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div><button id=amp-search-close class=amp-search-close-btn type=button aria-label="Đóng tìm kiếm">
+<kbd class=amp-search-kbd>ESC</kbd></button></div><div class=amp-search-body><div id=amp-search-loading class="amp-search-state amp-search-loading" style=display:none><div class=amp-search-spinner aria-hidden=true></div><span>Đang tải dữ liệu tìm kiếm...</span></div><div id=amp-search-initial class="amp-search-state amp-search-initial"><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p class=state-title>Tìm kiếm nhanh</p><p class=state-desc>Nhập từ khoá hoặc chủ đề để tìm kiếm trong tất cả bài viết đã xuất bản.</p></div><div id=amp-search-empty class="amp-search-state amp-search-empty" style=display:none><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="8" x2="14" y2="14"/><line x1="14" y1="8" x2="8" y2="14"/></svg><p class=state-title id=amp-search-empty-title>Không tìm thấy kết quả phù hợp</p><p class=state-desc id=amp-search-empty-desc>Hãy thử với từ khóa khác hoặc kiểm tra lại chính tả</p></div><div id=amp-search-results class=amp-search-results role=listbox style=display:none></div></div><div class=amp-search-footer><div class=amp-search-shortcuts><span class=shortcut-item><kbd>↑</kbd><kbd>↓</kbd>
+<span class=shortcut-label>Điều hướng</span>
+</span><span class=shortcut-item><kbd>↵</kbd>
+<span class=shortcut-label>Mở bài viết</span>
+</span><span class=shortcut-item><kbd>ESC</kbd>
+<span class=shortcut-label>Đóng</span></span></div><div id=amp-search-count class=amp-search-count style=display:none></div></div></div></div><footer class=amp-site-footer><div class=amp-footer-container><div class=amp-footer-grid><div class=footer-brand-col><a href=/vi/ class=footer-logo><span class=footer-logo-title>Hoang Duong</span></a><div class=footer-status><span class=status-dot></span>
+<span class=status-text>Hệ thống hoạt động ổn định</span></div><ul class=footer-meta-links><li><a href=/vi/about/>Giới thiệu Blog</a></li><li><a href=/vi/archives/>Lưu trữ bài viết</a></li></ul></div><div class=footer-links-grid><div class=footer-col><h3 class=footer-col-title>Chuyên mục</h3><ul class=footer-col-list><li><a href=/vi/categories/bash/>Bash Series</a></li><li><a href=/vi/categories/devops/>DevOps</a></li><li><a href=/vi/categories/docker/>Docker</a></li><li><a href=/vi/categories/linux/>Linux & Shell</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Tài nguyên</h3><ul class=footer-col-list><li><a href=/vi/about/>Về tôi</a></li><li><a href=/vi/archives/>Tất cả bài viết</a></li><li><a href=#search data-open-search>Tìm kiếm</a></li><li><a href=/vi/links/>Liên kết hữu ích</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Series Nổi Bật</h3><ul class=footer-col-list><li><a href=/vi/posts/bash/bash-step-eight/>Cron Jobs & Bash</a></li><li><a href=/vi/categories/devops/>DevOps Automation</a></li><li><a href=/vi/categories/docker/>Docker Essentials</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Kết nối</h3><ul class=footer-col-list><li><a href=https://github.com/hoangduonng target=_blank rel=noopener>GitHub ↗</a></li><li><a href=https://www.instagram.com/ngu_uuen/ target=_blank rel=noopener>Instagram ↗</a></li><li><a href=https://www.linkedin.com/in/hoangduonng/ target=_blank rel=noopener>LinkedIn ↗</a></li><li><a href=/vi/index.xml>RSS Feed ↗</a></li></ul></div></div></div><div class=amp-footer-bottom-bar><span class=footer-copyright>&copy; 2026 Hoang Duong. All rights reserved.</span></div></div></footer><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.ff582d61d6686f6f0f367e0f5be93dac2e8ef15b1fe7d29a941d5e4bd1b8b8af.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

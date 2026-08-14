@@ -1,30 +1,30 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Image on Hoàng Dương</title><link>https://tech.nguuyen.io.vn/tags/image/</link><description>Recent content in Image on Hoàng Dương</description><generator>Hugo -- gohugo.io</generator><language>vi</language><lastBuildDate>Sun, 25 Jan 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/image/index.xml" rel="self" type="application/rss+xml"/><item><title>Docker cơ bản: Image vs Container</title><link>https://tech.nguuyen.io.vn/posts/docker/docker-basics-image-vs-container/</link><pubDate>Sun, 25 Jan 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/docker/docker-basics-image-vs-container/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/docker/docker-basics-image-vs-container.jpg" alt="Featured image of post Docker cơ bản: Image vs Container" /&gt;&lt;h2 id="docker-image-và-container---hai-khái-niệm-thiết-yếu"&gt;Docker Image và Container - Hai khái niệm thiết yếu
-&lt;/h2&gt;&lt;p&gt;Khi bắt đầu với Docker, hai khái niệm quan trọng nhất bạn cần hiểu là &lt;strong&gt;Image&lt;/strong&gt; và &lt;strong&gt;Container&lt;/strong&gt;. Nhiều người mới thường nhầm lẫn giữa chúng, nhưng thực chất chúng đóng vai trò khác nhau trong hệ sinh thái Docker. Image giống như &lt;strong&gt;kho chứa recipe&lt;/strong&gt; (làm công thức), còn Container là &lt;strong&gt;thực tế thực thi&lt;/strong&gt; (món ăn được chuẩn bị). 🍳&lt;/p&gt;
-&lt;p&gt;Trong bài viết này, tôi sẽ giải thích chi tiết sự khác biệt giữa Image và Container, cách chúng hoạt động cùng nhau, và cung cấp ví dụ thực tế để bạn dễ hiểu hơn.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Image on Hoang Duong</title><link>https://tech.nguuyen.io.vn/tags/image/</link><description>Recent content in Image on Hoang Duong</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sun, 22 Feb 2026 14:30:00 +0700</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/image/index.xml" rel="self" type="application/rss+xml"/><item><title>Docker Basics: Image vs Container</title><link>https://tech.nguuyen.io.vn/posts/docker/docker-basics-image-vs-container/</link><pubDate>Sun, 25 Jan 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/docker/docker-basics-image-vs-container/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/docker/docker-basics-image-vs-container.jpg" alt="Featured image of post Docker Basics: Image vs Container" /&gt;&lt;h2 id="docker-image-and-container---two-essential-concepts"&gt;Docker Image and Container - Two Essential Concepts
+&lt;/h2&gt;&lt;p&gt;When starting with Docker, the two most important concepts you need to understand are &lt;strong&gt;Image&lt;/strong&gt; and &lt;strong&gt;Container&lt;/strong&gt;. Beginners often confuse them, but in reality, they play different roles in the Docker ecosystem. Image is like a &lt;strong&gt;recipe repository&lt;/strong&gt; (cooking instructions), while Container is &lt;strong&gt;the actual execution&lt;/strong&gt; (the prepared dish). 🍳&lt;/p&gt;
+&lt;p&gt;In this article, I&amp;rsquo;ll explain the detailed differences between Image and Container, how they work together, and provide real examples for better understanding.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="i-docker-image-là-gì"&gt;I. Docker Image là gì?
-&lt;/h2&gt;&lt;p&gt;Docker Image là một &lt;strong&gt;template&lt;/strong&gt; (khuôn mẫu) được sử dụng để tạo ra Container. Nó chứa tất cả mọi thứ cần thiết để chạy một ứng dụng:&lt;/p&gt;
+&lt;h2 id="i-what-is-a-docker-image"&gt;I. What is a Docker Image?
+&lt;/h2&gt;&lt;p&gt;A Docker Image is a &lt;strong&gt;template&lt;/strong&gt; used to create a Container. It contains everything needed to run an application:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Operating system (Hệ điều hành) — thường là Linux minimal&lt;/li&gt;
-&lt;li&gt;Runtime environment (Môi trường chạy) — Node.js, Python, Java, v.v.&lt;/li&gt;
-&lt;li&gt;Code ứng dụng&lt;/li&gt;
-&lt;li&gt;Dependencies (Các thư viện phụ thuộc)&lt;/li&gt;
-&lt;li&gt;Configuration files (Files cấu hình)&lt;/li&gt;
-&lt;li&gt;Environment variables (Biến môi trường)&lt;/li&gt;
+&lt;li&gt;Operating system — usually minimal Linux&lt;/li&gt;
+&lt;li&gt;Runtime environment — Node.js, Python, Java, etc.&lt;/li&gt;
+&lt;li&gt;Application code&lt;/li&gt;
+&lt;li&gt;Dependencies (libraries)&lt;/li&gt;
+&lt;li&gt;Configuration files&lt;/li&gt;
+&lt;li&gt;Environment variables&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id="đặc-điểm-chính-của-docker-image"&gt;Đặc điểm chính của Docker Image
+&lt;h3 id="key-characteristics-of-docker-image"&gt;Key Characteristics of Docker Image
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Read-only&lt;/strong&gt;: Image là chỉ đọc, không thể thay đổi sau khi đã tạo&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Layered structure&lt;/strong&gt;: Image được xây dựng từ các lớp (layers), mỗi layer đại diện cho một lệnh trong Dockerfile&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Reusable&lt;/strong&gt;: Có thể sử dụng cùng một image để tạo ra nhiều container&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Version-controlled&lt;/strong&gt;: Mỗi image có tag (vd: &lt;code&gt;1.0&lt;/code&gt;, &lt;code&gt;latest&lt;/code&gt;, &lt;code&gt;alpine&lt;/code&gt;) để quản lý phiên bản&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Read-only&lt;/strong&gt;: Image is read-only and cannot be changed after creation&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Layered structure&lt;/strong&gt;: Image is built from layers, each layer representing a command in Dockerfile&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Reusable&lt;/strong&gt;: The same image can be used to create multiple containers&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Version-controlled&lt;/strong&gt;: Each image has tags (e.g., &lt;code&gt;1.0&lt;/code&gt;, &lt;code&gt;latest&lt;/code&gt;, &lt;code&gt;alpine&lt;/code&gt;) for version management&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Ví dụ về cấu trúc Image:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Example of Image Structure:&lt;/strong&gt;&lt;/p&gt;
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;Layer&lt;/th&gt;
-&lt;th&gt;Nội dung&lt;/th&gt;
+&lt;th&gt;Content&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 &lt;tbody&gt;
@@ -50,7 +50,7 @@
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;h3 id="các-lệnh-phổ-biến-với-image"&gt;Các lệnh phổ biến với Image
+&lt;h3 id="common-image-commands"&gt;Common Image Commands
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -69,39 +69,39 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;14
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Pull một image từ Docker Hub&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Pull an image from Docker Hub&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker pull node:18-alpine
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Liệt kê các images đã tải về&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# List downloaded images&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker images
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Xóa một image không sử dụng&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Remove an unused image&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker image rm node:18-alpine
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Xóa tất cả unused images&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Remove all unused images&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker image prune -a
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Build image từ Dockerfile&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Build image from Dockerfile&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker build -t myapp:1.0 .
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
-&lt;h2 id="ii-docker-container-là-gì"&gt;II. Docker Container là gì?
-&lt;/h2&gt;&lt;p&gt;Docker Container là một &lt;strong&gt;thực thể đang chạy&lt;/strong&gt; (running instance) được tạo ra từ Docker Image. Container có:&lt;/p&gt;
+&lt;h2 id="ii-what-is-a-docker-container"&gt;II. What is a Docker Container?
+&lt;/h2&gt;&lt;p&gt;A Docker Container is a &lt;strong&gt;running instance&lt;/strong&gt; created from a Docker Image. Container has:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Một bộ file hệ thống riêng (filesystem)&lt;/li&gt;
-&lt;li&gt;Không gian mạng riêng (network isolation)&lt;/li&gt;
-&lt;li&gt;Process riêng, hoạt động độc lập&lt;/li&gt;
-&lt;li&gt;Các biến môi trường riêng&lt;/li&gt;
+&lt;li&gt;Its own file system&lt;/li&gt;
+&lt;li&gt;Isolated network space&lt;/li&gt;
+&lt;li&gt;Independent processes and operations&lt;/li&gt;
+&lt;li&gt;Its own environment variables&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id="đặc-điểm-chính-của-docker-container"&gt;Đặc điểm chính của Docker Container
+&lt;h3 id="key-characteristics-of-docker-container"&gt;Key Characteristics of Docker Container
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Read-only base + Read-write layer&lt;/strong&gt;: Container có read-write layer cho phép thay đổi dữ liệu&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Isolated&lt;/strong&gt;: Container cô lập với host và các container khác&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Stateful&lt;/strong&gt;: Container có thể ở các trạng thái: running, stopped, paused, exited&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Ephemeral&lt;/strong&gt;: Container có thể tạo và xóa nhanh chóng (&amp;lt; 1 giây)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Read-only base + Read-write layer&lt;/strong&gt;: Container has a read-write layer that allows data changes&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Isolated&lt;/strong&gt;: Container is isolated from host and other containers&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Stateful&lt;/strong&gt;: Container can be in various states: running, stopped, paused, exited&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Ephemeral&lt;/strong&gt;: Containers can be created and deleted quickly (&amp;lt; 1 second)&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Ví dụ về Container:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Example of Container:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -126,62 +126,62 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;20
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Tạo và chạy container từ image&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Create and run container from image&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker run -d --name myapp node:18-alpine node server.js
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Liệt kê các containers đang chạy&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# List running containers&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker ps
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Liệt kê tất cả containers (kể cả đã dừng)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# List all containers (including stopped)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker ps -a
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Dừng container&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Stop container&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker stop myapp
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Khởi động lại container&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Restart container&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker start myapp
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Xóa container&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Remove container&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker rm myapp
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Xem logs của container&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# View container logs&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker logs myapp
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="so-sánh-container-với-virtual-machine"&gt;So sánh Container với Virtual Machine
+&lt;/div&gt;&lt;h3 id="comparing-container-with-virtual-machine"&gt;Comparing Container with Virtual Machine
 &lt;/h3&gt;&lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
-&lt;th&gt;Tính chất&lt;/th&gt;
+&lt;th&gt;Aspect&lt;/th&gt;
 &lt;th&gt;Docker Container&lt;/th&gt;
 &lt;th&gt;Virtual Machine&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
-&lt;td&gt;Hệ điều hành&lt;/td&gt;
-&lt;td&gt;Chia sẻ kernel với host&lt;/td&gt;
-&lt;td&gt;Có OS riêng đầy đủ&lt;/td&gt;
+&lt;td&gt;Operating System&lt;/td&gt;
+&lt;td&gt;Share kernel with host&lt;/td&gt;
+&lt;td&gt;Full dedicated OS&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;Thời gian khởi động&lt;/td&gt;
-&lt;td&gt;~ 1-2 giây&lt;/td&gt;
-&lt;td&gt;~ 1-2 phút&lt;/td&gt;
+&lt;td&gt;Boot Time&lt;/td&gt;
+&lt;td&gt;~ 1-2 seconds&lt;/td&gt;
+&lt;td&gt;~ 1-2 minutes&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;Dung lượng&lt;/td&gt;
+&lt;td&gt;Disk Size&lt;/td&gt;
 &lt;td&gt;MB (10-100 MB)&lt;/td&gt;
 &lt;td&gt;GB (1-10 GB)&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;Hiệu năng&lt;/td&gt;
-&lt;td&gt;Gần như native&lt;/td&gt;
-&lt;td&gt;Cần virtualization overhead&lt;/td&gt;
+&lt;td&gt;Performance&lt;/td&gt;
+&lt;td&gt;Nearly native&lt;/td&gt;
+&lt;td&gt;Needs virtualization overhead&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;Số lượng tối đa&lt;/td&gt;
-&lt;td&gt;Hàng trăm host&lt;/td&gt;
-&lt;td&gt;Tẽn vài chục host&lt;/td&gt;
+&lt;td&gt;Max Per Host&lt;/td&gt;
+&lt;td&gt;Hundreds&lt;/td&gt;
+&lt;td&gt;Tens&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
@@ -190,71 +190,71 @@
 &lt;em&gt;Docker Container Architecture&lt;/em&gt;
 &lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="iii-so-sánh-chi-tiết-image-vs-container"&gt;III. So sánh chi tiết: Image vs Container
-&lt;/h2&gt;&lt;p&gt;Để dễ hình dung, hãy xem bảng so sánh dưới đây:&lt;/p&gt;
-&lt;h3 id="bảng-so-sánh-đầy-đủ"&gt;Bảng so sánh đầy đủ
+&lt;h2 id="iii-detailed-comparison-image-vs-container"&gt;III. Detailed Comparison: Image vs Container
+&lt;/h2&gt;&lt;p&gt;For easy visualization, see the comparison table below:&lt;/p&gt;
+&lt;h3 id="complete-comparison-table"&gt;Complete Comparison Table
 &lt;/h3&gt;&lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
-&lt;th&gt;Khía cạnh&lt;/th&gt;
+&lt;th&gt;Aspect&lt;/th&gt;
 &lt;th&gt;Image&lt;/th&gt;
 &lt;th&gt;Container&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
-&lt;td&gt;&lt;strong&gt;Công thức&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;Kho chứa recipe (công thức)&lt;/td&gt;
-&lt;td&gt;Món ăn được thực hiện&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Analogy&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Recipe repository (cooking recipe)&lt;/td&gt;
+&lt;td&gt;Prepared dish&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;&lt;strong&gt;Trạng thái&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;Static (tĩnh, read-only)&lt;/td&gt;
-&lt;td&gt;Dynamic (động, read-write)&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;State&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Static (read-only)&lt;/td&gt;
+&lt;td&gt;Dynamic (read-write)&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;&lt;strong&gt;Thay đổi&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;Không thay đổi sau khi tạo&lt;/td&gt;
-&lt;td&gt;Có thể thay đổi khi chạy&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Changes&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Cannot change after creation&lt;/td&gt;
+&lt;td&gt;Can change while running&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;&lt;strong&gt;Số lượng&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;Có 1 image, tạo N container&lt;/td&gt;
-&lt;td&gt;Nhiều container từ cùng 1 image&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Quantity&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;1 image creates N containers&lt;/td&gt;
+&lt;td&gt;Many containers from 1 image&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;&lt;strong&gt;Thời gian tạo&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;Chậm (build lần đầu ~5-10 phút)&lt;/td&gt;
-&lt;td&gt;Nhanh (&amp;lt; 1 giây)&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;strong&gt;Lưu trữ&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;Lưu trong Docker cache&lt;/td&gt;
-&lt;td&gt;Lưu thời gian chạy hoặc volume&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;strong&gt;Portability&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;Dễ dàng chia sẻ (push/pull)&lt;/td&gt;
-&lt;td&gt;Chỉ chạy trên môi trường đã install Docker&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;strong&gt;Version&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;Có tag quản lý (1.0, 2.0, latest)&lt;/td&gt;
-&lt;td&gt;Không có version riêng&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;strong&gt;Network&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;Không&lt;/td&gt;
-&lt;td&gt;Có network riêng&lt;/td&gt;
+&lt;td&gt;&lt;strong&gt;Creation Time&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Slow (first build ~5-10 mins)&lt;/td&gt;
+&lt;td&gt;Fast (&amp;lt; 1 second)&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;strong&gt;Storage&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;Lưu trữ tại layers&lt;/td&gt;
-&lt;td&gt;Có read-write layer trên cùng image&lt;/td&gt;
+&lt;td&gt;Stored in Docker cache&lt;/td&gt;
+&lt;td&gt;Stored at runtime or in volumes&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Portability&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Easy to share (push/pull)&lt;/td&gt;
+&lt;td&gt;Only runs where Docker is installed&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Version&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Has tags for management (1.0, 2.0, latest)&lt;/td&gt;
+&lt;td&gt;No separate version&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Network&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
+&lt;td&gt;Has isolated network&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;Storage&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Stored in layers&lt;/td&gt;
+&lt;td&gt;Has read-write layer on top of image&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;h3 id="quan-hệ-giữa-image-và-container"&gt;Quan hệ giữa Image và Container
+&lt;h3 id="relationship-between-image-and-container"&gt;Relationship between Image and Container
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -276,20 +276,20 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ↓
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; docker commit
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ↓
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Docker Image mới (updated)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Docker Image baru (updated)
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Lưu ý:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Notes:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Image&lt;/strong&gt; giống như &lt;code&gt;class&lt;/code&gt; trong OOP (Object Oriented Programming)&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Container&lt;/strong&gt; giống như &lt;code&gt;object&lt;/code&gt; (instance của class)&lt;/li&gt;
-&lt;li&gt;Dùng &lt;code&gt;docker run&lt;/code&gt; để tạo container từ image&lt;/li&gt;
-&lt;li&gt;Dùng &lt;code&gt;docker commit&lt;/code&gt; để save container thành image mới&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Image&lt;/strong&gt; is like a &lt;code&gt;class&lt;/code&gt; in Object Oriented Programming (OOP)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Container&lt;/strong&gt; is like an &lt;code&gt;object&lt;/code&gt; (instance of a class)&lt;/li&gt;
+&lt;li&gt;Use &lt;code&gt;docker run&lt;/code&gt; to create container from image&lt;/li&gt;
+&lt;li&gt;Use &lt;code&gt;docker commit&lt;/code&gt; to save container as a new image&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="iv-ví-dụ-thực-tế-từ-đầu-đến-cuối"&gt;IV. Ví dụ thực tế từ đầu đến cuối
-&lt;/h2&gt;&lt;p&gt;Để hiểu rõ hơn, hãy cùng làm một ví dụ chi tiết:&lt;/p&gt;
-&lt;h3 id="tạo-dockerfile-để-build-image"&gt;Tạo Dockerfile (để build image)
+&lt;h2 id="iv-real-world-example-from-start-to-finish"&gt;IV. Real-World Example from Start to Finish
+&lt;/h2&gt;&lt;p&gt;For better understanding, let&amp;rsquo;s do a detailed example:&lt;/p&gt;
+&lt;h3 id="create-dockerfile-to-build-image"&gt;Create Dockerfile (to build image)
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -318,7 +318,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;CMD&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;node&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;server.js&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="build-image-từ-dockerfile"&gt;Build image từ Dockerfile
+&lt;/div&gt;&lt;h3 id="build-image-from-dockerfile"&gt;Build image from Dockerfile
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -331,17 +331,17 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;8
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Build image với tên myapp và tag 1.0&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Build image with name myapp and tag 1.0&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker build -t myapp:1.0 .
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Xem image đã tạo&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# View created image&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker images
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Output:&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# REPOSITORY TAG IMAGE ID CREATED SIZE&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# myapp 1.0 abc123def456 2 minutes ago 150MB&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="tạo-và-chạy-container-từ-image"&gt;Tạo và chạy container từ image
+&lt;/div&gt;&lt;h3 id="create-and-run-container-from-image"&gt;Create and run container from image
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -360,23 +360,23 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;14
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Chạy container từ image myapp:1.0&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Run container from image myapp:1.0&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker run -d &lt;span class="se"&gt;\
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; --name myapp-container &lt;span class="se"&gt;\
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; -p 3000:3000 &lt;span class="se"&gt;\
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; myapp:1.0
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Xem container đang chạy&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# View running containers&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker ps
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Output:&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# CONTAINER ID IMAGE COMMAND STATUS PORTS&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# xyz789ghi012 myapp:1.0 &amp;#34;node server.js&amp;#34; Up 2 minutes 0.0.0.0:3000-&amp;gt;3000/tcp&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Xem logs&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# View logs&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker logs myapp-container
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="tương-tác-với-container"&gt;Tương tác với container
+&lt;/div&gt;&lt;h3 id="interact-with-container"&gt;Interact with container
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -387,15 +387,15 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;6
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Truy cập nội bộ container&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Access container shell&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker &lt;span class="nb"&gt;exec&lt;/span&gt; -it myapp-container sh
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Trong container — bạn có thể:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Inside container — you can:&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ls -la /app
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl http://localhost:3000
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="xóa-container-và-image"&gt;Xóa container và image
+&lt;/div&gt;&lt;h3 id="remove-container-and-image"&gt;Remove container and image
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -408,25 +408,25 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;8
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Dừng container&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Stop container&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker stop myapp-container
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Xóa container&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Remove container&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker rm myapp-container
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Xóa image&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Remove image&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker rmi myapp:1.0
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
-&lt;h2 id="v-best-practices-với-image-và-container"&gt;V. Best practices với Image và Container
-&lt;/h2&gt;&lt;h3 id="quản-lý-image"&gt;Quản lý Image
+&lt;h2 id="v-best-practices-with-image-and-container"&gt;V. Best Practices with Image and Container
+&lt;/h2&gt;&lt;h3 id="image-management"&gt;Image Management
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;✅ Sử dụng cụ thể hơn (ex: &lt;code&gt;node:18.12-alpine&lt;/code&gt; thay vì &lt;code&gt;node:latest&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;✅ Giảm kích thước bằng base image nhỏ (alpine, distroless)&lt;/li&gt;
-&lt;li&gt;✅ Tận dụng cache layer bằng cách xếp lệnh theo thứ tự&lt;/li&gt;
-&lt;li&gt;✅ Sử dụng &lt;code&gt;.dockerignore&lt;/code&gt; để loại bỏ file không cần thiết&lt;/li&gt;
-&lt;li&gt;✅ Xóa image unused thường xuyên với &lt;code&gt;docker image prune&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;✅ Use specific versions (e.g., &lt;code&gt;node:18.12-alpine&lt;/code&gt; instead of &lt;code&gt;node:latest&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;✅ Reduce size using minimal base images (alpine, distroless)&lt;/li&gt;
+&lt;li&gt;✅ Leverage layer cache by ordering commands properly&lt;/li&gt;
+&lt;li&gt;✅ Use &lt;code&gt;.dockerignore&lt;/code&gt; to exclude unnecessary files&lt;/li&gt;
+&lt;li&gt;✅ Regularly remove unused images with &lt;code&gt;docker image prune&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -436,19 +436,19 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;4
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Ví dụ: Sử dụng image cụ thể&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Example: Use specific image version&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;FROM node:18.12.1-alpine
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# thay vì&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# instead of&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;FROM node:latest
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="quản-lý-container"&gt;Quản lý Container
+&lt;/div&gt;&lt;h3 id="container-management"&gt;Container Management
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;✅ Đặt tên container rõ ràng (&lt;code&gt;--name app-container&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;✅ Sử dụng &lt;code&gt;-d&lt;/code&gt; (detached mode) để chạy container background&lt;/li&gt;
-&lt;li&gt;✅ Thường xuyên quay lại logs khi debug (&lt;code&gt;docker logs -f&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;✅ Sử dụng volumes nếu cần persistence dữ liệu&lt;/li&gt;
-&lt;li&gt;✅ Giới hạn resource với &lt;code&gt;--cpus&lt;/code&gt;, &lt;code&gt;--memory&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;✅ Name containers clearly (&lt;code&gt;--name app-container&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;✅ Use &lt;code&gt;-d&lt;/code&gt; (detached mode) to run containers in background&lt;/li&gt;
+&lt;li&gt;✅ Regularly check logs for debugging (&lt;code&gt;docker logs -f&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;✅ Use volumes if data persistence is needed&lt;/li&gt;
+&lt;li&gt;✅ Limit resources with &lt;code&gt;--cpus&lt;/code&gt;, &lt;code&gt;--memory&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -461,7 +461,7 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;7
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Run container với giới hạn resource&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Run container with resource limits&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker run -d &lt;span class="se"&gt;\
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; --name app &lt;span class="se"&gt;\
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; --cpus&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;1.5&amp;#34;&lt;/span&gt; &lt;span class="se"&gt;\
@@ -471,9 +471,9 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
-&lt;h2 id="troubleshooting-phổ-biến"&gt;Troubleshooting phổ biến
-&lt;/h2&gt;&lt;h3 id="container-không-thể-tạo-từ-image"&gt;Container không thể tạo từ image
-&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Lỗi:&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id="common-troubleshooting"&gt;Common Troubleshooting
+&lt;/h2&gt;&lt;h3 id="cannot-create-container-from-image"&gt;Cannot create container from image
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Error:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -482,13 +482,13 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Error: Cannot start container from image
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Nguyên nhân:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Causes:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Image chưa được build hoặc pull về&lt;/li&gt;
-&lt;li&gt;Image bị corrupt&lt;/li&gt;
-&lt;li&gt;Port đã được sử dụng bởi container khác&lt;/li&gt;
+&lt;li&gt;Image hasn&amp;rsquo;t been built or pulled&lt;/li&gt;
+&lt;li&gt;Image is corrupted&lt;/li&gt;
+&lt;li&gt;Port is already in use by another container&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Giải pháp:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Solution:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -501,19 +501,19 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;8
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Kiểm tra image đã tồn tại chưa&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Check if image exists&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker images &lt;span class="p"&gt;|&lt;/span&gt; grep myapp
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Pull về lại nếu chưa có&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Pull again if not present&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker pull myapp:1.0
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Build lại image&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Rebuild image&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker build -t myapp:1.0 .
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="container-không-lưu-dữ-liệu-khi-dừng"&gt;Container không lưu dữ liệu khi dừng
-&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Nguyên nhân:&lt;/strong&gt; Container là &lt;strong&gt;ephemeral&lt;/strong&gt;, dữ liệu trong container sẽ mất khi nó dừng hoặc xóa.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Giải pháp:&lt;/strong&gt; Sử dụng Docker Volumes&lt;/p&gt;
+&lt;/div&gt;&lt;h3 id="container-doesnt-persist-data-when-stopped"&gt;Container doesn&amp;rsquo;t persist data when stopped
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Cause:&lt;/strong&gt; Container is &lt;strong&gt;ephemeral&lt;/strong&gt;, data inside will be lost when it stops or is removed.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Solution:&lt;/strong&gt; Use Docker Volumes&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -526,19 +526,19 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;8
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Tạo volume&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Create volume&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker volume create myapp-data
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Gắn volume vào container&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Mount volume to container&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker run -d &lt;span class="se"&gt;\
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; --name app &lt;span class="se"&gt;\
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; -v myapp-data:/app/data &lt;span class="se"&gt;\
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; myapp:1.0
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="container-không-truy-cập-được-từ-bên-ngoài"&gt;Container không truy cập được từ bên ngoài
-&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Lỗi:&lt;/strong&gt; Không thể truy cập &lt;code&gt;http://localhost:3000&lt;/code&gt; khi run container&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Giải pháp:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;h3 id="container-not-accessible-from-outside"&gt;Container not accessible from outside
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Error:&lt;/strong&gt; Cannot access &lt;code&gt;http://localhost:3000&lt;/code&gt; when running container&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Solution:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -553,55 +553,55 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;10
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Đảm bảo được map port từ container → host&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Ensure port is mapped from container → host&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker run -d &lt;span class="se"&gt;\
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; --name app &lt;span class="se"&gt;\
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; -p 3000:3000 &lt;span class="se"&gt;\
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; myapp:1.0
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Nếu là multi-container, sử dụng docker network&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# For multi-container setup, use docker network&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker network create mynet
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker run -d --network mynet --name app1 myapp:1.0
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker run -d --network mynet --name app2 myapp:1.0
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
-&lt;h2 id="ghi-chú-triển-khai"&gt;Ghi chú triển khai
-&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;Khi áp dụng vào dự án của bạn&lt;/strong&gt;, hãy lưu ý các điểm quan trọng:&lt;/p&gt;
+&lt;h2 id="implementation-notes"&gt;Implementation Notes
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;When applying to your project&lt;/strong&gt;, remember these important points:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Đừng thay đổi trực tiếp container&lt;/strong&gt; — Hãy build lại image với Dockerfile&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Sử dụng docker-compose.yaml&lt;/strong&gt; để quản lý nhiều container và dependencies&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Sử dụng CI/CD&lt;/strong&gt; để tự động build và push image lên Docker Hub/Registry&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Giám sát ресурс&lt;/strong&gt; với &lt;code&gt;docker stats&lt;/code&gt; hoặc Prometheus + Grafana&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Backup dữ liệu&lt;/strong&gt; thường xuyên từ volumes&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Don&amp;rsquo;t modify containers directly&lt;/strong&gt; — Rebuild image with Dockerfile&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Use docker-compose.yaml&lt;/strong&gt; to manage multiple containers and dependencies&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Use CI/CD&lt;/strong&gt; to automatically build and push images to Docker Hub/Registry&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Monitor resources&lt;/strong&gt; with &lt;code&gt;docker stats&lt;/code&gt; or Prometheus + Grafana&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Backup data&lt;/strong&gt; regularly from volumes&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;strong&gt;Best practices:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Luôn đặt tên image và container rõ ràng&lt;/li&gt;
-&lt;li&gt;Sử dụng tags cụ thể cho môi trường khác nhau (dev, staging, prod)&lt;/li&gt;
-&lt;li&gt;Viết &lt;code&gt;.dockerignore&lt;/code&gt; để giảm kích thước image và tăng tốc build&lt;/li&gt;
-&lt;li&gt;Sử dụng multi-stage build để tạo image nhỏ nhất&lt;/li&gt;
+&lt;li&gt;Always name images and containers clearly&lt;/li&gt;
+&lt;li&gt;Use specific tags for different environments (dev, staging, prod)&lt;/li&gt;
+&lt;li&gt;Write &lt;code&gt;.dockerignore&lt;/code&gt; to reduce image size and speed up builds&lt;/li&gt;
+&lt;li&gt;Use multi-stage build to create minimal images&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;strong&gt;Troubleshooting:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Khi container bị crash, xem logs: &lt;code&gt;docker logs &amp;lt;container-name&amp;gt;&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Khi container không thể pull image, kiểm tra network: &lt;code&gt;ping registry-1.docker.io&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Khi container không có quyền truy cập file, gắn volume đúng permission&lt;/li&gt;
+&lt;li&gt;When container crashes, check logs: &lt;code&gt;docker logs &amp;lt;container-name&amp;gt;&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;When pulling fails, check network: &lt;code&gt;ping registry-1.docker.io&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;When container can&amp;rsquo;t access files, mount volume with correct permissions&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="lời-kết"&gt;Lời kết
-&lt;/h2&gt;&lt;p&gt;Tóm tắt lại:&lt;/p&gt;
+&lt;h2 id="conclusion"&gt;Conclusion
+&lt;/h2&gt;&lt;p&gt;To summarize:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Docker Image = Kho chứa recipe (template read-only)&lt;/strong&gt; — Chứa tất cả thiết lập để chạy ứng dụng&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Docker Container = Món ăn được thực hiện (running instance)&lt;/strong&gt; — Container được tạo từ image, read-write layer&lt;/li&gt;
-&lt;li&gt;Image là tĩnh, Container là động&lt;/li&gt;
-&lt;li&gt;Dùng &lt;code&gt;docker run&lt;/code&gt; để tạo container từ image&lt;/li&gt;
-&lt;li&gt;Dùng &lt;code&gt;docker commit&lt;/code&gt; để update container thành image mới&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Docker Image = Recipe repository (read-only template)&lt;/strong&gt; — Contains all settings needed to run an application&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Docker Container = Prepared dish (running instance)&lt;/strong&gt; — Container created from image with read-write layer&lt;/li&gt;
+&lt;li&gt;Image is static, Container is dynamic&lt;/li&gt;
+&lt;li&gt;Use &lt;code&gt;docker run&lt;/code&gt; to create container from image&lt;/li&gt;
+&lt;li&gt;Use &lt;code&gt;docker commit&lt;/code&gt; to update container as a new image&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Bây giờ bạn đã hiểu rõ sự khác biệt giữa Image và Container. Bước tiếp theo: học cách sử dụng Dockerfile để build image, và Docker Compose để quản lý nhiều container. 🚀&lt;/p&gt;
-&lt;p&gt;Nếu bạn thấy bài viết này hữu ích, hãy nhớ ⭐ star repo hoặc 📱 chia sẻ với bạn bè nhé! 😊&lt;/p&gt;
+&lt;p&gt;Now you understand the differences between Image and Container. Next step: learn how to use Dockerfile to build images and Docker Compose to manage multiple containers. 🚀&lt;/p&gt;
+&lt;p&gt;If you found this article helpful, remember to ⭐ star the repo or 📱 share with friends! 😊&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="tài-liệu-tham-khảo"&gt;Tài liệu tham khảo
+&lt;h2 id="references"&gt;References
 &lt;/h2&gt;&lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://docs.docker.com/" target="_blank" rel="noopener"
 &gt;Docker Official Documentation&lt;/a&gt;&lt;/li&gt;

@@ -1,19 +1,19 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Networking on Hoàng Dương</title><link>https://tech.nguuyen.io.vn/tags/networking/</link><description>Recent content in Networking on Hoàng Dương</description><generator>Hugo -- gohugo.io</generator><language>vi</language><lastBuildDate>Sun, 23 Feb 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/networking/index.xml" rel="self" type="application/rss+xml"/><item><title>Giao thức mạng (Networking Protocols)</title><link>https://tech.nguuyen.io.vn/posts/devops/devops-step-eight/</link><pubDate>Sun, 23 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/devops/devops-step-eight/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-eight.webp" alt="Featured image of post Giao thức mạng (Networking Protocols)" /&gt;&lt;h2 id="giao-thức-mạng-networking-protocols"&gt;Giao thức mạng (Networking Protocols)
-&lt;/h2&gt;&lt;p&gt;Giao thức mạng là tập hợp các quy tắc chuẩn hóa giúp dữ liệu được truyền, nhận và hiểu đúng cách trên các mạng máy tính. Chúng xác định định dạng, thời gian, trình tự và kiểm soát lỗi trong quá trình truyền dữ liệu. Một số giao thức quan trọng bao gồm:&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Networking on Hoang Duong</title><link>https://tech.nguuyen.io.vn/tags/networking/</link><description>Recent content in Networking on Hoang Duong</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sat, 07 Feb 2026 17:09:53 +0700</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/networking/index.xml" rel="self" type="application/rss+xml"/><item><title>Networking Protocols</title><link>https://tech.nguuyen.io.vn/posts/devops/devops-step-eight/</link><pubDate>Sun, 23 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/devops/devops-step-eight/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-eight.webp" alt="Featured image of post Networking Protocols" /&gt;&lt;h2 id="networking-protocols"&gt;Networking Protocols
+&lt;/h2&gt;&lt;p&gt;Networking protocols are a set of standardized rules that help data be transmitted, received, and understood correctly across computer networks. They define the format, timing, sequence, and error control during data transmission. Some important protocols include:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;TCP/IP&lt;/strong&gt;: Bộ giao thức nền tảng cho giao tiếp trên Internet.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;HTTP/HTTPS&lt;/strong&gt;: Giao thức truyền tải siêu văn bản dùng cho web.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;FTP/SFTP&lt;/strong&gt;: Giao thức truyền tải tệp tin.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;SMTP/POP3/IMAP&lt;/strong&gt;: Giao thức truyền tải email.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;DNS&lt;/strong&gt;: Giao thức phân giải tên miền.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;DHCP&lt;/strong&gt;: Giao thức cấp phát địa chỉ IP tự động.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;SSL/TLS&lt;/strong&gt;: Giao thức bảo mật dữ liệu.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;UDP&lt;/strong&gt;: Giao thức truyền tải không kết nối, nhanh chóng.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;TCP/IP&lt;/strong&gt;: The foundational protocol suite for Internet communication.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;HTTP/HTTPS&lt;/strong&gt;: Hypertext transfer protocol used for the web.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;FTP/SFTP&lt;/strong&gt;: File transfer protocols.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;SMTP/POP3/IMAP&lt;/strong&gt;: Email transmission protocols.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;DNS&lt;/strong&gt;: Domain name resolution protocol.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;DHCP&lt;/strong&gt;: Automatic IP address allocation protocol.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;SSL/TLS&lt;/strong&gt;: Data security protocols.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;UDP&lt;/strong&gt;: Connectionless, fast transmission protocol.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="hệ-thống-tên-miền-dns"&gt;Hệ thống tên miền (DNS)
-&lt;/h2&gt;&lt;p&gt;DNS (&lt;strong&gt;Domain Name System&lt;/strong&gt;) là hệ thống phân giải tên miền, giúp chuyển đổi tên miền dễ nhớ (vd: &lt;code&gt;www.example.com&lt;/code&gt;) thành địa chỉ IP (&lt;code&gt;192.168.1.1&lt;/code&gt;) mà máy tính có thể hiểu được.&lt;/p&gt;
-&lt;h3 id="ví-dụ-cấu-hình-dns-trong-linux"&gt;Ví dụ cấu hình DNS trong Linux:
+&lt;h2 id="domain-name-system-dns"&gt;Domain Name System (DNS)
+&lt;/h2&gt;&lt;p&gt;DNS (&lt;strong&gt;Domain Name System&lt;/strong&gt;) is a domain name resolution system that helps convert memorable domain names (e.g., &lt;code&gt;www.example.com&lt;/code&gt;) into IP addresses (&lt;code&gt;192.168.1.1&lt;/code&gt;) that computers can understand.&lt;/p&gt;
+&lt;h3 id="example-dns-configuration-in-linux"&gt;Example DNS configuration in Linux:
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -27,28 +27,28 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;9
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Kiểm tra DNS của một tên miền&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Check DNS for a domain name&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;nslookup example.com
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;dig example.com
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Chỉnh sửa file hosts để ánh xạ tên miền&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Edit hosts file to map domain names&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo nano /etc/hosts
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Thêm dòng sau:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Add the following line:&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;192.168.1.100 mycustomdomain.com
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;🔗 &lt;strong&gt;Tài nguyên tham khảo:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;🔗 &lt;strong&gt;Reference resources:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://howdns.works/" target="_blank" rel="noopener"
-&gt;📄 Cách hoạt động của DNS&lt;/a&gt;&lt;/li&gt;
+&gt;📄 How DNS works&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=Wj0od2ag5sk" target="_blank" rel="noopener"
-&gt;🎥 Video giải thích DNS&lt;/a&gt;&lt;/li&gt;
+&gt;🎥 DNS explanation video&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="giao-thức-http"&gt;Giao thức HTTP
-&lt;/h2&gt;&lt;p&gt;HTTP (&lt;strong&gt;Hypertext Transfer Protocol&lt;/strong&gt;) là giao thức truyền tải dữ liệu trên web theo mô hình &lt;strong&gt;yêu cầu - phản hồi&lt;/strong&gt;.&lt;/p&gt;
-&lt;h3 id="ví-dụ-gửi-yêu-cầu-http-bằng-curl"&gt;Ví dụ gửi yêu cầu HTTP bằng cURL:
+&lt;h2 id="http-protocol"&gt;HTTP Protocol
+&lt;/h2&gt;&lt;p&gt;HTTP (&lt;strong&gt;Hypertext Transfer Protocol&lt;/strong&gt;) is a data transmission protocol on the web following a &lt;strong&gt;request-response&lt;/strong&gt; model.&lt;/p&gt;
+&lt;h3 id="example-sending-http-requests-with-curl"&gt;Example sending HTTP requests with cURL:
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -60,26 +60,26 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;7
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Gửi yêu cầu GET&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Send GET request&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl -X GET https://jsonplaceholder.typicode.com/posts/1
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Gửi yêu cầu POST&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Send POST request&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl -X POST https://jsonplaceholder.typicode.com/posts &lt;span class="se"&gt;\
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; -H &lt;span class="s2"&gt;&amp;#34;Content-Type: application/json&amp;#34;&lt;/span&gt; &lt;span class="se"&gt;\
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; -d &lt;span class="s1"&gt;&amp;#39;{&amp;#34;title&amp;#34;: &amp;#34;Hello&amp;#34;, &amp;#34;body&amp;#34;: &amp;#34;World&amp;#34;}&amp;#39;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;🔗 &lt;strong&gt;Tài nguyên tham khảo:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;🔗 &lt;strong&gt;Reference resources:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.cloudflare.com/en-gb/learning/ddos/glossary/hypertext-transfer-protocol-http/" target="_blank" rel="noopener"
-&gt;📄 Tìm hiểu về HTTP&lt;/a&gt;&lt;/li&gt;
+&gt;📄 Learn about HTTP&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=iYM2zFP3Zn0" target="_blank" rel="noopener"
-&gt;🎥 Video hướng dẫn HTTP&lt;/a&gt;&lt;/li&gt;
+&gt;🎥 HTTP tutorial video&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="https-và-bảo-mật-ssltls"&gt;HTTPS và bảo mật (SSL/TLS)
-&lt;/h2&gt;&lt;p&gt;HTTPS là phiên bản bảo mật của HTTP, sử dụng &lt;em&gt;&lt;strong&gt;SSL/TLS&lt;/strong&gt;&lt;/em&gt; để mã hóa dữ liệu, đảm bảo an toàn khi truyền tải trên Internet.&lt;/p&gt;
-&lt;h3 id="ví-dụ-thiết-lập-https-với-nginx"&gt;Ví dụ thiết lập HTTPS với Nginx:
+&lt;h2 id="https-and-security-ssltls"&gt;HTTPS and Security (SSL/TLS)
+&lt;/h2&gt;&lt;p&gt;HTTPS is the secure version of HTTP, using &lt;em&gt;&lt;strong&gt;SSL/TLS&lt;/strong&gt;&lt;/em&gt; to encrypt data, ensuring safety during transmission over the Internet.&lt;/p&gt;
+&lt;h3 id="example-setting-up-https-with-nginx"&gt;Example setting up HTTPS with Nginx:
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -98,17 +98,17 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;🔗 &lt;strong&gt;Tài nguyên tham khảo:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;🔗 &lt;strong&gt;Reference resources:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.cloudflare.com/en-gb/learning/ssl/what-is-https/" target="_blank" rel="noopener"
-&gt;📄 HTTPS là gì?&lt;/a&gt;&lt;/li&gt;
+&gt;📄 What is HTTPS?&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=25mXesOV9-8" target="_blank" rel="noopener"
-&gt;🎥 Video HTTPS hoạt động như thế nào&lt;/a&gt;&lt;/li&gt;
+&gt;🎥 How HTTPS works video&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="ssh---kết-nối-bảo-mật"&gt;SSH - Kết nối bảo mật
-&lt;/h2&gt;&lt;p&gt;SSH (&lt;em&gt;&lt;strong&gt;Secure Shell&lt;/strong&gt;&lt;/em&gt;) là giao thức giúp kết nối an toàn đến máy chủ từ xa.&lt;/p&gt;
-&lt;h3 id="ví-dụ-sử-dụng-ssh-để-kết-nối-từ-xa"&gt;Ví dụ sử dụng SSH để kết nối từ xa:
+&lt;h2 id="ssh---secure-connection"&gt;SSH - Secure Connection
+&lt;/h2&gt;&lt;p&gt;SSH (&lt;em&gt;&lt;strong&gt;Secure Shell&lt;/strong&gt;&lt;/em&gt;) is a protocol that enables secure connection to remote servers.&lt;/p&gt;
+&lt;h3 id="example-using-ssh-for-remote-connection"&gt;Example using SSH for remote connection:
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -118,21 +118,21 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;5
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Kết nối đến máy chủ từ xa&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Connect to remote server&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh user@example.com
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Sao chép tệp tin từ máy chủ về máy cục bộ&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Copy files from server to local machine&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;scp user@example.com:/path/to/file ./localfile
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;🔗 &lt;strong&gt;Tài nguyên tham khảo:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;🔗 &lt;strong&gt;Reference resources:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.baeldung.com/cs/ssh-intro" target="_blank" rel="noopener"
-&gt;📄 Hướng dẫn SSH&lt;/a&gt;&lt;/li&gt;
+&gt;📄 SSH tutorial&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=5JvLV2-ngCI" target="_blank" rel="noopener"
-&gt;🎥 Video cách SSH hoạt động&lt;/a&gt;&lt;/li&gt;
+&gt;🎥 How SSH works video&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="kết-luận"&gt;Kết Luận
-&lt;/h2&gt;&lt;p&gt;Giao thức mạng là nền tảng của mọi hệ thống trực tuyến, từ duyệt web đến gửi email. Hiểu và biết cách sử dụng chúng giúp cải thiện bảo mật và hiệu suất của hệ thống. Hãy thử áp dụng các lệnh trên để kiểm tra và cấu hình hệ thống của bạn! 🚀&lt;/p&gt;
-&lt;p&gt;👉 &lt;strong&gt;Bước tiếp theo:&lt;/strong&gt; Tìm hiểu về &lt;em&gt;&lt;strong&gt;Cloud Providers&lt;/strong&gt;&lt;/em&gt; các công ty cung cấp dịch vụ điện toán đám mây, cho phép cá nhân và doanh nghiệp truy cập tài nguyên như máy chủ, lưu trữ, cơ sở dữ liệu, AI, và các dịch vụ khác qua internet mà không cần đầu tư hạ tầng phần cứng.&lt;/p&gt;</description></item></channel></rss>
+&lt;h2 id="conclusion"&gt;Conclusion
+&lt;/h2&gt;&lt;p&gt;Networking protocols are the foundation of all online systems, from web browsing to sending emails. Understanding and knowing how to use them helps improve system security and performance. Try applying the commands above to check and configure your system! 🚀&lt;/p&gt;
+&lt;p&gt;👉 &lt;strong&gt;Next step:&lt;/strong&gt; Learn about &lt;em&gt;&lt;strong&gt;Cloud Providers&lt;/strong&gt;&lt;/em&gt; - companies that provide cloud computing services, allowing individuals and businesses to access resources like servers, storage, databases, AI, and other services over the internet without investing in hardware infrastructure.&lt;/p&gt;</description></item></channel></rss>

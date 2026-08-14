@@ -1,10 +1,10 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Dockerfile on Hoàng Dương</title><link>https://tech.nguuyen.io.vn/tags/dockerfile/</link><description>Recent content in Dockerfile on Hoàng Dương</description><generator>Hugo -- gohugo.io</generator><language>vi</language><lastBuildDate>Sun, 22 Mar 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/dockerfile/index.xml" rel="self" type="application/rss+xml"/><item><title>Docker Build Cache &amp; Layering</title><link>https://tech.nguuyen.io.vn/posts/docker/docker-build-cache-layering/</link><pubDate>Sun, 22 Mar 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/docker/docker-build-cache-layering/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/docker/docker-build-cache-layering.jpg" alt="Featured image of post Docker Build Cache &amp; Layering" /&gt;&lt;h2 id="docker-build-cache--layering"&gt;Docker Build Cache &amp;amp; Layering
-&lt;/h2&gt;&lt;p&gt;Bạn đã bao giờ tự hỏi tại sao lần &lt;strong&gt;build đầu tiên&lt;/strong&gt; mất 5-10 phút, nhưng lần &lt;strong&gt;build thứ hai&lt;/strong&gt; chỉ mất vài giây? Đó là nhờ &lt;strong&gt;Build Cache&lt;/strong&gt;. Nhưng đôi khi, chỉ thay đổi 1 dòng code mà Docker lại rebuild toàn bộ — đó là vì bạn chưa hiểu cách &lt;strong&gt;Layering&lt;/strong&gt; hoạt động. 🧱&lt;/p&gt;
-&lt;p&gt;Trong bài viết này, tôi sẽ giải thích chi tiết cơ chế Layer và Build Cache, cách Docker quyết định khi nào dùng cache và khi nào rebuild, cùng các kỹ thuật tối ưu để build nhanh hơn.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Dockerfile on Hoang Duong</title><link>https://tech.nguuyen.io.vn/tags/dockerfile/</link><description>Recent content in Dockerfile on Hoang Duong</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sun, 22 Mar 2026 20:00:00 +0700</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/dockerfile/index.xml" rel="self" type="application/rss+xml"/><item><title>Docker Build Cache &amp; Layering</title><link>https://tech.nguuyen.io.vn/posts/docker/docker-build-cache-layering/</link><pubDate>Sun, 22 Mar 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/docker/docker-build-cache-layering/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/docker/docker-build-cache-layering.jpg" alt="Featured image of post Docker Build Cache &amp; Layering" /&gt;&lt;h2 id="docker-build-cache--layering"&gt;Docker Build Cache &amp;amp; Layering
+&lt;/h2&gt;&lt;p&gt;Have you ever wondered why the &lt;strong&gt;first build&lt;/strong&gt; takes 5–10 minutes, but the &lt;strong&gt;second build&lt;/strong&gt; finishes in just a few seconds? That&amp;rsquo;s thanks to &lt;strong&gt;Build Cache&lt;/strong&gt;. But sometimes, changing just one line of code causes Docker to rebuild everything — that&amp;rsquo;s because you don&amp;rsquo;t yet understand how &lt;strong&gt;Layering&lt;/strong&gt; works. 🧱&lt;/p&gt;
+&lt;p&gt;In this article, I&amp;rsquo;ll explain in detail how Layers and Build Cache work, how Docker decides when to use cache versus rebuild, and techniques to optimize for faster builds.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="layer-trong-docker-là-gì"&gt;Layer trong Docker là gì?
-&lt;/h2&gt;&lt;p&gt;Mỗi lệnh trong Dockerfile tạo ra một &lt;strong&gt;layer&lt;/strong&gt; (lớp) trong image. Bạn có thể hình dung image như một chồng các lớp xếp chồng lên nhau, mỗi lớp thêm nội dung mới lên trên lớp trước đó.&lt;/p&gt;
-&lt;h3 id="cách-layer-được-tạo-ra"&gt;Cách Layer được tạo ra
+&lt;h2 id="what-is-a-layer-in-docker"&gt;What Is a Layer in Docker?
+&lt;/h2&gt;&lt;p&gt;Each instruction in a Dockerfile creates a &lt;strong&gt;layer&lt;/strong&gt; in the image. You can think of an image as a stack of layers piled on top of each other, with each layer adding new content on top of the previous one.&lt;/p&gt;
+&lt;h3 id="how-layers-are-created"&gt;How Layers Are Created
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -16,19 +16,19 @@
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-dockerfile" data-lang="dockerfile"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;FROM&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;node:18-alpine&lt;/span&gt; &lt;span class="c1"&gt;# Layer 1: Base image&lt;/span&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;WORKDIR&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;/app&lt;/span&gt; &lt;span class="c1"&gt;# Layer 2: Tạo thư mục làm việc&lt;/span&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;COPY&lt;/span&gt; package.json ./ &lt;span class="c1"&gt;# Layer 3: Copy file package.json&lt;/span&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm install &lt;span class="c1"&gt;# Layer 4: Cài dependencies&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;WORKDIR&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;/app&lt;/span&gt; &lt;span class="c1"&gt;# Layer 2: Create working directory&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;COPY&lt;/span&gt; package.json ./ &lt;span class="c1"&gt;# Layer 3: Copy package.json file&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm install &lt;span class="c1"&gt;# Layer 4: Install dependencies&lt;/span&gt;&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;COPY&lt;/span&gt; . . &lt;span class="c1"&gt;# Layer 5: Copy source code&lt;/span&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm run build &lt;span class="c1"&gt;# Layer 6: Build ứng dụng&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm run build &lt;span class="c1"&gt;# Layer 6: Build the application&lt;/span&gt;&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;Layer&lt;/th&gt;
-&lt;th&gt;Lệnh Dockerfile&lt;/th&gt;
-&lt;th&gt;Nội dung&lt;/th&gt;
+&lt;th&gt;Dockerfile Instruction&lt;/th&gt;
+&lt;th&gt;Content&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 &lt;tbody&gt;
@@ -40,42 +40,42 @@
 &lt;tr&gt;
 &lt;td&gt;Layer 2&lt;/td&gt;
 &lt;td&gt;&lt;code&gt;WORKDIR /app&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Tạo và chuyển vào thư mục /app&lt;/td&gt;
+&lt;td&gt;Create and switch to /app directory&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Layer 3&lt;/td&gt;
 &lt;td&gt;&lt;code&gt;COPY package.json ./&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Thêm file package.json&lt;/td&gt;
+&lt;td&gt;Add package.json file&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Layer 4&lt;/td&gt;
 &lt;td&gt;&lt;code&gt;RUN npm install&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Cài đặt node_modules&lt;/td&gt;
+&lt;td&gt;Install node_modules&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Layer 5&lt;/td&gt;
 &lt;td&gt;&lt;code&gt;COPY . .&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Thêm toàn bộ source code&lt;/td&gt;
+&lt;td&gt;Add all source code&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Layer 6&lt;/td&gt;
 &lt;td&gt;&lt;code&gt;RUN npm run build&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Tạo file build (dist/)&lt;/td&gt;
+&lt;td&gt;Generate build files (dist/)&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;h3 id="đặc-điểm-quan-trọng-của-layer"&gt;Đặc điểm quan trọng của Layer
+&lt;h3 id="key-characteristics-of-layers"&gt;Key Characteristics of Layers
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Read-only&lt;/strong&gt;: Mỗi layer sau khi tạo xong là chỉ đọc, không thể thay đổi&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Chia sẻ được&lt;/strong&gt;: Nhiều image có thể dùng chung các layer giống nhau (ví dụ: cùng base image &lt;code&gt;node:18-alpine&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Có thứ tự&lt;/strong&gt;: Layer sau được xếp chồng lên layer trước, tạo thành file system hoàn chỉnh&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Có kích thước&lt;/strong&gt;: Mỗi layer có dung lượng riêng, tổng tất cả layer = kích thước image&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Read-only&lt;/strong&gt;: Each layer is immutable once created — it cannot be modified&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Shareable&lt;/strong&gt;: Multiple images can share identical layers (e.g., the same &lt;code&gt;node:18-alpine&lt;/code&gt; base image)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Ordered&lt;/strong&gt;: Each layer stacks on top of the previous one, forming a complete file system&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Sized&lt;/strong&gt;: Each layer has its own size — the sum of all layers equals the image size&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="build-cache-hoạt-động-như-thế-nào"&gt;Build Cache hoạt động như thế nào?
-&lt;/h2&gt;&lt;p&gt;Build Cache là cơ chế giúp Docker &lt;strong&gt;bỏ qua các bước không cần thiết&lt;/strong&gt; khi rebuild image. Nếu một layer không thay đổi so với lần build trước, Docker sẽ dùng lại kết quả cũ thay vì chạy lại.&lt;/p&gt;
-&lt;h3 id="quy-tắc-cache-của-docker"&gt;Quy tắc cache của Docker
-&lt;/h3&gt;&lt;p&gt;Docker kiểm tra cache theo thứ tự từng lệnh trong Dockerfile:&lt;/p&gt;
+&lt;h2 id="how-does-build-cache-work"&gt;How Does Build Cache Work?
+&lt;/h2&gt;&lt;p&gt;Build Cache is the mechanism that allows Docker to &lt;strong&gt;skip unnecessary steps&lt;/strong&gt; when rebuilding an image. If a layer hasn&amp;rsquo;t changed since the last build, Docker reuses the previous result instead of running it again.&lt;/p&gt;
+&lt;h3 id="dockers-cache-rules"&gt;Docker&amp;rsquo;s Cache Rules
+&lt;/h3&gt;&lt;p&gt;Docker checks cache in order for each instruction in the Dockerfile:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -85,52 +85,52 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;5
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Lệnh 1 → Có cache? ✅ Dùng lại → Tiếp tục
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Lệnh 2 → Có cache? ✅ Dùng lại → Tiếp tục
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Lệnh 3 → Có cache? ❌ Cache miss → Rebuild từ đây trở đi
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Lệnh 4 → Bắt buộc rebuild (vì lệnh 3 đã thay đổi)
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Lệnh 5 → Bắt buộc rebuild
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Instruction 1 → Cache hit? ✅ Reuse → Continue
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Instruction 2 → Cache hit? ✅ Reuse → Continue
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Instruction 3 → Cache hit? ❌ Cache miss → Rebuild from here onward
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Instruction 4 → Must rebuild (because instruction 3 changed)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Instruction 5 → Must rebuild
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Quy tắc quan trọng nhất:&lt;/strong&gt; Khi một layer bị invalidate (mất cache), &lt;strong&gt;tất cả các layer phía sau đều phải rebuild&lt;/strong&gt; — kể cả khi chúng không thay đổi gì.&lt;/p&gt;
-&lt;h3 id="khi-nào-cache-bị-invalidate"&gt;Khi nào cache bị invalidate?
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;The most important rule:&lt;/strong&gt; When a layer is invalidated (cache miss), &lt;strong&gt;all subsequent layers must also be rebuilt&lt;/strong&gt; — even if they haven&amp;rsquo;t changed at all.&lt;/p&gt;
+&lt;h3 id="when-is-cache-invalidated"&gt;When Is Cache Invalidated?
 &lt;/h3&gt;&lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
-&lt;th&gt;Trường hợp&lt;/th&gt;
-&lt;th&gt;Cache bị mất?&lt;/th&gt;
-&lt;th&gt;Giải thích&lt;/th&gt;
+&lt;th&gt;Scenario&lt;/th&gt;
+&lt;th&gt;Cache invalidated?&lt;/th&gt;
+&lt;th&gt;Explanation&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
-&lt;td&gt;Thay đổi lệnh trong Dockerfile&lt;/td&gt;
-&lt;td&gt;✅ Có&lt;/td&gt;
-&lt;td&gt;Docker so sánh chuỗi lệnh, khác → rebuild&lt;/td&gt;
+&lt;td&gt;Dockerfile instruction changed&lt;/td&gt;
+&lt;td&gt;✅ Yes&lt;/td&gt;
+&lt;td&gt;Docker compares instruction strings — different → rebuild&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;File trong &lt;code&gt;COPY&lt;/code&gt;/&lt;code&gt;ADD&lt;/code&gt; thay đổi&lt;/td&gt;
-&lt;td&gt;✅ Có&lt;/td&gt;
-&lt;td&gt;Docker tính checksum của file, khác → rebuild&lt;/td&gt;
+&lt;td&gt;Files in &lt;code&gt;COPY&lt;/code&gt;/&lt;code&gt;ADD&lt;/code&gt; changed&lt;/td&gt;
+&lt;td&gt;✅ Yes&lt;/td&gt;
+&lt;td&gt;Docker computes file checksums — different → rebuild&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;Chỉ thay đổi &lt;code&gt;mtime&lt;/code&gt; của file&lt;/td&gt;
-&lt;td&gt;❌ Không&lt;/td&gt;
-&lt;td&gt;Docker không xét thời gian sửa đổi, chỉ xét nội dung&lt;/td&gt;
+&lt;td&gt;Only file &lt;code&gt;mtime&lt;/code&gt; changed&lt;/td&gt;
+&lt;td&gt;❌ No&lt;/td&gt;
+&lt;td&gt;Docker ignores modification time, only checks content&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;Lệnh &lt;code&gt;RUN&lt;/code&gt; giống hệt lần trước&lt;/td&gt;
-&lt;td&gt;❌ Không&lt;/td&gt;
-&lt;td&gt;Cùng chuỗi lệnh → dùng cache (kể cả kết quả đã cũ)&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;RUN&lt;/code&gt; instruction identical to last&lt;/td&gt;
+&lt;td&gt;❌ No&lt;/td&gt;
+&lt;td&gt;Same instruction string → use cache (even if outdated)&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;Layer trước đó bị invalidate&lt;/td&gt;
-&lt;td&gt;✅ Có&lt;/td&gt;
-&lt;td&gt;Tất cả layer phía sau đều phải rebuild&lt;/td&gt;
+&lt;td&gt;Previous layer was invalidated&lt;/td&gt;
+&lt;td&gt;✅ Yes&lt;/td&gt;
+&lt;td&gt;All subsequent layers must rebuild&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;h3 id="ví-dụ-minh-hoạ-cache-invalidation"&gt;Ví dụ minh hoạ cache invalidation
+&lt;h3 id="cache-invalidation-example"&gt;Cache Invalidation Example
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -140,19 +140,19 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;5
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-dockerfile" data-lang="dockerfile"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;FROM&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;node:18-alpine&lt;/span&gt; &lt;span class="c1"&gt;# ✅ Cache hit (không đổi)&lt;/span&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;WORKDIR&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;/app&lt;/span&gt; &lt;span class="c1"&gt;# ✅ Cache hit (không đổi)&lt;/span&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;COPY&lt;/span&gt; . . &lt;span class="c1"&gt;# ❌ Cache miss (bạn sửa 1 file .js)&lt;/span&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm install &lt;span class="c1"&gt;# ❌ Phải rebuild (vì COPY ở trên miss)&lt;/span&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm run build &lt;span class="c1"&gt;# ❌ Phải rebuild (vì layer trước miss)&lt;/span&gt;&lt;span class="err"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-dockerfile" data-lang="dockerfile"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;FROM&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;node:18-alpine&lt;/span&gt; &lt;span class="c1"&gt;# ✅ Cache hit (unchanged)&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;WORKDIR&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;/app&lt;/span&gt; &lt;span class="c1"&gt;# ✅ Cache hit (unchanged)&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;COPY&lt;/span&gt; . . &lt;span class="c1"&gt;# ❌ Cache miss (you edited a .js file)&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm install &lt;span class="c1"&gt;# ❌ Must rebuild (because COPY above missed)&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm run build &lt;span class="c1"&gt;# ❌ Must rebuild (because previous layer missed)&lt;/span&gt;&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Chỉ sửa 1 file &lt;code&gt;.js&lt;/code&gt; nhỏ, nhưng &lt;code&gt;npm install&lt;/code&gt; phải chạy lại dù &lt;code&gt;package.json&lt;/code&gt; không đổi. Đây là vấn đề phổ biến nhất khi viết Dockerfile chưa tối ưu.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;You only edited one small &lt;code&gt;.js&lt;/code&gt; file, but &lt;code&gt;npm install&lt;/code&gt; has to run again even though &lt;code&gt;package.json&lt;/code&gt; hasn&amp;rsquo;t changed. This is the most common issue with unoptimized Dockerfiles.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="kỹ-thuật-tối-ưu-build-cache"&gt;Kỹ thuật tối ưu Build Cache
-&lt;/h2&gt;&lt;h3 id="sắp-xếp-lệnh-theo-tần-suất-thay-đổi"&gt;Sắp xếp lệnh theo tần suất thay đổi
-&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Nguyên tắc:&lt;/strong&gt; Lệnh ít thay đổi → đặt trước. Lệnh hay thay đổi → đặt sau.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;❌ Chưa tối ưu:&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id="techniques-to-optimize-build-cache"&gt;Techniques to Optimize Build Cache
+&lt;/h2&gt;&lt;h3 id="order-instructions-by-change-frequency"&gt;Order Instructions by Change Frequency
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Principle:&lt;/strong&gt; Instructions that rarely change → place first. Instructions that change often → place last.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;❌ Not optimized:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -164,12 +164,12 @@
 &lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-dockerfile" data-lang="dockerfile"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;FROM&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;node:18-alpine&lt;/span&gt;&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;WORKDIR&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;/app&lt;/span&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;COPY&lt;/span&gt; . . &lt;span class="c1"&gt;# Copy tất cả (thay đổi thường xuyên)&lt;/span&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm install &lt;span class="c1"&gt;# Phải chạy lại mỗi khi code thay đổi&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;COPY&lt;/span&gt; . . &lt;span class="c1"&gt;# Copies everything (changes frequently)&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm install &lt;span class="c1"&gt;# Must re-run every time code changes&lt;/span&gt;&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm run build&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;✅ Đã tối ưu:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;✅ Optimized:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -182,15 +182,15 @@
 &lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-dockerfile" data-lang="dockerfile"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;FROM&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;node:18-alpine&lt;/span&gt;&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;WORKDIR&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;/app&lt;/span&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;COPY&lt;/span&gt; package.json yarn.lock ./ &lt;span class="c1"&gt;# Ít thay đổi → copy trước&lt;/span&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm install &lt;span class="c1"&gt;# Chỉ rebuild khi dependencies đổi&lt;/span&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;COPY&lt;/span&gt; . . &lt;span class="c1"&gt;# Hay thay đổi → copy sau&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;COPY&lt;/span&gt; package.json yarn.lock ./ &lt;span class="c1"&gt;# Rarely changes → copy first&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm install &lt;span class="c1"&gt;# Only rebuilds when dependencies change&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;COPY&lt;/span&gt; . . &lt;span class="c1"&gt;# Changes often → copy last&lt;/span&gt;&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm run build&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Kết quả:&lt;/strong&gt; Khi chỉ sửa source code, &lt;code&gt;npm install&lt;/code&gt; được cache lại → tiết kiệm 2-5 phút mỗi lần build.&lt;/p&gt;
-&lt;h3 id="sử-dụng-dockerignore"&gt;Sử dụng .dockerignore
-&lt;/h3&gt;&lt;p&gt;File &lt;code&gt;.dockerignore&lt;/code&gt; giúp loại bỏ các file không cần thiết khỏi build context, giảm nguy cơ cache bị invalidate vô ích.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Result:&lt;/strong&gt; When only source code changes, &lt;code&gt;npm install&lt;/code&gt; is cached → saving 2–5 minutes per build.&lt;/p&gt;
+&lt;h3 id="use-dockerignore"&gt;Use .dockerignore
+&lt;/h3&gt;&lt;p&gt;The &lt;code&gt;.dockerignore&lt;/code&gt; file excludes unnecessary files from the build context, reducing the risk of unnecessary cache invalidation.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -213,9 +213,9 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;.DS_Store
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Tại sao quan trọng?&lt;/strong&gt; Nếu không có &lt;code&gt;.dockerignore&lt;/code&gt;, lệnh &lt;code&gt;COPY . .&lt;/code&gt; sẽ copy cả &lt;code&gt;node_modules&lt;/code&gt; (hàng trăm MB) và &lt;code&gt;.git&lt;/code&gt; vào build context. Bất kỳ thay đổi nào trong các thư mục này đều làm cache miss.&lt;/p&gt;
-&lt;h3 id="sử-dụng-cache-mounts"&gt;Sử dụng Cache Mounts
-&lt;/h3&gt;&lt;p&gt;Cache mounts cho phép lưu trữ cache của package manager &lt;strong&gt;giữa các lần build&lt;/strong&gt;, kể cả khi layer bị rebuild.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Why is this important?&lt;/strong&gt; Without &lt;code&gt;.dockerignore&lt;/code&gt;, the &lt;code&gt;COPY . .&lt;/code&gt; instruction copies &lt;code&gt;node_modules&lt;/code&gt; (hundreds of MBs) and &lt;code&gt;.git&lt;/code&gt; into the build context. Any change in these directories triggers a cache miss.&lt;/p&gt;
+&lt;h3 id="use-cache-mounts"&gt;Use Cache Mounts
+&lt;/h3&gt;&lt;p&gt;Cache mounts allow you to persist package manager caches &lt;strong&gt;across builds&lt;/strong&gt;, even when a layer is rebuilt.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Node.js:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -279,9 +279,9 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; go build -o /app/server&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Lợi ích:&lt;/strong&gt; Ngay cả khi &lt;code&gt;package.json&lt;/code&gt; thay đổi và layer phải rebuild, các package đã tải trước đó vẫn được lưu trong cache mount → chỉ tải package mới, không tải lại toàn bộ.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Benefit:&lt;/strong&gt; Even when &lt;code&gt;package.json&lt;/code&gt; changes and the layer must rebuild, previously downloaded packages are still stored in the cache mount → only new packages are downloaded, not everything from scratch.&lt;/p&gt;
 &lt;h3 id="multi-stage-build"&gt;Multi-stage Build
-&lt;/h3&gt;&lt;p&gt;Multi-stage build giúp tách quá trình build và runtime, giảm kích thước image cuối cùng và tối ưu cache cho từng giai đoạn.&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;Multi-stage builds separate the build process from the runtime, reducing the final image size and optimizing cache for each stage.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -299,7 +299,7 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;13
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-dockerfile" data-lang="dockerfile"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c"&gt;# Stage 1: Build (layer nặng nhưng không nằm trong image cuối)&lt;/span&gt;&lt;span class="err"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-dockerfile" data-lang="dockerfile"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c"&gt;# Stage 1: Build (heavy layers but not included in the final image)&lt;/span&gt;&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;FROM&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;node:18-alpine&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;AS&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;builder&lt;/span&gt;&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;WORKDIR&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;/app&lt;/span&gt;&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;COPY&lt;/span&gt; package.json yarn.lock ./&lt;span class="err"&gt;
@@ -307,7 +307,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;COPY&lt;/span&gt; . .&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm run build&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c"&gt;# Stage 2: Runtime (chỉ chứa file cần thiết)&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c"&gt;# Stage 2: Runtime (only contains necessary files)&lt;/span&gt;&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;FROM&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;nginx:alpine&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;AS&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;production&lt;/span&gt;&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;COPY&lt;/span&gt; --from&lt;span class="o"&gt;=&lt;/span&gt;builder /app/dist /usr/share/nginx/html&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;EXPOSE&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;80&lt;/span&gt;&lt;span class="err"&gt;
@@ -318,29 +318,29 @@
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;Stage&lt;/th&gt;
-&lt;th&gt;Mục đích&lt;/th&gt;
-&lt;th&gt;Kích thước&lt;/th&gt;
-&lt;th&gt;Có trong image cuối?&lt;/th&gt;
+&lt;th&gt;Purpose&lt;/th&gt;
+&lt;th&gt;Size&lt;/th&gt;
+&lt;th&gt;Included in final image?&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
 &lt;td&gt;builder&lt;/td&gt;
-&lt;td&gt;Build ứng dụng&lt;/td&gt;
+&lt;td&gt;Build application&lt;/td&gt;
 &lt;td&gt;~500 MB&lt;/td&gt;
-&lt;td&gt;❌ Không&lt;/td&gt;
+&lt;td&gt;❌ No&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;production&lt;/td&gt;
-&lt;td&gt;Chạy ứng dụng&lt;/td&gt;
+&lt;td&gt;Run application&lt;/td&gt;
 &lt;td&gt;~30 MB&lt;/td&gt;
-&lt;td&gt;✅ Có&lt;/td&gt;
+&lt;td&gt;✅ Yes&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;hr&gt;
-&lt;h2 id="ví-dụ-thực-tế-tối-ưu-dockerfile-cho-nodejs"&gt;Ví dụ thực tế: Tối ưu Dockerfile cho Node.js
-&lt;/h2&gt;&lt;h3 id="dockerfile-chưa-tối-ưu"&gt;Dockerfile chưa tối ưu
+&lt;h2 id="real-world-example-optimizing-a-nodejs-dockerfile"&gt;Real-World Example: Optimizing a Node.js Dockerfile
+&lt;/h2&gt;&lt;h3 id="unoptimized-dockerfile"&gt;Unoptimized Dockerfile
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -359,14 +359,14 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;CMD&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;node&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;dist/server.js&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Vấn đề:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Issues:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;❌ Base image lớn (&lt;code&gt;node:18&lt;/code&gt; ~ 900 MB)&lt;/li&gt;
-&lt;li&gt;❌ &lt;code&gt;COPY . .&lt;/code&gt; trước &lt;code&gt;npm install&lt;/code&gt; → mọi thay đổi code đều rebuild dependencies&lt;/li&gt;
-&lt;li&gt;❌ Không có &lt;code&gt;.dockerignore&lt;/code&gt; → copy cả &lt;code&gt;node_modules&lt;/code&gt;, &lt;code&gt;.git&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;❌ Không dùng multi-stage → image cuối chứa devDependencies&lt;/li&gt;
+&lt;li&gt;❌ Large base image (&lt;code&gt;node:18&lt;/code&gt; ~ 900 MB)&lt;/li&gt;
+&lt;li&gt;❌ &lt;code&gt;COPY . .&lt;/code&gt; before &lt;code&gt;npm install&lt;/code&gt; → any code change rebuilds dependencies&lt;/li&gt;
+&lt;li&gt;❌ No &lt;code&gt;.dockerignore&lt;/code&gt; → copies &lt;code&gt;node_modules&lt;/code&gt;, &lt;code&gt;.git&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;❌ No multi-stage → final image includes devDependencies&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id="dockerfile-đã-tối-ưu"&gt;Dockerfile đã tối ưu
+&lt;h3 id="optimized-dockerfile"&gt;Optimized Dockerfile
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -427,48 +427,48 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;CMD&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;node&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;dist/server.js&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Cải thiện:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Improvements:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;✅ Base image nhỏ (&lt;code&gt;node:18-alpine&lt;/code&gt; ~ 170 MB)&lt;/li&gt;
-&lt;li&gt;✅ Tách &lt;code&gt;COPY package.json&lt;/code&gt; riêng → cache dependencies hiệu quả&lt;/li&gt;
-&lt;li&gt;✅ Cache mount cho npm → tải lại nhanh khi rebuild&lt;/li&gt;
-&lt;li&gt;✅ Multi-stage → image cuối chỉ chứa production dependencies&lt;/li&gt;
-&lt;li&gt;✅ Sử dụng &lt;code&gt;npm ci&lt;/code&gt; thay &lt;code&gt;npm install&lt;/code&gt; → đảm bảo reproducible builds&lt;/li&gt;
+&lt;li&gt;✅ Small base image (&lt;code&gt;node:18-alpine&lt;/code&gt; ~ 170 MB)&lt;/li&gt;
+&lt;li&gt;✅ Separate &lt;code&gt;COPY package.json&lt;/code&gt; → efficient dependency caching&lt;/li&gt;
+&lt;li&gt;✅ Cache mount for npm → faster re-downloads on rebuild&lt;/li&gt;
+&lt;li&gt;✅ Multi-stage → final image only contains production dependencies&lt;/li&gt;
+&lt;li&gt;✅ Uses &lt;code&gt;npm ci&lt;/code&gt; instead of &lt;code&gt;npm install&lt;/code&gt; → ensures reproducible builds&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id="so-sánh-kết-quả"&gt;So sánh kết quả
+&lt;h3 id="results-comparison"&gt;Results Comparison
 &lt;/h3&gt;&lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
-&lt;th&gt;Tiêu chí&lt;/th&gt;
-&lt;th&gt;Chưa tối ưu&lt;/th&gt;
-&lt;th&gt;Đã tối ưu&lt;/th&gt;
+&lt;th&gt;Criteria&lt;/th&gt;
+&lt;th&gt;Unoptimized&lt;/th&gt;
+&lt;th&gt;Optimized&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
-&lt;td&gt;Kích thước image&lt;/td&gt;
+&lt;td&gt;Image size&lt;/td&gt;
 &lt;td&gt;~900 MB&lt;/td&gt;
 &lt;td&gt;~170 MB&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;Build lần đầu&lt;/td&gt;
-&lt;td&gt;~5 phút&lt;/td&gt;
-&lt;td&gt;~5 phút&lt;/td&gt;
+&lt;td&gt;First build&lt;/td&gt;
+&lt;td&gt;~5 minutes&lt;/td&gt;
+&lt;td&gt;~5 minutes&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;Rebuild khi đổi code&lt;/td&gt;
-&lt;td&gt;~5 phút&lt;/td&gt;
-&lt;td&gt;~30 giây&lt;/td&gt;
+&lt;td&gt;Rebuild on code change&lt;/td&gt;
+&lt;td&gt;~5 minutes&lt;/td&gt;
+&lt;td&gt;~30 seconds&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
-&lt;td&gt;Rebuild khi đổi deps&lt;/td&gt;
-&lt;td&gt;~5 phút&lt;/td&gt;
-&lt;td&gt;~2 phút&lt;/td&gt;
+&lt;td&gt;Rebuild on dependency change&lt;/td&gt;
+&lt;td&gt;~5 minutes&lt;/td&gt;
+&lt;td&gt;~2 minutes&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;hr&gt;
-&lt;h2 id="các-lệnh-hữu-ích-để-debug-cache"&gt;Các lệnh hữu ích để debug Cache
+&lt;h2 id="useful-commands-for-debugging-cache"&gt;Useful Commands for Debugging Cache
 &lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -490,26 +490,26 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;17
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Xem chi tiết quá trình build (hiển thị cache hit/miss)&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# View detailed build output (shows cache hit/miss)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker build --progress&lt;span class="o"&gt;=&lt;/span&gt;plain -t myapp .
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Build không dùng cache (force rebuild toàn bộ)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Build without cache (force full rebuild)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker build --no-cache -t myapp .
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Chỉ invalidate cache cho stage cụ thể&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Invalidate cache for a specific stage only&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker build --no-cache-filter builder -t myapp .
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Xem các layer của image&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# View image layers&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker &lt;span class="nb"&gt;history&lt;/span&gt; myapp
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Xem dung lượng build cache&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Check build cache disk usage&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker builder du
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Xoá build cache&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Clear build cache&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker builder prune
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Đọc output build:&lt;/strong&gt; Khi build, Docker hiển thị &lt;code&gt;CACHED&lt;/code&gt; cho các layer dùng cache:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Reading build output:&lt;/strong&gt; During builds, Docker shows &lt;code&gt;CACHED&lt;/code&gt; for layers that use cache:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -524,46 +524,46 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; =&amp;gt; [builder 5/5] RUN npm run build
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Các dòng có &lt;code&gt;CACHED&lt;/code&gt; nghĩa là layer đó được lấy từ cache, không cần rebuild.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Lines with &lt;code&gt;CACHED&lt;/code&gt; mean the layer was retrieved from cache and didn&amp;rsquo;t need to be rebuilt.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="ghi-chú-triển-khai"&gt;Ghi chú triển khai
+&lt;h2 id="implementation-notes"&gt;Implementation Notes
 &lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Khi áp dụng vào dự án của bạn&lt;/strong&gt;, hãy lưu ý các điểm quan trọng:
+&lt;li&gt;&lt;strong&gt;When applying to your project&lt;/strong&gt;, keep these important points in mind:
 &lt;ul&gt;
-&lt;li&gt;Luôn tạo file &lt;code&gt;.dockerignore&lt;/code&gt; trước khi viết Dockerfile&lt;/li&gt;
-&lt;li&gt;Tách &lt;code&gt;COPY package.json&lt;/code&gt; riêng trước &lt;code&gt;RUN npm install&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Sử dụng multi-stage build cho production image&lt;/li&gt;
-&lt;li&gt;Cache mount (&lt;code&gt;--mount=type=cache&lt;/code&gt;) cần BuildKit (mặc định từ Docker 23.0+)&lt;/li&gt;
+&lt;li&gt;Always create a &lt;code&gt;.dockerignore&lt;/code&gt; file before writing your Dockerfile&lt;/li&gt;
+&lt;li&gt;Separate &lt;code&gt;COPY package.json&lt;/code&gt; before &lt;code&gt;RUN npm install&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Use multi-stage builds for production images&lt;/li&gt;
+&lt;li&gt;Cache mounts (&lt;code&gt;--mount=type=cache&lt;/code&gt;) require BuildKit (enabled by default since Docker 23.0+)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Best practices&lt;/strong&gt;:
 &lt;ul&gt;
-&lt;li&gt;Sắp xếp lệnh: ít thay đổi → trước, hay thay đổi → sau&lt;/li&gt;
-&lt;li&gt;Dùng &lt;code&gt;npm ci&lt;/code&gt; thay &lt;code&gt;npm install&lt;/code&gt; trong CI/CD&lt;/li&gt;
-&lt;li&gt;Pin version cụ thể cho base image (&lt;code&gt;node:18.12-alpine&lt;/code&gt; thay vì &lt;code&gt;node:latest&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Order instructions: rarely changes → first, frequently changes → last&lt;/li&gt;
+&lt;li&gt;Use &lt;code&gt;npm ci&lt;/code&gt; instead of &lt;code&gt;npm install&lt;/code&gt; in CI/CD&lt;/li&gt;
+&lt;li&gt;Pin specific versions for base images (&lt;code&gt;node:18.12-alpine&lt;/code&gt; instead of &lt;code&gt;node:latest&lt;/code&gt;)&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Troubleshooting&lt;/strong&gt;:
 &lt;ul&gt;
-&lt;li&gt;Build chậm dù không đổi gì? → Kiểm tra &lt;code&gt;.dockerignore&lt;/code&gt;, có thể file không liên quan đang trigger cache miss&lt;/li&gt;
-&lt;li&gt;Cache mount không hoạt động? → Đảm bảo Docker BuildKit đang bật: &lt;code&gt;DOCKER_BUILDKIT=1&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Muốn xem layer nào bị miss? → Dùng &lt;code&gt;docker build --progress=plain&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Build is slow even though nothing changed? → Check &lt;code&gt;.dockerignore&lt;/code&gt;, unrelated files may be triggering cache misses&lt;/li&gt;
+&lt;li&gt;Cache mounts not working? → Make sure Docker BuildKit is enabled: &lt;code&gt;DOCKER_BUILDKIT=1&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Want to see which layer missed? → Use &lt;code&gt;docker build --progress=plain&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="lời-kết"&gt;Lời kết
-&lt;/h2&gt;&lt;p&gt;Tóm tắt lại:&lt;/p&gt;
+&lt;h2 id="conclusion"&gt;Conclusion
+&lt;/h2&gt;&lt;p&gt;To summarize:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Layer&lt;/strong&gt; = mỗi lệnh trong Dockerfile tạo ra một lớp trong image&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Build Cache&lt;/strong&gt; = Docker lưu lại kết quả các layer để dùng lại khi rebuild&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Cache invalidation&lt;/strong&gt; = khi một layer thay đổi, tất cả layer phía sau đều phải rebuild&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Tối ưu&lt;/strong&gt; = sắp xếp lệnh hợp lý + &lt;code&gt;.dockerignore&lt;/code&gt; + cache mounts + multi-stage build&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Layer&lt;/strong&gt; = each instruction in a Dockerfile creates a layer in the image&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Build Cache&lt;/strong&gt; = Docker stores layer results and reuses them when rebuilding&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Cache invalidation&lt;/strong&gt; = when a layer changes, all subsequent layers must rebuild&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Optimization&lt;/strong&gt; = proper instruction ordering + &lt;code&gt;.dockerignore&lt;/code&gt; + cache mounts + multi-stage builds&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Chỉ cần hiểu và áp dụng 4 kỹ thuật trên, bạn có thể giảm thời gian build Docker từ &lt;strong&gt;5 phút xuống dưới 30 giây&lt;/strong&gt; cho phần lớn trường hợp. 🚀&lt;/p&gt;
-&lt;p&gt;Nếu bạn thấy bài viết này hữu ích, hãy nhớ ⭐ star repo hoặc 📱 chia sẻ với bạn bè nhé! 😊&lt;/p&gt;
+&lt;p&gt;By understanding and applying these 4 techniques, you can reduce Docker build times from &lt;strong&gt;5 minutes to under 30 seconds&lt;/strong&gt; in most cases. 🚀&lt;/p&gt;
+&lt;p&gt;If you find this article helpful, feel free to ⭐ star the repo or 📱 share it with your friends! 😊&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="tài-liệu-tham-khảo"&gt;Tài liệu tham khảo
+&lt;h2 id="references"&gt;References
 &lt;/h2&gt;&lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://docs.docker.com/build/cache/" target="_blank" rel="noopener"
 &gt;Docker Official Documentation - Build Cache&lt;/a&gt;&lt;/li&gt;

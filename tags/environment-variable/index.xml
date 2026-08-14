@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Environment-Variable on Hoàng Dương</title><link>https://tech.nguuyen.io.vn/tags/environment-variable/</link><description>Recent content in Environment-Variable on Hoàng Dương</description><generator>Hugo -- gohugo.io</generator><language>vi</language><lastBuildDate>Wed, 24 Jun 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/environment-variable/index.xml" rel="self" type="application/rss+xml"/><item><title>Quản lý biến và môi trường trong Bash cho DevOps</title><link>https://tech.nguuyen.io.vn/posts/bash/bash-step-seven/</link><pubDate>Wed, 24 Jun 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/bash/bash-step-seven/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/bash/bash-step-seven.jpg" alt="Featured image of post Quản lý biến và môi trường trong Bash cho DevOps" /&gt;&lt;h2 id="vì-sao-biến-môi-trường-quan-trọng-trong-bash"&gt;Vì sao biến môi trường quan trọng trong Bash
-&lt;/h2&gt;&lt;p&gt;Ở &lt;a class="link" href="https://tech.nguuyen.io.vn/posts/bash/bash-step-six/" &gt;bài trước&lt;/a&gt; chúng ta đã tách logic thành function để script dễ tái sử dụng hơn. Khi script bắt đầu chạy trong nhiều môi trường — local, staging, production, CI/CD runner — vấn đề tiếp theo là: &lt;strong&gt;cấu hình lấy từ đâu và truyền vào như thế nào?&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;Biến trong Bash giúp lưu giá trị tạm thời trong script. Biến môi trường giúp truyền cấu hình cho process con như &lt;code&gt;docker&lt;/code&gt;, &lt;code&gt;kubectl&lt;/code&gt;, &lt;code&gt;aws&lt;/code&gt;, &lt;code&gt;curl&lt;/code&gt; hoặc ứng dụng mà script khởi chạy. Nếu quản lý biến không rõ ràng, script rất dễ deploy nhầm môi trường, lộ secret, hoặc chạy sai vì thiếu config.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Environment-Variable on Hoang Duong</title><link>https://tech.nguuyen.io.vn/tags/environment-variable/</link><description>Recent content in Environment-Variable on Hoang Duong</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Thu, 25 Jun 2026 00:00:00 +0700</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/environment-variable/index.xml" rel="self" type="application/rss+xml"/><item><title>Managing Variables and Environment in Bash for DevOps</title><link>https://tech.nguuyen.io.vn/posts/bash/bash-step-seven/</link><pubDate>Wed, 24 Jun 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/bash/bash-step-seven/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/bash/bash-step-seven.jpg" alt="Featured image of post Managing Variables and Environment in Bash for DevOps" /&gt;&lt;h2 id="why-environment-variables-matter-in-bash"&gt;Why environment variables matter in Bash
+&lt;/h2&gt;&lt;p&gt;In the &lt;a class="link" href="https://tech.nguuyen.io.vn/en/posts/bash/bash-step-six/" &gt;previous article&lt;/a&gt; we split logic into functions so scripts are easier to reuse. Once a script starts running across multiple environments — local, staging, production, CI/CD runners — the next question is: &lt;strong&gt;where does configuration come from, and how should it be passed in?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Variables in Bash store temporary values inside a script. Environment variables pass configuration to child processes such as &lt;code&gt;docker&lt;/code&gt;, &lt;code&gt;kubectl&lt;/code&gt;, &lt;code&gt;aws&lt;/code&gt;, &lt;code&gt;curl&lt;/code&gt;, or the application launched by the script. If variables are managed poorly, a script can deploy to the wrong environment, leak secrets, or fail because required config is missing.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="biến-cục-bộ-và-cách-gán-giá-trị"&gt;Biến cục bộ và cách gán giá trị
-&lt;/h2&gt;&lt;p&gt;Cú pháp gán biến trong Bash không có khoảng trắng quanh dấu &lt;code&gt;=&lt;/code&gt;:&lt;/p&gt;
+&lt;h2 id="local-variables-and-assignment-syntax"&gt;Local variables and assignment syntax
+&lt;/h2&gt;&lt;p&gt;Bash variable assignment has no spaces around &lt;code&gt;=&lt;/code&gt;:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -16,7 +16,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;RETRY_COUNT&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;3&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Khi đọc biến, dùng &lt;code&gt;$VAR&lt;/code&gt; hoặc &lt;code&gt;${VAR}&lt;/code&gt;. Trong script thực tế, &lt;code&gt;${VAR}&lt;/code&gt; thường rõ ràng hơn khi nối chuỗi:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;To read a variable, use &lt;code&gt;$VAR&lt;/code&gt; or &lt;code&gt;${VAR}&lt;/code&gt;. In real scripts, &lt;code&gt;${VAR}&lt;/code&gt; is often clearer when concatenating strings:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -27,16 +27,16 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;LOG_FILE&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;/var/log/&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;APP_NAME&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;.log&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Một lỗi rất phổ biến là thêm khoảng trắng:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;A very common mistake is adding spaces:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;APP_NAME&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;blog-api&amp;#34;&lt;/span&gt; &lt;span class="c1"&gt;# sai: Bash hiểu APP_NAME là command&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;APP_NAME&lt;/span&gt; &lt;span class="o"&gt;=&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;blog-api&amp;#34;&lt;/span&gt; &lt;span class="c1"&gt;# wrong: Bash treats APP_NAME as a command&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Khi giá trị có khoảng trắng hoặc ký tự đặc biệt, luôn quote biến:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;When a value contains spaces or special characters, always quote the variable:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -47,10 +47,10 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;mkdir -p &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;BACKUP_DIR&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Không quote biến có thể làm path bị tách thành nhiều argument, gây lỗi khó đoán trong script vận hành.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Unquoted variables can split paths into multiple arguments and cause hard-to-debug operational failures.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="export-khi-nào-biến-trở-thành-environment-variable"&gt;&lt;code&gt;export&lt;/code&gt;: khi nào biến trở thành environment variable
-&lt;/h2&gt;&lt;p&gt;Biến Bash bình thường chỉ tồn tại trong shell hiện tại. Process con không tự thấy biến đó:&lt;/p&gt;
+&lt;h2 id="export-when-a-variable-becomes-an-environment-variable"&gt;&lt;code&gt;export&lt;/code&gt;: when a variable becomes an environment variable
+&lt;/h2&gt;&lt;p&gt;A normal Bash variable only exists in the current shell. Child processes do not see it automatically:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -58,10 +58,10 @@
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;APP_ENV&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;staging&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;bash -c &lt;span class="s1"&gt;&amp;#39;echo &amp;#34;APP_ENV=$APP_ENV&amp;#34;&amp;#39;&lt;/span&gt; &lt;span class="c1"&gt;# rỗng&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;bash -c &lt;span class="s1"&gt;&amp;#39;echo &amp;#34;APP_ENV=$APP_ENV&amp;#34;&amp;#39;&lt;/span&gt; &lt;span class="c1"&gt;# empty&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Muốn process con đọc được, dùng &lt;code&gt;export&lt;/code&gt;:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;To make a child process read it, use &lt;code&gt;export&lt;/code&gt;:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -72,7 +72,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;bash -c &lt;span class="s1"&gt;&amp;#39;echo &amp;#34;APP_ENV=$APP_ENV&amp;#34;&amp;#39;&lt;/span&gt; &lt;span class="c1"&gt;# APP_ENV=staging&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Trong DevOps, &lt;code&gt;export&lt;/code&gt; thường dùng khi gọi CLI hoặc chạy ứng dụng:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;In DevOps, &lt;code&gt;export&lt;/code&gt; is commonly used before calling a CLI or starting an app:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -87,7 +87,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;kubectl get pods
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Bạn cũng có thể truyền biến chỉ cho một command:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;You can also pass a variable to a single command only:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -96,10 +96,10 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;APP_ENV&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;staging&amp;#34;&lt;/span&gt; ./run-migration.sh
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Cách này gọn và an toàn hơn nếu biến chỉ cần tồn tại cho đúng một lệnh.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;This is cleaner and safer when the variable only needs to exist for one command.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="xem-đặt-và-xóa-biến-với-env-set-unset"&gt;Xem, đặt và xóa biến với &lt;code&gt;env&lt;/code&gt;, &lt;code&gt;set&lt;/code&gt;, &lt;code&gt;unset&lt;/code&gt;
-&lt;/h2&gt;&lt;p&gt;Một vài command hữu ích khi debug môi trường chạy script:&lt;/p&gt;
+&lt;h2 id="inspect-set-and-remove-variables-with-env-set-unset"&gt;Inspect, set, and remove variables with &lt;code&gt;env&lt;/code&gt;, &lt;code&gt;set&lt;/code&gt;, &lt;code&gt;unset&lt;/code&gt;
+&lt;/h2&gt;&lt;p&gt;A few useful commands when debugging a script environment:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -108,14 +108,14 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;4
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;env &lt;span class="c1"&gt;# in environment variables&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;printenv APP_ENV &lt;span class="c1"&gt;# in một biến môi trường cụ thể&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;set&lt;/span&gt; &lt;span class="c1"&gt;# in cả shell variables, functions và environment variables&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;unset&lt;/span&gt; APP_ENV &lt;span class="c1"&gt;# xóa biến&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;env &lt;span class="c1"&gt;# print environment variables&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;printenv APP_ENV &lt;span class="c1"&gt;# print a specific environment variable&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;set&lt;/span&gt; &lt;span class="c1"&gt;# print shell variables, functions, and environment variables&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;unset&lt;/span&gt; APP_ENV &lt;span class="c1"&gt;# remove a variable&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;code&gt;env&lt;/code&gt; phù hợp để kiểm tra process con sẽ thấy gì. &lt;code&gt;set&lt;/code&gt; chi tiết hơn, nhưng output dài và có thể chứa dữ liệu nhạy cảm, nên hạn chế paste nguyên output vào ticket hoặc log.&lt;/p&gt;
-&lt;p&gt;Ví dụ kiểm tra biến bắt buộc:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;env&lt;/code&gt; is useful for checking what child processes will see. &lt;code&gt;set&lt;/code&gt; is more detailed, but its output is long and may contain sensitive data, so avoid pasting the full output into tickets or logs.&lt;/p&gt;
+&lt;p&gt;Example for validating required variables:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -144,10 +144,10 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;require_env &lt;span class="s2"&gt;&amp;#34;DATABASE_URL&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Cú pháp &lt;code&gt;${!name}&lt;/code&gt; là indirect expansion: nếu &lt;code&gt;name=&amp;quot;APP_ENV&amp;quot;&lt;/code&gt;, Bash sẽ đọc giá trị của biến &lt;code&gt;APP_ENV&lt;/code&gt;.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;${!name}&lt;/code&gt; is indirect expansion: if &lt;code&gt;name=&amp;quot;APP_ENV&amp;quot;&lt;/code&gt;, Bash reads the value of the &lt;code&gt;APP_ENV&lt;/code&gt; variable.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="đọc-cấu-hình-từ-file-env"&gt;Đọc cấu hình từ file &lt;code&gt;.env&lt;/code&gt;
-&lt;/h2&gt;&lt;p&gt;File &lt;code&gt;.env&lt;/code&gt; giúp tách config khỏi code:&lt;/p&gt;
+&lt;h2 id="loading-configuration-from-a-env-file"&gt;Loading configuration from a &lt;code&gt;.env&lt;/code&gt; file
+&lt;/h2&gt;&lt;p&gt;A &lt;code&gt;.env&lt;/code&gt; file keeps configuration separate from code:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -160,7 +160,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;BACKUP_DIR&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;/opt/backups/blog
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Cách đơn giản để load file:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;The simplest way to load it:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -173,9 +173,9 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;set&lt;/span&gt; +a
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;code&gt;set -a&lt;/code&gt; làm các biến được gán sau đó tự động export, nên process con có thể đọc được.&lt;/p&gt;
-&lt;p&gt;Tuy nhiên, &lt;code&gt;source .env&lt;/code&gt; sẽ thực thi nội dung file như Bash code. Vì vậy chỉ dùng với file bạn kiểm soát, không source file upload từ user hoặc nguồn không tin cậy.&lt;/p&gt;
-&lt;p&gt;Một pattern an toàn hơn cho script deploy:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;set -a&lt;/code&gt; automatically exports variables assigned after it, so child processes can read them.&lt;/p&gt;
+&lt;p&gt;However, &lt;code&gt;source .env&lt;/code&gt; executes the file content as Bash code. Only use it with files you control. Never source files uploaded by users or fetched from untrusted sources.&lt;/p&gt;
+&lt;p&gt;A safer pattern for deployment scripts:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -208,10 +208,10 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;: &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;APP_PORT&lt;/span&gt;&lt;span class="p"&gt;:?APP_PORT is required&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Dòng &lt;code&gt;: &amp;quot;${VAR:?message}&amp;quot;&lt;/code&gt; khiến script dừng ngay nếu biến chưa được set hoặc rỗng. Đây là cách fail-fast rất hữu ích trước khi chạy deploy.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;: &amp;quot;${VAR:?message}&amp;quot;&lt;/code&gt; makes the script stop immediately if the variable is unset or empty. This fail-fast pattern is very useful before running a deployment.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="nhận-tham-số-cli-bằng-getopts"&gt;Nhận tham số CLI bằng &lt;code&gt;getopts&lt;/code&gt;
-&lt;/h2&gt;&lt;p&gt;Không phải cấu hình nào cũng nên nằm trong &lt;code&gt;.env&lt;/code&gt;. Những giá trị thay đổi theo lần chạy, như môi trường đích hoặc chế độ dry-run, nên nhận qua flag:&lt;/p&gt;
+&lt;h2 id="reading-cli-arguments-with-getopts"&gt;Reading CLI arguments with &lt;code&gt;getopts&lt;/code&gt;
+&lt;/h2&gt;&lt;p&gt;Not every config value belongs in &lt;code&gt;.env&lt;/code&gt;. Values that change per run, such as target environment or dry-run mode, should be passed as flags:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -262,7 +262,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;environment=&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;ENVIRONMENT&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; dry_run=&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;DRY_RUN&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Chạy thử:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Run it:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -271,11 +271,11 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;./deploy.sh -e production -n
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;code&gt;getopts&lt;/code&gt; phù hợp cho option ngắn như &lt;code&gt;-e production&lt;/code&gt;, &lt;code&gt;-n&lt;/code&gt;. Nếu cần long option như &lt;code&gt;--environment&lt;/code&gt;, bạn có thể tự parse bằng &lt;code&gt;case&lt;/code&gt;, nhưng nên giữ format đơn giản để script dễ bảo trì.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;getopts&lt;/code&gt; is a good fit for short options such as &lt;code&gt;-e production&lt;/code&gt; and &lt;code&gt;-n&lt;/code&gt;. If you need long options such as &lt;code&gt;--environment&lt;/code&gt;, you can parse them manually with &lt;code&gt;case&lt;/code&gt;, but keeping the format simple makes scripts easier to maintain.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="ifs-kiểm-soát-cách-bash-tách-chuỗi"&gt;&lt;code&gt;$IFS&lt;/code&gt;: kiểm soát cách Bash tách chuỗi
-&lt;/h2&gt;&lt;p&gt;&lt;code&gt;IFS&lt;/code&gt; là Internal Field Separator — tập ký tự Bash dùng để tách word khi xử lý một số expansion và lệnh &lt;code&gt;read&lt;/code&gt;. Mặc định gồm space, tab và newline.&lt;/p&gt;
-&lt;p&gt;Khi đọc file từng dòng, dùng pattern này để giữ nguyên khoảng trắng đầu/cuối và không xử lý backslash đặc biệt:&lt;/p&gt;
+&lt;h2 id="ifs-controlling-how-bash-splits-strings"&gt;&lt;code&gt;$IFS&lt;/code&gt;: controlling how Bash splits strings
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;IFS&lt;/code&gt; means Internal Field Separator — the characters Bash uses for word splitting in some expansions and in the &lt;code&gt;read&lt;/code&gt; command. By default, it contains space, tab, and newline.&lt;/p&gt;
+&lt;p&gt;When reading a file line by line, use this pattern to preserve leading/trailing spaces and avoid special backslash handling:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -292,7 +292,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;done&lt;/span&gt; &amp;lt; servers.txt
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Khi tách chuỗi CSV đơn giản:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;When splitting a simple CSV string:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -311,53 +311,53 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;done&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Tránh đổi &lt;code&gt;IFS&lt;/code&gt; global nếu không cần. Nếu phải đổi, hãy giới hạn trong một dòng hoặc một scope nhỏ để không làm hỏng phần khác của script.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Avoid changing &lt;code&gt;IFS&lt;/code&gt; globally unless you really need to. If you must change it, keep the change limited to one line or a small scope so it does not break another part of the script.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="các-biến-đặc-biệt-thường-gặp"&gt;Các biến đặc biệt thường gặp
-&lt;/h2&gt;&lt;p&gt;Bash có nhiều biến đặc biệt rất hữu ích khi viết script vận hành:&lt;/p&gt;
+&lt;h2 id="common-special-variables"&gt;Common special variables
+&lt;/h2&gt;&lt;p&gt;Bash has many special variables that are useful in operational scripts:&lt;/p&gt;
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
-&lt;th&gt;Biến&lt;/th&gt;
-&lt;th&gt;Ý nghĩa&lt;/th&gt;
+&lt;th&gt;Variable&lt;/th&gt;
+&lt;th&gt;Meaning&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;$0&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Tên script đang chạy&lt;/td&gt;
+&lt;td&gt;Name of the running script&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;$1&lt;/code&gt;, &lt;code&gt;$2&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Tham số vị trí&lt;/td&gt;
+&lt;td&gt;Positional arguments&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;$@&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Toàn bộ tham số, nên dùng &lt;code&gt;&amp;quot;$@&amp;quot;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;All arguments; usually use &lt;code&gt;&amp;quot;$@&amp;quot;&lt;/code&gt;&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;$#&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Số lượng tham số&lt;/td&gt;
+&lt;td&gt;Number of arguments&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;$?&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Exit code của command vừa chạy&lt;/td&gt;
+&lt;td&gt;Exit code of the last command&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;$$&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;PID của shell hiện tại&lt;/td&gt;
+&lt;td&gt;PID of the current shell&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;$!&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;PID của background process gần nhất&lt;/td&gt;
+&lt;td&gt;PID of the most recent background process&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;${BASH_SOURCE[0]}&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Đường dẫn file script hiện tại trong Bash&lt;/td&gt;
+&lt;td&gt;Path to the current script file in Bash&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
-&lt;p&gt;Ví dụ dùng &lt;code&gt;$!&lt;/code&gt; và &lt;code&gt;wait&lt;/code&gt; để theo dõi background job:&lt;/p&gt;
+&lt;p&gt;Example using &lt;code&gt;$!&lt;/code&gt; and &lt;code&gt;wait&lt;/code&gt; to track a background job:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -386,7 +386,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;fi&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Ví dụ lấy thư mục chứa script, không phụ thuộc bạn chạy script từ đâu:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Example for finding the directory that contains the script, regardless of where you run it from:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -397,10 +397,10 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;source&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;SCRIPT_DIR&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;/lib/log.sh&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Pattern này rất hữu ích khi script cần load file config hoặc thư viện nằm cạnh nó.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;This pattern is useful when a script needs to load a config file or library located next to it.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="ví-dụ-devops-script-deploy-đọc-env-nhận-flag-và-validate-biến"&gt;Ví dụ DevOps: script deploy đọc &lt;code&gt;.env&lt;/code&gt;, nhận flag và validate biến
-&lt;/h2&gt;&lt;p&gt;Ví dụ dưới đây mô phỏng một script deploy nhỏ. Script nhận môi trường qua &lt;code&gt;-e&lt;/code&gt;, hỗ trợ dry-run bằng &lt;code&gt;-n&lt;/code&gt;, load file &lt;code&gt;.env.&amp;lt;environment&amp;gt;&lt;/code&gt;, validate biến bắt buộc rồi chạy lệnh deploy.&lt;/p&gt;
+&lt;h2 id="devops-example-deploy-script-with-env-flags-and-validation"&gt;DevOps example: deploy script with &lt;code&gt;.env&lt;/code&gt;, flags, and validation
+&lt;/h2&gt;&lt;p&gt;The example below simulates a small deployment script. It accepts the environment through &lt;code&gt;-e&lt;/code&gt;, supports dry-run with &lt;code&gt;-n&lt;/code&gt;, loads &lt;code&gt;.env.&amp;lt;environment&amp;gt;&lt;/code&gt;, validates required variables, and then runs the deploy command.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -515,7 +515,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;cmd&lt;/span&gt;&lt;span class="p"&gt;[@]&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;File &lt;code&gt;.env.staging&lt;/code&gt; có thể như sau:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;A &lt;code&gt;.env.staging&lt;/code&gt; file can look like this:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -528,65 +528,65 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;DEPLOY_HOST&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;webserver-01
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Điểm quan trọng trong ví dụ:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Key points in this example:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Không hardcode host/image tag trong script.&lt;/li&gt;
-&lt;li&gt;Validate môi trường hợp lệ trước khi source file.&lt;/li&gt;
-&lt;li&gt;Dùng &lt;code&gt;set -a&lt;/code&gt; để export config cho process con nếu cần.&lt;/li&gt;
-&lt;li&gt;Dùng dry-run để kiểm tra lệnh trước khi chạy thật.&lt;/li&gt;
-&lt;li&gt;Quote biến khi dựng path và argument.&lt;/li&gt;
+&lt;li&gt;Do not hardcode host names or image tags in the script.&lt;/li&gt;
+&lt;li&gt;Validate the allowed environment before sourcing a file.&lt;/li&gt;
+&lt;li&gt;Use &lt;code&gt;set -a&lt;/code&gt; to export config for child processes if needed.&lt;/li&gt;
+&lt;li&gt;Use dry-run mode to inspect the command before executing it.&lt;/li&gt;
+&lt;li&gt;Quote variables when building paths and arguments.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="sai-sót-thường-gặp"&gt;Sai sót thường gặp
+&lt;h2 id="common-mistakes"&gt;Common mistakes
 &lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Gán biến có khoảng trắng quanh &lt;code&gt;=&lt;/code&gt;:&lt;/strong&gt; &lt;code&gt;NAME = value&lt;/code&gt; là sai trong Bash.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Không quote biến:&lt;/strong&gt; Path có khoảng trắng hoặc ký tự glob như &lt;code&gt;*&lt;/code&gt; có thể làm script chạy sai.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Export quá nhiều:&lt;/strong&gt; Chỉ export biến mà process con cần đọc.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Source &lt;code&gt;.env&lt;/code&gt; không tin cậy:&lt;/strong&gt; &lt;code&gt;.env&lt;/code&gt; là Bash code khi dùng &lt;code&gt;source&lt;/code&gt;, có thể thực thi lệnh.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Đưa secret vào log:&lt;/strong&gt; Tránh &lt;code&gt;set -x&lt;/code&gt; quanh đoạn xử lý token/password.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Dùng &lt;code&gt;$1&lt;/code&gt; trực tiếp với &lt;code&gt;set -u&lt;/code&gt;:&lt;/strong&gt; Hãy dùng &lt;code&gt;${1:-}&lt;/code&gt; hoặc validate trước.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Đổi &lt;code&gt;IFS&lt;/code&gt; global:&lt;/strong&gt; Có thể làm hỏng loop hoặc parse argument ở đoạn sau.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Spaces around &lt;code&gt;=&lt;/code&gt; in assignment:&lt;/strong&gt; &lt;code&gt;NAME = value&lt;/code&gt; is invalid in Bash.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Not quoting variables:&lt;/strong&gt; Paths with spaces or glob characters such as &lt;code&gt;*&lt;/code&gt; can make scripts behave incorrectly.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Exporting too much:&lt;/strong&gt; Only export variables child processes need to read.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Sourcing untrusted &lt;code&gt;.env&lt;/code&gt; files:&lt;/strong&gt; With &lt;code&gt;source&lt;/code&gt;, &lt;code&gt;.env&lt;/code&gt; is Bash code and can execute commands.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Logging secrets:&lt;/strong&gt; Avoid &lt;code&gt;set -x&lt;/code&gt; around token/password handling.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Using &lt;code&gt;$1&lt;/code&gt; directly with &lt;code&gt;set -u&lt;/code&gt;:&lt;/strong&gt; Use &lt;code&gt;${1:-}&lt;/code&gt; or validate first.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Changing &lt;code&gt;IFS&lt;/code&gt; globally:&lt;/strong&gt; It can break loops or argument parsing later in the script.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="ghi-chú-triển-khai"&gt;Ghi chú triển khai
+&lt;h2 id="implementation-notes"&gt;Implementation notes
 &lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Khi áp dụng vào dự án của bạn&lt;/strong&gt;, hãy phân loại cấu hình:
+&lt;li&gt;&lt;strong&gt;When applying this to your own project&lt;/strong&gt;, classify configuration:
 &lt;ul&gt;
-&lt;li&gt;Giá trị cố định theo môi trường → &lt;code&gt;.env.staging&lt;/code&gt;, &lt;code&gt;.env.production&lt;/code&gt; hoặc config file riêng.&lt;/li&gt;
-&lt;li&gt;Giá trị thay đổi theo lần chạy → flag CLI qua &lt;code&gt;getopts&lt;/code&gt;.&lt;/li&gt;
-&lt;li&gt;Secret → biến môi trường từ CI/CD secret store hoặc vault, không commit vào git.&lt;/li&gt;
+&lt;li&gt;Values fixed per environment → &lt;code&gt;.env.staging&lt;/code&gt;, &lt;code&gt;.env.production&lt;/code&gt;, or a separate config file.&lt;/li&gt;
+&lt;li&gt;Values that change per run → CLI flags through &lt;code&gt;getopts&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Secrets → environment variables from a CI/CD secret store or vault; do not commit them to git.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Best practices:&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;Bật &lt;code&gt;set -u&lt;/code&gt; để phát hiện biến chưa khai báo, nhưng dùng &lt;code&gt;${VAR:-}&lt;/code&gt; khi biến optional.&lt;/li&gt;
-&lt;li&gt;Validate biến bắt buộc sớm bằng &lt;code&gt;: &amp;quot;${VAR:?message}&amp;quot;&lt;/code&gt;.&lt;/li&gt;
-&lt;li&gt;Dùng &lt;code&gt;printenv VAR&lt;/code&gt; để debug một biến thay vì in toàn bộ environment.&lt;/li&gt;
-&lt;li&gt;Prefix biến theo app, ví dụ &lt;code&gt;BLOG_APP_ENV&lt;/code&gt;, để tránh trùng tên.&lt;/li&gt;
-&lt;li&gt;Không commit file &lt;code&gt;.env&lt;/code&gt; chứa secret; chỉ commit &lt;code&gt;.env.example&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Enable &lt;code&gt;set -u&lt;/code&gt; to catch undeclared variables, but use &lt;code&gt;${VAR:-}&lt;/code&gt; for optional variables.&lt;/li&gt;
+&lt;li&gt;Validate required variables early with &lt;code&gt;: &amp;quot;${VAR:?message}&amp;quot;&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Use &lt;code&gt;printenv VAR&lt;/code&gt; to debug one variable instead of printing the whole environment.&lt;/li&gt;
+&lt;li&gt;Prefix app-specific variables, for example &lt;code&gt;BLOG_APP_ENV&lt;/code&gt;, to avoid name collisions.&lt;/li&gt;
+&lt;li&gt;Do not commit &lt;code&gt;.env&lt;/code&gt; files containing secrets; commit only &lt;code&gt;.env.example&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Troubleshooting:&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;Process con không thấy biến? → Kiểm tra bạn đã &lt;code&gt;export&lt;/code&gt; chưa.&lt;/li&gt;
-&lt;li&gt;Script chạy đúng local nhưng sai cron/CI? → Kiểm tra &lt;code&gt;PATH&lt;/code&gt;, working directory và biến môi trường runner cung cấp.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;.env&lt;/code&gt; không load đúng? → Kiểm tra file có syntax Bash hợp lệ, không có khoảng trắng quanh &lt;code&gt;=&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Child process cannot see a variable? → Check whether you used &lt;code&gt;export&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Script works locally but fails in cron/CI? → Check &lt;code&gt;PATH&lt;/code&gt;, working directory, and runner-provided environment variables.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;.env&lt;/code&gt; does not load correctly? → Check that the file uses valid Bash syntax and has no spaces around &lt;code&gt;=&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="lời-kết"&gt;Lời kết
-&lt;/h2&gt;&lt;p&gt;Quản lý biến tốt giúp Bash script chạy ổn định hơn giữa nhiều môi trường. Hãy giữ code và config tách biệt, validate biến bắt buộc trước khi thao tác thật, quote biến khi dùng trong command, và chỉ export những gì process con cần.&lt;/p&gt;
-&lt;p&gt;Ở bài tiếp theo, chúng ta sẽ đi vào &lt;strong&gt;cron job với Bash&lt;/strong&gt;: cú pháp lịch chạy, &lt;code&gt;crontab&lt;/code&gt;, &lt;code&gt;@daily&lt;/code&gt;, &lt;code&gt;@reboot&lt;/code&gt;, log cron, vấn đề &lt;code&gt;PATH&lt;/code&gt; và ví dụ backup/healthcheck tự động.&lt;/p&gt;
+&lt;h2 id="conclusion"&gt;Conclusion
+&lt;/h2&gt;&lt;p&gt;Good variable management makes Bash scripts more stable across environments. Keep code and config separate, validate required variables before real operations, quote variables when using them in commands, and export only what child processes need.&lt;/p&gt;
+&lt;p&gt;In the next article, we will cover &lt;strong&gt;cron jobs with Bash&lt;/strong&gt;: schedule syntax, &lt;code&gt;crontab&lt;/code&gt;, &lt;code&gt;@daily&lt;/code&gt;, &lt;code&gt;@reboot&lt;/code&gt;, cron logs, &lt;code&gt;PATH&lt;/code&gt; issues, and automated backup/healthcheck examples.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="tài-liệu-tham-khảo"&gt;Tài liệu tham khảo
+&lt;h2 id="references"&gt;References
 &lt;/h2&gt;&lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.gnu.org/software/bash/manual/bash.html#Shell-Parameters" target="_blank" rel="noopener"
-&gt;GNU Bash Manual — Shell Parameters&lt;/a&gt; — Tài liệu chính thức về positional parameters và special parameters.&lt;/li&gt;
+&gt;GNU Bash Manual — Shell Parameters&lt;/a&gt; — Official documentation for positional parameters and special parameters.&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.gnu.org/software/bash/manual/bash.html#Bourne-Shell-Builtins" target="_blank" rel="noopener"
-&gt;GNU Bash Manual — Bourne Shell Builtins&lt;/a&gt; — Tham khảo &lt;code&gt;export&lt;/code&gt;, &lt;code&gt;set&lt;/code&gt;, &lt;code&gt;unset&lt;/code&gt;, &lt;code&gt;getopts&lt;/code&gt;, &lt;code&gt;source&lt;/code&gt;.&lt;/li&gt;
+&gt;GNU Bash Manual — Bourne Shell Builtins&lt;/a&gt; — Reference for &lt;code&gt;export&lt;/code&gt;, &lt;code&gt;set&lt;/code&gt;, &lt;code&gt;unset&lt;/code&gt;, &lt;code&gt;getopts&lt;/code&gt;, and &lt;code&gt;source&lt;/code&gt;.&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.gnu.org/software/bash/manual/bash.html#Word-Splitting" target="_blank" rel="noopener"
-&gt;GNU Bash Manual — Word Splitting&lt;/a&gt; — Giải thích vai trò của &lt;code&gt;IFS&lt;/code&gt; trong word splitting.&lt;/li&gt;
+&gt;GNU Bash Manual — Word Splitting&lt;/a&gt; — Explains the role of &lt;code&gt;IFS&lt;/code&gt; in word splitting.&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://pubs.opengroup.org/onlinepubs/9699919799/utilities/V3_chap02.html" target="_blank" rel="noopener"
-&gt;The Open Group — Shell Command Language&lt;/a&gt; — Tham khảo chuẩn POSIX shell về biến, quoting và expansion.&lt;/li&gt;
+&gt;The Open Group — Shell Command Language&lt;/a&gt; — POSIX shell reference for variables, quoting, and expansion.&lt;/li&gt;
 &lt;/ul&gt;</description></item></channel></rss>

@@ -1,330 +1,13 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Docker-Compose on Hoàng Dương</title><link>https://tech.nguuyen.io.vn/tags/docker-compose/</link><description>Recent content in Docker-Compose on Hoàng Dương</description><generator>Hugo -- gohugo.io</generator><language>vi</language><lastBuildDate>Sat, 11 Apr 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/docker-compose/index.xml" rel="self" type="application/rss+xml"/><item><title>Cài đặt Docker và Docker Compose tự động bằng Bash Script</title><link>https://tech.nguuyen.io.vn/posts/docker/install-docker-bash-script/</link><pubDate>Sat, 11 Apr 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/docker/install-docker-bash-script/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/docker/install-docker-bash-script.webp" alt="Featured image of post Cài đặt Docker và Docker Compose tự động bằng Bash Script" /&gt;&lt;h2 id="tự-động-hóa-cài-đặt-docker-bằng-bash-script"&gt;Tự động hóa cài đặt Docker bằng Bash Script
-&lt;/h2&gt;&lt;p&gt;Khi làm việc với nhiều server, việc cài đặt Docker thủ công từng bước trên mỗi máy là tốn thời gian và dễ sai sót. Giải pháp đơn giản nhất là viết một &lt;strong&gt;Bash Script&lt;/strong&gt; tự động hóa toàn bộ quá trình — từ cài đặt dependencies, thêm Docker repository, đến cài đặt Docker Engine và Docker Compose.&lt;/p&gt;
-&lt;p&gt;Trong bài viết này, tôi sẽ hướng dẫn bạn viết script cài đặt Docker theo đúng &lt;a class="link" href="https://docs.docker.com/engine/install/ubuntu/" target="_blank" rel="noopener"
-&gt;tài liệu chính thức của Docker&lt;/a&gt;, đảm bảo luôn lấy phiên bản mới nhất từ repository chính thức.&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id="yêu-cầu-hệ-thống"&gt;Yêu cầu hệ thống
-&lt;/h2&gt;&lt;p&gt;Trước khi bắt đầu, hãy đảm bảo server của bạn đáp ứng các điều kiện sau:&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Yêu cầu&lt;/th&gt;
-&lt;th&gt;Chi tiết&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;strong&gt;Hệ điều hành&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;Ubuntu 22.04 (Jammy), 24.04 (Noble), 25.10 (Questing), 26.04 (Resolute)&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;strong&gt;Kiến trúc&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;x86_64 (amd64), arm64, armhf, s390x, ppc64le&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;strong&gt;Quyền&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;Tài khoản có quyền &lt;code&gt;sudo&lt;/code&gt;&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;&lt;strong&gt;Kết nối mạng&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;Có kết nối Internet để tải packages&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;hr&gt;
-&lt;h2 id="gỡ-cài-đặt-phiên-bản-docker-cũ-nếu-có"&gt;Gỡ cài đặt phiên bản Docker cũ (nếu có)
-&lt;/h2&gt;&lt;p&gt;Theo &lt;a class="link" href="https://docs.docker.com/engine/install/ubuntu/#uninstall-old-versions" target="_blank" rel="noopener"
-&gt;tài liệu chính thức của Docker&lt;/a&gt;, trước khi cài đặt Docker Engine, bạn cần gỡ bỏ các package xung đột có thể đã được cài sẵn bởi hệ điều hành:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
-&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt remove docker.io docker-compose docker-compose-v2 docker-doc podman-docker containerd runc
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;Lưu ý:&lt;/strong&gt; Lệnh trên có thể báo rằng không có package nào được cài — điều này hoàn toàn bình thường trên server mới.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;h2 id="viết-bash-script-cài-đặt-docker"&gt;Viết Bash Script cài đặt Docker
-&lt;/h2&gt;&lt;h3 id="tạo-file-script"&gt;Tạo file script
-&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
-&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;vi install-docker.sh
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="nội-dung-script"&gt;Nội dung script
-&lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
-&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
-&lt;/span&gt;&lt;span class="lnt"&gt; 2
-&lt;/span&gt;&lt;span class="lnt"&gt; 3
-&lt;/span&gt;&lt;span class="lnt"&gt; 4
-&lt;/span&gt;&lt;span class="lnt"&gt; 5
-&lt;/span&gt;&lt;span class="lnt"&gt; 6
-&lt;/span&gt;&lt;span class="lnt"&gt; 7
-&lt;/span&gt;&lt;span class="lnt"&gt; 8
-&lt;/span&gt;&lt;span class="lnt"&gt; 9
-&lt;/span&gt;&lt;span class="lnt"&gt;10
-&lt;/span&gt;&lt;span class="lnt"&gt;11
-&lt;/span&gt;&lt;span class="lnt"&gt;12
-&lt;/span&gt;&lt;span class="lnt"&gt;13
-&lt;/span&gt;&lt;span class="lnt"&gt;14
-&lt;/span&gt;&lt;span class="lnt"&gt;15
-&lt;/span&gt;&lt;span class="lnt"&gt;16
-&lt;/span&gt;&lt;span class="lnt"&gt;17
-&lt;/span&gt;&lt;span class="lnt"&gt;18
-&lt;/span&gt;&lt;span class="lnt"&gt;19
-&lt;/span&gt;&lt;span class="lnt"&gt;20
-&lt;/span&gt;&lt;span class="lnt"&gt;21
-&lt;/span&gt;&lt;span class="lnt"&gt;22
-&lt;/span&gt;&lt;span class="lnt"&gt;23
-&lt;/span&gt;&lt;span class="lnt"&gt;24
-&lt;/span&gt;&lt;span class="lnt"&gt;25
-&lt;/span&gt;&lt;span class="lnt"&gt;26
-&lt;/span&gt;&lt;span class="lnt"&gt;27
-&lt;/span&gt;&lt;span class="lnt"&gt;28
-&lt;/span&gt;&lt;span class="lnt"&gt;29
-&lt;/span&gt;&lt;span class="lnt"&gt;30
-&lt;/span&gt;&lt;span class="lnt"&gt;31
-&lt;/span&gt;&lt;span class="lnt"&gt;32
-&lt;/span&gt;&lt;span class="lnt"&gt;33
-&lt;/span&gt;&lt;span class="lnt"&gt;34
-&lt;/span&gt;&lt;span class="lnt"&gt;35
-&lt;/span&gt;&lt;span class="lnt"&gt;36
-&lt;/span&gt;&lt;span class="lnt"&gt;37
-&lt;/span&gt;&lt;span class="lnt"&gt;38
-&lt;/span&gt;&lt;span class="lnt"&gt;39
-&lt;/span&gt;&lt;span class="lnt"&gt;40
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="cp"&gt;#!/bin/bash
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;set&lt;/span&gt; -e
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;==========================================&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34; Cài đặt Docker Engine &amp;amp; Docker Compose &amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;==========================================&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Bước 1: Cài đặt các packages cần thiết&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;[1/5] Cài đặt dependencies...&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt update -y
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt install -y ca-certificates curl gnupg
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Bước 2: Thêm Docker GPG key&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;[2/5] Thêm Docker GPG key...&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo install -m &lt;span class="m"&gt;0755&lt;/span&gt; -d /etc/apt/keyrings
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl -fsSL https://download.docker.com/linux/ubuntu/gpg &lt;span class="p"&gt;|&lt;/span&gt; sudo gpg --dearmor -o /etc/apt/keyrings/docker.gpg
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo chmod a+r /etc/apt/keyrings/docker.gpg
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Bước 3: Thêm Docker repository vào apt sources&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;[3/5] Thêm Docker repository...&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="se"&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;deb [arch=&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;dpkg --print-architecture&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt; signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s2"&gt; &lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;. /etc/os-release &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$VERSION_CODENAME&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt; stable&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; &lt;span class="se"&gt;\
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; sudo tee /etc/apt/sources.list.d/docker.list &amp;gt; /dev/null
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Bước 4: Cài đặt Docker Engine và Docker Compose plugin&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;[4/5] Cài đặt Docker Engine...&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt update -y
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Bước 5: Khởi động và enable Docker service&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;[5/5] Khởi động Docker service...&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl start docker
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; docker
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;==========================================&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34; Cài đặt hoàn tất!&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;==========================================&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker --version
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker compose version
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Giải thích từng bước trong script:&lt;/strong&gt;&lt;/p&gt;
-&lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;Bước&lt;/th&gt;
-&lt;th&gt;Lệnh&lt;/th&gt;
-&lt;th&gt;Mục đích&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;1&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;apt install ca-certificates curl gnupg&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Cài các package cần thiết để xác thực GPG key và tải file qua HTTPS&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;2&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;curl ... | gpg --dearmor&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Tải và chuyển đổi GPG key của Docker sang định dạng binary để &lt;code&gt;apt&lt;/code&gt; xác thực package&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;3&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;tee /etc/apt/sources.list.d/docker.list&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Thêm Docker repository vào danh sách sources của &lt;code&gt;apt&lt;/code&gt;, tự động detect kiến trúc và codename&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;4&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;apt install docker-ce ...&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Cài đặt Docker Engine, CLI, containerd, Buildx plugin và Compose plugin&lt;/td&gt;
-&lt;/tr&gt;
-&lt;tr&gt;
-&lt;td&gt;5&lt;/td&gt;
-&lt;td&gt;&lt;code&gt;systemctl start/enable docker&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Khởi động Docker daemon và cấu hình tự khởi động cùng hệ thống&lt;/td&gt;
-&lt;/tr&gt;
-&lt;/tbody&gt;
-&lt;/table&gt;
-&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;Lưu ý quan trọng:&lt;/strong&gt; Script sử dụng &lt;code&gt;docker-compose-plugin&lt;/code&gt; (Compose V2) thay vì &lt;code&gt;docker-compose&lt;/code&gt; standalone (V1). Compose V2 được tích hợp trực tiếp vào Docker CLI với lệnh &lt;code&gt;docker compose&lt;/code&gt; (không có dấu gạch ngang). Docker đã &lt;a class="link" href="https://docs.docker.com/compose/releases/migrate/" target="_blank" rel="noopener"
-&gt;ngừng hỗ trợ Compose V1&lt;/a&gt; từ tháng 7/2023.&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;hr&gt;
-&lt;h2 id="cấp-quyền-và-chạy-script"&gt;Cấp quyền và chạy script
-&lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
-&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
-&lt;/span&gt;&lt;span class="lnt"&gt;2
-&lt;/span&gt;&lt;span class="lnt"&gt;3
-&lt;/span&gt;&lt;span class="lnt"&gt;4
-&lt;/span&gt;&lt;span class="lnt"&gt;5
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Cấp quyền thực thi&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;chmod +x install-docker.sh
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Chạy script&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo bash install-docker.sh
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;hr&gt;
-&lt;h2 id="xác-nhận-kết-quả-cài-đặt"&gt;Xác nhận kết quả cài đặt
-&lt;/h2&gt;&lt;p&gt;Sau khi script chạy xong, bạn sẽ thấy output tương tự:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
-&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
-&lt;/span&gt;&lt;span class="lnt"&gt;2
-&lt;/span&gt;&lt;span class="lnt"&gt;3
-&lt;/span&gt;&lt;span class="lnt"&gt;4
-&lt;/span&gt;&lt;span class="lnt"&gt;5
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ docker --version
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Docker version 28.1.1, build 4eba377
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ docker compose version
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Docker Compose version v2.35.1
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Để kiểm tra Docker hoạt động chính xác, chạy container thử nghiệm:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
-&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo docker run hello-world
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Nếu thấy thông báo &lt;code&gt;Hello from Docker!&lt;/code&gt;, quá trình cài đặt đã thành công.&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id="cấu-hình-sau-cài-đặt-post-installation"&gt;Cấu hình sau cài đặt (Post-installation)
-&lt;/h2&gt;&lt;h3 id="cho-phép-user-thường-chạy-docker-không-cần-sudo"&gt;Cho phép user thường chạy Docker (không cần sudo)
-&lt;/h3&gt;&lt;p&gt;Theo mặc định, lệnh &lt;code&gt;docker&lt;/code&gt; yêu cầu quyền &lt;code&gt;root&lt;/code&gt;. Để user thường có thể sử dụng Docker:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
-&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
-&lt;/span&gt;&lt;span class="lnt"&gt;2
-&lt;/span&gt;&lt;span class="lnt"&gt;3
-&lt;/span&gt;&lt;span class="lnt"&gt;4
-&lt;/span&gt;&lt;span class="lnt"&gt;5
-&lt;/span&gt;&lt;span class="lnt"&gt;6
-&lt;/span&gt;&lt;span class="lnt"&gt;7
-&lt;/span&gt;&lt;span class="lnt"&gt;8
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Thêm user hiện tại vào group docker&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo usermod -aG docker &lt;span class="nv"&gt;$USER&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Áp dụng thay đổi group (cần logout/login lại hoặc chạy lệnh sau)&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;newgrp docker
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Xác nhận — không cần sudo nữa&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker run hello-world
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="cấu-hình-docker-khởi-động-cùng-hệ-thống"&gt;Cấu hình Docker khởi động cùng hệ thống
-&lt;/h3&gt;&lt;p&gt;Script đã thực hiện bước này với &lt;code&gt;systemctl enable docker&lt;/code&gt;. Để xác nhận:&lt;/p&gt;
-&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
-&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
-&lt;/span&gt;&lt;span class="lnt"&gt;2
-&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
-&lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl is-enabled docker
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Output: enabled&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
-&lt;/div&gt;
-&lt;/div&gt;&lt;hr&gt;
-&lt;h2 id="ghi-chú-triển-khai"&gt;Ghi chú triển khai
-&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Khi áp dụng vào dự án của bạn&lt;/strong&gt;, hãy lưu ý:
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Docker-Compose on Hoang Duong</title><link>https://tech.nguuyen.io.vn/tags/docker-compose/</link><description>Recent content in Docker-Compose on Hoang Duong</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sun, 05 Apr 2026 20:00:00 +0700</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/docker-compose/index.xml" rel="self" type="application/rss+xml"/><item><title>Deploying Node.js with Docker + Nginx</title><link>https://tech.nguuyen.io.vn/posts/docker/deploy-nodejs-docker-nginx/</link><pubDate>Tue, 10 Feb 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/docker/deploy-nodejs-docker-nginx/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/docker/deploy-nodejs-docker-nginx.jpg" alt="Featured image of post Deploying Node.js with Docker + Nginx" /&gt;&lt;h2 id="deploying-nodejs-with-docker--nginx--case-study"&gt;Deploying Node.js with Docker + Nginx — Case Study
+&lt;/h2&gt;&lt;p&gt;You&amp;rsquo;ve finished writing your API with Node.js, and it works perfectly on localhost. But when it comes to deploying on a real server, you face a bunch of questions:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Script chỉ hỗ trợ &lt;strong&gt;Ubuntu&lt;/strong&gt;. Với Debian, CentOS, hoặc Fedora, cần thay đổi URL repository và lệnh package manager tương ứng&lt;/li&gt;
-&lt;li&gt;Luôn kiểm tra &lt;a class="link" href="https://docs.docker.com/engine/install/" target="_blank" rel="noopener"
-&gt;tài liệu chính thức&lt;/a&gt; để đảm bảo các bước cài đặt chưa thay đổi&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;set -e&lt;/code&gt; ở đầu script đảm bảo script dừng ngay khi có lệnh bị lỗi, tránh cài đặt không đầy đủ&lt;/li&gt;
+&lt;li&gt;How do I keep the app running stably and auto-restart on crash?&lt;/li&gt;
+&lt;li&gt;How do I prevent clients from accessing port 3000 directly?&lt;/li&gt;
+&lt;li&gt;How do I handle SSL, rate limiting, and static files?&lt;/li&gt;
 &lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Best practices:&lt;/strong&gt;
-&lt;ul&gt;
-&lt;li&gt;Sử dụng &lt;code&gt;docker compose&lt;/code&gt; (V2) thay vì &lt;code&gt;docker-compose&lt;/code&gt; (V1) — V1 đã ngừng hỗ trợ&lt;/li&gt;
-&lt;li&gt;Không chạy container bằng user &lt;code&gt;root&lt;/code&gt; trong production — cấu hình user thường với group &lt;code&gt;docker&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Sau khi cài đặt, cấu hình &lt;a class="link" href="https://docs.docker.com/reference/cli/dockerd/" target="_blank" rel="noopener"
-&gt;Docker daemon&lt;/a&gt; phù hợp với môi trường (log driver, storage driver, v.v.)&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Troubleshooting:&lt;/strong&gt;
-&lt;ul&gt;
-&lt;li&gt;Lỗi &lt;code&gt;Permission denied&lt;/code&gt; khi chạy &lt;code&gt;docker&lt;/code&gt;? → Đảm bảo user đã được thêm vào group &lt;code&gt;docker&lt;/code&gt; và đã logout/login lại&lt;/li&gt;
-&lt;li&gt;Lỗi &lt;code&gt;Cannot connect to the Docker daemon&lt;/code&gt;? → Kiểm tra Docker service: &lt;code&gt;sudo systemctl status docker&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;GPG key bị lỗi khi &lt;code&gt;apt update&lt;/code&gt;? → Xóa key cũ và chạy lại bước thêm GPG key: &lt;code&gt;sudo rm /etc/apt/keyrings/docker.gpg&lt;/code&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
+&lt;p&gt;The answer: &lt;strong&gt;Docker + Nginx reverse proxy&lt;/strong&gt;. In this article, I&amp;rsquo;ll walk you through deploying a Node.js (Express) application from start to finish, using Docker for packaging and Nginx as a reverse proxy in front.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="lời-kết"&gt;Lời kết
-&lt;/h2&gt;&lt;p&gt;Với Bash Script trên, bạn có thể cài đặt Docker Engine và Docker Compose trên bất kỳ server Ubuntu nào chỉ với một lệnh duy nhất. Script sử dụng phương pháp cài đặt chính thức từ Docker repository, đảm bảo:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Luôn lấy &lt;strong&gt;phiên bản mới nhất&lt;/strong&gt; từ repository chính thức&lt;/li&gt;
-&lt;li&gt;Cài đặt đầy đủ: Docker Engine, CLI, containerd, Buildx, và Compose V2&lt;/li&gt;
-&lt;li&gt;Tự động khởi động và enable Docker service&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Bạn có thể lưu script này vào hệ thống quản lý cấu hình (Ansible, Terraform) hoặc đơn giản clone từ repository để sử dụng trên nhiều server. 🚀&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id="tài-liệu-tham-khảo"&gt;Tài liệu tham khảo
-&lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;a class="link" href="https://docs.docker.com/engine/install/ubuntu/" target="_blank" rel="noopener"
-&gt;Docker Official - Install Docker Engine on Ubuntu&lt;/a&gt; — Hướng dẫn chính thức cài đặt Docker trên Ubuntu&lt;/li&gt;
-&lt;li&gt;&lt;a class="link" href="https://docs.docker.com/engine/install/linux-postinstall/" target="_blank" rel="noopener"
-&gt;Docker Official - Post-installation steps for Linux&lt;/a&gt; — Cấu hình sau cài đặt&lt;/li&gt;
-&lt;li&gt;&lt;a class="link" href="https://docs.docker.com/compose/releases/migrate/" target="_blank" rel="noopener"
-&gt;Docker Compose - Migrate to Compose V2&lt;/a&gt; — Hướng dẫn chuyển từ Compose V1 sang V2&lt;/li&gt;
-&lt;/ul&gt;</description></item><item><title>Triển khai Node.js với Docker + Nginx</title><link>https://tech.nguuyen.io.vn/posts/docker/deploy-nodejs-docker-nginx/</link><pubDate>Tue, 10 Feb 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/docker/deploy-nodejs-docker-nginx/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/docker/deploy-nodejs-docker-nginx.jpg" alt="Featured image of post Triển khai Node.js với Docker + Nginx" /&gt;&lt;h2 id="triển-khai-nodejs-với-docker--nginx--case-study"&gt;Triển khai Node.js với Docker + Nginx — Case Study
-&lt;/h2&gt;&lt;p&gt;Bạn đã viết xong API bằng Node.js, test local ngon lành. Nhưng khi đưa lên server thật, bạn gặp hàng loạt câu hỏi:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;Làm sao chạy app ổn định, tự restart khi crash?&lt;/li&gt;
-&lt;li&gt;Làm sao để client không truy cập thẳng vào port 3000?&lt;/li&gt;
-&lt;li&gt;Làm sao xử lý SSL, rate limit, static files?&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Câu trả lời: &lt;strong&gt;Docker + Nginx reverse proxy&lt;/strong&gt;. Trong bài viết này, tôi sẽ hướng dẫn bạn triển khai một ứng dụng Node.js (Express) từ đầu đến cuối, sử dụng Docker để đóng gói và Nginx làm reverse proxy phía trước.&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id="kiến-trúc-tổng-quan"&gt;Kiến trúc tổng quan
+&lt;h2 id="architecture-overview"&gt;Architecture Overview
 &lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -357,41 +40,41 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; └──────────┘
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Nginx&lt;/strong&gt; đứng trước nhận request từ client, sau đó chuyển tiếp (proxy) đến &lt;strong&gt;Node.js&lt;/strong&gt; chạy bên trong. Client không bao giờ truy cập trực tiếp vào Node.js.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Tại sao cần Nginx phía trước?&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Nginx&lt;/strong&gt; sits in front, receives requests from clients, then forwards (proxies) them to &lt;strong&gt;Node.js&lt;/strong&gt; running behind it. Clients never access Node.js directly.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Why do we need Nginx in front?&lt;/strong&gt;&lt;/p&gt;
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
-&lt;th&gt;Lý do&lt;/th&gt;
-&lt;th&gt;Giải thích&lt;/th&gt;
+&lt;th&gt;Reason&lt;/th&gt;
+&lt;th&gt;Explanation&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;strong&gt;Reverse proxy&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;Ẩn port thật của app, client chỉ thấy port 80/443&lt;/td&gt;
+&lt;td&gt;Hides the app&amp;rsquo;s real port, clients only see port 80/443&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;strong&gt;Static files&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;Nginx phục vụ file tĩnh (CSS, JS, ảnh) nhanh hơn Node.js rất nhiều&lt;/td&gt;
+&lt;td&gt;Nginx serves static files (CSS, JS, images) much faster than Node.js&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;strong&gt;SSL termination&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;Nginx xử lý HTTPS, Node.js chỉ nhận HTTP thuần&lt;/td&gt;
+&lt;td&gt;Nginx handles HTTPS, Node.js only receives plain HTTP&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;strong&gt;Rate limiting&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;Giới hạn request ở tầng Nginx, bảo vệ Node.js khỏi quá tải&lt;/td&gt;
+&lt;td&gt;Limits requests at the Nginx layer, protecting Node.js from being overloaded&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;strong&gt;Load balancing&lt;/strong&gt;&lt;/td&gt;
-&lt;td&gt;Khi scale nhiều instance Node.js, Nginx phân phối request&lt;/td&gt;
+&lt;td&gt;When scaling multiple Node.js instances, Nginx distributes requests&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;hr&gt;
-&lt;h2 id="bước-1-tạo-ứng-dụng-nodejs-express"&gt;Bước 1: Tạo ứng dụng Node.js (Express)
-&lt;/h2&gt;&lt;h3 id="cấu-trúc-project"&gt;Cấu trúc project
+&lt;h2 id="step-1-create-the-nodejs-application-express"&gt;Step 1: Create the Node.js Application (Express)
+&lt;/h2&gt;&lt;h3 id="project-structure"&gt;Project Structure
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -485,10 +168,10 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;Lưu ý:&lt;/strong&gt; &lt;code&gt;app.listen(PORT, &amp;quot;0.0.0.0&amp;quot;)&lt;/code&gt; — phải bind &lt;code&gt;0.0.0.0&lt;/code&gt; để container nhận được request từ bên ngoài. Nếu bind &lt;code&gt;127.0.0.1&lt;/code&gt; (localhost), Nginx sẽ không thể kết nối đến app.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Note:&lt;/strong&gt; &lt;code&gt;app.listen(PORT, &amp;quot;0.0.0.0&amp;quot;)&lt;/code&gt; — you must bind to &lt;code&gt;0.0.0.0&lt;/code&gt; so the container can receive requests from outside. If you bind to &lt;code&gt;127.0.0.1&lt;/code&gt; (localhost), Nginx won&amp;rsquo;t be able to connect to the app.&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;hr&gt;
-&lt;h2 id="bước-2-viết-dockerfile-cho-nodejs"&gt;Bước 2: Viết Dockerfile cho Node.js
+&lt;h2 id="step-2-write-the-dockerfile-for-nodejs"&gt;Step 2: Write the Dockerfile for Node.js
 &lt;/h2&gt;&lt;h3 id="file-dockerignore"&gt;File &lt;code&gt;.dockerignore&lt;/code&gt;
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -504,8 +187,8 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;.env
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Theo &lt;a class="link" href="https://docs.docker.com/language/nodejs/containerize/" target="_blank" rel="noopener"
-&gt;tài liệu chính thức của Docker&lt;/a&gt;, Dockerfile cho Node.js nên dùng &lt;strong&gt;multi-stage build&lt;/strong&gt;, tạo &lt;strong&gt;non-root user&lt;/strong&gt; và sử dụng &lt;strong&gt;cache mount&lt;/strong&gt; để tối ưu.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;According to the &lt;a class="link" href="https://docs.docker.com/language/nodejs/containerize/" target="_blank" rel="noopener"
+&gt;official Docker documentation&lt;/a&gt;, a Dockerfile for Node.js should use &lt;strong&gt;multi-stage builds&lt;/strong&gt;, create a &lt;strong&gt;non-root user&lt;/strong&gt;, and leverage &lt;strong&gt;cache mounts&lt;/strong&gt; for optimization.&lt;/p&gt;
 &lt;h3 id="file-dockerfile"&gt;File &lt;code&gt;Dockerfile&lt;/code&gt;
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -550,7 +233,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;FROM&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;node:18-alpine&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="k"&gt;AS&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;production&lt;/span&gt;&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;WORKDIR&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;/app&lt;/span&gt;&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c"&gt;# Tạo non-root user (theo best practice từ Docker docs)&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c"&gt;# Create non-root user (following best practices from Docker docs)&lt;/span&gt;&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; addgroup -g &lt;span class="m"&gt;1001&lt;/span&gt; -S nodejs &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; &lt;span class="se"&gt;\
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; adduser -S nodejs -u &lt;span class="m"&gt;1001&lt;/span&gt; -G nodejs&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="err"&gt;
@@ -567,46 +250,46 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;CMD&lt;/span&gt; &lt;span class="p"&gt;[&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;node&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;,&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;src/server.js&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;]&lt;/span&gt;&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Giải thích:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Explanation:&lt;/strong&gt;&lt;/p&gt;
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
-&lt;th&gt;Kỹ thuật&lt;/th&gt;
-&lt;th&gt;Mục đích&lt;/th&gt;
+&lt;th&gt;Technique&lt;/th&gt;
+&lt;th&gt;Purpose&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;node:18-alpine&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Base image nhỏ (~170 MB thay vì ~900 MB của &lt;code&gt;node:18&lt;/code&gt;)&lt;/td&gt;
+&lt;td&gt;Small base image (~170 MB instead of ~900 MB for &lt;code&gt;node:18&lt;/code&gt;)&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Multi-stage build&lt;/td&gt;
-&lt;td&gt;Stage &lt;code&gt;deps&lt;/code&gt; cài dependencies, stage &lt;code&gt;production&lt;/code&gt; chỉ copy kết quả&lt;/td&gt;
+&lt;td&gt;The &lt;code&gt;deps&lt;/code&gt; stage installs dependencies, the &lt;code&gt;production&lt;/code&gt; stage only copies the result&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;npm ci&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Cài đặt chính xác theo &lt;code&gt;package-lock.json&lt;/code&gt;, đảm bảo reproducible builds&lt;/td&gt;
+&lt;td&gt;Installs exactly according to &lt;code&gt;package-lock.json&lt;/code&gt;, ensuring reproducible builds&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;--mount=type=cache&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Cache npm packages giữa các lần build&lt;/td&gt;
+&lt;td&gt;Caches npm packages across builds&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Non-root user&lt;/td&gt;
-&lt;td&gt;Không chạy app bằng root, tăng bảo mật&lt;/td&gt;
+&lt;td&gt;Doesn&amp;rsquo;t run the app as root, improving security&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;COPY src ./src&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Chỉ copy source code cần thiết, không copy toàn bộ project&lt;/td&gt;
+&lt;td&gt;Only copies the required source code, not the entire project&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;hr&gt;
-&lt;h2 id="bước-3-cấu-hình-nginx-làm-reverse-proxy"&gt;Bước 3: Cấu hình Nginx làm Reverse Proxy
+&lt;h2 id="step-3-configure-nginx-as-a-reverse-proxy"&gt;Step 3: Configure Nginx as a Reverse Proxy
 &lt;/h2&gt;&lt;h3 id="file-nginxdefaultconf"&gt;File &lt;code&gt;nginx/default.conf&lt;/code&gt;
-&lt;/h3&gt;&lt;p&gt;Theo &lt;a class="link" href="https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/" target="_blank" rel="noopener"
-&gt;tài liệu chính thức của Nginx&lt;/a&gt;, directive &lt;code&gt;proxy_pass&lt;/code&gt; được dùng để chuyển tiếp request đến server khác. Các header &lt;code&gt;proxy_set_header&lt;/code&gt; cần được thiết lập để server backend nhận đúng thông tin client.&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;According to the &lt;a class="link" href="https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/" target="_blank" rel="noopener"
+&gt;official Nginx documentation&lt;/a&gt;, the &lt;code&gt;proxy_pass&lt;/code&gt; directive is used to forward requests to another server. The &lt;code&gt;proxy_set_header&lt;/code&gt; directives need to be configured so the backend server receives correct client information.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -652,25 +335,25 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kn"&gt;listen&lt;/span&gt; &lt;span class="mi"&gt;80&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kn"&gt;server_name&lt;/span&gt; &lt;span class="s"&gt;_&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;# Giới hạn kích thước request body (chống upload quá lớn)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;# Limit request body size (prevent oversized uploads)
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kn"&gt;client_max_body_size&lt;/span&gt; &lt;span class="mi"&gt;10m&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kn"&gt;location&lt;/span&gt; &lt;span class="s"&gt;/&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kn"&gt;proxy_pass&lt;/span&gt; &lt;span class="s"&gt;http://nodejs_app&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;# Chuyển tiếp thông tin client gốc đến Node.js
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;# Forward original client information to Node.js
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kn"&gt;proxy_set_header&lt;/span&gt; &lt;span class="s"&gt;Host&lt;/span&gt; &lt;span class="nv"&gt;$host&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kn"&gt;proxy_set_header&lt;/span&gt; &lt;span class="s"&gt;X-Real-IP&lt;/span&gt; &lt;span class="nv"&gt;$remote_addr&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kn"&gt;proxy_set_header&lt;/span&gt; &lt;span class="s"&gt;X-Forwarded-For&lt;/span&gt; &lt;span class="nv"&gt;$proxy_add_x_forwarded_for&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kn"&gt;proxy_set_header&lt;/span&gt; &lt;span class="s"&gt;X-Forwarded-Proto&lt;/span&gt; &lt;span class="nv"&gt;$scheme&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;# Hỗ trợ WebSocket (nếu app cần)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;# WebSocket support (if the app needs it)
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kn"&gt;proxy_http_version&lt;/span&gt; &lt;span class="mi"&gt;1&lt;/span&gt;&lt;span class="s"&gt;.1&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kn"&gt;proxy_set_header&lt;/span&gt; &lt;span class="s"&gt;Upgrade&lt;/span&gt; &lt;span class="nv"&gt;$http_upgrade&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kn"&gt;proxy_set_header&lt;/span&gt; &lt;span class="s"&gt;Connection&lt;/span&gt; &lt;span class="s"&gt;&amp;#34;upgrade&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;# Health check endpoint (Nginx trả thẳng, không cần qua Node.js)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;# Health check endpoint (Nginx responds directly, no need to go through Node.js)
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kn"&gt;location&lt;/span&gt; &lt;span class="p"&gt;=&lt;/span&gt; &lt;span class="s"&gt;/nginx-health&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kn"&gt;access_log&lt;/span&gt; &lt;span class="no"&gt;off&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kn"&gt;return&lt;/span&gt; &lt;span class="mi"&gt;200&lt;/span&gt; &lt;span class="s"&gt;&amp;#34;ok&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
@@ -679,49 +362,49 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Giải thích các directive quan trọng:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Key directives explained:&lt;/strong&gt;&lt;/p&gt;
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
 &lt;th&gt;Directive&lt;/th&gt;
-&lt;th&gt;Ý nghĩa&lt;/th&gt;
+&lt;th&gt;Meaning&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;upstream nodejs_app&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Định nghĩa nhóm backend server. Khi scale nhiều instance, thêm server vào đây&lt;/td&gt;
+&lt;td&gt;Defines a group of backend servers. When scaling multiple instances, add servers here&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;proxy_pass http://nodejs_app&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Chuyển tiếp request đến upstream đã định nghĩa&lt;/td&gt;
+&lt;td&gt;Forwards requests to the defined upstream&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;proxy_set_header Host $host&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Giữ nguyên hostname gốc từ client (mặc định Nginx đổi thành &lt;code&gt;$proxy_host&lt;/code&gt;)&lt;/td&gt;
+&lt;td&gt;Preserves the original hostname from the client (by default Nginx changes it to &lt;code&gt;$proxy_host&lt;/code&gt;)&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;proxy_set_header X-Real-IP&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Gửi IP thật của client đến Node.js (không phải IP của Nginx)&lt;/td&gt;
+&lt;td&gt;Sends the client&amp;rsquo;s real IP to Node.js (not Nginx&amp;rsquo;s IP)&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;proxy_set_header X-Forwarded-For&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Chuỗi IP qua các proxy, giúp Node.js biết client thật&lt;/td&gt;
+&lt;td&gt;The chain of IPs through proxies, helping Node.js identify the real client&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;proxy_set_header X-Forwarded-Proto&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Cho Node.js biết client dùng HTTP hay HTTPS&lt;/td&gt;
+&lt;td&gt;Tells Node.js whether the client is using HTTP or HTTPS&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;proxy_http_version 1.1&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Bắt buộc để hỗ trợ WebSocket và keep-alive&lt;/td&gt;
+&lt;td&gt;Required for WebSocket and keep-alive support&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;hr&gt;
-&lt;h2 id="bước-4-docker-compose--kết-nối-tất-cả"&gt;Bước 4: Docker Compose — Kết nối tất cả
-&lt;/h2&gt;&lt;p&gt;Theo &lt;a class="link" href="https://docs.docker.com/compose/production/" target="_blank" rel="noopener"
-&gt;Docker Compose production guide&lt;/a&gt;, khi deploy production nên: bỏ volume bind cho code, set restart policy, và tách file compose cho từng môi trường.&lt;/p&gt;
+&lt;h2 id="step-4-docker-compose--connecting-everything"&gt;Step 4: Docker Compose — Connecting Everything
+&lt;/h2&gt;&lt;p&gt;According to the &lt;a class="link" href="https://docs.docker.com/compose/production/" target="_blank" rel="noopener"
+&gt;Docker Compose production guide&lt;/a&gt;, when deploying to production you should: remove volume binds for code, set restart policies, and separate compose files for each environment.&lt;/p&gt;
 &lt;h3 id="file-docker-composeyml"&gt;File &lt;code&gt;docker-compose.yml&lt;/code&gt;
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -823,43 +506,43 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;driver&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;bridge&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Các điểm quan trọng:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Key configurations:&lt;/strong&gt;&lt;/p&gt;
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
-&lt;th&gt;Cấu hình&lt;/th&gt;
-&lt;th&gt;Giải thích&lt;/th&gt;
+&lt;th&gt;Configuration&lt;/th&gt;
+&lt;th&gt;Explanation&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;expose: &amp;quot;3000&amp;quot;&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Chỉ mở port nội bộ giữa các container, &lt;strong&gt;không&lt;/strong&gt; expose ra host&lt;/td&gt;
+&lt;td&gt;Only opens the port internally between containers, &lt;strong&gt;not&lt;/strong&gt; exposed to the host&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;ports: &amp;quot;80:80&amp;quot;&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Chỉ Nginx được expose ra ngoài&lt;/td&gt;
+&lt;td&gt;Only Nginx is exposed to the outside&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;depends_on: condition: service_healthy&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Nginx chỉ start sau khi Node.js healthy&lt;/td&gt;
+&lt;td&gt;Nginx only starts after Node.js is healthy&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;restart: unless-stopped&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Tự restart khi crash, trừ khi bạn chủ động stop&lt;/td&gt;
+&lt;td&gt;Auto-restarts on crash, unless you manually stop it&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;:ro&lt;/code&gt; (read-only)&lt;/td&gt;
-&lt;td&gt;Mount config Nginx ở chế độ chỉ đọc&lt;/td&gt;
+&lt;td&gt;Mounts the Nginx config in read-only mode&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;networks: app-network&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Cả 2 container cùng network, Nginx gọi &lt;code&gt;app:3000&lt;/code&gt; qua tên service&lt;/td&gt;
+&lt;td&gt;Both containers share the same network, Nginx calls &lt;code&gt;app:3000&lt;/code&gt; via the service name&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;hr&gt;
-&lt;h2 id="bước-5-build-và-chạy"&gt;Bước 5: Build và chạy
+&lt;h2 id="step-5-build-and-run"&gt;Step 5: Build and Run
 &lt;/h2&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -872,17 +555,17 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;8
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Build và chạy tất cả&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Build and run everything&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker compose up --build -d
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Xem logs&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# View logs&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker compose logs -f
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Kiểm tra trạng thái&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Check status&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker compose ps
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Kiểm tra hoạt động:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Verify it&amp;rsquo;s working:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -895,17 +578,17 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;8
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Request qua Nginx (port 80)&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Request through Nginx (port 80)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl http://localhost
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Kiểm tra health của Node.js&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Check Node.js health&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl http://localhost/health
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Kiểm tra health của Nginx&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Check Nginx health&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl http://localhost/nginx-health
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Kết quả mong đợi:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Expected output:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -915,9 +598,9 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
-&lt;h2 id="bước-6-deploy-lại-khi-thay-đổi-code"&gt;Bước 6: Deploy lại khi thay đổi code
-&lt;/h2&gt;&lt;p&gt;Theo &lt;a class="link" href="https://docs.docker.com/compose/production/" target="_blank" rel="noopener"
-&gt;Docker Compose docs&lt;/a&gt;, khi cập nhật code, bạn chỉ cần rebuild service cần thiết:&lt;/p&gt;
+&lt;h2 id="step-6-redeploying-after-code-changes"&gt;Step 6: Redeploying After Code Changes
+&lt;/h2&gt;&lt;p&gt;According to the &lt;a class="link" href="https://docs.docker.com/compose/production/" target="_blank" rel="noopener"
+&gt;Docker Compose docs&lt;/a&gt;, when updating code, you only need to rebuild the necessary service:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -925,15 +608,15 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;3
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Rebuild chỉ service app (không ảnh hưởng Nginx)&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Rebuild only the app service (without affecting Nginx)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker compose build app
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker compose up --no-deps -d app
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Flag &lt;code&gt;--no-deps&lt;/code&gt; đảm bảo chỉ restart service &lt;code&gt;app&lt;/code&gt;, không restart Nginx. Client không bị gián đoạn.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;The &lt;code&gt;--no-deps&lt;/code&gt; flag ensures only the &lt;code&gt;app&lt;/code&gt; service is restarted, not Nginx. Clients experience no interruption.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="mở-rộng-scale-nhiều-instance-nodejs"&gt;Mở rộng: Scale nhiều instance Node.js
-&lt;/h2&gt;&lt;p&gt;Khi traffic tăng, bạn có thể chạy nhiều instance Node.js và để Nginx load balance:&lt;/p&gt;
+&lt;h2 id="scaling-running-multiple-nodejs-instances"&gt;Scaling: Running Multiple Node.js Instances
+&lt;/h2&gt;&lt;p&gt;When traffic increases, you can run multiple Node.js instances and let Nginx load balance:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -942,7 +625,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker compose up --scale &lt;span class="nv"&gt;app&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;3&lt;/span&gt; -d
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Cập nhật &lt;code&gt;nginx/default.conf&lt;/code&gt; để Nginx biết có nhiều instance:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Update &lt;code&gt;nginx/default.conf&lt;/code&gt; so Nginx knows about multiple instances:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -953,68 +636,68 @@
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-nginx" data-lang="nginx"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;upstream&lt;/span&gt; &lt;span class="s"&gt;nodejs_app&lt;/span&gt; &lt;span class="p"&gt;{&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;# Docker Compose DNS tự động resolve tên service
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;# thành tất cả container IP đang chạy
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;# Docker Compose DNS automatically resolves the service name
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="c1"&gt;# to all running container IPs
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="kn"&gt;server&lt;/span&gt; &lt;span class="n"&gt;app&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="mi"&gt;3000&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Khi dùng Docker Compose với &lt;code&gt;--scale&lt;/code&gt;, Docker DNS tự động resolve &lt;code&gt;app&lt;/code&gt; thành tất cả IP của các container &lt;code&gt;app&lt;/code&gt;. Nginx sẽ round-robin request đến từng instance.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;When using Docker Compose with &lt;code&gt;--scale&lt;/code&gt;, Docker DNS automatically resolves &lt;code&gt;app&lt;/code&gt; to all IPs of the &lt;code&gt;app&lt;/code&gt; containers. Nginx will round-robin requests to each instance.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="ghi-chú-triển-khai"&gt;Ghi chú triển khai
+&lt;h2 id="implementation-notes"&gt;Implementation Notes
 &lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Khi áp dụng vào dự án của bạn&lt;/strong&gt;, hãy lưu ý:
+&lt;li&gt;&lt;strong&gt;When applying to your project&lt;/strong&gt;, keep these important points in mind:
 &lt;ul&gt;
-&lt;li&gt;Luôn dùng &lt;code&gt;expose&lt;/code&gt; thay vì &lt;code&gt;ports&lt;/code&gt; cho service backend — chỉ Nginx mới cần expose ra ngoài&lt;/li&gt;
-&lt;li&gt;Bind &lt;code&gt;0.0.0.0&lt;/code&gt; trong Node.js, không bind &lt;code&gt;127.0.0.1&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Dùng &lt;code&gt;npm ci&lt;/code&gt; thay &lt;code&gt;npm install&lt;/code&gt; để đảm bảo reproducible builds&lt;/li&gt;
-&lt;li&gt;Tạo non-root user trong Dockerfile cho bảo mật&lt;/li&gt;
+&lt;li&gt;Always use &lt;code&gt;expose&lt;/code&gt; instead of &lt;code&gt;ports&lt;/code&gt; for backend services — only Nginx should be exposed to the outside&lt;/li&gt;
+&lt;li&gt;Bind &lt;code&gt;0.0.0.0&lt;/code&gt; in Node.js, not &lt;code&gt;127.0.0.1&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Use &lt;code&gt;npm ci&lt;/code&gt; instead of &lt;code&gt;npm install&lt;/code&gt; to ensure reproducible builds&lt;/li&gt;
+&lt;li&gt;Create a non-root user in the Dockerfile for security&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Best practices&lt;/strong&gt;:
 &lt;ul&gt;
-&lt;li&gt;Dùng &lt;code&gt;docker compose up --no-deps -d app&lt;/code&gt; khi chỉ cần redeploy app&lt;/li&gt;
-&lt;li&gt;Pin version cho base image (&lt;code&gt;node:18-alpine&lt;/code&gt;, &lt;code&gt;nginx:1.27-alpine&lt;/code&gt;) thay vì &lt;code&gt;latest&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Tách &lt;code&gt;docker-compose.prod.yml&lt;/code&gt; riêng cho production config&lt;/li&gt;
+&lt;li&gt;Use &lt;code&gt;docker compose up --no-deps -d app&lt;/code&gt; when you only need to redeploy the app&lt;/li&gt;
+&lt;li&gt;Pin versions for base images (&lt;code&gt;node:18-alpine&lt;/code&gt;, &lt;code&gt;nginx:1.27-alpine&lt;/code&gt;) instead of &lt;code&gt;latest&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Separate &lt;code&gt;docker-compose.prod.yml&lt;/code&gt; for production config&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Troubleshooting&lt;/strong&gt;:
 &lt;ul&gt;
-&lt;li&gt;Nginx báo &lt;code&gt;502 Bad Gateway&lt;/code&gt;? → Node.js chưa start xong hoặc bind sai address. Kiểm tra &lt;code&gt;docker compose logs app&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Không kết nối được giữa Nginx và Node.js? → Đảm bảo cả 2 cùng network và dùng đúng tên service trong &lt;code&gt;proxy_pass&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Request bị timeout? → Kiểm tra &lt;code&gt;client_max_body_size&lt;/code&gt; và &lt;code&gt;proxy_read_timeout&lt;/code&gt; trong Nginx config&lt;/li&gt;
+&lt;li&gt;Nginx returns &lt;code&gt;502 Bad Gateway&lt;/code&gt;? → Node.js hasn&amp;rsquo;t finished starting or is bound to the wrong address. Check &lt;code&gt;docker compose logs app&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Can&amp;rsquo;t connect between Nginx and Node.js? → Make sure both are on the same network and the correct service name is used in &lt;code&gt;proxy_pass&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Requests are timing out? → Check &lt;code&gt;client_max_body_size&lt;/code&gt; and &lt;code&gt;proxy_read_timeout&lt;/code&gt; in the Nginx config&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="lời-kết"&gt;Lời kết
-&lt;/h2&gt;&lt;p&gt;Tóm tắt lại flow triển khai:&lt;/p&gt;
+&lt;h2 id="conclusion"&gt;Conclusion
+&lt;/h2&gt;&lt;p&gt;Here&amp;rsquo;s a summary of the deployment flow:&lt;/p&gt;
 &lt;ol&gt;
-&lt;li&gt;&lt;strong&gt;Viết app&lt;/strong&gt; Node.js (Express) với health check endpoint&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Dockerfile&lt;/strong&gt; multi-stage build + non-root user&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Nginx config&lt;/strong&gt; reverse proxy với &lt;code&gt;proxy_pass&lt;/code&gt; và các header cần thiết&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Docker Compose&lt;/strong&gt; kết nối app + Nginx, chỉ expose port 80&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Deploy&lt;/strong&gt; bằng &lt;code&gt;docker compose up --build -d&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Update&lt;/strong&gt; bằng &lt;code&gt;docker compose build app &amp;amp;&amp;amp; docker compose up --no-deps -d app&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Write the app&lt;/strong&gt; — Node.js (Express) with a health check endpoint&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Dockerfile&lt;/strong&gt; — multi-stage build + non-root user&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Nginx config&lt;/strong&gt; — reverse proxy with &lt;code&gt;proxy_pass&lt;/code&gt; and the necessary headers&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Docker Compose&lt;/strong&gt; — connect app + Nginx, only expose port 80&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Deploy&lt;/strong&gt; with &lt;code&gt;docker compose up --build -d&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Update&lt;/strong&gt; with &lt;code&gt;docker compose build app &amp;amp;&amp;amp; docker compose up --no-deps -d app&lt;/code&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;Đây là kiến trúc cơ bản nhất để đưa một ứng dụng Node.js lên production. Từ đây bạn có thể mở rộng thêm SSL (Let&amp;rsquo;s Encrypt), database, monitoring tuỳ nhu cầu. 🚀&lt;/p&gt;
-&lt;p&gt;Nếu bạn thấy bài viết này hữu ích, hãy nhớ ⭐ star repo hoặc 📱 chia sẻ với bạn bè nhé! 😊&lt;/p&gt;
+&lt;p&gt;This is the most basic architecture for deploying a Node.js application to production. From here, you can extend with SSL (Let&amp;rsquo;s Encrypt), databases, monitoring, and more as needed. 🚀&lt;/p&gt;
+&lt;p&gt;If you find this article helpful, feel free to ⭐ star the repo or 📱 share it with your friends! 😊&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="tài-liệu-tham-khảo"&gt;Tài liệu tham khảo
+&lt;h2 id="references"&gt;References
 &lt;/h2&gt;&lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://docs.docker.com/language/nodejs/containerize/" target="_blank" rel="noopener"
-&gt;Docker Official - Containerize Node.js&lt;/a&gt; — Hướng dẫn chính thức Docker cho Node.js&lt;/li&gt;
+&gt;Docker Official - Containerize Node.js&lt;/a&gt; — Official Docker guide for Node.js&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://docs.docker.com/compose/production/" target="_blank" rel="noopener"
-&gt;Docker Compose in Production&lt;/a&gt; — Hướng dẫn deploy production với Compose&lt;/li&gt;
+&gt;Docker Compose in Production&lt;/a&gt; — Production deployment guide with Compose&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://docs.nginx.com/nginx/admin-guide/web-server/reverse-proxy/" target="_blank" rel="noopener"
-&gt;Nginx Reverse Proxy&lt;/a&gt; — Tài liệu chính thức cấu hình reverse proxy&lt;/li&gt;
+&gt;Nginx Reverse Proxy&lt;/a&gt; — Official reverse proxy configuration documentation&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://nginx.org/en/docs/beginners_guide.html" target="_blank" rel="noopener"
-&gt;Nginx Beginner&amp;rsquo;s Guide&lt;/a&gt; — Hướng dẫn cơ bản từ nginx.org&lt;/li&gt;
-&lt;/ul&gt;</description></item><item><title>Docker Compose cho người mới (v2) — Thực hành</title><link>https://tech.nguuyen.io.vn/posts/docker/docker-compose-v2-best-practices/</link><pubDate>Wed, 04 Feb 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/docker/docker-compose-v2-best-practices/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/docker/docker-compose-v2.jpg" alt="Featured image of post Docker Compose cho người mới (v2) — Thực hành" /&gt;&lt;h2 id="docker-compose-v2---công-cụ-quản-lý-multi-container"&gt;Docker Compose v2 - Công cụ quản lý multi-container
-&lt;/h2&gt;&lt;p&gt;Docker Compose là công cụ giúp bạn &lt;strong&gt;định nghĩa và chạy nhiều container&lt;/strong&gt; cùng lúc thông qua file YAML. Phiên bản v2 mang đến nhiều cải tiến về hiệu suất và tính năng mới.&lt;/p&gt;
+&gt;Nginx Beginner&amp;rsquo;s Guide&lt;/a&gt; — Beginner&amp;rsquo;s guide from nginx.org&lt;/li&gt;
+&lt;/ul&gt;</description></item><item><title>Docker Compose for Beginners (v2) — Hands-on Practice</title><link>https://tech.nguuyen.io.vn/posts/docker/docker-compose-v2-best-practices/</link><pubDate>Wed, 04 Feb 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/docker/docker-compose-v2-best-practices/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/docker/docker-compose-v2.jpg" alt="Featured image of post Docker Compose for Beginners (v2) — Hands-on Practice" /&gt;&lt;h2 id="docker-compose-v2---multi-container-management-tool"&gt;Docker Compose v2 - Multi-container Management Tool
+&lt;/h2&gt;&lt;p&gt;Docker Compose is a tool that helps you &lt;strong&gt;define and run multiple containers&lt;/strong&gt; simultaneously through a YAML file. Version v2 brings many improvements in performance and new features.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="i-cài-đặt-và-chuẩn-bị"&gt;I. Cài đặt và chuẩn bị
-&lt;/h2&gt;&lt;h3 id="kiểm-tra-phiên-bản-docker-compose"&gt;Kiểm tra phiên bản Docker Compose
+&lt;h2 id="i-installation-and-preparation"&gt;I. Installation and Preparation
+&lt;/h2&gt;&lt;h3 id="check-docker-compose-version"&gt;Check Docker Compose Version
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -1024,14 +707,14 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;5
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Kiểm tra phiên bản hiện tại&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Check current version&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker compose version
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Output mong muốn (v2.x.x)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Expected output (v2.x.x)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Docker Compose version v2.24.5
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="cấu-trúc-project-cơ-bản"&gt;Cấu trúc project cơ bản
+&lt;/div&gt;&lt;h3 id="basic-project-structure"&gt;Basic Project Structure
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -1055,8 +738,8 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
-&lt;h2 id="ii-cú-pháp-docker-compose-v2"&gt;II. Cú pháp Docker Compose v2
-&lt;/h2&gt;&lt;h3 id="file-docker-composeyml-cơ-bản"&gt;File docker-compose.yml cơ bản
+&lt;h2 id="ii-docker-compose-v2-syntax"&gt;II. Docker Compose v2 Syntax
+&lt;/h2&gt;&lt;h3 id="basic-docker-composeyml-file"&gt;Basic docker-compose.yml File
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -1119,7 +802,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;postgres_data&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="sử-dụng-file-env"&gt;Sử dụng file .env
+&lt;/div&gt;&lt;h3 id="using-env-file"&gt;Using .env File
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -1161,8 +844,8 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
-&lt;h2 id="iii-best-practices-cho-docker-compose-v2"&gt;III. Best Practices cho Docker Compose v2
-&lt;/h2&gt;&lt;h3 id="quản-lý-networks"&gt;Quản lý Networks
+&lt;h2 id="iii-best-practices-for-docker-compose-v2"&gt;III. Best Practices for Docker Compose v2
+&lt;/h2&gt;&lt;h3 id="network-management"&gt;Network Management
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -1288,8 +971,8 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
-&lt;h2 id="iv-các-lệnh-docker-compose-v2-thường-dùng"&gt;IV. Các lệnh Docker Compose v2 thường dùng
-&lt;/h2&gt;&lt;h3 id="lệnh-cơ-bản"&gt;Lệnh cơ bản
+&lt;h2 id="iv-common-docker-compose-v2-commands"&gt;IV. Common Docker Compose v2 Commands
+&lt;/h2&gt;&lt;h3 id="basic-commands"&gt;Basic Commands
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -1308,23 +991,23 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;14
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Khởi chạy services (detached mode)&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Start services (detached mode)&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker compose up -d
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Xem logs&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# View logs&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker compose logs -f
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Dừng services&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Stop services&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker compose down
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Rebuild và restart&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Rebuild and restart&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker compose up --build -d
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Xem trạng thái services&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# View service status&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker compose ps
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="lệnh-nâng-cao"&gt;Lệnh nâng cao
+&lt;/div&gt;&lt;h3 id="advanced-commands"&gt;Advanced Commands
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -1340,13 +1023,13 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;11
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Chạy lệnh trong container&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Run a command inside a container&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker compose &lt;span class="nb"&gt;exec&lt;/span&gt; web bash
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Scale service&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Scale a service&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker compose up --scale &lt;span class="nv"&gt;web&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;3&lt;/span&gt; -d
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Xem resource usage&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# View resource usage&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker compose top
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Validate compose file&lt;/span&gt;
@@ -1354,7 +1037,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
-&lt;h2 id="v-ví-dụ-thực-tế-web-app-với-database"&gt;V. Ví dụ thực tế: Web App với Database
+&lt;h2 id="v-real-world-example-web-app-with-database"&gt;V. Real-World Example: Web App with Database
 &lt;/h2&gt;&lt;h3 id="nodejs--postgresql--redis"&gt;Node.js + PostgreSQL + Redis
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -1480,7 +1163,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;redis_data&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="file-nginxconf"&gt;File nginx.conf
+&lt;/div&gt;&lt;h3 id="nginxconf-file"&gt;nginx.conf File
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -1526,7 +1209,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
-&lt;h2 id="vi-override-và-multiple-environments"&gt;VI. Override và Multiple Environments
+&lt;h2 id="vi-override-and-multiple-environments"&gt;VI. Override and Multiple Environments
 &lt;/h2&gt;&lt;h3 id="docker-composeoverrideyml"&gt;docker-compose.override.yml
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -1541,7 +1224,7 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;9
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c"&gt;# docker-compose.override.yml (tự động load)&lt;/span&gt;&lt;span class="w"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c"&gt;# docker-compose.override.yml (automatically loaded)&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;version&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;3.8&amp;#34;&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;services&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
@@ -1552,7 +1235,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;DEBUG=true&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="environment-specific-files"&gt;Environment-specific files
+&lt;/div&gt;&lt;h3 id="environment-specific-files"&gt;Environment-specific Files
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -1600,32 +1283,32 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
-&lt;h2 id="ghi-chú-triển-khai"&gt;Ghi chú triển khai
+&lt;h2 id="implementation-notes"&gt;Implementation Notes
 &lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Khi áp dụng vào dự án của bạn&lt;/strong&gt;, hãy lưu ý các điểm quan trọng:
+&lt;li&gt;&lt;strong&gt;When applying to your project&lt;/strong&gt;, keep these important points in mind:
 &lt;ul&gt;
-&lt;li&gt;Luôn sử dụng &lt;code&gt;.env&lt;/code&gt; file cho sensitive data&lt;/li&gt;
-&lt;li&gt;Implement health checks cho critical services&lt;/li&gt;
-&lt;li&gt;Sử dụng named volumes cho persistent data&lt;/li&gt;
-&lt;li&gt;Cấu hình restart policies phù hợp&lt;/li&gt;
+&lt;li&gt;Always use &lt;code&gt;.env&lt;/code&gt; files for sensitive data&lt;/li&gt;
+&lt;li&gt;Implement health checks for critical services&lt;/li&gt;
+&lt;li&gt;Use named volumes for persistent data&lt;/li&gt;
+&lt;li&gt;Configure appropriate restart policies&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Best practices&lt;/strong&gt;:
 &lt;ul&gt;
-&lt;li&gt;Tách biệt networks cho security&lt;/li&gt;
-&lt;li&gt;Sử dụng specific image tags thay vì &lt;code&gt;latest&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;Implement proper logging strategy&lt;/li&gt;
+&lt;li&gt;Separate networks for security&lt;/li&gt;
+&lt;li&gt;Use specific image tags instead of &lt;code&gt;latest&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Implement a proper logging strategy&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Troubleshooting&lt;/strong&gt;:
 &lt;ul&gt;
-&lt;li&gt;Sử dụng &lt;code&gt;docker compose logs&lt;/code&gt; để debug&lt;/li&gt;
-&lt;li&gt;Kiểm tra &lt;code&gt;docker compose config&lt;/code&gt; trước khi deploy&lt;/li&gt;
-&lt;li&gt;Monitor resource usage với &lt;code&gt;docker compose top&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Use &lt;code&gt;docker compose logs&lt;/code&gt; to debug&lt;/li&gt;
+&lt;li&gt;Check &lt;code&gt;docker compose config&lt;/code&gt; before deploying&lt;/li&gt;
+&lt;li&gt;Monitor resource usage with &lt;code&gt;docker compose top&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="lời-kết"&gt;Lời kết
-&lt;/h2&gt;&lt;p&gt;Docker Compose v2 là công cụ mạnh mẽ giúp bạn quản lý multi-container applications một cách dễ dàng. Với các best practices trên, bạn có thể xây dựng và triển khai ứng dụng một cách chuyên nghiệp và hiệu quả! 🚀&lt;/p&gt;
-&lt;p&gt;Hãy thử nghiệm với các ví dụ trên và dần dần áp dụng vào dự án thực tế của bạn. 😊&lt;/p&gt;</description></item></channel></rss>
+&lt;h2 id="conclusion"&gt;Conclusion
+&lt;/h2&gt;&lt;p&gt;Docker Compose v2 is a powerful tool that helps you manage multi-container applications with ease. With the best practices above, you can build and deploy applications professionally and efficiently! 🚀&lt;/p&gt;
+&lt;p&gt;Try experimenting with the examples above and gradually apply them to your real-world projects. 😊&lt;/p&gt;</description></item></channel></rss>

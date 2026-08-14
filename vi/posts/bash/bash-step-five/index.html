@@ -1,0 +1,297 @@
+<!doctype html><html lang=vi dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="Hướng dẫn xử lý text trong Bash với grep, awk và sed. Kèm ví dụ DevOps: lọc log Nginx, đếm IP unique và chỉnh config an toàn."><title>Text Processing trong Bash: grep, awk, sed cho DevOps</title><link rel=canonical href=https://tech.nguuyen.io.vn/vi/posts/bash/bash-step-five/><link rel=stylesheet href=/scss/style.min.fbf3f87cee1a2d6f23f6655f0af971c652e0e8528062e5eac89afc11052fa1dc.css><meta property='og:title' content="Text Processing trong Bash: grep, awk, sed cho DevOps"><meta property='og:description' content="Hướng dẫn xử lý text trong Bash với grep, awk và sed. Kèm ví dụ DevOps: lọc log Nginx, đếm IP unique và chỉnh config an toàn."><meta property='og:url' content='https://tech.nguuyen.io.vn/vi/posts/bash/bash-step-five/'><meta property='og:site_name' content='Hoàng Dương'><meta property='og:type' content='article'><meta property='article:section' content='Posts'><meta property='article:tag' content='bash'><meta property='article:tag' content='shell-script'><meta property='article:tag' content='devops'><meta property='article:tag' content='automation'><meta property='article:tag' content='linux'><meta property='article:tag' content='grep'><meta property='article:tag' content='awk'><meta property='article:tag' content='sed'><meta property='article:published_time' content='2026-06-08T00:00:00+00:00'><meta property='article:modified_time' content='2026-06-08T00:00:00+00:00'><meta property='og:image' content='https://tech.nguuyen.io.vn/images/bash/bash-step-five.jpg'><meta name=twitter:title content="Text Processing trong Bash: grep, awk, sed cho DevOps"><meta name=twitter:description content="Hướng dẫn xử lý text trong Bash với grep, awk và sed. Kèm ví dụ DevOps: lọc log Nginx, đếm IP unique và chỉnh config an toàn."><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://tech.nguuyen.io.vn/images/bash/bash-step-five.jpg'><link rel=icon type=image/x-icon href=/favicon.ico><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel=stylesheet></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><header class="amp-header is-article-header"><div class=amp-header-inner><div class=amp-brand><a href=/vi/ class=amp-logo-link><span class=amp-logo-text>Hoang Duong</span></a></div><div class=amp-header-divider aria-hidden=true></div><div class=amp-header-rail><a href=/vi/ class="header-rail-crumb header-rail-home">BÀI VIẾT
+</a><span class=header-rail-sep>//</span>
+<a href=/vi/categories/devops/ class="header-rail-crumb header-rail-cat">[DEVOPS]
+</a><span class=header-rail-title>Text Processing trong Bash: grep, awk, sed cho DevOps</span></div><div class=amp-header-spacer></div><nav class=amp-nav-links><button id=amp-menu-toggle class=amp-menu-trigger-fixed aria-label="Toggle Menu" title=Menu type=button>
+<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" class="chevron-icon"><polyline points="6 9 12 15 18 9"/></svg></button></nav></div></header><div id=amp-menu-dropdown class=amp-menu-popover aria-hidden=true><div class=amp-popover-inner><div class=amp-popover-nav><span class=popover-section-label>ĐIỀU HƯỚNG</span>
+<a href=/vi/ class=popover-item>Trang chủ</a>
+<a href=/vi/about/ class=popover-item>Về tôi</a>
+<a href=/vi/archives/ class=popover-item>Lưu trữ</a>
+<a href=/vi/links/ class=popover-item>Liên kết</a>
+<a href=/vi/categories/ class=popover-item>Chuyên mục</a></div><div class=amp-popover-footer><a href=/posts/bash/bash-step-five/ class="popover-btn lang-btn" title=English><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>EN</span>
+</a><button class="popover-btn theme-btn dark-mode-toggle" data-toggle-theme title="Chế độ tối" type=button>
+<svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+</button>
+<button type=button class="popover-btn search-btn search-trigger-btn" data-open-search aria-label="Tìm kiếm (Cmd+K)" title="Tìm kiếm (Cmd+K)">
+<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<span class=search-kbd-badge>⌘K</span></button></div></div></div><div id=amp-menu-backdrop class=amp-menu-backdrop aria-hidden=true></div><div class=amp-site-wrapper><main class=amp-main><div class=amp-article-layout><div class=amp-hero-banner-wrap><div class=amp-hero-banner><img src=/images/bash/bash-step-five.jpg alt="Text Processing trong Bash: grep, awk, sed cho DevOps" class=amp-hero-banner-img></div></div><div class=amp-article-container><div class=amp-article-grid><div class=amp-article-main><article class=amp-article-body><header class=amp-article-header><div class=amp-article-meta-top><time class=meta-date datetime=2026-06-08T00:00:00Z>JUNE 08, 2026
+</time><span class=meta-dot>&#183;</span>
+<span class=meta-reading-time>10 PHÚT ĐỌC</span>
+<span class=meta-dot>&#183;</span>
+<span class=meta-author>HOÀNG DƯƠNG</span>
+<span class=meta-dot>&#183;</span>
+<a href=/posts/bash/bash-step-five/ class=meta-lang-switch><svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:3px"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>EN</span></a></div><h1 class=amp-article-title>Text Processing trong Bash: grep, awk, sed cho DevOps</h1><p class=amp-article-description>Hướng dẫn xử lý text trong Bash với grep, awk và sed. Kèm ví dụ DevOps: lọc log Nginx, đếm IP unique và chỉnh config an toàn.</p><div class=amp-article-categories><a href=/vi/categories/devops/ class=amp-cat-pill>DEVOPS
+</a><a href=/vi/categories/bash/ class=amp-cat-pill>BASH</a></div></header><section class="article-content amp-prose"><h2 id=text-processing-trong-bash-cho-devops>Text processing trong Bash cho DevOps</h2><p>Ở <a class=link href=/posts/bash/bash-step-four/>bài trước</a> chúng ta đã xử lý file: đọc, ghi, redirect, <code>tee</code>, <code>find</code> và <code>xargs</code>. Nhưng file text chỉ thật sự hữu ích khi bạn biết <strong>lọc, trích xuất và biến đổi dữ liệu</strong> trong đó.</p><p>Trong DevOps, <code>grep</code>, <code>awk</code> và <code>sed</code> xuất hiện ở khắp nơi: lọc log lỗi, lấy status code từ access log, đếm IP truy cập nhiều nhất, thay đổi config trước khi deploy, hoặc tạo report nhanh từ output của command. Bài này đi qua ba công cụ theo hướng thực dụng, có ví dụ gần với vận hành hằng ngày.</p><hr><h2 id=grep-tìm-dòng-khớp-pattern>grep: tìm dòng khớp pattern</h2><p><code>grep</code> đọc input và in ra những dòng khớp pattern. Đây thường là bước đầu tiên khi bạn cần tìm nhanh thông tin trong log hoặc config.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>grep <span class=s2>&#34;ERROR&#34;</span> app.log
+</span></span><span class=line><span class=cl>grep <span class=s2>&#34;server_name&#34;</span> /etc/nginx/conf.d/*.conf
+</span></span></code></pre></td></tr></table></div></div><p>Một số option hay dùng:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>grep -n <span class=s2>&#34;ERROR&#34;</span> app.log          <span class=c1># in kèm line number</span>
+</span></span><span class=line><span class=cl>grep -i <span class=s2>&#34;timeout&#34;</span> app.log        <span class=c1># ignore case</span>
+</span></span><span class=line><span class=cl>grep -v <span class=s2>&#34;healthcheck&#34;</span> app.log    <span class=c1># loại trừ dòng khớp</span>
+</span></span><span class=line><span class=cl>grep -r <span class=s2>&#34;DATABASE_URL&#34;</span> ./config  <span class=c1># tìm đệ quy trong thư mục</span>
+</span></span><span class=line><span class=cl>grep -E <span class=s2>&#34;ERROR|WARN&#34;</span> app.log     <span class=c1># extended regex</span>
+</span></span><span class=line><span class=cl>grep -F <span class=s2>&#34;[literal]&#34;</span> app.log      <span class=c1># fixed string, không coi là regex</span>
+</span></span></code></pre></td></tr></table></div></div><p>Theo GNU grep, <code>-E</code> dùng extended regular expression, còn <code>-F</code> dùng fixed strings. Khi pattern là chuỗi literal đơn giản, <code>grep -F</code> giúp tránh lỗi do ký tự như <code>.</code>, <code>[</code>, <code>*</code> bị hiểu là regex.</p><hr><h2 id=grep-context-xem-dòng-trước-và-sau-lỗi>grep context: xem dòng trước và sau lỗi</h2><p>Khi debug log, chỉ một dòng lỗi thường chưa đủ. GNU grep hỗ trợ context:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>grep -A <span class=m>3</span> <span class=s2>&#34;ERROR&#34;</span> app.log  <span class=c1># 3 dòng sau match</span>
+</span></span><span class=line><span class=cl>grep -B <span class=m>3</span> <span class=s2>&#34;ERROR&#34;</span> app.log  <span class=c1># 3 dòng trước match</span>
+</span></span><span class=line><span class=cl>grep -C <span class=m>3</span> <span class=s2>&#34;ERROR&#34;</span> app.log  <span class=c1># 3 dòng trước và sau match</span>
+</span></span></code></pre></td></tr></table></div></div><p>Ví dụ xem lỗi deploy kèm ngữ cảnh:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>grep -n -C <span class=m>5</span> <span class=s2>&#34;deploy failed&#34;</span> ./logs/deploy.log
+</span></span></code></pre></td></tr></table></div></div><p>Khi có nhiều nhóm match cách xa nhau, <code>grep</code> mặc định chèn dòng <code>--</code> để phân tách context group. Điều này hữu ích khi đọc terminal, nhưng nếu output đưa vào script khác, bạn nên nhớ dòng separator này có thể xuất hiện.</p><hr><h2 id=grep-trong-pipeline-devops>grep trong pipeline DevOps</h2><p>Ví dụ lọc log ứng dụng, bỏ healthcheck và chỉ xem lỗi nghiêm trọng:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>LOG_FILE</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=p>./logs/app.log</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[[</span> ! -r <span class=s2>&#34;</span><span class=si>${</span><span class=nv>LOG_FILE</span><span class=si>}</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;ERROR: Cannot read log file: </span><span class=si>${</span><span class=nv>LOG_FILE</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>grep -E <span class=s2>&#34;ERROR|FATAL&#34;</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>LOG_FILE</span><span class=si>}</span><span class=s2>&#34;</span> <span class=p>|</span> grep -v <span class=s2>&#34;healthcheck&#34;</span> <span class=o>||</span> <span class=nb>true</span>
+</span></span></code></pre></td></tr></table></div></div><p>Vì <code>grep</code> trả exit code <code>1</code> khi không có match, pipeline có thể làm script dừng nếu đang dùng <code>set -e</code>. Trong tình huống “không có lỗi” là bình thường, thêm <code>|| true</code> ở cuối pipeline là chấp nhận được. Với pipeline quan trọng hơn, hãy xử lý exit code rõ ràng bằng <code>if grep ...; then ... fi</code>.</p><hr><h2 id=awk-xử-lý-theo-dòng-và-theo-cột>awk: xử lý theo dòng và theo cột</h2><p><code>awk</code> đọc input theo record, mặc định mỗi dòng là một record. Mỗi dòng được tách thành field: <code>$1</code>, <code>$2</code>, <code>$3</code>… Toàn bộ dòng là <code>$0</code>.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>awk <span class=s1>&#39;{ print $1 }&#39;</span> access.log
+</span></span><span class=line><span class=cl>awk <span class=s1>&#39;{ print $1, $9 }&#39;</span> access.log
+</span></span></code></pre></td></tr></table></div></div><p>Một số biến built-in quan trọng:</p><ul><li><code>NR</code>: số record đã đọc từ đầu input.</li><li><code>NF</code>: số field của record hiện tại.</li><li><code>$0</code>: toàn bộ dòng hiện tại.</li><li><code>$1</code>, <code>$2</code>, &mldr;: field thứ nhất, thứ hai, &mldr;</li><li><code>FS</code>: field separator input.</li><li><code>OFS</code>: output field separator.</li></ul><p>Ví dụ in số dòng và số field:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>awk <span class=s1>&#39;{ print NR, NF, $0 }&#39;</span> app.log
+</span></span></code></pre></td></tr></table></div></div><p>Theo GNU awk manual, <code>NR</code> tăng mỗi khi awk đọc record mới, còn <code>NF</code> là số field của record hiện tại. Đây là hai biến rất hữu ích khi cần validate dữ liệu text nhanh.</p><hr><h2 id=awk-begin-end-và-điều-kiện>awk BEGIN, END và điều kiện</h2><p><code>BEGIN</code> chạy trước khi đọc input. <code>END</code> chạy sau khi đọc hết input. Phần giữa là rule áp dụng cho từng dòng.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>awk <span class=s1>&#39;BEGIN { print &#34;status,count&#34; } { count[$9]++ } END { for (code in count) print code &#34;,&#34; count[code] }&#39;</span> access.log
+</span></span></code></pre></td></tr></table></div></div><p>Ví dụ dễ đọc hơn, đếm HTTP status code từ Nginx access log dạng phổ biến:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>awk <span class=s1>&#39;
+</span></span></span><span class=line><span class=cl><span class=s1>  BEGIN {
+</span></span></span><span class=line><span class=cl><span class=s1>    print &#34;status,count&#34;
+</span></span></span><span class=line><span class=cl><span class=s1>  }
+</span></span></span><span class=line><span class=cl><span class=s1>  {
+</span></span></span><span class=line><span class=cl><span class=s1>    status[$9]++
+</span></span></span><span class=line><span class=cl><span class=s1>  }
+</span></span></span><span class=line><span class=cl><span class=s1>  END {
+</span></span></span><span class=line><span class=cl><span class=s1>    for (code in status) {
+</span></span></span><span class=line><span class=cl><span class=s1>      print code &#34;,&#34; status[code]
+</span></span></span><span class=line><span class=cl><span class=s1>    }
+</span></span></span><span class=line><span class=cl><span class=s1>  }
+</span></span></span><span class=line><span class=cl><span class=s1>&#39;</span> access.log
+</span></span></code></pre></td></tr></table></div></div><p>Trong access log phổ biến, <code>$1</code> thường là IP client, <code>$7</code> là path và <code>$9</code> là HTTP status. Tuy nhiên format log có thể khác theo cấu hình Nginx/Apache, nên hãy kiểm tra vài dòng mẫu trước khi hardcode vị trí field.</p><hr><h2 id=awk-với-delimiter-tùy-chỉnh>awk với delimiter tùy chỉnh</h2><p>Mặc định awk tách field theo whitespace. Với file dạng key-value hoặc CSV đơn giản, dùng <code>-F</code> để chọn delimiter.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>awk -F<span class=o>=</span> <span class=s1>&#39;{ print $1, $2 }&#39;</span> app.env
+</span></span><span class=line><span class=cl>awk -F: <span class=s1>&#39;{ print $1, $7 }&#39;</span> /etc/passwd
+</span></span></code></pre></td></tr></table></div></div><p>Ví dụ đọc file <code>.env</code> và bỏ comment/dòng rỗng:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>awk -F<span class=o>=</span> <span class=s1>&#39;
+</span></span></span><span class=line><span class=cl><span class=s1>  /^[[:space:]]*#/ { next }
+</span></span></span><span class=line><span class=cl><span class=s1>  NF &lt; 2 { next }
+</span></span></span><span class=line><span class=cl><span class=s1>  {
+</span></span></span><span class=line><span class=cl><span class=s1>    print &#34;key=&#34; $1
+</span></span></span><span class=line><span class=cl><span class=s1>  }
+</span></span></span><span class=line><span class=cl><span class=s1>&#39;</span> .env
+</span></span></code></pre></td></tr></table></div></div><p>Với CSV phức tạp có quote, comma bên trong field hoặc escape, <code>awk -F,</code> không đủ an toàn. Khi đó nên dùng parser CSV đúng nghĩa bằng Python, Go hoặc công cụ chuyên dụng.</p><hr><h2 id=sed-thay-thế-và-chỉnh-text-theo-dòng>sed: thay thế và chỉnh text theo dòng</h2><p><code>sed</code> là stream editor: đọc input, áp dụng script, rồi ghi output. Lệnh nổi tiếng nhất là substitute:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sed <span class=s1>&#39;s/old/new/&#39;</span> file.txt      <span class=c1># thay match đầu tiên mỗi dòng</span>
+</span></span><span class=line><span class=cl>sed <span class=s1>&#39;s/old/new/g&#39;</span> file.txt     <span class=c1># thay tất cả match trên mỗi dòng</span>
+</span></span></code></pre></td></tr></table></div></div><p>Theo GNU sed manual, cú pháp cơ bản là <code>s/regexp/replacement/flags</code>. Flag <code>g</code> thay tất cả match trong dòng thay vì chỉ match đầu tiên.</p><p>Ví dụ đổi endpoint trong file config và ghi ra file mới:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sed <span class=s1>&#39;s|http://localhost:8080|https://api.example.com|g&#39;</span> app.conf &gt; app.conf.new
+</span></span></code></pre></td></tr></table></div></div><p>Ở đây dùng delimiter <code>|</code> thay vì <code>/</code> để tránh phải escape nhiều dấu <code>/</code> trong URL.</p><hr><h2 id=sed-theo-address-và-in-place-edit>sed theo address và in-place edit</h2><p>Bạn có thể giới hạn <code>sed</code> chỉ tác động trên dòng khớp pattern hoặc range.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sed <span class=s1>&#39;/^LOG_LEVEL=/s/=.*$/=debug/&#39;</span> app.env
+</span></span><span class=line><span class=cl>sed <span class=s1>&#39;10,20s/enabled=false/enabled=true/&#39;</span> feature.conf
+</span></span></code></pre></td></tr></table></div></div><p>GNU sed hỗ trợ <code>-i</code> để chỉnh file tại chỗ. Nếu truyền suffix, sed tạo backup trước khi rename file tạm thành file gốc:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>sed -i.bak <span class=s1>&#39;s/^LOG_LEVEL=.*/LOG_LEVEL=info/&#39;</span> app.env
+</span></span></code></pre></td></tr></table></div></div><p>Cẩn thận với <code>sed -i</code>:</p><ul><li>Luôn test không <code>-i</code> trước để xem output.</li><li>Dùng suffix như <code>.bak</code> khi chỉnh file quan trọng.</li><li>Khác biệt cú pháp <code>sed -i</code> giữa GNU sed và BSD/macOS sed có thể làm script kém portable.</li></ul><hr><h2 id=thực-hành-devops-parse-nginx-log>Thực hành DevOps: parse Nginx log</h2><p>Giả sử access log có format phổ biến:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>203.0.113.10 - - [08/Jun/2026:10:12:01 +0700] &#34;GET /api/health HTTP/1.1&#34; 200 12
+</span></span><span class=line><span class=cl>198.51.100.23 - - [08/Jun/2026:10:12:02 +0700] &#34;POST /api/login HTTP/1.1&#34; 401 64
+</span></span><span class=line><span class=cl>203.0.113.10 - - [08/Jun/2026:10:12:03 +0700] &#34;GET /api/users HTTP/1.1&#34; 200 532
+</span></span></code></pre></td></tr></table></div></div><p>Lọc lỗi 4xx/5xx bằng <code>awk</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>awk <span class=s1>&#39;$9 ~ /^[45][0-9][0-9]$/ { print $1, $7, $9 }&#39;</span> access.log
+</span></span></code></pre></td></tr></table></div></div><p>Đếm top IP truy cập nhiều nhất:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>awk <span class=s1>&#39;{ count[$1]++ } END { for (ip in count) print count[ip], ip }&#39;</span> access.log <span class=se>\
+</span></span></span><span class=line><span class=cl>  <span class=p>|</span> sort -nr <span class=se>\
+</span></span></span><span class=line><span class=cl>  <span class=p>|</span> head -n <span class=m>10</span>
+</span></span></code></pre></td></tr></table></div></div><p>Đếm status code:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>awk <span class=s1>&#39;{ status[$9]++ } END { for (code in status) print code, status[code] }&#39;</span> access.log <span class=se>\
+</span></span></span><span class=line><span class=cl>  <span class=p>|</span> sort -n
+</span></span></code></pre></td></tr></table></div></div><p>Nếu bạn muốn bỏ các request healthcheck khỏi thống kê:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>grep -v <span class=s1>&#39;&#34;GET /api/health &#39;</span> access.log <span class=se>\
+</span></span></span><span class=line><span class=cl>  <span class=p>|</span> awk <span class=s1>&#39;{ status[$9]++ } END { for (code in status) print code, status[code] }&#39;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>  <span class=p>|</span> sort -n
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=thực-hành-devops-đổi-config-trước-khi-deploy>Thực hành DevOps: đổi config trước khi deploy</h2><p>Ví dụ script cập nhật <code>LOG_LEVEL</code> và <code>FEATURE_FLAG</code> trong file <code>.env</code>, có backup trước khi sửa.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>ENV_FILE</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=p>./app.env</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>LOG_LEVEL</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>LOG_LEVEL</span><span class=k>:-</span><span class=nv>info</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>FEATURE_FLAG</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>FEATURE_FLAG</span><span class=k>:-</span><span class=nv>false</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[[</span> ! -f <span class=s2>&#34;</span><span class=si>${</span><span class=nv>ENV_FILE</span><span class=si>}</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;ERROR: env file not found: </span><span class=si>${</span><span class=nv>ENV_FILE</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[[</span> ! -w <span class=s2>&#34;</span><span class=si>${</span><span class=nv>ENV_FILE</span><span class=si>}</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;ERROR: env file is not writable: </span><span class=si>${</span><span class=nv>ENV_FILE</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>cp -- <span class=s2>&#34;</span><span class=si>${</span><span class=nv>ENV_FILE</span><span class=si>}</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>ENV_FILE</span><span class=si>}</span><span class=s2>.bak.</span><span class=k>$(</span>date +%Y%m%d%H%M%S<span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>sed -i.bak <span class=se>\
+</span></span></span><span class=line><span class=cl>  -e <span class=s2>&#34;s/^LOG_LEVEL=.*/LOG_LEVEL=</span><span class=si>${</span><span class=nv>LOG_LEVEL</span><span class=si>}</span><span class=s2>/&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>  -e <span class=s2>&#34;s/^FEATURE_FLAG=.*/FEATURE_FLAG=</span><span class=si>${</span><span class=nv>FEATURE_FLAG</span><span class=si>}</span><span class=s2>/&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>  <span class=s2>&#34;</span><span class=si>${</span><span class=nv>ENV_FILE</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> ! grep -q <span class=s1>&#39;^LOG_LEVEL=&#39;</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>ENV_FILE</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;LOG_LEVEL=</span><span class=si>${</span><span class=nv>LOG_LEVEL</span><span class=si>}</span><span class=s2>&#34;</span> &gt;&gt; <span class=s2>&#34;</span><span class=si>${</span><span class=nv>ENV_FILE</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> ! grep -q <span class=s1>&#39;^FEATURE_FLAG=&#39;</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>ENV_FILE</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;FEATURE_FLAG=</span><span class=si>${</span><span class=nv>FEATURE_FLAG</span><span class=si>}</span><span class=s2>&#34;</span> &gt;&gt; <span class=s2>&#34;</span><span class=si>${</span><span class=nv>ENV_FILE</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span></code></pre></td></tr></table></div></div><p>Script này minh họa cách phối hợp công cụ:</p><ul><li><code>cp</code> tạo backup rõ ràng trước khi chỉnh.</li><li><code>sed</code> thay giá trị nếu key đã tồn tại.</li><li><code>grep -q</code> kiểm tra key có tồn tại chưa.</li><li><code>>></code> append key còn thiếu.</li></ul><p>Lưu ý: không đưa secret thật vào ví dụ hoặc commit. Với secret, ưu tiên biến môi trường, secret manager hoặc CI/CD secret store.</p><hr><h2 id=thực-hành-devops-report-lỗi-từ-log>Thực hành DevOps: report lỗi từ log</h2><p>Ví dụ tạo report ngắn gồm tổng số lỗi và top endpoint trả 5xx:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>ACCESS_LOG</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=p>./access.log</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>REPORT_FILE</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=p>./error-report.txt</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[[</span> ! -r <span class=s2>&#34;</span><span class=si>${</span><span class=nv>ACCESS_LOG</span><span class=si>}</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;ERROR: Cannot read access log: </span><span class=si>${</span><span class=nv>ACCESS_LOG</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=o>{</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;Error report generated at </span><span class=k>$(</span>date -Is<span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;Total 5xx responses:&#34;</span>
+</span></span><span class=line><span class=cl>  awk <span class=s1>&#39;$9 ~ /^5[0-9][0-9]$/ { total++ } END { print total + 0 }&#39;</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>ACCESS_LOG</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;Top 5 endpoints with 5xx:&#34;</span>
+</span></span><span class=line><span class=cl>  awk <span class=s1>&#39;$9 ~ /^5[0-9][0-9]$/ { count[$7]++ } END { for (path in count) print count[path], path }&#39;</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>ACCESS_LOG</span><span class=si>}</span><span class=s2>&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>    <span class=p>|</span> sort -nr <span class=se>\
+</span></span></span><span class=line><span class=cl>    <span class=p>|</span> head -n <span class=m>5</span>
+</span></span><span class=line><span class=cl><span class=o>}</span> &gt; <span class=s2>&#34;</span><span class=si>${</span><span class=nv>REPORT_FILE</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Wrote </span><span class=si>${</span><span class=nv>REPORT_FILE</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>Đây là dạng script rất hữu ích để chạy từ cron hoặc CI job sau test load, miễn là bạn hiểu rõ format log đầu vào.</p><hr><h2 id=sai-sót-thường-gặp>Sai sót thường gặp</h2><ul><li><strong>Dùng regex khi chỉ cần literal:</strong> Nếu pattern có ký tự đặc biệt như <code>[</code>, <code>.</code>, <code>*</code>, cân nhắc <code>grep -F</code>.</li><li><strong>Quên grep exit code:</strong> Không có match là exit code <code>1</code>, không nhất thiết là lỗi nghiệp vụ.</li><li><strong>Hardcode field log mà không kiểm tra format:</strong> <code>$9</code> là status code với format phổ biến, nhưng không phải mọi log đều như vậy.</li><li><strong>Dùng <code>awk -F,</code> cho CSV phức tạp:</strong> CSV có quote/comma bên trong field cần parser đúng nghĩa.</li><li><strong>Chạy <code>sed -i</code> ngay trên file quan trọng:</strong> Test output trước, dùng backup suffix hoặc copy file trước khi sửa.</li><li><strong>Không quote biến trong script:</strong> Khi truyền file path vào <code>grep</code>, <code>awk</code>, <code>sed</code>, luôn quote <code>"${FILE}"</code>.</li></ul><hr><h2 id=ghi-chú-triển-khai>Ghi chú triển khai</h2><ul><li><strong>Khi áp dụng vào dự án của bạn</strong>, chọn công cụ theo mục tiêu:<ul><li>Tìm/lọc dòng → <code>grep</code>.</li><li>Trích cột, tính tổng, đếm nhóm → <code>awk</code>.</li><li>Thay thế text theo dòng/pattern → <code>sed</code>.</li></ul></li><li><strong>Best practices:</strong><ul><li>Dùng <code>grep -n</code> khi debug để biết line number.</li><li>Dùng <code>grep -C</code> khi cần context quanh lỗi.</li><li>Dùng <code>awk</code> với <code>BEGIN</code>/<code>END</code> để tạo report có header/footer.</li><li>Dùng delimiter khác trong <code>sed</code> khi xử lý URL/path, ví dụ <code>s|old|new|g</code>.</li><li>Với chỉnh sửa config, backup trước và verify sau bằng <code>grep</code> hoặc test config của service.</li></ul></li><li><strong>Troubleshooting:</strong><ul><li>Pipeline dừng vì <code>grep</code> không match? → Xử lý exit code bằng <code>if grep ...</code> hoặc <code>|| true</code> khi hợp lý.</li><li><code>awk</code> in sai cột? → In thử <code>awk '{ print NR, NF, $0 }'</code> để kiểm tra field.</li><li><code>sed</code> không thay gì? → Kiểm tra pattern có anchor đúng không, delimiter có cần escape không.</li></ul></li></ul><hr><h2 id=lời-kết>Lời kết</h2><p><code>grep</code>, <code>awk</code> và <code>sed</code> là bộ ba nền tảng để biến Bash thành công cụ xử lý log/config cực nhanh. <code>grep</code> giúp tìm đúng dòng, <code>awk</code> giúp phân tích theo cột và tổng hợp số liệu, còn <code>sed</code> giúp chỉnh sửa text có kiểm soát. Khi kết hợp với kỹ năng xử lý file ở bài trước, bạn đã có thể tạo nhiều script DevOps nhỏ nhưng rất hữu ích.</p><p>Ở bài tiếp theo, chúng ta sẽ đi vào <strong>function trong Bash</strong>: tách logic thành hàm, truyền tham số, dùng <code>local</code>, xử lý return code và xây dựng thư viện logging nhỏ để tái sử dụng.</p><hr><h2 id=tài-liệu-tham-khảo>Tài liệu tham khảo</h2><ul><li><a class=link href=https://www.gnu.org/software/grep/manual/grep.html target=_blank rel=noopener>GNU Grep Manual</a> — Tài liệu chính thức về <code>grep</code>, regex, <code>-E</code>, <code>-F</code>, <code>-n</code>, <code>-A</code>, <code>-B</code>, <code>-C</code>.</li><li><a class=link href=https://www.gnu.org/software/gawk/manual/gawk.html target=_blank rel=noopener>GNU Awk Manual</a> — Tài liệu chính thức về field, <code>NR</code>, <code>NF</code>, <code>BEGIN</code>, <code>END</code> và awk program.</li><li><a class=link href=https://www.gnu.org/software/sed/manual/sed.html target=_blank rel=noopener>GNU Sed Manual</a> — Tài liệu chính thức về <code>s/regexp/replacement/flags</code>, address và <code>-i</code>.</li><li><a class=link href=https://www.gnu.org/software/coreutils/manual/html_node/sort-invocation.html target=_blank rel=noopener>GNU Coreutils Manual — sort</a> — Tham khảo thêm cho các pipeline thống kê với <code>sort</code>.</li></ul></section><div class=amp-article-tags-wrap><span class=tags-label>THẺ:</span><div class=amp-article-tags><a href=/vi/tags/bash/ class=amp-tag-pill>#bash
+</a><a href=/vi/tags/shell-script/ class=amp-tag-pill>#shell-script
+</a><a href=/vi/tags/devops/ class=amp-tag-pill>#devops
+</a><a href=/vi/tags/automation/ class=amp-tag-pill>#automation
+</a><a href=/vi/tags/linux/ class=amp-tag-pill>#linux
+</a><a href=/vi/tags/grep/ class=amp-tag-pill>#grep
+</a><a href=/vi/tags/awk/ class=amp-tag-pill>#awk
+</a><a href=/vi/tags/sed/ class=amp-tag-pill>#sed</a></div></div><div class=amp-article-footer-box><div class=footer-box-item><span class=box-label>TÁC GIẢ</span>
+<span class=box-value>Hoàng Dương</span></div><div class=footer-box-item><span class=box-label>BẢN QUYỀN</span>
+<span class=box-value>CC BY-NC-SA 4.0</span></div></div><nav class=amp-post-nav><a href=/vi/posts/bash/bash-step-four/ class="post-nav-card nav-prev"><span class=nav-direction>&larr; BÀI TRƯỚC</span>
+<span class=nav-post-title>Xử lý file trong Bash: đọc, ghi và quản lý an toàn cho DevOps</span>
+</a><a href=/vi/posts/bash/bash-step-six/ class="post-nav-card nav-next"><span class=nav-direction>BÀI TIẾP THEO &rarr;</span>
+<span class=nav-post-title>Function trong Bash: tái sử dụng code hiệu quả cho DevOps</span></a></nav><section class=amp-comments-section><div class=comments-section-header><span class=mono-label>THẢO LUẬN & BÌNH LUẬN</span></div><div class=utterances-container><script>(function(){var t=document.documentElement.dataset.scheme||"light",n=t==="dark"?"github-dark":"github-light",e=document.createElement("script");e.src="https://utteranc.es/client.js",e.setAttribute("repo","hoangduonng/blog_comments"),e.setAttribute("issue-term","pathname"),e.setAttribute("label","comments"),e.setAttribute("theme",n),e.setAttribute("crossorigin","anonymous"),e.async=!0,document.currentScript.parentElement.appendChild(e)})()</script></div><style>.utterances-container{width:100%;margin-top:8px;position:relative}.utterances{max-width:100%!important;margin:0!important}[data-scheme=light] .utterances iframe,html:not([data-scheme=dark]) .utterances iframe{mix-blend-mode:multiply;transition:mix-blend-mode .2s ease}[data-scheme=dark] .utterances iframe{mix-blend-mode:normal}</style><script>let utterancesLoaded=!1;function setUtterancesTheme(e){let t=document.querySelector(".utterances iframe");if(t&&t.contentWindow){let n=e==="dark"?"github-dark":"github-light";t.contentWindow.postMessage({type:"set-theme",theme:n},"https://utteranc.es")}}addEventListener("message",e=>{if(e.origin!=="https://utteranc.es")return;utterancesLoaded=!0,setUtterancesTheme(document.documentElement.dataset.scheme||"light")}),window.addEventListener("onColorSchemeChange",e=>{if(!utterancesLoaded)return;setUtterancesTheme(e.detail)})</script></section></article></div><aside class=amp-article-sidebar><div class=amp-sticky-sidebar-inner><div class=amp-toc-card><div class=toc-header><span class=toc-title-label>MỤC LỤC</span></div><div class=toc-content id=toc-content><nav id=TableOfContents><ol><li><a href=#text-processing-trong-bash-cho-devops>Text processing trong Bash cho DevOps</a></li><li><a href=#grep-tìm-dòng-khớp-pattern>grep: tìm dòng khớp pattern</a></li><li><a href=#grep-context-xem-dòng-trước-và-sau-lỗi>grep context: xem dòng trước và sau lỗi</a></li><li><a href=#grep-trong-pipeline-devops>grep trong pipeline DevOps</a></li><li><a href=#awk-xử-lý-theo-dòng-và-theo-cột>awk: xử lý theo dòng và theo cột</a></li><li><a href=#awk-begin-end-và-điều-kiện>awk BEGIN, END và điều kiện</a></li><li><a href=#awk-với-delimiter-tùy-chỉnh>awk với delimiter tùy chỉnh</a></li><li><a href=#sed-thay-thế-và-chỉnh-text-theo-dòng>sed: thay thế và chỉnh text theo dòng</a></li><li><a href=#sed-theo-address-và-in-place-edit>sed theo address và in-place edit</a></li><li><a href=#thực-hành-devops-parse-nginx-log>Thực hành DevOps: parse Nginx log</a></li><li><a href=#thực-hành-devops-đổi-config-trước-khi-deploy>Thực hành DevOps: đổi config trước khi deploy</a></li><li><a href=#thực-hành-devops-report-lỗi-từ-log>Thực hành DevOps: report lỗi từ log</a></li><li><a href=#sai-sót-thường-gặp>Sai sót thường gặp</a></li><li><a href=#ghi-chú-triển-khai>Ghi chú triển khai</a></li><li><a href=#lời-kết>Lời kết</a></li><li><a href=#tài-liệu-tham-khảo>Tài liệu tham khảo</a></li></ol></nav></div><div class=toc-scroll-indicator id=toc-indicator style=display:none></div></div><div class=amp-sidebar-callout><div class=callout-badge>BÀI VIẾT LIÊN QUAN</div><a href=/vi/posts/bash/bash-step-eight/ class=callout-image-link><img src=/images/bash/bash-step-eight.jpg alt="Cron Job với Bash: tự động hóa theo lịch cho DevOps" class=callout-image></a><div class=callout-body><h4 class=callout-title><a href=/vi/posts/bash/bash-step-eight/>Cron Job với Bash: tự động hóa theo lịch cho DevOps</a></h4><p class=callout-excerpt>Cron job trong Bash cho DevOps Ở bài trước chúng ta đã quản lý biến, .env, tham số …</p><a href=/vi/posts/bash/bash-step-eight/ class=callout-link-btn>ĐỌC TIẾP &rarr;</a></div></div></div></aside></div></div></div><script>document.addEventListener("DOMContentLoaded",function(){var e=document.getElementById("toc-content"),t=document.getElementById("toc-indicator");if(e&&t){function n(){var s,o,n=e.scrollHeight-e.clientHeight;if(n<=2){t.style.display="none";return}t.style.display="block",s=e.scrollTop/n,o=e.clientHeight-32,t.style.top=e.offsetTop+s*o+"px"}e.addEventListener("scroll",n,{passive:!0}),n(),window.addEventListener("resize",n,{passive:!0}),window.addEventListener("load",n,{passive:!0})}})</script><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><div id=amp-search-overlay class=amp-search-overlay aria-hidden=true data-index-url=/vi/search/index.json data-lang=vi data-no-results="Không tìm thấy kết quả phù hợp" data-no-results-sub="Hãy thử với từ khóa khác hoặc kiểm tra lại chính tả" data-initial-hint="Nhập từ khoá để tìm kiếm bài viết..." data-results-count="kết quả"><div class=amp-search-backdrop id=amp-search-backdrop tabindex=-1></div><div class=amp-search-dialog role=dialog aria-modal=true aria-label="Tìm kiếm bài viết"><div class=amp-search-header><div class=amp-search-input-wrapper><svg class="amp-search-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<input id=amp-search-input class=amp-search-input type=text placeholder="Tìm kiếm bài viết, chuyên mục, chủ đề..." autocomplete=off autocorrect=off autocapitalize=off spellcheck=false aria-autocomplete=list aria-controls=amp-search-results>
+<button id=amp-search-clear class=amp-search-clear type=button aria-label="Xóa từ khóa" style=display:none>
+<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div><button id=amp-search-close class=amp-search-close-btn type=button aria-label="Đóng tìm kiếm">
+<kbd class=amp-search-kbd>ESC</kbd></button></div><div class=amp-search-body><div id=amp-search-loading class="amp-search-state amp-search-loading" style=display:none><div class=amp-search-spinner aria-hidden=true></div><span>Đang tải dữ liệu tìm kiếm...</span></div><div id=amp-search-initial class="amp-search-state amp-search-initial"><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p class=state-title>Tìm kiếm nhanh</p><p class=state-desc>Nhập từ khoá hoặc chủ đề để tìm kiếm trong tất cả bài viết đã xuất bản.</p></div><div id=amp-search-empty class="amp-search-state amp-search-empty" style=display:none><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="8" x2="14" y2="14"/><line x1="14" y1="8" x2="8" y2="14"/></svg><p class=state-title id=amp-search-empty-title>Không tìm thấy kết quả phù hợp</p><p class=state-desc id=amp-search-empty-desc>Hãy thử với từ khóa khác hoặc kiểm tra lại chính tả</p></div><div id=amp-search-results class=amp-search-results role=listbox style=display:none></div></div><div class=amp-search-footer><div class=amp-search-shortcuts><span class=shortcut-item><kbd>↑</kbd><kbd>↓</kbd>
+<span class=shortcut-label>Điều hướng</span>
+</span><span class=shortcut-item><kbd>↵</kbd>
+<span class=shortcut-label>Mở bài viết</span>
+</span><span class=shortcut-item><kbd>ESC</kbd>
+<span class=shortcut-label>Đóng</span></span></div><div id=amp-search-count class=amp-search-count style=display:none></div></div></div></div><footer class=amp-site-footer><div class=amp-footer-container><div class=amp-footer-grid><div class=footer-brand-col><a href=/vi/ class=footer-logo><span class=footer-logo-title>Hoang Duong</span></a><div class=footer-status><span class=status-dot></span>
+<span class=status-text>Hệ thống hoạt động ổn định</span></div><ul class=footer-meta-links><li><a href=/vi/about/>Giới thiệu Blog</a></li><li><a href=/vi/archives/>Lưu trữ bài viết</a></li></ul></div><div class=footer-links-grid><div class=footer-col><h3 class=footer-col-title>Chuyên mục</h3><ul class=footer-col-list><li><a href=/vi/categories/bash/>Bash Series</a></li><li><a href=/vi/categories/devops/>DevOps</a></li><li><a href=/vi/categories/docker/>Docker</a></li><li><a href=/vi/categories/linux/>Linux & Shell</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Tài nguyên</h3><ul class=footer-col-list><li><a href=/vi/about/>Về tôi</a></li><li><a href=/vi/archives/>Tất cả bài viết</a></li><li><a href=#search data-open-search>Tìm kiếm</a></li><li><a href=/vi/links/>Liên kết hữu ích</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Series Nổi Bật</h3><ul class=footer-col-list><li><a href=/vi/posts/bash/bash-step-eight/>Cron Jobs & Bash</a></li><li><a href=/vi/categories/devops/>DevOps Automation</a></li><li><a href=/vi/categories/docker/>Docker Essentials</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Kết nối</h3><ul class=footer-col-list><li><a href=https://github.com/hoangduonng target=_blank rel=noopener>GitHub ↗</a></li><li><a href=https://www.instagram.com/ngu_uuen/ target=_blank rel=noopener>Instagram ↗</a></li><li><a href=https://www.linkedin.com/in/hoangduonng/ target=_blank rel=noopener>LinkedIn ↗</a></li><li><a href=/vi/index.xml>RSS Feed ↗</a></li></ul></div></div></div><div class=amp-footer-bottom-bar><span class=footer-copyright>&copy; 2026 Hoang Duong. All rights reserved.</span></div></div></footer><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.ff582d61d6686f6f0f367e0f5be93dac2e8ef15b1fe7d29a941d5e4bd1b8b8af.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

@@ -1,0 +1,336 @@
+<!doctype html><html lang=vi dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="Hướng dẫn dùng vòng lặp for, while, until, break và continue trong Bash. Kèm ví dụ DevOps thực tế: lặp danh sách server, đọc log theo dòng và retry lệnh thất bại."><title>Vòng lặp trong Bash: for, while, until cho tự động hóa DevOps</title><link rel=canonical href=https://tech.nguuyen.io.vn/vi/posts/bash/bash-step-three/><link rel=stylesheet href=/scss/style.min.fbf3f87cee1a2d6f23f6655f0af971c652e0e8528062e5eac89afc11052fa1dc.css><meta property='og:title' content="Vòng lặp trong Bash: for, while, until cho tự động hóa DevOps"><meta property='og:description' content="Hướng dẫn dùng vòng lặp for, while, until, break và continue trong Bash. Kèm ví dụ DevOps thực tế: lặp danh sách server, đọc log theo dòng và retry lệnh thất bại."><meta property='og:url' content='https://tech.nguuyen.io.vn/vi/posts/bash/bash-step-three/'><meta property='og:site_name' content='Hoàng Dương'><meta property='og:type' content='article'><meta property='article:section' content='Posts'><meta property='article:tag' content='bash'><meta property='article:tag' content='shell-script'><meta property='article:tag' content='devops'><meta property='article:tag' content='automation'><meta property='article:tag' content='linux'><meta property='article:published_time' content='2026-06-02T00:00:00+00:00'><meta property='article:modified_time' content='2026-06-02T00:00:00+00:00'><meta property='og:image' content='https://tech.nguuyen.io.vn/images/bash/bash-step-three.jpg'><meta name=twitter:title content="Vòng lặp trong Bash: for, while, until cho tự động hóa DevOps"><meta name=twitter:description content="Hướng dẫn dùng vòng lặp for, while, until, break và continue trong Bash. Kèm ví dụ DevOps thực tế: lặp danh sách server, đọc log theo dòng và retry lệnh thất bại."><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://tech.nguuyen.io.vn/images/bash/bash-step-three.jpg'><link rel=icon type=image/x-icon href=/favicon.ico><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel=stylesheet></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><header class="amp-header is-article-header"><div class=amp-header-inner><div class=amp-brand><a href=/vi/ class=amp-logo-link><span class=amp-logo-text>Hoang Duong</span></a></div><div class=amp-header-divider aria-hidden=true></div><div class=amp-header-rail><a href=/vi/ class="header-rail-crumb header-rail-home">BÀI VIẾT
+</a><span class=header-rail-sep>//</span>
+<a href=/vi/categories/devops/ class="header-rail-crumb header-rail-cat">[DEVOPS]
+</a><span class=header-rail-title>Vòng lặp trong Bash: for, while, until cho tự động hóa DevOps</span></div><div class=amp-header-spacer></div><nav class=amp-nav-links><button id=amp-menu-toggle class=amp-menu-trigger-fixed aria-label="Toggle Menu" title=Menu type=button>
+<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" class="chevron-icon"><polyline points="6 9 12 15 18 9"/></svg></button></nav></div></header><div id=amp-menu-dropdown class=amp-menu-popover aria-hidden=true><div class=amp-popover-inner><div class=amp-popover-nav><span class=popover-section-label>ĐIỀU HƯỚNG</span>
+<a href=/vi/ class=popover-item>Trang chủ</a>
+<a href=/vi/about/ class=popover-item>Về tôi</a>
+<a href=/vi/archives/ class=popover-item>Lưu trữ</a>
+<a href=/vi/links/ class=popover-item>Liên kết</a>
+<a href=/vi/categories/ class=popover-item>Chuyên mục</a></div><div class=amp-popover-footer><a href=/posts/bash/bash-step-three/ class="popover-btn lang-btn" title=English><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>EN</span>
+</a><button class="popover-btn theme-btn dark-mode-toggle" data-toggle-theme title="Chế độ tối" type=button>
+<svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+</button>
+<button type=button class="popover-btn search-btn search-trigger-btn" data-open-search aria-label="Tìm kiếm (Cmd+K)" title="Tìm kiếm (Cmd+K)">
+<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<span class=search-kbd-badge>⌘K</span></button></div></div></div><div id=amp-menu-backdrop class=amp-menu-backdrop aria-hidden=true></div><div class=amp-site-wrapper><main class=amp-main><div class=amp-article-layout><div class=amp-hero-banner-wrap><div class=amp-hero-banner><img src=/images/bash/bash-step-three.jpg alt="Vòng lặp trong Bash: for, while, until cho tự động hóa DevOps" class=amp-hero-banner-img></div></div><div class=amp-article-container><div class=amp-article-grid><div class=amp-article-main><article class=amp-article-body><header class=amp-article-header><div class=amp-article-meta-top><time class=meta-date datetime=2026-06-02T00:00:00Z>JUNE 02, 2026
+</time><span class=meta-dot>&#183;</span>
+<span class=meta-reading-time>9 PHÚT ĐỌC</span>
+<span class=meta-dot>&#183;</span>
+<span class=meta-author>HOÀNG DƯƠNG</span>
+<span class=meta-dot>&#183;</span>
+<a href=/posts/bash/bash-step-three/ class=meta-lang-switch><svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:3px"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>EN</span></a></div><h1 class=amp-article-title>Vòng lặp trong Bash: for, while, until cho tự động hóa DevOps</h1><p class=amp-article-description>Hướng dẫn dùng vòng lặp for, while, until, break và continue trong Bash. Kèm ví dụ DevOps thực tế: lặp danh sách server, đọc log theo dòng và retry lệnh thất bại.</p><div class=amp-article-categories><a href=/vi/categories/devops/ class=amp-cat-pill>DEVOPS
+</a><a href=/vi/categories/bash/ class=amp-cat-pill>BASH</a></div></header><section class="article-content amp-prose"><h2 id=vòng-lặp-trong-bash-cho-devops>Vòng lặp trong Bash cho DevOps</h2><p>Ở <a class=link href=/posts/bash/bash-step-two/>bài trước</a> chúng ta đã dùng điều kiện để script biết rẽ nhánh theo trạng thái hệ thống. Nhưng trong công việc DevOps, rất nhiều tác vụ không chỉ chạy một lần: kiểm tra nhiều server, đọc từng dòng log, retry một lệnh có thể lỗi tạm thời, hoặc xử lý hàng loạt file cấu hình.</p><p><strong>Vòng lặp trong Bash</strong> giúp bạn lặp lại một khối lệnh theo danh sách, theo điều kiện, hoặc cho đến khi một điều kiện được thoả mãn. Bài này đi qua <code>for</code>, <code>while</code>, <code>until</code>, <code>break</code>, <code>continue</code> và các ví dụ thực hành gần với vận hành hằng ngày.</p><hr><h2 id=for-in--lặp-qua-danh-sách>for in — lặp qua danh sách</h2><p>Theo GNU Bash Manual, dạng <code>for name in words; do ...; done</code> sẽ mở rộng danh sách <code>words</code>, rồi chạy khối lệnh một lần cho từng phần tử. Ở mỗi lượt lặp, biến <code>name</code> nhận giá trị hiện tại.</p><p>Cú pháp phổ biến:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=k>for</span> item in item1 item2 item3<span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;Đang xử lý: </span><span class=si>${</span><span class=nv>item</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span></code></pre></td></tr></table></div></div><p>Ví dụ — kiểm tra nhanh nhiều host bằng <code>ping</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>HOSTS</span><span class=o>=(</span><span class=s2>&#34;web-01&#34;</span> <span class=s2>&#34;web-02&#34;</span> <span class=s2>&#34;db-01&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> HOST in <span class=s2>&#34;</span><span class=si>${</span><span class=nv>HOSTS</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;Checking </span><span class=si>${</span><span class=nv>HOST</span><span class=si>}</span><span class=s2>...&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> ping -c <span class=m>1</span> -W <span class=m>2</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>HOST</span><span class=si>}</span><span class=s2>&#34;</span> &gt;/dev/null 2&gt;<span class=p>&amp;</span>1<span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;OK: </span><span class=si>${</span><span class=nv>HOST</span><span class=si>}</span><span class=s2> reachable&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=k>else</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;WARN: </span><span class=si>${</span><span class=nv>HOST</span><span class=si>}</span><span class=s2> unreachable&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span></code></pre></td></tr></table></div></div><p>Điểm quan trọng là dùng <code>"${HOSTS[@]}"</code> thay vì <code>${HOSTS[@]}</code> trần. Cách quote này giữ nguyên từng phần tử array, kể cả khi giá trị có khoảng trắng.</p><hr><h2 id=for-kiểu-c--lặp-theo-bộ-đếm>for kiểu C — lặp theo bộ đếm</h2><p>Bash cũng hỗ trợ dạng <code>for (( expr1; expr2; expr3 ))</code>, tương tự ngôn ngữ C. Dạng này phù hợp khi bạn cần bộ đếm rõ ràng: chạy đúng N lần, đánh số retry, hoặc tạo tên file theo index.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=o>((</span> <span class=nv>i</span> <span class=o>=</span> 1<span class=p>;</span> i &lt;<span class=o>=</span> 5<span class=p>;</span> i++ <span class=o>))</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;Attempt </span><span class=si>${</span><span class=nv>i</span><span class=si>}</span><span class=s2>/5&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span></code></pre></td></tr></table></div></div><p>Ví dụ — tạo 3 file log giả lập cho môi trường test:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>LOG_DIR</span><span class=o>=</span><span class=s2>&#34;/tmp/bash-loop-demo&#34;</span>
+</span></span><span class=line><span class=cl>mkdir -p <span class=s2>&#34;</span><span class=si>${</span><span class=nv>LOG_DIR</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=o>((</span> <span class=nv>i</span> <span class=o>=</span> 1<span class=p>;</span> i &lt;<span class=o>=</span> 3<span class=p>;</span> i++ <span class=o>))</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>  <span class=nv>LOG_FILE</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>LOG_DIR</span><span class=si>}</span><span class=s2>/app-</span><span class=si>${</span><span class=nv>i</span><span class=si>}</span><span class=s2>.log&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;</span><span class=k>$(</span>date -Is<span class=k>)</span><span class=s2> demo log </span><span class=si>${</span><span class=nv>i</span><span class=si>}</span><span class=s2>&#34;</span> &gt; <span class=s2>&#34;</span><span class=si>${</span><span class=nv>LOG_FILE</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;Created </span><span class=si>${</span><span class=nv>LOG_FILE</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span></code></pre></td></tr></table></div></div><p>Trong <code>(( ... ))</code>, bạn có thể dùng toán tử số học quen thuộc như <code>&lt;=</code>, <code>++</code>, <code>+=</code>. Tên biến không bắt buộc có <code>$</code> ở phía trước.</p><hr><h2 id=while--lặp-khi-điều-kiện-còn-đúng>while — lặp khi điều kiện còn đúng</h2><p><code>while</code> chạy khối lệnh miễn là lệnh kiểm tra trả exit code <code>0</code>. Đây là lựa chọn tốt khi số lần lặp chưa biết trước: đọc file đến hết, chờ service sẵn sàng, hoặc polling một endpoint.</p><p>Cú pháp:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=k>while</span> &lt;lệnh_kiểm_tra&gt;<span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>  &lt;lệnh_cần_lặp&gt;
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span></code></pre></td></tr></table></div></div><p>Ví dụ — đọc file log theo từng dòng và lọc dòng lỗi:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>LOG_FILE</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=p>/var/log/app/app.log</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[[</span> ! -r <span class=s2>&#34;</span><span class=si>${</span><span class=nv>LOG_FILE</span><span class=si>}</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;ERROR: Không đọc được log file: </span><span class=si>${</span><span class=nv>LOG_FILE</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>while</span> <span class=nv>IFS</span><span class=o>=</span> <span class=nb>read</span> -r LINE<span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=o>[[</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>LINE</span><span class=si>}</span><span class=s2>&#34;</span> <span class=o>==</span> *<span class=s2>&#34;ERROR&#34;</span>* <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Found error: </span><span class=si>${</span><span class=nv>LINE</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=k>done</span> &lt; <span class=s2>&#34;</span><span class=si>${</span><span class=nv>LOG_FILE</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p><code>IFS= read -r LINE</code> là pattern nên dùng khi đọc từng dòng:</p><ul><li><code>IFS=</code> tránh việc Bash tự cắt khoảng trắng đầu/cuối dòng.</li><li><code>read -r</code> giữ nguyên dấu <code>\</code>, không coi nó là ký tự escape.</li><li><code>done &lt; "${LOG_FILE}"</code> đưa file vào stdin của vòng lặp, tránh cần gọi <code>cat</code> không cần thiết.</li></ul><hr><h2 id=until--lặp-cho-đến-khi-điều-kiện-đúng>until — lặp cho đến khi điều kiện đúng</h2><p><code>until</code> gần giống <code>while</code>, nhưng logic ngược lại: nó chạy khối lệnh miễn là lệnh kiểm tra trả non-zero, và dừng khi điều kiện trả <code>0</code>.</p><p>Cú pháp:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=k>until</span> &lt;lệnh_kiểm_tra&gt;<span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>  &lt;lệnh_cần_lặp&gt;
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span></code></pre></td></tr></table></div></div><p>Ví dụ — chờ một endpoint healthcheck sẵn sàng:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>HEALTH_URL</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=nv>http</span><span class=p>://localhost:</span><span class=nv>8080</span><span class=p>/health</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>MAX_WAIT_SECONDS</span><span class=o>=</span><span class=s2>&#34;30&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>WAITED</span><span class=o>=</span><span class=s2>&#34;0&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>until</span> curl -fsS <span class=s2>&#34;</span><span class=si>${</span><span class=nv>HEALTH_URL</span><span class=si>}</span><span class=s2>&#34;</span> &gt;/dev/null<span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=o>((</span> WAITED &gt;<span class=o>=</span> MAX_WAIT_SECONDS <span class=o>))</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;ERROR: Service is not healthy after </span><span class=si>${</span><span class=nv>MAX_WAIT_SECONDS</span><span class=si>}</span><span class=s2>s&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>  <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;Waiting for service healthcheck... (</span><span class=si>${</span><span class=nv>WAITED</span><span class=si>}</span><span class=s2>s)&#34;</span>
+</span></span><span class=line><span class=cl>  sleep <span class=m>2</span>
+</span></span><span class=line><span class=cl>  <span class=nv>WAITED</span><span class=o>=</span><span class=k>$((</span> WAITED <span class=o>+</span> <span class=m>2</span> <span class=k>))</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;OK: Service is healthy&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p><code>until</code> đọc rất tự nhiên trong các tình huống &ldquo;lặp cho tới khi thành công&rdquo;. Nếu team của bạn thấy <code>while ! command; do ...</code> dễ hiểu hơn, dùng <code>while</code> cũng hoàn toàn ổn.</p><hr><h2 id=break-và-continue>break và continue</h2><p><code>break</code> thoát khỏi vòng lặp hiện tại. <code>continue</code> bỏ qua phần còn lại của lượt lặp hiện tại và chuyển sang lượt tiếp theo. Theo GNU Bash Manual, cả hai đều dùng được trong <code>for</code>, <code>while</code>, <code>until</code> và <code>select</code>.</p><p>Ví dụ — bỏ qua file không phải <code>.log</code>, dừng khi gặp log quá lớn:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> FILE in /var/log/*.log<span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>  <span class=o>[[</span> -e <span class=s2>&#34;</span><span class=si>${</span><span class=nv>FILE</span><span class=si>}</span><span class=s2>&#34;</span> <span class=o>]]</span> <span class=o>||</span> <span class=k>continue</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=o>[[</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>FILE</span><span class=si>}</span><span class=s2>&#34;</span> !<span class=o>=</span> *.log <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=k>continue</span>
+</span></span><span class=line><span class=cl>  <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nv>SIZE_MB</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span>du -m <span class=s2>&#34;</span><span class=si>${</span><span class=nv>FILE</span><span class=si>}</span><span class=s2>&#34;</span> <span class=p>|</span> awk <span class=s1>&#39;{print $1}&#39;</span><span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=o>((</span> SIZE_MB &gt; <span class=m>1024</span> <span class=o>))</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Stop: </span><span class=si>${</span><span class=nv>FILE</span><span class=si>}</span><span class=s2> is larger than 1GB&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>break</span>
+</span></span><span class=line><span class=cl>  <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;Process </span><span class=si>${</span><span class=nv>FILE</span><span class=si>}</span><span class=s2> (</span><span class=si>${</span><span class=nv>SIZE_MB</span><span class=si>}</span><span class=s2>MB)&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span></code></pre></td></tr></table></div></div><p>Dòng <code>[[ -e "${FILE}" ]] || continue</code> xử lý trường hợp glob <code>/var/log/*.log</code> không match file nào. Nếu không có file, Bash có thể giữ nguyên pattern thành chuỗi literal, nên cần kiểm tra tồn tại trước khi xử lý.</p><hr><h2 id=thực-hành-devops-lặp-qua-danh-sách-server-ssh>Thực hành DevOps: lặp qua danh sách server SSH</h2><p>Ví dụ này đọc danh sách server từ file, SSH vào từng host và chạy một lệnh kiểm tra ngắn. Tên server, user và command đều dùng placeholder chung, không phụ thuộc môi trường thật.</p><p>Tạo file <code>servers.txt</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>webserver-01
+</span></span><span class=line><span class=cl>webserver-02
+</span></span><span class=line><span class=cl>worker-01
+</span></span></code></pre></td></tr></table></div></div><p>Tạo script <code>check_servers.sh</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>SERVER_FILE</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=nv>servers</span><span class=p>.txt</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>SSH_USER</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>SSH_USER</span><span class=k>:-</span><span class=nv>deploy</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>REMOTE_COMMAND</span><span class=o>=</span><span class=s2>&#34;uptime&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[[</span> ! -r <span class=s2>&#34;</span><span class=si>${</span><span class=nv>SERVER_FILE</span><span class=si>}</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;ERROR: Cannot read server file: </span><span class=si>${</span><span class=nv>SERVER_FILE</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>while</span> <span class=nv>IFS</span><span class=o>=</span> <span class=nb>read</span> -r SERVER<span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>  <span class=o>[[</span> -n <span class=s2>&#34;</span><span class=si>${</span><span class=nv>SERVER</span><span class=si>}</span><span class=s2>&#34;</span> <span class=o>]]</span> <span class=o>||</span> <span class=k>continue</span>
+</span></span><span class=line><span class=cl>  <span class=o>[[</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>SERVER</span><span class=si>}</span><span class=s2>&#34;</span> !<span class=o>=</span> <span class=se>\#</span>* <span class=o>]]</span> <span class=o>||</span> <span class=k>continue</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;===== </span><span class=si>${</span><span class=nv>SERVER</span><span class=si>}</span><span class=s2> =====&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> ssh -o <span class=nv>BatchMode</span><span class=o>=</span>yes -o <span class=nv>ConnectTimeout</span><span class=o>=</span><span class=m>5</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>SSH_USER</span><span class=si>}</span><span class=s2>@</span><span class=si>${</span><span class=nv>SERVER</span><span class=si>}</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>REMOTE_COMMAND</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;OK: </span><span class=si>${</span><span class=nv>SERVER</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=k>else</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;WARN: command failed on </span><span class=si>${</span><span class=nv>SERVER</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=k>fi</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span>
+</span></span><span class=line><span class=cl><span class=k>done</span> &lt; <span class=s2>&#34;</span><span class=si>${</span><span class=nv>SERVER_FILE</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>Chạy thử:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>chmod +x check_servers.sh
+</span></span><span class=line><span class=cl>./check_servers.sh servers.txt
+</span></span></code></pre></td></tr></table></div></div><p>Một vài điểm đáng chú ý:</p><ul><li><code>BatchMode=yes</code> giúp SSH không hỏi password/passphrase trong automation. Nếu key chưa sẵn sàng, lệnh sẽ fail thay vì treo script.</li><li><code>ConnectTimeout=5</code> tránh chờ quá lâu khi một host không phản hồi.</li><li>Dòng rỗng và dòng comment bắt đầu bằng <code>#</code> được bỏ qua bằng <code>continue</code>.</li><li>Không hardcode user nhạy cảm: script lấy <code>SSH_USER</code> từ biến môi trường, mặc định là <code>deploy</code>.</li></ul><hr><h2 id=thực-hành-devops-retry-lệnh-thất-bại>Thực hành DevOps: retry lệnh thất bại</h2><p>Trong vận hành, có những lỗi chỉ tạm thời: network chập chờn, registry chưa phản hồi, endpoint vừa restart xong. Vòng lặp giúp bạn retry có kiểm soát thay vì chạy lại thủ công.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>URL</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=nv>https</span><span class=p>://example.com/health</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>MAX_RETRIES</span><span class=o>=</span><span class=s2>&#34;5&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>SLEEP_SECONDS</span><span class=o>=</span><span class=s2>&#34;3&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=o>((</span> <span class=nv>attempt</span> <span class=o>=</span> 1<span class=p>;</span> attempt &lt;<span class=o>=</span> MAX_RETRIES<span class=p>;</span> attempt++ <span class=o>))</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;Attempt </span><span class=si>${</span><span class=nv>attempt</span><span class=si>}</span><span class=s2>/</span><span class=si>${</span><span class=nv>MAX_RETRIES</span><span class=si>}</span><span class=s2>: </span><span class=si>${</span><span class=nv>URL</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> curl -fsS <span class=s2>&#34;</span><span class=si>${</span><span class=nv>URL</span><span class=si>}</span><span class=s2>&#34;</span> &gt;/dev/null<span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;OK: endpoint is reachable&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>exit</span> <span class=m>0</span>
+</span></span><span class=line><span class=cl>  <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=o>((</span> <span class=nv>attempt</span> <span class=o>==</span> MAX_RETRIES <span class=o>))</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;ERROR: endpoint is still unreachable after </span><span class=si>${</span><span class=nv>MAX_RETRIES</span><span class=si>}</span><span class=s2> attempts&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>  <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  sleep <span class=s2>&#34;</span><span class=si>${</span><span class=nv>SLEEP_SECONDS</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span></code></pre></td></tr></table></div></div><p>Ở đây, <code>curl -f</code> trả lỗi nếu HTTP status là 4xx/5xx, <code>-sS</code> giữ output gọn nhưng vẫn in lỗi khi thất bại. Exit code cuối cùng giúp pipeline biết nên tiếp tục hay dừng.</p><hr><h2 id=sai-sót-thường-gặp>Sai sót thường gặp</h2><ul><li><strong>Lặp qua output của <code>ls</code>:</strong> <code>for FILE in $(ls)</code> dễ vỡ khi tên file có khoảng trắng hoặc ký tự đặc biệt. Hãy dùng glob (<code>for FILE in *.log</code>) hoặc <code>find ... -print0</code> cho case phức tạp.</li><li><strong>Quên quote biến:</strong> Luôn dùng <code>"${VAR}"</code>, đặc biệt khi biến là đường dẫn, hostname hoặc dữ liệu đọc từ file.</li><li><strong>Dùng pipe làm mất biến ngoài vòng lặp:</strong> <code>cat file | while read ...</code> thường chạy vòng lặp trong subshell, thay đổi biến bên trong có thể không còn sau vòng lặp. Ưu tiên <code>while ...; done &lt; file</code>.</li><li><strong>Vòng lặp vô hạn không có điều kiện dừng:</strong> Khi dùng <code>while true</code>, luôn có <code>break</code>, timeout, hoặc giới hạn số lần thử.</li><li><strong>Không xử lý dòng rỗng/comment:</strong> Khi đọc danh sách server hoặc config, nên bỏ qua dòng rỗng và comment để script bền hơn.</li></ul><hr><h2 id=ghi-chú-triển-khai>Ghi chú triển khai</h2><ul><li><strong>Khi áp dụng vào dự án của bạn</strong>, hãy xác định rõ vòng lặp đang lặp theo danh sách hay theo trạng thái:<ul><li>Có danh sách sẵn → thường dùng <code>for</code>.</li><li>Đọc từng dòng hoặc chờ điều kiện còn đúng → thường dùng <code>while</code>.</li><li>Chờ cho đến khi lệnh thành công → cân nhắc <code>until</code>.</li></ul></li><li><strong>Best practices:</strong><ul><li>Dùng <code>IFS= read -r</code> khi đọc file theo dòng.</li><li>Quote array bằng <code>"${ARRAY[@]}"</code> khi lặp qua danh sách.</li><li>Với retry, luôn có <code>MAX_RETRIES</code> và <code>SLEEP_SECONDS</code> rõ ràng.</li><li>Với SSH automation, thêm timeout và tránh prompt tương tác.</li></ul></li><li><strong>Troubleshooting:</strong><ul><li>Vòng lặp không chạy? → Kiểm tra danh sách đầu vào có rỗng không, glob có match file không.</li><li>Script dừng giữa chừng khi dùng <code>set -e</code>? → Một lệnh trong vòng lặp trả non-zero nhưng chưa được bọc bằng <code>if</code>, <code>||</code>, hoặc xử lý exit code.</li><li>Đọc file bị mất khoảng trắng? → Đảm bảo dùng <code>IFS= read -r LINE</code>.</li></ul></li></ul><hr><h2 id=lời-kết>Lời kết</h2><p>Vòng lặp là nền tảng để Bash chuyển từ các script chạy một lần sang automation thật sự: xử lý nhiều server, nhiều file, nhiều dòng log và nhiều lần retry. Khi kết hợp <code>for</code>, <code>while</code>, <code>until</code> với điều kiện ở bài trước, bạn đã có thể viết các script DevOps nhỏ nhưng rất hữu dụng cho kiểm tra, triển khai và vận hành hằng ngày.</p><p>Ở bài tiếp theo, chúng ta sẽ đi vào <strong>xử lý file trong Bash</strong>: đọc, ghi, redirect output, dùng <code>tee</code>, <code>find</code>, <code>xargs</code> và các pattern quản lý log/config an toàn hơn.</p><hr><h2 id=tài-liệu-tham-khảo>Tài liệu tham khảo</h2><ul><li><a class=link href=https://www.gnu.org/software/bash/manual/bash.html#Looping-Constructs target=_blank rel=noopener>GNU Bash Manual — Looping Constructs</a> — Tài liệu chính thức về <code>for</code>, <code>while</code>, <code>until</code>.</li><li><a class=link href=https://www.gnu.org/software/bash/manual/bash.html#Bourne-Shell-Builtins target=_blank rel=noopener>GNU Bash Manual — Bourne Shell Builtins</a> — Tài liệu chính thức về <code>break</code> và <code>continue</code>.</li><li><a class=link href=https://www.gnu.org/software/bash/manual/bash.html#Bash-Builtin-Commands target=_blank rel=noopener>GNU Bash Manual — Bash Builtin Commands</a> — Tài liệu chính thức về <code>read</code>, <code>mapfile</code> và các builtin khác.</li><li><a class=link href=https://www.shellcheck.net/wiki/SC2045 target=_blank rel=noopener>ShellCheck Wiki — SC2045</a> — Vì sao không nên lặp qua output của <code>ls</code>.</li></ul></section><div class=amp-article-tags-wrap><span class=tags-label>THẺ:</span><div class=amp-article-tags><a href=/vi/tags/bash/ class=amp-tag-pill>#bash
+</a><a href=/vi/tags/shell-script/ class=amp-tag-pill>#shell-script
+</a><a href=/vi/tags/devops/ class=amp-tag-pill>#devops
+</a><a href=/vi/tags/automation/ class=amp-tag-pill>#automation
+</a><a href=/vi/tags/linux/ class=amp-tag-pill>#linux</a></div></div><div class=amp-article-footer-box><div class=footer-box-item><span class=box-label>TÁC GIẢ</span>
+<span class=box-value>Hoàng Dương</span></div><div class=footer-box-item><span class=box-label>BẢN QUYỀN</span>
+<span class=box-value>CC BY-NC-SA 4.0</span></div></div><nav class=amp-post-nav><a href=/vi/posts/bash/bash-step-two/ class="post-nav-card nav-prev"><span class=nav-direction>&larr; BÀI TRƯỚC</span>
+<span class=nav-post-title>Điều kiện trong Bash: if, case và xử lý logic cho DevOps</span>
+</a><a href=/vi/posts/bash/bash-step-four/ class="post-nav-card nav-next"><span class=nav-direction>BÀI TIẾP THEO &rarr;</span>
+<span class=nav-post-title>Xử lý file trong Bash: đọc, ghi và quản lý an toàn cho DevOps</span></a></nav><section class=amp-comments-section><div class=comments-section-header><span class=mono-label>THẢO LUẬN & BÌNH LUẬN</span></div><div class=utterances-container><script>(function(){var t=document.documentElement.dataset.scheme||"light",n=t==="dark"?"github-dark":"github-light",e=document.createElement("script");e.src="https://utteranc.es/client.js",e.setAttribute("repo","hoangduonng/blog_comments"),e.setAttribute("issue-term","pathname"),e.setAttribute("label","comments"),e.setAttribute("theme",n),e.setAttribute("crossorigin","anonymous"),e.async=!0,document.currentScript.parentElement.appendChild(e)})()</script></div><style>.utterances-container{width:100%;margin-top:8px;position:relative}.utterances{max-width:100%!important;margin:0!important}[data-scheme=light] .utterances iframe,html:not([data-scheme=dark]) .utterances iframe{mix-blend-mode:multiply;transition:mix-blend-mode .2s ease}[data-scheme=dark] .utterances iframe{mix-blend-mode:normal}</style><script>let utterancesLoaded=!1;function setUtterancesTheme(e){let t=document.querySelector(".utterances iframe");if(t&&t.contentWindow){let n=e==="dark"?"github-dark":"github-light";t.contentWindow.postMessage({type:"set-theme",theme:n},"https://utteranc.es")}}addEventListener("message",e=>{if(e.origin!=="https://utteranc.es")return;utterancesLoaded=!0,setUtterancesTheme(document.documentElement.dataset.scheme||"light")}),window.addEventListener("onColorSchemeChange",e=>{if(!utterancesLoaded)return;setUtterancesTheme(e.detail)})</script></section></article></div><aside class=amp-article-sidebar><div class=amp-sticky-sidebar-inner><div class=amp-toc-card><div class=toc-header><span class=toc-title-label>MỤC LỤC</span></div><div class=toc-content id=toc-content><nav id=TableOfContents><ol><li><a href=#vòng-lặp-trong-bash-cho-devops>Vòng lặp trong Bash cho DevOps</a></li><li><a href=#for-in--lặp-qua-danh-sách>for in — lặp qua danh sách</a></li><li><a href=#for-kiểu-c--lặp-theo-bộ-đếm>for kiểu C — lặp theo bộ đếm</a></li><li><a href=#while--lặp-khi-điều-kiện-còn-đúng>while — lặp khi điều kiện còn đúng</a></li><li><a href=#until--lặp-cho-đến-khi-điều-kiện-đúng>until — lặp cho đến khi điều kiện đúng</a></li><li><a href=#break-và-continue>break và continue</a></li><li><a href=#thực-hành-devops-lặp-qua-danh-sách-server-ssh>Thực hành DevOps: lặp qua danh sách server SSH</a></li><li><a href=#thực-hành-devops-retry-lệnh-thất-bại>Thực hành DevOps: retry lệnh thất bại</a></li><li><a href=#sai-sót-thường-gặp>Sai sót thường gặp</a></li><li><a href=#ghi-chú-triển-khai>Ghi chú triển khai</a></li><li><a href=#lời-kết>Lời kết</a></li><li><a href=#tài-liệu-tham-khảo>Tài liệu tham khảo</a></li></ol></nav></div><div class=toc-scroll-indicator id=toc-indicator style=display:none></div></div><div class=amp-sidebar-callout><div class=callout-badge>BÀI VIẾT LIÊN QUAN</div><a href=/vi/posts/bash/bash-step-eight/ class=callout-image-link><img src=/images/bash/bash-step-eight.jpg alt="Cron Job với Bash: tự động hóa theo lịch cho DevOps" class=callout-image></a><div class=callout-body><h4 class=callout-title><a href=/vi/posts/bash/bash-step-eight/>Cron Job với Bash: tự động hóa theo lịch cho DevOps</a></h4><p class=callout-excerpt>Cron job trong Bash cho DevOps Ở bài trước chúng ta đã quản lý biến, .env, tham số …</p><a href=/vi/posts/bash/bash-step-eight/ class=callout-link-btn>ĐỌC TIẾP &rarr;</a></div></div></div></aside></div></div></div><script>document.addEventListener("DOMContentLoaded",function(){var e=document.getElementById("toc-content"),t=document.getElementById("toc-indicator");if(e&&t){function n(){var s,o,n=e.scrollHeight-e.clientHeight;if(n<=2){t.style.display="none";return}t.style.display="block",s=e.scrollTop/n,o=e.clientHeight-32,t.style.top=e.offsetTop+s*o+"px"}e.addEventListener("scroll",n,{passive:!0}),n(),window.addEventListener("resize",n,{passive:!0}),window.addEventListener("load",n,{passive:!0})}})</script><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><div id=amp-search-overlay class=amp-search-overlay aria-hidden=true data-index-url=/vi/search/index.json data-lang=vi data-no-results="Không tìm thấy kết quả phù hợp" data-no-results-sub="Hãy thử với từ khóa khác hoặc kiểm tra lại chính tả" data-initial-hint="Nhập từ khoá để tìm kiếm bài viết..." data-results-count="kết quả"><div class=amp-search-backdrop id=amp-search-backdrop tabindex=-1></div><div class=amp-search-dialog role=dialog aria-modal=true aria-label="Tìm kiếm bài viết"><div class=amp-search-header><div class=amp-search-input-wrapper><svg class="amp-search-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<input id=amp-search-input class=amp-search-input type=text placeholder="Tìm kiếm bài viết, chuyên mục, chủ đề..." autocomplete=off autocorrect=off autocapitalize=off spellcheck=false aria-autocomplete=list aria-controls=amp-search-results>
+<button id=amp-search-clear class=amp-search-clear type=button aria-label="Xóa từ khóa" style=display:none>
+<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div><button id=amp-search-close class=amp-search-close-btn type=button aria-label="Đóng tìm kiếm">
+<kbd class=amp-search-kbd>ESC</kbd></button></div><div class=amp-search-body><div id=amp-search-loading class="amp-search-state amp-search-loading" style=display:none><div class=amp-search-spinner aria-hidden=true></div><span>Đang tải dữ liệu tìm kiếm...</span></div><div id=amp-search-initial class="amp-search-state amp-search-initial"><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p class=state-title>Tìm kiếm nhanh</p><p class=state-desc>Nhập từ khoá hoặc chủ đề để tìm kiếm trong tất cả bài viết đã xuất bản.</p></div><div id=amp-search-empty class="amp-search-state amp-search-empty" style=display:none><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="8" x2="14" y2="14"/><line x1="14" y1="8" x2="8" y2="14"/></svg><p class=state-title id=amp-search-empty-title>Không tìm thấy kết quả phù hợp</p><p class=state-desc id=amp-search-empty-desc>Hãy thử với từ khóa khác hoặc kiểm tra lại chính tả</p></div><div id=amp-search-results class=amp-search-results role=listbox style=display:none></div></div><div class=amp-search-footer><div class=amp-search-shortcuts><span class=shortcut-item><kbd>↑</kbd><kbd>↓</kbd>
+<span class=shortcut-label>Điều hướng</span>
+</span><span class=shortcut-item><kbd>↵</kbd>
+<span class=shortcut-label>Mở bài viết</span>
+</span><span class=shortcut-item><kbd>ESC</kbd>
+<span class=shortcut-label>Đóng</span></span></div><div id=amp-search-count class=amp-search-count style=display:none></div></div></div></div><footer class=amp-site-footer><div class=amp-footer-container><div class=amp-footer-grid><div class=footer-brand-col><a href=/vi/ class=footer-logo><span class=footer-logo-title>Hoang Duong</span></a><div class=footer-status><span class=status-dot></span>
+<span class=status-text>Hệ thống hoạt động ổn định</span></div><ul class=footer-meta-links><li><a href=/vi/about/>Giới thiệu Blog</a></li><li><a href=/vi/archives/>Lưu trữ bài viết</a></li></ul></div><div class=footer-links-grid><div class=footer-col><h3 class=footer-col-title>Chuyên mục</h3><ul class=footer-col-list><li><a href=/vi/categories/bash/>Bash Series</a></li><li><a href=/vi/categories/devops/>DevOps</a></li><li><a href=/vi/categories/docker/>Docker</a></li><li><a href=/vi/categories/linux/>Linux & Shell</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Tài nguyên</h3><ul class=footer-col-list><li><a href=/vi/about/>Về tôi</a></li><li><a href=/vi/archives/>Tất cả bài viết</a></li><li><a href=#search data-open-search>Tìm kiếm</a></li><li><a href=/vi/links/>Liên kết hữu ích</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Series Nổi Bật</h3><ul class=footer-col-list><li><a href=/vi/posts/bash/bash-step-eight/>Cron Jobs & Bash</a></li><li><a href=/vi/categories/devops/>DevOps Automation</a></li><li><a href=/vi/categories/docker/>Docker Essentials</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Kết nối</h3><ul class=footer-col-list><li><a href=https://github.com/hoangduonng target=_blank rel=noopener>GitHub ↗</a></li><li><a href=https://www.instagram.com/ngu_uuen/ target=_blank rel=noopener>Instagram ↗</a></li><li><a href=https://www.linkedin.com/in/hoangduonng/ target=_blank rel=noopener>LinkedIn ↗</a></li><li><a href=/vi/index.xml>RSS Feed ↗</a></li></ul></div></div></div><div class=amp-footer-bottom-bar><span class=footer-copyright>&copy; 2026 Hoang Duong. All rights reserved.</span></div></div></footer><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.ff582d61d6686f6f0f367e0f5be93dac2e8ef15b1fe7d29a941d5e4bd1b8b8af.js defer></script><script>(function(){const e=document.createElement("link");e.href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700&display=swap",e.type="text/css",e.rel="stylesheet",document.head.appendChild(e)})()</script></body></html>

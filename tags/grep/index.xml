@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Grep on Hoàng Dương</title><link>https://tech.nguuyen.io.vn/tags/grep/</link><description>Recent content in Grep on Hoàng Dương</description><generator>Hugo -- gohugo.io</generator><language>vi</language><lastBuildDate>Mon, 08 Jun 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/grep/index.xml" rel="self" type="application/rss+xml"/><item><title>Text Processing trong Bash: grep, awk, sed cho DevOps</title><link>https://tech.nguuyen.io.vn/posts/bash/bash-step-five/</link><pubDate>Mon, 08 Jun 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/bash/bash-step-five/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/bash/bash-step-five.jpg" alt="Featured image of post Text Processing trong Bash: grep, awk, sed cho DevOps" /&gt;&lt;h2 id="text-processing-trong-bash-cho-devops"&gt;Text processing trong Bash cho DevOps
-&lt;/h2&gt;&lt;p&gt;Ở &lt;a class="link" href="https://tech.nguuyen.io.vn/posts/bash/bash-step-four/" &gt;bài trước&lt;/a&gt; chúng ta đã xử lý file: đọc, ghi, redirect, &lt;code&gt;tee&lt;/code&gt;, &lt;code&gt;find&lt;/code&gt; và &lt;code&gt;xargs&lt;/code&gt;. Nhưng file text chỉ thật sự hữu ích khi bạn biết &lt;strong&gt;lọc, trích xuất và biến đổi dữ liệu&lt;/strong&gt; trong đó.&lt;/p&gt;
-&lt;p&gt;Trong DevOps, &lt;code&gt;grep&lt;/code&gt;, &lt;code&gt;awk&lt;/code&gt; và &lt;code&gt;sed&lt;/code&gt; xuất hiện ở khắp nơi: lọc log lỗi, lấy status code từ access log, đếm IP truy cập nhiều nhất, thay đổi config trước khi deploy, hoặc tạo report nhanh từ output của command. Bài này đi qua ba công cụ theo hướng thực dụng, có ví dụ gần với vận hành hằng ngày.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Grep on Hoang Duong</title><link>https://tech.nguuyen.io.vn/tags/grep/</link><description>Recent content in Grep on Hoang Duong</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 22 Jun 2026 07:10:00 +0700</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/grep/index.xml" rel="self" type="application/rss+xml"/><item><title>Text Processing in Bash: grep, awk, and sed for DevOps</title><link>https://tech.nguuyen.io.vn/posts/bash/bash-step-five/</link><pubDate>Mon, 08 Jun 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/bash/bash-step-five/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/bash/bash-step-five.jpg" alt="Featured image of post Text Processing in Bash: grep, awk, and sed for DevOps" /&gt;&lt;h2 id="text-processing-in-bash-for-devops"&gt;Text Processing in Bash for DevOps
+&lt;/h2&gt;&lt;p&gt;In the &lt;a class="link" href="https://tech.nguuyen.io.vn/posts/bash/bash-step-four/" &gt;previous article&lt;/a&gt; we handled files: reading, writing, redirection, &lt;code&gt;tee&lt;/code&gt;, &lt;code&gt;find&lt;/code&gt;, and &lt;code&gt;xargs&lt;/code&gt;. But text files become truly useful when you know how to &lt;strong&gt;filter, extract, and transform data&lt;/strong&gt; inside them.&lt;/p&gt;
+&lt;p&gt;In DevOps, &lt;code&gt;grep&lt;/code&gt;, &lt;code&gt;awk&lt;/code&gt;, and &lt;code&gt;sed&lt;/code&gt; show up everywhere: filtering error logs, extracting status codes from access logs, counting the most active IP addresses, changing config before deployment, or creating quick reports from command output. This article walks through the three tools in a practical way, with examples close to daily operations work.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="grep-tìm-dòng-khớp-pattern"&gt;grep: tìm dòng khớp pattern
-&lt;/h2&gt;&lt;p&gt;&lt;code&gt;grep&lt;/code&gt; đọc input và in ra những dòng khớp pattern. Đây thường là bước đầu tiên khi bạn cần tìm nhanh thông tin trong log hoặc config.&lt;/p&gt;
+&lt;h2 id="grep-find-lines-that-match-a-pattern"&gt;grep: find lines that match a pattern
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;grep&lt;/code&gt; reads input and prints lines that match a pattern. It is often the first tool you reach for when you need to find information quickly in logs or config files.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -14,7 +14,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep &lt;span class="s2"&gt;&amp;#34;server_name&amp;#34;&lt;/span&gt; /etc/nginx/conf.d/*.conf
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Một số option hay dùng:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Common options:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -25,18 +25,18 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;6
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -n &lt;span class="s2"&gt;&amp;#34;ERROR&amp;#34;&lt;/span&gt; app.log &lt;span class="c1"&gt;# in kèm line number&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -n &lt;span class="s2"&gt;&amp;#34;ERROR&amp;#34;&lt;/span&gt; app.log &lt;span class="c1"&gt;# print line numbers&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -i &lt;span class="s2"&gt;&amp;#34;timeout&amp;#34;&lt;/span&gt; app.log &lt;span class="c1"&gt;# ignore case&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -v &lt;span class="s2"&gt;&amp;#34;healthcheck&amp;#34;&lt;/span&gt; app.log &lt;span class="c1"&gt;# loại trừ dòng khớp&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -r &lt;span class="s2"&gt;&amp;#34;DATABASE_URL&amp;#34;&lt;/span&gt; ./config &lt;span class="c1"&gt;# tìm đệ quy trong thư mục&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -v &lt;span class="s2"&gt;&amp;#34;healthcheck&amp;#34;&lt;/span&gt; app.log &lt;span class="c1"&gt;# exclude matching lines&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -r &lt;span class="s2"&gt;&amp;#34;DATABASE_URL&amp;#34;&lt;/span&gt; ./config &lt;span class="c1"&gt;# search recursively in a directory&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -E &lt;span class="s2"&gt;&amp;#34;ERROR|WARN&amp;#34;&lt;/span&gt; app.log &lt;span class="c1"&gt;# extended regex&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -F &lt;span class="s2"&gt;&amp;#34;[literal]&amp;#34;&lt;/span&gt; app.log &lt;span class="c1"&gt;# fixed string, không coi là regex&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -F &lt;span class="s2"&gt;&amp;#34;[literal]&amp;#34;&lt;/span&gt; app.log &lt;span class="c1"&gt;# fixed string, not regex&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Theo GNU grep, &lt;code&gt;-E&lt;/code&gt; dùng extended regular expression, còn &lt;code&gt;-F&lt;/code&gt; dùng fixed strings. Khi pattern là chuỗi literal đơn giản, &lt;code&gt;grep -F&lt;/code&gt; giúp tránh lỗi do ký tự như &lt;code&gt;.&lt;/code&gt;, &lt;code&gt;[&lt;/code&gt;, &lt;code&gt;*&lt;/code&gt; bị hiểu là regex.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;According to GNU grep, &lt;code&gt;-E&lt;/code&gt; uses extended regular expressions, while &lt;code&gt;-F&lt;/code&gt; uses fixed strings. When the pattern is a simple literal string, &lt;code&gt;grep -F&lt;/code&gt; helps avoid surprises from characters like &lt;code&gt;.&lt;/code&gt;, &lt;code&gt;[&lt;/code&gt;, or &lt;code&gt;*&lt;/code&gt; being interpreted as regex.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="grep-context-xem-dòng-trước-và-sau-lỗi"&gt;grep context: xem dòng trước và sau lỗi
-&lt;/h2&gt;&lt;p&gt;Khi debug log, chỉ một dòng lỗi thường chưa đủ. GNU grep hỗ trợ context:&lt;/p&gt;
+&lt;h2 id="grep-context-view-lines-before-and-after-an-error"&gt;grep context: view lines before and after an error
+&lt;/h2&gt;&lt;p&gt;When debugging logs, a single error line is often not enough. GNU grep supports context options:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -44,12 +44,12 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;3
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -A &lt;span class="m"&gt;3&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;ERROR&amp;#34;&lt;/span&gt; app.log &lt;span class="c1"&gt;# 3 dòng sau match&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -B &lt;span class="m"&gt;3&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;ERROR&amp;#34;&lt;/span&gt; app.log &lt;span class="c1"&gt;# 3 dòng trước match&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -C &lt;span class="m"&gt;3&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;ERROR&amp;#34;&lt;/span&gt; app.log &lt;span class="c1"&gt;# 3 dòng trước và sau match&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -A &lt;span class="m"&gt;3&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;ERROR&amp;#34;&lt;/span&gt; app.log &lt;span class="c1"&gt;# 3 lines after the match&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -B &lt;span class="m"&gt;3&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;ERROR&amp;#34;&lt;/span&gt; app.log &lt;span class="c1"&gt;# 3 lines before the match&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -C &lt;span class="m"&gt;3&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;ERROR&amp;#34;&lt;/span&gt; app.log &lt;span class="c1"&gt;# 3 lines before and after the match&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Ví dụ xem lỗi deploy kèm ngữ cảnh:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Example: inspect a deploy error with surrounding context:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -58,10 +58,10 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -n -C &lt;span class="m"&gt;5&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;deploy failed&amp;#34;&lt;/span&gt; ./logs/deploy.log
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Khi có nhiều nhóm match cách xa nhau, &lt;code&gt;grep&lt;/code&gt; mặc định chèn dòng &lt;code&gt;--&lt;/code&gt; để phân tách context group. Điều này hữu ích khi đọc terminal, nhưng nếu output đưa vào script khác, bạn nên nhớ dòng separator này có thể xuất hiện.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;When multiple match groups are far apart, &lt;code&gt;grep&lt;/code&gt; inserts &lt;code&gt;--&lt;/code&gt; by default to separate context groups. This is useful in the terminal, but if the output is passed to another script, remember that this separator line may appear.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="grep-trong-pipeline-devops"&gt;grep trong pipeline DevOps
-&lt;/h2&gt;&lt;p&gt;Ví dụ lọc log ứng dụng, bỏ healthcheck và chỉ xem lỗi nghiêm trọng:&lt;/p&gt;
+&lt;h2 id="grep-in-a-devops-pipeline"&gt;grep in a DevOps pipeline
+&lt;/h2&gt;&lt;p&gt;Example: filter an application log, exclude healthchecks, and show only severe errors:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -90,10 +90,10 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep -E &lt;span class="s2"&gt;&amp;#34;ERROR|FATAL&amp;#34;&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;LOG_FILE&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; grep -v &lt;span class="s2"&gt;&amp;#34;healthcheck&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Vì &lt;code&gt;grep&lt;/code&gt; trả exit code &lt;code&gt;1&lt;/code&gt; khi không có match, pipeline có thể làm script dừng nếu đang dùng &lt;code&gt;set -e&lt;/code&gt;. Trong tình huống “không có lỗi” là bình thường, thêm &lt;code&gt;|| true&lt;/code&gt; ở cuối pipeline là chấp nhận được. Với pipeline quan trọng hơn, hãy xử lý exit code rõ ràng bằng &lt;code&gt;if grep ...; then ... fi&lt;/code&gt;.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Because &lt;code&gt;grep&lt;/code&gt; returns exit code &lt;code&gt;1&lt;/code&gt; when there is no match, a pipeline may stop the script if you are using &lt;code&gt;set -e&lt;/code&gt;. In a case where “no errors found” is normal, adding &lt;code&gt;|| true&lt;/code&gt; at the end of the pipeline is acceptable. For more important pipelines, handle the exit code explicitly with &lt;code&gt;if grep ...; then ... fi&lt;/code&gt;.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="awk-xử-lý-theo-dòng-và-theo-cột"&gt;awk: xử lý theo dòng và theo cột
-&lt;/h2&gt;&lt;p&gt;&lt;code&gt;awk&lt;/code&gt; đọc input theo record, mặc định mỗi dòng là một record. Mỗi dòng được tách thành field: &lt;code&gt;$1&lt;/code&gt;, &lt;code&gt;$2&lt;/code&gt;, &lt;code&gt;$3&lt;/code&gt;… Toàn bộ dòng là &lt;code&gt;$0&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id="awk-process-text-by-line-and-column"&gt;awk: process text by line and column
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;awk&lt;/code&gt; reads input as records; by default, each line is one record. Each line is split into fields: &lt;code&gt;$1&lt;/code&gt;, &lt;code&gt;$2&lt;/code&gt;, &lt;code&gt;$3&lt;/code&gt;, and so on. The full line is &lt;code&gt;$0&lt;/code&gt;.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -104,16 +104,16 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;awk &lt;span class="s1"&gt;&amp;#39;{ print $1, $9 }&amp;#39;&lt;/span&gt; access.log
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Một số biến built-in quan trọng:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Important built-in variables:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;NR&lt;/code&gt;: số record đã đọc từ đầu input.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;NF&lt;/code&gt;: số field của record hiện tại.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;$0&lt;/code&gt;: toàn bộ dòng hiện tại.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;$1&lt;/code&gt;, &lt;code&gt;$2&lt;/code&gt;, &amp;hellip;: field thứ nhất, thứ hai, &amp;hellip;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;FS&lt;/code&gt;: field separator input.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;NR&lt;/code&gt;: number of records read so far.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;NF&lt;/code&gt;: number of fields in the current record.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;$0&lt;/code&gt;: the full current line.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;$1&lt;/code&gt;, &lt;code&gt;$2&lt;/code&gt;, &amp;hellip;: the first field, second field, and so on.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;FS&lt;/code&gt;: input field separator.&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;OFS&lt;/code&gt;: output field separator.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Ví dụ in số dòng và số field:&lt;/p&gt;
+&lt;p&gt;Example: print line number, field count, and the full line:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -122,10 +122,10 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;awk &lt;span class="s1"&gt;&amp;#39;{ print NR, NF, $0 }&amp;#39;&lt;/span&gt; app.log
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Theo GNU awk manual, &lt;code&gt;NR&lt;/code&gt; tăng mỗi khi awk đọc record mới, còn &lt;code&gt;NF&lt;/code&gt; là số field của record hiện tại. Đây là hai biến rất hữu ích khi cần validate dữ liệu text nhanh.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;According to the GNU awk manual, &lt;code&gt;NR&lt;/code&gt; increments whenever awk reads a new record, while &lt;code&gt;NF&lt;/code&gt; is the number of fields in the current record. These two variables are very useful when you need to validate text data quickly.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="awk-begin-end-và-điều-kiện"&gt;awk BEGIN, END và điều kiện
-&lt;/h2&gt;&lt;p&gt;&lt;code&gt;BEGIN&lt;/code&gt; chạy trước khi đọc input. &lt;code&gt;END&lt;/code&gt; chạy sau khi đọc hết input. Phần giữa là rule áp dụng cho từng dòng.&lt;/p&gt;
+&lt;h2 id="awk-begin-end-and-conditions"&gt;awk BEGIN, END, and conditions
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;BEGIN&lt;/code&gt; runs before input is read. &lt;code&gt;END&lt;/code&gt; runs after all input has been read. The middle part is a rule applied to each line.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -134,7 +134,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;awk &lt;span class="s1"&gt;&amp;#39;BEGIN { print &amp;#34;status,count&amp;#34; } { count[$9]++ } END { for (code in count) print code &amp;#34;,&amp;#34; count[code] }&amp;#39;&lt;/span&gt; access.log
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Ví dụ dễ đọc hơn, đếm HTTP status code từ Nginx access log dạng phổ biến:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;A more readable example: count HTTP status codes from a common Nginx access log format:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -167,10 +167,10 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt; access.log
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Trong access log phổ biến, &lt;code&gt;$1&lt;/code&gt; thường là IP client, &lt;code&gt;$7&lt;/code&gt; là path và &lt;code&gt;$9&lt;/code&gt; là HTTP status. Tuy nhiên format log có thể khác theo cấu hình Nginx/Apache, nên hãy kiểm tra vài dòng mẫu trước khi hardcode vị trí field.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;In a common access log, &lt;code&gt;$1&lt;/code&gt; is often the client IP, &lt;code&gt;$7&lt;/code&gt; is the path, and &lt;code&gt;$9&lt;/code&gt; is the HTTP status code. However, log formats can differ depending on the Nginx or Apache configuration, so always inspect a few sample lines before hardcoding field positions.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="awk-với-delimiter-tùy-chỉnh"&gt;awk với delimiter tùy chỉnh
-&lt;/h2&gt;&lt;p&gt;Mặc định awk tách field theo whitespace. Với file dạng key-value hoặc CSV đơn giản, dùng &lt;code&gt;-F&lt;/code&gt; để chọn delimiter.&lt;/p&gt;
+&lt;h2 id="awk-with-a-custom-delimiter"&gt;awk with a custom delimiter
+&lt;/h2&gt;&lt;p&gt;By default, awk splits fields on whitespace. For key-value files or simple CSV-like data, use &lt;code&gt;-F&lt;/code&gt; to choose a delimiter.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -181,7 +181,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;awk -F: &lt;span class="s1"&gt;&amp;#39;{ print $1, $7 }&amp;#39;&lt;/span&gt; /etc/passwd
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Ví dụ đọc file &lt;code&gt;.env&lt;/code&gt; và bỏ comment/dòng rỗng:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Example: read a &lt;code&gt;.env&lt;/code&gt; file and skip comments or blank lines:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -202,22 +202,22 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s1"&gt;&amp;#39;&lt;/span&gt; .env
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Với CSV phức tạp có quote, comma bên trong field hoặc escape, &lt;code&gt;awk -F,&lt;/code&gt; không đủ an toàn. Khi đó nên dùng parser CSV đúng nghĩa bằng Python, Go hoặc công cụ chuyên dụng.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;For complex CSV with quotes, commas inside fields, or escaping, &lt;code&gt;awk -F,&lt;/code&gt; is not safe enough. In that case, use a real CSV parser in Python, Go, or a dedicated tool.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="sed-thay-thế-và-chỉnh-text-theo-dòng"&gt;sed: thay thế và chỉnh text theo dòng
-&lt;/h2&gt;&lt;p&gt;&lt;code&gt;sed&lt;/code&gt; là stream editor: đọc input, áp dụng script, rồi ghi output. Lệnh nổi tiếng nhất là substitute:&lt;/p&gt;
+&lt;h2 id="sed-replace-and-edit-text-line-by-line"&gt;sed: replace and edit text line by line
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;sed&lt;/code&gt; is a stream editor: it reads input, applies a script, and writes output. Its most famous command is substitute:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
 &lt;/span&gt;&lt;span class="lnt"&gt;2
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sed &lt;span class="s1"&gt;&amp;#39;s/old/new/&amp;#39;&lt;/span&gt; file.txt &lt;span class="c1"&gt;# thay match đầu tiên mỗi dòng&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sed &lt;span class="s1"&gt;&amp;#39;s/old/new/g&amp;#39;&lt;/span&gt; file.txt &lt;span class="c1"&gt;# thay tất cả match trên mỗi dòng&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sed &lt;span class="s1"&gt;&amp;#39;s/old/new/&amp;#39;&lt;/span&gt; file.txt &lt;span class="c1"&gt;# replace the first match on each line&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sed &lt;span class="s1"&gt;&amp;#39;s/old/new/g&amp;#39;&lt;/span&gt; file.txt &lt;span class="c1"&gt;# replace all matches on each line&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Theo GNU sed manual, cú pháp cơ bản là &lt;code&gt;s/regexp/replacement/flags&lt;/code&gt;. Flag &lt;code&gt;g&lt;/code&gt; thay tất cả match trong dòng thay vì chỉ match đầu tiên.&lt;/p&gt;
-&lt;p&gt;Ví dụ đổi endpoint trong file config và ghi ra file mới:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;According to the GNU sed manual, the basic syntax is &lt;code&gt;s/regexp/replacement/flags&lt;/code&gt;. The &lt;code&gt;g&lt;/code&gt; flag replaces all matches on a line instead of only the first match.&lt;/p&gt;
+&lt;p&gt;Example: change an endpoint in a config file and write the result to a new file:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -226,10 +226,10 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sed &lt;span class="s1"&gt;&amp;#39;s|http://localhost:8080|https://api.example.com|g&amp;#39;&lt;/span&gt; app.conf &amp;gt; app.conf.new
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Ở đây dùng delimiter &lt;code&gt;|&lt;/code&gt; thay vì &lt;code&gt;/&lt;/code&gt; để tránh phải escape nhiều dấu &lt;code&gt;/&lt;/code&gt; trong URL.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Here we use &lt;code&gt;|&lt;/code&gt; as the delimiter instead of &lt;code&gt;/&lt;/code&gt; to avoid escaping many &lt;code&gt;/&lt;/code&gt; characters in the URL.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="sed-theo-address-và-in-place-edit"&gt;sed theo address và in-place edit
-&lt;/h2&gt;&lt;p&gt;Bạn có thể giới hạn &lt;code&gt;sed&lt;/code&gt; chỉ tác động trên dòng khớp pattern hoặc range.&lt;/p&gt;
+&lt;h2 id="sed-addresses-and-in-place-editing"&gt;sed addresses and in-place editing
+&lt;/h2&gt;&lt;p&gt;You can limit &lt;code&gt;sed&lt;/code&gt; so it only changes lines matching a pattern or a range.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -240,7 +240,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sed &lt;span class="s1"&gt;&amp;#39;10,20s/enabled=false/enabled=true/&amp;#39;&lt;/span&gt; feature.conf
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;GNU sed hỗ trợ &lt;code&gt;-i&lt;/code&gt; để chỉnh file tại chỗ. Nếu truyền suffix, sed tạo backup trước khi rename file tạm thành file gốc:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;GNU sed supports &lt;code&gt;-i&lt;/code&gt; for in-place editing. If you provide a suffix, sed creates a backup before renaming the temporary file back to the original file:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -249,15 +249,15 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sed -i.bak &lt;span class="s1"&gt;&amp;#39;s/^LOG_LEVEL=.*/LOG_LEVEL=info/&amp;#39;&lt;/span&gt; app.env
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Cẩn thận với &lt;code&gt;sed -i&lt;/code&gt;:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Be careful with &lt;code&gt;sed -i&lt;/code&gt;:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Luôn test không &lt;code&gt;-i&lt;/code&gt; trước để xem output.&lt;/li&gt;
-&lt;li&gt;Dùng suffix như &lt;code&gt;.bak&lt;/code&gt; khi chỉnh file quan trọng.&lt;/li&gt;
-&lt;li&gt;Khác biệt cú pháp &lt;code&gt;sed -i&lt;/code&gt; giữa GNU sed và BSD/macOS sed có thể làm script kém portable.&lt;/li&gt;
+&lt;li&gt;Always test without &lt;code&gt;-i&lt;/code&gt; first so you can inspect the output.&lt;/li&gt;
+&lt;li&gt;Use a suffix such as &lt;code&gt;.bak&lt;/code&gt; when editing important files.&lt;/li&gt;
+&lt;li&gt;Differences between GNU sed and BSD/macOS sed can make &lt;code&gt;sed -i&lt;/code&gt; scripts less portable.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="thực-hành-devops-parse-nginx-log"&gt;Thực hành DevOps: parse Nginx log
-&lt;/h2&gt;&lt;p&gt;Giả sử access log có format phổ biến:&lt;/p&gt;
+&lt;h2 id="devops-practice-parse-nginx-logs"&gt;DevOps practice: parse Nginx logs
+&lt;/h2&gt;&lt;p&gt;Assume the access log uses a common format:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -270,7 +270,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;203.0.113.10 - - [08/Jun/2026:10:12:03 +0700] &amp;#34;GET /api/users HTTP/1.1&amp;#34; 200 532
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Lọc lỗi 4xx/5xx bằng &lt;code&gt;awk&lt;/code&gt;:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Filter 4xx/5xx errors with &lt;code&gt;awk&lt;/code&gt;:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -279,7 +279,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;awk &lt;span class="s1"&gt;&amp;#39;$9 ~ /^[45][0-9][0-9]$/ { print $1, $7, $9 }&amp;#39;&lt;/span&gt; access.log
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Đếm top IP truy cập nhiều nhất:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Count the top IP addresses by request count:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -292,7 +292,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;|&lt;/span&gt; head -n &lt;span class="m"&gt;10&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Đếm status code:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Count status codes:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -303,7 +303,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;|&lt;/span&gt; sort -n
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Nếu bạn muốn bỏ các request healthcheck khỏi thống kê:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;If you want to exclude healthcheck requests from the statistics:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -317,8 +317,8 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
-&lt;h2 id="thực-hành-devops-đổi-config-trước-khi-deploy"&gt;Thực hành DevOps: đổi config trước khi deploy
-&lt;/h2&gt;&lt;p&gt;Ví dụ script cập nhật &lt;code&gt;LOG_LEVEL&lt;/code&gt; và &lt;code&gt;FEATURE_FLAG&lt;/code&gt; trong file &lt;code&gt;.env&lt;/code&gt;, có backup trước khi sửa.&lt;/p&gt;
+&lt;h2 id="devops-practice-update-config-before-deployment"&gt;DevOps practice: update config before deployment
+&lt;/h2&gt;&lt;p&gt;Example script: update &lt;code&gt;LOG_LEVEL&lt;/code&gt; and &lt;code&gt;FEATURE_FLAG&lt;/code&gt; in a &lt;code&gt;.env&lt;/code&gt; file, with a backup before editing.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -387,17 +387,17 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;fi&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Script này minh họa cách phối hợp công cụ:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;This script demonstrates how the tools work together:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;cp&lt;/code&gt; tạo backup rõ ràng trước khi chỉnh.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;sed&lt;/code&gt; thay giá trị nếu key đã tồn tại.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;grep -q&lt;/code&gt; kiểm tra key có tồn tại chưa.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;&amp;gt;&amp;gt;&lt;/code&gt; append key còn thiếu.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;cp&lt;/code&gt; creates a clear backup before editing.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;sed&lt;/code&gt; replaces values when the keys already exist.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;grep -q&lt;/code&gt; checks whether each key exists.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;gt;&amp;gt;&lt;/code&gt; appends missing keys.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Lưu ý: không đưa secret thật vào ví dụ hoặc commit. Với secret, ưu tiên biến môi trường, secret manager hoặc CI/CD secret store.&lt;/p&gt;
+&lt;p&gt;Note: do not put real secrets in examples or commits. For secrets, prefer environment variables, a secret manager, or your CI/CD secret store.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="thực-hành-devops-report-lỗi-từ-log"&gt;Thực hành DevOps: report lỗi từ log
-&lt;/h2&gt;&lt;p&gt;Ví dụ tạo report ngắn gồm tổng số lỗi và top endpoint trả 5xx:&lt;/p&gt;
+&lt;h2 id="devops-practice-generate-an-error-report-from-logs"&gt;DevOps practice: generate an error report from logs
+&lt;/h2&gt;&lt;p&gt;Example: create a short report with the total number of errors and the top endpoints returning 5xx:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -452,57 +452,57 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;Wrote &lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;REPORT_FILE&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Đây là dạng script rất hữu ích để chạy từ cron hoặc CI job sau test load, miễn là bạn hiểu rõ format log đầu vào.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;This kind of script is useful to run from cron or a CI job after a load test, as long as you understand the input log format clearly.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="sai-sót-thường-gặp"&gt;Sai sót thường gặp
+&lt;h2 id="common-mistakes"&gt;Common mistakes
 &lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Dùng regex khi chỉ cần literal:&lt;/strong&gt; Nếu pattern có ký tự đặc biệt như &lt;code&gt;[&lt;/code&gt;, &lt;code&gt;.&lt;/code&gt;, &lt;code&gt;*&lt;/code&gt;, cân nhắc &lt;code&gt;grep -F&lt;/code&gt;.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Quên grep exit code:&lt;/strong&gt; Không có match là exit code &lt;code&gt;1&lt;/code&gt;, không nhất thiết là lỗi nghiệp vụ.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Hardcode field log mà không kiểm tra format:&lt;/strong&gt; &lt;code&gt;$9&lt;/code&gt; là status code với format phổ biến, nhưng không phải mọi log đều như vậy.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Dùng &lt;code&gt;awk -F,&lt;/code&gt; cho CSV phức tạp:&lt;/strong&gt; CSV có quote/comma bên trong field cần parser đúng nghĩa.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Chạy &lt;code&gt;sed -i&lt;/code&gt; ngay trên file quan trọng:&lt;/strong&gt; Test output trước, dùng backup suffix hoặc copy file trước khi sửa.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Không quote biến trong script:&lt;/strong&gt; Khi truyền file path vào &lt;code&gt;grep&lt;/code&gt;, &lt;code&gt;awk&lt;/code&gt;, &lt;code&gt;sed&lt;/code&gt;, luôn quote &lt;code&gt;&amp;quot;${FILE}&amp;quot;&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Using regex when a literal string is enough:&lt;/strong&gt; If the pattern contains special characters such as &lt;code&gt;[&lt;/code&gt;, &lt;code&gt;.&lt;/code&gt;, or &lt;code&gt;*&lt;/code&gt;, consider &lt;code&gt;grep -F&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Forgetting grep exit codes:&lt;/strong&gt; No match means exit code &lt;code&gt;1&lt;/code&gt;, which is not necessarily a business-level error.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Hardcoding log fields without checking the format:&lt;/strong&gt; &lt;code&gt;$9&lt;/code&gt; is the status code in a common format, but not every log format is the same.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Using &lt;code&gt;awk -F,&lt;/code&gt; for complex CSV:&lt;/strong&gt; CSV with quotes or commas inside fields needs a real parser.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Running &lt;code&gt;sed -i&lt;/code&gt; directly on important files:&lt;/strong&gt; Test the output first, use a backup suffix, or copy the file before editing.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Not quoting variables in scripts:&lt;/strong&gt; When passing file paths to &lt;code&gt;grep&lt;/code&gt;, &lt;code&gt;awk&lt;/code&gt;, or &lt;code&gt;sed&lt;/code&gt;, always quote &lt;code&gt;&amp;quot;${FILE}&amp;quot;&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="ghi-chú-triển-khai"&gt;Ghi chú triển khai
+&lt;h2 id="implementation-notes"&gt;Implementation notes
 &lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Khi áp dụng vào dự án của bạn&lt;/strong&gt;, chọn công cụ theo mục tiêu:
+&lt;li&gt;&lt;strong&gt;When applying this to your own project&lt;/strong&gt;, choose the tool based on the goal:
 &lt;ul&gt;
-&lt;li&gt;Tìm/lọc dòng → &lt;code&gt;grep&lt;/code&gt;.&lt;/li&gt;
-&lt;li&gt;Trích cột, tính tổng, đếm nhóm → &lt;code&gt;awk&lt;/code&gt;.&lt;/li&gt;
-&lt;li&gt;Thay thế text theo dòng/pattern → &lt;code&gt;sed&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Find/filter lines → &lt;code&gt;grep&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Extract columns, calculate totals, group counts → &lt;code&gt;awk&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Replace text by line or pattern → &lt;code&gt;sed&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Best practices:&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;Dùng &lt;code&gt;grep -n&lt;/code&gt; khi debug để biết line number.&lt;/li&gt;
-&lt;li&gt;Dùng &lt;code&gt;grep -C&lt;/code&gt; khi cần context quanh lỗi.&lt;/li&gt;
-&lt;li&gt;Dùng &lt;code&gt;awk&lt;/code&gt; với &lt;code&gt;BEGIN&lt;/code&gt;/&lt;code&gt;END&lt;/code&gt; để tạo report có header/footer.&lt;/li&gt;
-&lt;li&gt;Dùng delimiter khác trong &lt;code&gt;sed&lt;/code&gt; khi xử lý URL/path, ví dụ &lt;code&gt;s|old|new|g&lt;/code&gt;.&lt;/li&gt;
-&lt;li&gt;Với chỉnh sửa config, backup trước và verify sau bằng &lt;code&gt;grep&lt;/code&gt; hoặc test config của service.&lt;/li&gt;
+&lt;li&gt;Use &lt;code&gt;grep -n&lt;/code&gt; when debugging so you can see line numbers.&lt;/li&gt;
+&lt;li&gt;Use &lt;code&gt;grep -C&lt;/code&gt; when you need context around an error.&lt;/li&gt;
+&lt;li&gt;Use &lt;code&gt;awk&lt;/code&gt; with &lt;code&gt;BEGIN&lt;/code&gt;/&lt;code&gt;END&lt;/code&gt; to create reports with headers or footers.&lt;/li&gt;
+&lt;li&gt;Use a different delimiter in &lt;code&gt;sed&lt;/code&gt; when processing URLs or paths, for example &lt;code&gt;s|old|new|g&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;For config edits, back up first and verify afterward with &lt;code&gt;grep&lt;/code&gt; or the service&amp;rsquo;s config test command.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Troubleshooting:&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;Pipeline dừng vì &lt;code&gt;grep&lt;/code&gt; không match? → Xử lý exit code bằng &lt;code&gt;if grep ...&lt;/code&gt; hoặc &lt;code&gt;|| true&lt;/code&gt; khi hợp lý.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;awk&lt;/code&gt; in sai cột? → In thử &lt;code&gt;awk '{ print NR, NF, $0 }'&lt;/code&gt; để kiểm tra field.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;sed&lt;/code&gt; không thay gì? → Kiểm tra pattern có anchor đúng không, delimiter có cần escape không.&lt;/li&gt;
+&lt;li&gt;Pipeline stops because &lt;code&gt;grep&lt;/code&gt; found no match? → Handle the exit code with &lt;code&gt;if grep ...&lt;/code&gt; or &lt;code&gt;|| true&lt;/code&gt; when appropriate.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;awk&lt;/code&gt; prints the wrong column? → Try &lt;code&gt;awk '{ print NR, NF, $0 }'&lt;/code&gt; to inspect fields.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;sed&lt;/code&gt; changes nothing? → Check whether the pattern anchor is correct and whether the delimiter needs escaping.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="lời-kết"&gt;Lời kết
-&lt;/h2&gt;&lt;p&gt;&lt;code&gt;grep&lt;/code&gt;, &lt;code&gt;awk&lt;/code&gt; và &lt;code&gt;sed&lt;/code&gt; là bộ ba nền tảng để biến Bash thành công cụ xử lý log/config cực nhanh. &lt;code&gt;grep&lt;/code&gt; giúp tìm đúng dòng, &lt;code&gt;awk&lt;/code&gt; giúp phân tích theo cột và tổng hợp số liệu, còn &lt;code&gt;sed&lt;/code&gt; giúp chỉnh sửa text có kiểm soát. Khi kết hợp với kỹ năng xử lý file ở bài trước, bạn đã có thể tạo nhiều script DevOps nhỏ nhưng rất hữu ích.&lt;/p&gt;
-&lt;p&gt;Ở bài tiếp theo, chúng ta sẽ đi vào &lt;strong&gt;function trong Bash&lt;/strong&gt;: tách logic thành hàm, truyền tham số, dùng &lt;code&gt;local&lt;/code&gt;, xử lý return code và xây dựng thư viện logging nhỏ để tái sử dụng.&lt;/p&gt;
+&lt;h2 id="conclusion"&gt;Conclusion
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;grep&lt;/code&gt;, &lt;code&gt;awk&lt;/code&gt;, and &lt;code&gt;sed&lt;/code&gt; are the core trio that turns Bash into a fast log and config processing tool. &lt;code&gt;grep&lt;/code&gt; helps you find the right lines, &lt;code&gt;awk&lt;/code&gt; helps you analyze columns and summarize numbers, and &lt;code&gt;sed&lt;/code&gt; helps you edit text in a controlled way. Combined with the file-handling skills from the previous article, you can already build many small but useful DevOps scripts.&lt;/p&gt;
+&lt;p&gt;In the next article, we will cover &lt;strong&gt;functions in Bash&lt;/strong&gt;: splitting logic into functions, passing arguments, using &lt;code&gt;local&lt;/code&gt;, handling return codes, and building a small reusable logging library.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="tài-liệu-tham-khảo"&gt;Tài liệu tham khảo
+&lt;h2 id="references"&gt;References
 &lt;/h2&gt;&lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.gnu.org/software/grep/manual/grep.html" target="_blank" rel="noopener"
-&gt;GNU Grep Manual&lt;/a&gt; — Tài liệu chính thức về &lt;code&gt;grep&lt;/code&gt;, regex, &lt;code&gt;-E&lt;/code&gt;, &lt;code&gt;-F&lt;/code&gt;, &lt;code&gt;-n&lt;/code&gt;, &lt;code&gt;-A&lt;/code&gt;, &lt;code&gt;-B&lt;/code&gt;, &lt;code&gt;-C&lt;/code&gt;.&lt;/li&gt;
+&gt;GNU Grep Manual&lt;/a&gt; — Official documentation for &lt;code&gt;grep&lt;/code&gt;, regex, &lt;code&gt;-E&lt;/code&gt;, &lt;code&gt;-F&lt;/code&gt;, &lt;code&gt;-n&lt;/code&gt;, &lt;code&gt;-A&lt;/code&gt;, &lt;code&gt;-B&lt;/code&gt;, and &lt;code&gt;-C&lt;/code&gt;.&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.gnu.org/software/gawk/manual/gawk.html" target="_blank" rel="noopener"
-&gt;GNU Awk Manual&lt;/a&gt; — Tài liệu chính thức về field, &lt;code&gt;NR&lt;/code&gt;, &lt;code&gt;NF&lt;/code&gt;, &lt;code&gt;BEGIN&lt;/code&gt;, &lt;code&gt;END&lt;/code&gt; và awk program.&lt;/li&gt;
+&gt;GNU Awk Manual&lt;/a&gt; — Official documentation for fields, &lt;code&gt;NR&lt;/code&gt;, &lt;code&gt;NF&lt;/code&gt;, &lt;code&gt;BEGIN&lt;/code&gt;, &lt;code&gt;END&lt;/code&gt;, and awk programs.&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.gnu.org/software/sed/manual/sed.html" target="_blank" rel="noopener"
-&gt;GNU Sed Manual&lt;/a&gt; — Tài liệu chính thức về &lt;code&gt;s/regexp/replacement/flags&lt;/code&gt;, address và &lt;code&gt;-i&lt;/code&gt;.&lt;/li&gt;
+&gt;GNU Sed Manual&lt;/a&gt; — Official documentation for &lt;code&gt;s/regexp/replacement/flags&lt;/code&gt;, addresses, and &lt;code&gt;-i&lt;/code&gt;.&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.gnu.org/software/coreutils/manual/html_node/sort-invocation.html" target="_blank" rel="noopener"
-&gt;GNU Coreutils Manual — sort&lt;/a&gt; — Tham khảo thêm cho các pipeline thống kê với &lt;code&gt;sort&lt;/code&gt;.&lt;/li&gt;
+&gt;GNU Coreutils Manual — sort&lt;/a&gt; — Additional reference for statistical pipelines with &lt;code&gt;sort&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;</description></item></channel></rss>

@@ -1,18 +1,18 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Cloud on Hoàng Dương</title><link>https://tech.nguuyen.io.vn/tags/cloud/</link><description>Recent content in Cloud on Hoàng Dương</description><generator>Hugo -- gohugo.io</generator><language>vi</language><lastBuildDate>Tue, 25 Feb 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/cloud/index.xml" rel="self" type="application/rss+xml"/><item><title>Quản lý Artifacts trong phát triển phần mềm</title><link>https://tech.nguuyen.io.vn/posts/devops/devops-step-nineteen/</link><pubDate>Tue, 25 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/devops/devops-step-nineteen/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-nineteen.jpg" alt="Featured image of post Quản lý Artifacts trong phát triển phần mềm" /&gt;&lt;h2 id="artifacts-là-gì"&gt;Artifacts là gì?
-&lt;/h2&gt;&lt;p&gt;Artifacts là các sản phẩm được tạo ra trong suốt vòng đời phát triển phần mềm. Chúng có thể bao gồm:&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Cloud on Hoang Duong</title><link>https://tech.nguuyen.io.vn/tags/cloud/</link><description>Recent content in Cloud on Hoang Duong</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Mon, 16 Feb 2026 00:51:21 +0700</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/cloud/index.xml" rel="self" type="application/rss+xml"/><item><title>Artifact Management in Software Development</title><link>https://tech.nguuyen.io.vn/posts/devops/devops-step-nineteen/</link><pubDate>Tue, 25 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/devops/devops-step-nineteen/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-nineteen.jpg" alt="Featured image of post Artifact Management in Software Development" /&gt;&lt;h2 id="what-are-artifacts"&gt;What are Artifacts?
+&lt;/h2&gt;&lt;p&gt;Artifacts are products generated throughout the software development lifecycle. They can include:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;📜 &lt;strong&gt;Mã nguồn (Source code)&lt;/strong&gt;: Các tệp chứa logic ứng dụng.&lt;/li&gt;
-&lt;li&gt;🏗 &lt;strong&gt;Binaries&lt;/strong&gt;: Các tệp thực thi hoặc thư viện được biên dịch.&lt;/li&gt;
-&lt;li&gt;📖 &lt;strong&gt;Tài liệu (Documentation)&lt;/strong&gt;: Hướng dẫn sử dụng, API specs.&lt;/li&gt;
-&lt;li&gt;⚙ &lt;strong&gt;Tệp cấu hình (Configuration files)&lt;/strong&gt;: Các thiết lập cần thiết để chạy ứng dụng.&lt;/li&gt;
-&lt;li&gt;🛠 &lt;strong&gt;Kết quả kiểm thử (Test results)&lt;/strong&gt;: Báo cáo từ các quy trình kiểm thử.&lt;/li&gt;
+&lt;li&gt;📜 &lt;strong&gt;Source code&lt;/strong&gt;: Files that contain application logic.&lt;/li&gt;
+&lt;li&gt;🏗 &lt;strong&gt;Binaries&lt;/strong&gt;: Compiled executables or libraries.&lt;/li&gt;
+&lt;li&gt;📖 &lt;strong&gt;Documentation&lt;/strong&gt;: User guides, API specs.&lt;/li&gt;
+&lt;li&gt;⚙ &lt;strong&gt;Configuration files&lt;/strong&gt;: Settings needed to run the application.&lt;/li&gt;
+&lt;li&gt;🛠 &lt;strong&gt;Test results&lt;/strong&gt;: Reports from testing pipelines.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Việc quản lý artifacts giúp đảm bảo tính nhất quán, dễ dàng theo dõi và triển khai phần mềm hiệu quả hơn.&lt;/p&gt;
+&lt;p&gt;Managing artifacts helps ensure consistency, traceability, and more efficient software delivery.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="các-công-cụ-quản-lý-artifacts-phổ-biến"&gt;Các công cụ quản lý Artifacts phổ biến
+&lt;h2 id="popular-artifact-management-tools"&gt;Popular Artifact Management Tools
 &lt;/h2&gt;&lt;h3 id="artifactory"&gt;Artifactory
-&lt;/h3&gt;&lt;p&gt;Artifactory là một giải pháp DevOps cho việc lưu trữ, quản lý và phân phối các artifacts. Nó hỗ trợ nhiều định dạng như Docker, npm, Maven, Python, Go, và hơn thế nữa.&lt;/p&gt;
-&lt;h4 id="cài-đặt-artifactory-trên-docker"&gt;Cài đặt Artifactory trên Docker:
+&lt;/h3&gt;&lt;p&gt;Artifactory is a DevOps solution for storing, managing, and distributing artifacts. It supports many formats such as Docker, npm, Maven, Python, Go, and more.&lt;/p&gt;
+&lt;h4 id="install-artifactory-with-docker"&gt;Install Artifactory with Docker:
 &lt;/h4&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -22,17 +22,17 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;5
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Kéo image Artifactory&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Pull Artifactory image&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker pull releases-docker.jfrog.io/jfrog/artifactory-oss:latest
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Chạy container&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Run container&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker run --name artifactory -d -p 8081:8081 releases-docker.jfrog.io/jfrog/artifactory-oss:latest
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Sau khi cài đặt, bạn có thể truy cập giao diện web qua &lt;code&gt;http://localhost:8081&lt;/code&gt;.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;After installation, you can access the web interface at &lt;code&gt;http://localhost:8081&lt;/code&gt;.&lt;/p&gt;
 &lt;h3 id="nexus-repository-manager"&gt;Nexus Repository Manager
-&lt;/h3&gt;&lt;p&gt;Nexus là một trong những công cụ phổ biến để quản lý binary artifacts, đặc biệt trong môi trường Java.&lt;/p&gt;
-&lt;h4 id="cài-đặt-nexus-trên-linux"&gt;Cài đặt Nexus trên Linux:
+&lt;/h3&gt;&lt;p&gt;Nexus is one of the most popular tools for binary artifacts, especially in Java environments.&lt;/p&gt;
+&lt;h4 id="install-nexus-on-linux"&gt;Install Nexus on Linux:
 &lt;/h4&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -47,10 +47,10 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;./bin/nexus start
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Sau khi chạy, bạn có thể truy cập Nexus tại &lt;code&gt;http://localhost:8081&lt;/code&gt;.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;After it starts, you can access Nexus at &lt;code&gt;http://localhost:8081&lt;/code&gt;.&lt;/p&gt;
 &lt;h3 id="3-cloudsmith"&gt;3. Cloudsmith
-&lt;/h3&gt;&lt;p&gt;Cloudsmith là một nền tảng quản lý artifacts dựa trên đám mây, hỗ trợ nhiều định dạng gói tin như Docker, Helm, npm, pip.&lt;/p&gt;
-&lt;h4 id="cách-tải-và-đẩy-package-lên-cloudsmith"&gt;Cách tải và đẩy package lên Cloudsmith:
+&lt;/h3&gt;&lt;p&gt;Cloudsmith is a cloud-based artifact management platform that supports many package formats such as Docker, Helm, npm, and pip.&lt;/p&gt;
+&lt;h4 id="upload-packages-to-cloudsmith"&gt;Upload packages to Cloudsmith:
 &lt;/h4&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -60,35 +60,35 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;5
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Cài đặt CLI của Cloudsmith&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Install Cloudsmith CLI&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;pip install cloudsmith-cli
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Đẩy một package lên kho lưu trữ&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Push a package to the repository&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;cloudsmith push python my-org/my-repo my-package-1.0.0.tar.gz
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Cloudsmith giúp đơn giản hóa quá trình quản lý và phân phối gói phần mềm.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Cloudsmith simplifies package distribution and management.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="kết-luận"&gt;Kết luận
-&lt;/h2&gt;&lt;p&gt;Việc quản lý artifacts đóng vai trò quan trọng trong quy trình phát triển phần mềm. Sử dụng các công cụ như &lt;strong&gt;Artifactory, Nexus, và Cloudsmith&lt;/strong&gt; giúp đảm bảo tính tổ chức, bảo mật và hiệu quả trong việc lưu trữ và triển khai ứng dụng. Tùy vào nhu cầu của dự án, bạn có thể chọn công cụ phù hợp để tối ưu hóa quy trình DevOps của mình!&lt;/p&gt;
-&lt;p&gt;🛠 Bạn đang sử dụng công cụ nào để quản lý artifacts? Hãy chia sẻ kinh nghiệm của bạn!&lt;/p&gt;
-&lt;p&gt;👉 &lt;strong&gt;Bước tiếp theo:&lt;/strong&gt; Tìm hiểu về &lt;em&gt;&lt;strong&gt;GitOps&lt;/strong&gt;&lt;/em&gt; quá trình cung cấp và cấu hình tài nguyên (máy chủ, mạng, lưu trữ, tài khoản) để hệ thống hoặc ứng dụng có thể hoạt động hiệu quả.&lt;/p&gt;</description></item><item><title>CI/CD - Tích hợp liên tục và triển khai liên tục</title><link>https://tech.nguuyen.io.vn/posts/devops/devops-step-thirteen/</link><pubDate>Mon, 24 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/devops/devops-step-thirteen/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-thirteen.jpg" alt="Featured image of post CI/CD - Tích hợp liên tục và triển khai liên tục" /&gt;&lt;h2 id="cicd-là-gì"&gt;CI/CD là gì?
-&lt;/h2&gt;&lt;p&gt;CI/CD (Continuous Integration/Continuous Deployment) là một phương pháp giúp tự động hóa quá trình phát triển phần mềm, giúp giảm lỗi, tăng tốc độ triển khai và cải thiện chất lượng sản phẩm.&lt;/p&gt;
+&lt;h2 id="conclusion"&gt;Conclusion
+&lt;/h2&gt;&lt;p&gt;Artifact management is critical in the software development process. Using tools like &lt;strong&gt;Artifactory, Nexus, and Cloudsmith&lt;/strong&gt; ensures organized, secure, and efficient storage and deployment. Depending on project needs, you can choose the tool that best fits your DevOps workflow.&lt;/p&gt;
+&lt;p&gt;🛠 What tools do you use to manage artifacts? Share your experience!&lt;/p&gt;
+&lt;p&gt;👉 &lt;strong&gt;Next step:&lt;/strong&gt; Learn about &lt;em&gt;&lt;strong&gt;GitOps&lt;/strong&gt;&lt;/em&gt; - the process of provisioning and configuring resources (servers, networks, storage, accounts) so that systems or applications can operate effectively.&lt;/p&gt;</description></item><item><title>CI/CD - Continuous Integration and Continuous Deployment</title><link>https://tech.nguuyen.io.vn/posts/devops/devops-step-thirteen/</link><pubDate>Mon, 24 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/devops/devops-step-thirteen/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-thirteen.jpg" alt="Featured image of post CI/CD - Continuous Integration and Continuous Deployment" /&gt;&lt;h2 id="what-is-cicd"&gt;What is CI/CD?
+&lt;/h2&gt;&lt;p&gt;CI/CD (Continuous Integration/Continuous Deployment) is a methodology that helps automate the software development process, reducing errors, speeding up deployment, and improving product quality.&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Continuous Integration (CI):&lt;/strong&gt; Tích hợp liên tục, giúp phát hiện lỗi sớm bằng cách tự động kiểm thử mỗi khi có thay đổi trong mã nguồn.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Continuous Deployment (CD):&lt;/strong&gt; Triển khai liên tục, đảm bảo phần mềm được phát hành một cách tự động và nhanh chóng.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Continuous Integration (CI):&lt;/strong&gt; Continuous integration, helps detect errors early by automatically testing whenever there are changes in the source code.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Continuous Deployment (CD):&lt;/strong&gt; Continuous deployment, ensures software is released automatically and quickly.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="các-công-cụ-cicd-phổ-biến"&gt;Các công cụ CI/CD phổ biến
+&lt;h2 id="popular-cicd-tools"&gt;Popular CI/CD Tools
 &lt;/h2&gt;&lt;h3 id="jenkins"&gt;Jenkins
-&lt;/h3&gt;&lt;p&gt;Jenkins là một máy chủ tự động hóa mã nguồn mở phổ biến, giúp xây dựng, kiểm thử và triển khai phần mềm một cách tự động.&lt;/p&gt;
-&lt;p&gt;📌 &lt;strong&gt;Đặc điểm nổi bật:&lt;/strong&gt;&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;Jenkins is a popular open-source automation server that helps build, test, and deploy software automatically.&lt;/p&gt;
+&lt;p&gt;📌 &lt;strong&gt;Key Features:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Hỗ trợ nhiều plugin, dễ dàng tích hợp với các công cụ DevOps.&lt;/li&gt;
-&lt;li&gt;Giao diện web trực quan, dễ dàng cấu hình.&lt;/li&gt;
-&lt;li&gt;Hỗ trợ cả môi trường Windows và Linux.&lt;/li&gt;
+&lt;li&gt;Supports many plugins, easy integration with DevOps tools.&lt;/li&gt;
+&lt;li&gt;Intuitive web interface, easy to configure.&lt;/li&gt;
+&lt;li&gt;Supports both Windows and Linux environments.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;💡 &lt;strong&gt;Ví dụ:&lt;/strong&gt; Cấu hình một pipeline đơn giản trong Jenkinsfile&lt;/p&gt;
+&lt;p&gt;💡 &lt;strong&gt;Example:&lt;/strong&gt; Configuring a simple pipeline in Jenkinsfile&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -135,23 +135,23 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Tài nguyên hữu ích:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Useful Resources:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.jenkins.io/" target="_blank" rel="noopener"
-&gt;🔗 Trang chủ Jenkins&lt;/a&gt;&lt;/li&gt;
+&gt;🔗 Jenkins Homepage&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=6YZvp2GwT0A" target="_blank" rel="noopener"
-&gt;🎥 Hướng dẫn Jenkins từ A-Z&lt;/a&gt;&lt;/li&gt;
+&gt;🎥 Jenkins Tutorial from A-Z&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h3 id="circleci"&gt;CircleCI
-&lt;/h3&gt;&lt;p&gt;CircleCI là một nền tảng CI/CD mạnh mẽ, hỗ trợ nhiều ngôn ngữ lập trình và tích hợp tốt với GitHub, Bitbucket.&lt;/p&gt;
-&lt;p&gt;📌 &lt;strong&gt;Đặc điểm nổi bật:&lt;/strong&gt;&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;CircleCI is a powerful CI/CD platform that supports many programming languages and integrates well with GitHub and Bitbucket.&lt;/p&gt;
+&lt;p&gt;📌 &lt;strong&gt;Key Features:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Hỗ trợ build song song để tăng tốc độ xử lý.&lt;/li&gt;
-&lt;li&gt;Tích hợp tốt với Docker và Kubernetes.&lt;/li&gt;
-&lt;li&gt;Có phiên bản cloud và self-hosted.&lt;/li&gt;
+&lt;li&gt;Supports parallel builds to increase processing speed.&lt;/li&gt;
+&lt;li&gt;Good integration with Docker and Kubernetes.&lt;/li&gt;
+&lt;li&gt;Available in cloud and self-hosted versions.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;💡 &lt;strong&gt;Ví dụ:&lt;/strong&gt; Cấu hình một pipeline CircleCI trong &lt;code&gt;.circleci/config.yml&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;💡 &lt;strong&gt;Example:&lt;/strong&gt; Configuring a CircleCI pipeline in &lt;code&gt;.circleci/config.yml&lt;/code&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -176,23 +176,23 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;run&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;npm test&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Tài nguyên hữu ích:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Useful Resources:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://circleci.com/" target="_blank" rel="noopener"
-&gt;🔗 Trang chủ CircleCI&lt;/a&gt;&lt;/li&gt;
+&gt;🔗 CircleCI Homepage&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=_XaYv9zvHUk" target="_blank" rel="noopener"
-&gt;🎥 Video hướng dẫn CircleCI&lt;/a&gt;&lt;/li&gt;
+&gt;🎥 CircleCI Tutorial Video&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h3 id="gitlab-cicd"&gt;GitLab CI/CD
-&lt;/h3&gt;&lt;p&gt;GitLab CI/CD là một hệ thống tích hợp sẵn trong GitLab, cho phép tự động hóa quá trình kiểm thử và triển khai ngay trong Git repository.&lt;/p&gt;
-&lt;p&gt;📌 &lt;strong&gt;Đặc điểm nổi bật:&lt;/strong&gt;&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;GitLab CI/CD is a built-in system in GitLab that allows automating testing and deployment processes right within the Git repository.&lt;/p&gt;
+&lt;p&gt;📌 &lt;strong&gt;Key Features:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Hỗ trợ tự động hóa toàn bộ pipeline từ build, test đến deploy.&lt;/li&gt;
-&lt;li&gt;Có sẵn trong GitLab, không cần công cụ bên ngoài.&lt;/li&gt;
-&lt;li&gt;Hỗ trợ cả chạy pipeline trên Docker container.&lt;/li&gt;
+&lt;li&gt;Supports full pipeline automation from build, test to deploy.&lt;/li&gt;
+&lt;li&gt;Built into GitLab, no external tools needed.&lt;/li&gt;
+&lt;li&gt;Supports running pipelines on Docker containers.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;💡 &lt;strong&gt;Ví dụ:&lt;/strong&gt; Cấu hình pipeline GitLab CI/CD trong &lt;code&gt;.gitlab-ci.yml&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;💡 &lt;strong&gt;Example:&lt;/strong&gt; Configuring GitLab CI/CD pipeline in &lt;code&gt;.gitlab-ci.yml&lt;/code&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -219,23 +219,23 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;npm test&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Tài nguyên hữu ích:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Useful Resources:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://gitlab.com/" target="_blank" rel="noopener"
-&gt;🔗 Trang chủ GitLab&lt;/a&gt;&lt;/li&gt;
+&gt;🔗 GitLab Homepage&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=z7nLsJvEyMY" target="_blank" rel="noopener"
-&gt;🎥 Hướng dẫn GitLab CI/CD&lt;/a&gt;&lt;/li&gt;
+&gt;🎥 GitLab CI/CD Tutorial&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h3 id="github-actions"&gt;GitHub Actions
-&lt;/h3&gt;&lt;p&gt;GitHub Actions là công cụ CI/CD được tích hợp trực tiếp vào GitHub, giúp tự động hóa quá trình kiểm thử và triển khai mỗi khi có thay đổi trong repository.&lt;/p&gt;
-&lt;p&gt;📌 &lt;strong&gt;Đặc điểm nổi bật:&lt;/strong&gt;&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;GitHub Actions is a CI/CD tool integrated directly into GitHub, helping automate testing and deployment processes whenever there are changes in the repository.&lt;/p&gt;
+&lt;p&gt;📌 &lt;strong&gt;Key Features:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Tích hợp chặt chẽ với GitHub, dễ dàng thiết lập workflow.&lt;/li&gt;
-&lt;li&gt;Hỗ trợ nhiều hệ điều hành và ngôn ngữ lập trình.&lt;/li&gt;
-&lt;li&gt;Có thể sử dụng marketplace với hàng nghìn actions có sẵn.&lt;/li&gt;
+&lt;li&gt;Tightly integrated with GitHub, easy workflow setup.&lt;/li&gt;
+&lt;li&gt;Supports many operating systems and programming languages.&lt;/li&gt;
+&lt;li&gt;Can use marketplace with thousands of available actions.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;💡 &lt;strong&gt;Ví dụ:&lt;/strong&gt; Workflow GitHub Actions trong &lt;code&gt;.github/workflows/main.yml&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;💡 &lt;strong&gt;Example:&lt;/strong&gt; GitHub Actions workflow in &lt;code&gt;.github/workflows/main.yml&lt;/code&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -268,29 +268,29 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;run&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;npm test&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Tài nguyên hữu ích:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Useful Resources:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://docs.github.com/en/actions" target="_blank" rel="noopener"
-&gt;🔗 Trang chủ GitHub Actions&lt;/a&gt;&lt;/li&gt;
+&gt;🔗 GitHub Actions Homepage&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=nyKZTKQS_EQ" target="_blank" rel="noopener"
-&gt;🎥 Video hướng dẫn GitHub Actions&lt;/a&gt;&lt;/li&gt;
+&gt;🎥 GitHub Actions Tutorial Video&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="kết-luận"&gt;Kết luận
-&lt;/h2&gt;&lt;p&gt;CI/CD giúp tăng tốc quá trình phát triển phần mềm, giảm thiểu lỗi và nâng cao chất lượng sản phẩm. Tùy theo nhu cầu và môi trường làm việc, bạn có thể chọn &lt;strong&gt;Jenkins, CircleCI, GitLab CI/CD hoặc GitHub Actions&lt;/strong&gt; để triển khai hệ thống CI/CD của mình. 🚀&lt;/p&gt;
-&lt;p&gt;👉 &lt;strong&gt;Bước tiếp theo:&lt;/strong&gt; Tìm hiểu về &lt;em&gt;&lt;strong&gt;Secret Management&lt;/strong&gt;&lt;/em&gt; quá trình lưu trữ, quản lý và bảo vệ các thông tin nhạy cảm như mật khẩu, khóa API, chứng chỉ và token truy cập để ngăn chặn rò rỉ dữ liệu và đảm bảo bảo mật hệ thống. 💡&lt;/p&gt;</description></item><item><title>Quản lý cấu hình (Configuration Management)</title><link>https://tech.nguuyen.io.vn/posts/devops/devops-step-twelve/</link><pubDate>Mon, 24 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/devops/devops-step-twelve/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-twelve.webp" alt="Featured image of post Quản lý cấu hình (Configuration Management)" /&gt;&lt;h2 id="quản-lý-cấu-hình-configuration-management"&gt;Quản lý cấu hình (Configuration Management)
-&lt;/h2&gt;&lt;p&gt;Quản lý cấu hình là quy trình quản lý và duy trì tính nhất quán của các thành phần trong hệ thống công nghệ thông tin. Trong lĩnh vực phần mềm, nó bao gồm việc giám sát, theo dõi và quản lý các thay đổi cấu hình của hệ thống trong suốt vòng đời sản phẩm. Việc áp dụng quản lý cấu hình giúp tăng tính đồng bộ, giảm nguy cơ lỗi, và đảm bảo sự tuân thủ các tiêu chuẩn trong quy trình CI/CD (Continuous Integration and Continuous Deployment).&lt;/p&gt;
+&lt;h2 id="conclusion"&gt;Conclusion
+&lt;/h2&gt;&lt;p&gt;CI/CD helps accelerate the software development process, minimize errors, and improve product quality. Depending on your needs and working environment, you can choose &lt;strong&gt;Jenkins, CircleCI, GitLab CI/CD, or GitHub Actions&lt;/strong&gt; to deploy your CI/CD system. 🚀&lt;/p&gt;
+&lt;p&gt;👉 &lt;strong&gt;Next step:&lt;/strong&gt; Learn about &lt;em&gt;&lt;strong&gt;Secret Management&lt;/strong&gt;&lt;/em&gt; - the process of storing, managing, and protecting sensitive information such as passwords, API keys, certificates, and access tokens to prevent data leakage and ensure system security. 💡&lt;/p&gt;</description></item><item><title>Configuration Management</title><link>https://tech.nguuyen.io.vn/posts/devops/devops-step-twelve/</link><pubDate>Mon, 24 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/devops/devops-step-twelve/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-twelve.webp" alt="Featured image of post Configuration Management" /&gt;&lt;h2 id="configuration-management"&gt;Configuration Management
+&lt;/h2&gt;&lt;p&gt;Configuration management is the process of managing and maintaining consistency of components within an information technology system. In the software field, it includes monitoring, tracking, and managing system configuration changes throughout the product lifecycle. Applying configuration management helps increase synchronization, reduce error risks, and ensure compliance with standards in CI/CD (Continuous Integration and Continuous Deployment) processes.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="các-công-cụ-quản-lý-cấu-hình-phổ-biến"&gt;Các công cụ quản lý cấu hình phổ biến
+&lt;h2 id="popular-configuration-management-tools"&gt;Popular Configuration Management Tools
 &lt;/h2&gt;&lt;h3 id="ansible"&gt;Ansible
-&lt;/h3&gt;&lt;p&gt;Ansible là một công cụ tự động hóa mở, chủ yếu dùng cho quản lý cấu hình, triển khai ứng dụng và tự động hóa tác vụ.&lt;/p&gt;
-&lt;p&gt;🔄 &lt;strong&gt;Đặc điểm:&lt;/strong&gt;&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;Ansible is an open automation tool, primarily used for configuration management, application deployment, and task automation.&lt;/p&gt;
+&lt;p&gt;🔄 &lt;strong&gt;Features:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Sử dụng YAML (playbooks) để xác định trạng thái mong muốn.&lt;/li&gt;
-&lt;li&gt;Hoạt động không cần cài đặt agent.&lt;/li&gt;
-&lt;li&gt;Phù hợp với quy mô nhỏ đến lớn.&lt;/li&gt;
+&lt;li&gt;Uses YAML (playbooks) to define desired states.&lt;/li&gt;
+&lt;li&gt;Works without requiring agent installation.&lt;/li&gt;
+&lt;li&gt;Suitable for small to large scale environments.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;💡 &lt;strong&gt;Ví dụ sử dụng Ansible:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;💡 &lt;strong&gt;Ansible usage example:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -307,39 +307,39 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;12
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;- &lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;Cài đặt và khởi động Nginx&lt;/span&gt;&lt;span class="w"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-yaml" data-lang="yaml"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;- &lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;Install and start Nginx&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;hosts&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;all&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;become&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="kc"&gt;yes&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;tasks&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;Cài đặt Nginx&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;Install Nginx&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;apt&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;nginx&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;state&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;present&lt;/span&gt;&lt;span class="w"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;Khởi động Nginx&lt;/span&gt;&lt;span class="w"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;Start Nginx&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;service&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;name&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;nginx&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;state&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;started&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Tài nguyên miễn phí hữu ích:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Useful free resources:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=9Ua2b06oAr4" target="_blank" rel="noopener"
-&gt;📚 Khóa học Ansible đầy đủ cho người mới bắt đầu&lt;/a&gt;&lt;/li&gt;
+&gt;📚 Complete Ansible Course for Beginners&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.ansible.com/" target="_blank" rel="noopener"
-&gt;🔗 Trang web chính thức của Ansible&lt;/a&gt;&lt;/li&gt;
+&gt;🔗 Official Ansible Website&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=xRMPKQweySE" target="_blank" rel="noopener"
-&gt;🎥 Ansible trong 100 giây&lt;/a&gt;&lt;/li&gt;
+&gt;🎥 Ansible in 100 Seconds&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h3 id="chef"&gt;Chef
-&lt;/h3&gt;&lt;p&gt;Chef (hiện thuộc Progress Chef) là một trong những công cụ quản lý cấu hình đầu tiên. Nó sử dụng ngôn ngữ Ruby và đề cao tính idempotence (đảm bảo chạy n nhiều lần vẫn cùng kết quả).&lt;/p&gt;
-&lt;p&gt;🔄 &lt;strong&gt;Đặc điểm:&lt;/strong&gt;&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;Chef (now part of Progress Chef) is one of the first configuration management tools. It uses Ruby language and emphasizes idempotence (ensuring running n times produces the same result).&lt;/p&gt;
+&lt;p&gt;🔄 &lt;strong&gt;Features:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Dựa trên client/server.&lt;/li&gt;
-&lt;li&gt;Có Chef-Solo cho triển khai độc lập.&lt;/li&gt;
-&lt;li&gt;Phù hợp với môi trường doanh nghiệp.&lt;/li&gt;
+&lt;li&gt;Client/server based.&lt;/li&gt;
+&lt;li&gt;Has Chef-Solo for standalone deployment.&lt;/li&gt;
+&lt;li&gt;Suitable for enterprise environments.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;💡 &lt;strong&gt;Ví dụ sử dụng Chef:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;💡 &lt;strong&gt;Chef usage example:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -360,25 +360,25 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;end&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Tài nguyên miễn phí hữu ích:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Useful free resources:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.chef.io/products/chef-infra" target="_blank" rel="noopener"
-&gt;🔗 Trang web chính thức của Chef&lt;/a&gt;&lt;/li&gt;
+&gt;🔗 Official Chef Website&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.tutorialspoint.com/chef/index.htm" target="_blank" rel="noopener"
-&gt;📚 Hướng dẫn Chef&lt;/a&gt;&lt;/li&gt;
+&gt;📚 Chef Tutorial&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://github.com/chef/chef" target="_blank" rel="noopener"
-&gt;🎥 Video hướng dẫn Chef&lt;/a&gt;&lt;/li&gt;
+&gt;🎥 Chef Tutorial Video&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h3 id="puppet"&gt;Puppet
-&lt;/h3&gt;&lt;p&gt;Puppet là một công cụ quản lý cấu hình theo mô hình declarative, hoạt động theo kiểu client/server và hỗ trợ nhiều hệ điều hành.&lt;/p&gt;
-&lt;p&gt;🔄 &lt;strong&gt;Đặc điểm:&lt;/strong&gt;&lt;/p&gt;
+&lt;/h3&gt;&lt;p&gt;Puppet is a declarative configuration management tool that operates in a client/server model and supports multiple operating systems.&lt;/p&gt;
+&lt;p&gt;🔄 &lt;strong&gt;Features:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Quản lý quy mô lớn.&lt;/li&gt;
-&lt;li&gt;Kiểm tra và áp dụng cấu hình định kỳ.&lt;/li&gt;
-&lt;li&gt;Tích hợp với nhiều công cụ DevOps.&lt;/li&gt;
+&lt;li&gt;Large scale management.&lt;/li&gt;
+&lt;li&gt;Periodic configuration checking and application.&lt;/li&gt;
+&lt;li&gt;Integration with many DevOps tools.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;💡 &lt;strong&gt;Ví dụ sử dụng Puppet:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;💡 &lt;strong&gt;Puppet usage example:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -401,33 +401,33 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Tài nguyên miễn phí hữu ích:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Useful free resources:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=Ns_tRKD20c4" target="_blank" rel="noopener"
-&gt;📚 Khóa học Puppet đầy đủ&lt;/a&gt;&lt;/li&gt;
+&gt;📚 Complete Puppet Course&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://puppet.com/" target="_blank" rel="noopener"
-&gt;🔗 Trang web chính thức của Puppet&lt;/a&gt;&lt;/li&gt;
+&gt;🔗 Official Puppet Website&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://app.daily.dev/tags/puppet?ref=roadmapsh" target="_blank" rel="noopener"
-&gt;🎥 Bài viết hay về Puppet&lt;/a&gt;&lt;/li&gt;
+&gt;🎥 Great Puppet Articles&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="kết-luận"&gt;Kết luận
-&lt;/h2&gt;&lt;p&gt;Quản lý cấu hình là một yếu tố quan trọng trong quy trình DevOps, giúp đảm bảo hệ thống hoạt động nhất quán, giảm thiểu lỗi và nâng cao độ tin cậy. Tùy thuộc vào nhu cầu và quy mô, doanh nghiệp có thể chọn Ansible, Chef hoặc Puppet để quản lý hạ tầng một cách hiệu quả.&lt;/p&gt;
-&lt;p&gt;👉 &lt;strong&gt;Bước tiếp theo:&lt;/strong&gt; Tìm hiểu về &lt;em&gt;&lt;strong&gt;Continuous Integration and Continuous Deployment&lt;/strong&gt;&lt;/em&gt; (CI/CD), là quy trình tự động hóa trong phát triển phần mềm giúp tích hợp, kiểm thử và triển khai ứng dụng một cách liên tục.&lt;/p&gt;</description></item><item><title>Serverless và các nền tảng liên quan</title><link>https://tech.nguuyen.io.vn/posts/devops/devops-step-ten/</link><pubDate>Mon, 24 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/devops/devops-step-ten/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-ten.webp" alt="Featured image of post Serverless và các nền tảng liên quan " /&gt;&lt;h2 id="serverless-là-gì"&gt;Serverless là gì?
-&lt;/h2&gt;&lt;p&gt;Serverless là mô hình điện toán đám mây nơi nhà cung cấp dịch vụ quản lý hoàn toàn cơ sở hạ tầng, giúp lập trình viên chỉ cần tập trung vào viết mã. Hệ thống sẽ &lt;strong&gt;tự động phân bổ tài nguyên&lt;/strong&gt; theo nhu cầu và chỉ tính phí dựa trên tài nguyên thực tế sử dụng. Kiến trúc serverless thường được áp dụng cho các &lt;strong&gt;ứng dụng microservices, xử lý sự kiện&lt;/strong&gt; và giúp giảm thiểu chi phí vận hành.&lt;/p&gt;
-&lt;p&gt;📖 &lt;strong&gt;Tài nguyên miễn phí để tìm hiểu:&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id="conclusion"&gt;Conclusion
+&lt;/h2&gt;&lt;p&gt;Configuration management is an important element in the DevOps process, helping ensure consistent system operation, minimize errors, and enhance reliability. Depending on needs and scale, businesses can choose Ansible, Chef, or Puppet to manage infrastructure effectively.&lt;/p&gt;
+&lt;p&gt;👉 &lt;strong&gt;Next step:&lt;/strong&gt; Learn about &lt;em&gt;&lt;strong&gt;Continuous Integration and Continuous Deployment&lt;/strong&gt;&lt;/em&gt; (CI/CD), which is an automation process in software development that helps integrate, test, and deploy applications continuously.&lt;/p&gt;</description></item><item><title>Serverless and Related Platforms</title><link>https://tech.nguuyen.io.vn/posts/devops/devops-step-ten/</link><pubDate>Mon, 24 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/devops/devops-step-ten/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-ten.webp" alt="Featured image of post Serverless and Related Platforms " /&gt;&lt;h2 id="what-is-serverless"&gt;What is Serverless?
+&lt;/h2&gt;&lt;p&gt;Serverless is a cloud computing model where service providers fully manage the infrastructure, allowing developers to focus solely on writing code. The system &lt;strong&gt;automatically allocates resources&lt;/strong&gt; based on demand and charges only for actual resource usage. Serverless architecture is commonly applied for &lt;strong&gt;microservices applications, event processing&lt;/strong&gt; and helps minimize operational costs.&lt;/p&gt;
+&lt;p&gt;📖 &lt;strong&gt;Free resources to learn:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;📄 &lt;a class="link" href="https://www.redhat.com/en/topics/cloud-native-apps/what-is-serverless" target="_blank" rel="noopener"
-&gt;Serverless là gì?&lt;/a&gt;&lt;/li&gt;
+&gt;What is Serverless?&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=vxJobGtqKVM" target="_blank" rel="noopener"
-&gt;Giới thiệu về Serverless&lt;/a&gt;&lt;/li&gt;
+&gt;Introduction to Serverless&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;🌍 &lt;a class="link" href="https://app.daily.dev/tags/serverless?ref=roadmapsh" target="_blank" rel="noopener"
-&gt;Bài viết hay về Serverless&lt;/a&gt;&lt;/li&gt;
+&gt;Great articles about Serverless&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="aws-lambda"&gt;AWS Lambda
-&lt;/h2&gt;&lt;p&gt;AWS Lambda là một dịch vụ serverless của AWS, cho phép chạy mã mà không cần quản lý máy chủ. Lambda &lt;strong&gt;tự động mở rộng&lt;/strong&gt; theo nhu cầu, hỗ trợ nhiều ngôn ngữ lập trình và dễ dàng tích hợp với các dịch vụ khác của AWS. Nó phù hợp với &lt;strong&gt;xử lý dữ liệu, tự động hóa tác vụ, xây dựng microservices&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;🖥 &lt;strong&gt;Ví dụ:&lt;/strong&gt; Triển khai một function trên AWS Lambda&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;AWS Lambda is a serverless service from AWS that allows running code without managing servers. Lambda &lt;strong&gt;automatically scales&lt;/strong&gt; based on demand, supports multiple programming languages, and easily integrates with other AWS services. It&amp;rsquo;s suitable for &lt;strong&gt;data processing, task automation, building microservices&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;🖥 &lt;strong&gt;Example:&lt;/strong&gt; Deploying a function on AWS Lambda&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -446,65 +446,65 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Tài nguyên miễn phí để tìm hiểu:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Free resources to learn:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;🔗 &lt;a class="link" href="https://docs.aws.amazon.com/lambda/latest/operatorguide/intro.html" target="_blank" rel="noopener"
-&gt;Giới thiệu AWS Lambda&lt;/a&gt;&lt;/li&gt;
+&gt;Introduction to AWS Lambda&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=RtiWU1DrMaM" target="_blank" rel="noopener"
-&gt;Hướng dẫn AWS Lambda từ A-Z&lt;/a&gt;&lt;/li&gt;
+&gt;AWS Lambda Tutorial from A-Z&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;🌍 &lt;a class="link" href="https://app.daily.dev/tags/aws?ref=roadmapsh" target="_blank" rel="noopener"
-&gt;Bài viết hay về AWS Lambda&lt;/a&gt;&lt;/li&gt;
+&gt;Great articles about AWS Lambda&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="cloudflare"&gt;Cloudflare
-&lt;/h2&gt;&lt;p&gt;Cloudflare là một công ty cung cấp dịch vụ &lt;strong&gt;CDN, bảo mật, tối ưu hiệu suất&lt;/strong&gt; cho website. Cloudflare đóng vai trò là &lt;strong&gt;proxy ngược&lt;/strong&gt;, giúp tăng tốc tải trang và bảo vệ website khỏi các cuộc tấn công. Công ty được thành lập năm 2009 và lên sàn chứng khoán vào năm 2019.&lt;/p&gt;
-&lt;p&gt;📖 &lt;strong&gt;Tài nguyên miễn phí để tìm hiểu:&lt;/strong&gt;&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;Cloudflare is a company that provides &lt;strong&gt;CDN, security, performance optimization&lt;/strong&gt; services for websites. Cloudflare acts as a &lt;strong&gt;reverse proxy&lt;/strong&gt;, helping to speed up page loading and protect websites from attacks. The company was founded in 2009 and went public in 2019.&lt;/p&gt;
+&lt;p&gt;📖 &lt;strong&gt;Free resources to learn:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;🔗 &lt;a class="link" href="https://cloudflare.com/" target="_blank" rel="noopener"
-&gt;Trang chủ Cloudflare&lt;/a&gt;&lt;/li&gt;
+&gt;Cloudflare Homepage&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=24cml1rKGBs" target="_blank" rel="noopener"
-&gt;Giới thiệu về Cloudflare&lt;/a&gt;&lt;/li&gt;
+&gt;Introduction to Cloudflare&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;🌍 &lt;a class="link" href="https://app.daily.dev/tags/cloudflare?ref=roadmapsh" target="_blank" rel="noopener"
-&gt;Bài viết hay về Cloudflare&lt;/a&gt;&lt;/li&gt;
+&gt;Great articles about Cloudflare&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="vercel"&gt;Vercel
-&lt;/h2&gt;&lt;p&gt;Vercel là nền tảng &lt;strong&gt;triển khai frontend&lt;/strong&gt; giúp đưa các ứng dụng web lên cloud một cách nhanh chóng. Nó hỗ trợ &lt;strong&gt;React, Next.js, Vue, Angular&lt;/strong&gt;, tích hợp với GitHub, và cho phép triển khai chỉ với một lệnh push.&lt;/p&gt;
-&lt;p&gt;📖 &lt;strong&gt;Tài nguyên miễn phí để tìm hiểu:&lt;/strong&gt;&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;Vercel is a &lt;strong&gt;frontend deployment&lt;/strong&gt; platform that helps deploy web applications to the cloud quickly. It supports &lt;strong&gt;React, Next.js, Vue, Angular&lt;/strong&gt;, integrates with GitHub, and allows deployment with just a push command.&lt;/p&gt;
+&lt;p&gt;📖 &lt;strong&gt;Free resources to learn:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;🔗 &lt;a class="link" href="https://vercel.com/" target="_blank" rel="noopener"
-&gt;Trang chủ Vercel&lt;/a&gt;&lt;/li&gt;
+&gt;Vercel Homepage&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;📖 &lt;a class="link" href="https://vercel.com/docs" target="_blank" rel="noopener"
-&gt;Tài liệu chính thức Vercel&lt;/a&gt;&lt;/li&gt;
+&gt;Official Vercel Documentation&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=sPmat30SE4k" target="_blank" rel="noopener"
-&gt;Hướng dẫn sử dụng Vercel&lt;/a&gt;&lt;/li&gt;
+&gt;Vercel Usage Guide&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;🌍 &lt;a class="link" href="https://app.daily.dev/tags/vercel?ref=roadmapsh" target="_blank" rel="noopener"
-&gt;Bài viết hay về Vercel&lt;/a&gt;&lt;/li&gt;
+&gt;Great articles about Vercel&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="kết-luận"&gt;Kết Luận
-&lt;/h2&gt;&lt;p&gt;Serverless giúp &lt;strong&gt;tự động hóa triển khai, giảm chi phí, dễ dàng mở rộng&lt;/strong&gt;. Các nền tảng phổ biến:&lt;/p&gt;
+&lt;h2 id="conclusion"&gt;Conclusion
+&lt;/h2&gt;&lt;p&gt;Serverless helps &lt;strong&gt;automate deployment, reduce costs, and easily scale&lt;/strong&gt;. Popular platforms:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;AWS Lambda&lt;/strong&gt;: Xử lý sự kiện không cần máy chủ.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Cloudflare&lt;/strong&gt;: CDN và bảo mật website.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Vercel&lt;/strong&gt;: Triển khai frontend nhanh chóng.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;AWS Lambda&lt;/strong&gt;: Event processing without servers.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Cloudflare&lt;/strong&gt;: CDN and website security.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Vercel&lt;/strong&gt;: Fast frontend deployment.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Việc lựa chọn nền tảng phụ thuộc vào &lt;strong&gt;nhu cầu, công nghệ và chi phí&lt;/strong&gt; của bạn. 🚀&lt;/p&gt;
-&lt;p&gt;👉 &lt;strong&gt;Bước tiếp theo:&lt;/strong&gt; Tìm hiểu về &lt;em&gt;&lt;strong&gt;Provisioning&lt;/strong&gt;&lt;/em&gt; quá trình cung cấp và cấu hình tài nguyên (máy chủ, mạng, lưu trữ, tài khoản) để hệ thống hoặc ứng dụng có thể hoạt động hiệu quả.&lt;/p&gt;</description></item><item><title>Dịch vụ Cloud</title><link>https://tech.nguuyen.io.vn/posts/devops/devops-step-nine/</link><pubDate>Sun, 23 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/devops/devops-step-nine/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-nine.webp" alt="Featured image of post Dịch vụ Cloud " /&gt;&lt;h2 id="cloud-providers"&gt;Cloud Providers
-&lt;/h2&gt;&lt;p&gt;Các nhà cung cấp dịch vụ đám mây cung cấp một lớp API để trừu tượng hóa cơ sở hạ tầng, giúp triển khai tài nguyên dựa trên các tiêu chuẩn bảo mật và mô hình thanh toán. Dù thực tế các dịch vụ đám mây chạy trên các máy chủ trong trung tâm dữ liệu, nhưng nhờ vào các lớp trừu tượng, chúng tạo cảm giác như đang tương tác với một nền tảng duy nhất. Khả năng triển khai, cấu hình và bảo mật tài nguyên nhanh chóng đã giúp cloud trở thành yếu tố quan trọng trong thành công và sự phức tạp của DevOps hiện đại.&lt;/p&gt;
-&lt;p&gt;📖 &lt;strong&gt;Tài nguyên miễn phí để tìm hiểu:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Platform selection depends on your &lt;strong&gt;needs, technology, and budget&lt;/strong&gt;. 🚀&lt;/p&gt;
+&lt;p&gt;👉 &lt;strong&gt;Next step:&lt;/strong&gt; Learn about &lt;em&gt;&lt;strong&gt;Provisioning&lt;/strong&gt;&lt;/em&gt; - the process of providing and configuring resources (servers, networks, storage, accounts) so that systems or applications can operate effectively.&lt;/p&gt;</description></item><item><title>Cloud Services</title><link>https://tech.nguuyen.io.vn/posts/devops/devops-step-nine/</link><pubDate>Sun, 23 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/devops/devops-step-nine/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-nine.webp" alt="Featured image of post Cloud Services " /&gt;&lt;h2 id="cloud-providers"&gt;Cloud Providers
+&lt;/h2&gt;&lt;p&gt;Cloud service providers offer an API layer to abstract infrastructure, enabling resource deployment based on security standards and billing models. While cloud services actually run on servers in data centers, abstraction layers create the feeling of interacting with a single platform. The ability to quickly deploy, configure, and secure resources has made cloud a critical factor in the success and complexity of modern DevOps.&lt;/p&gt;
+&lt;p&gt;📖 &lt;strong&gt;Free resources to learn:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;📄 &lt;a class="link" href="https://www.techtarget.com/searchitchannel/definition/cloud-service-provider-cloud-provider" target="_blank" rel="noopener"
 &gt;Cloud Service Provider&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;📄 &lt;a class="link" href="https://www.redhat.com/en/topics/cloud-computing/what-are-cloud-providers" target="_blank" rel="noopener"
-&gt;Cloud Providers là gì?&lt;/a&gt;&lt;/li&gt;
+&gt;What are Cloud Providers?&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;🌍 &lt;a class="link" href="https://app.daily.dev/tags/cloud?ref=roadmapsh" target="_blank" rel="noopener"
-&gt;Bài viết hay về Cloud&lt;/a&gt;&lt;/li&gt;
+&gt;Great articles about Cloud&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="aws-amazon-web-services"&gt;AWS (Amazon Web Services)
-&lt;/h2&gt;&lt;p&gt;AWS là nền tảng điện toán đám mây hàng đầu từ năm 2011, vượt xa Azure và Google Cloud. AWS cung cấp hơn &lt;strong&gt;200 dịch vụ&lt;/strong&gt;, hoạt động trên quy mô toàn cầu. AWS mang đến giải pháp tính toán linh hoạt và tiết kiệm chi phí, bao gồm: &lt;strong&gt;sức mạnh tính toán, lưu trữ dữ liệu, phân phối nội dung&lt;/strong&gt;, v.v.&lt;/p&gt;
-&lt;p&gt;🖥 &lt;strong&gt;Ví dụ:&lt;/strong&gt; Tạo một EC2 instance bằng AWS CLI&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;AWS has been the leading cloud computing platform since 2011, far ahead of Azure and Google Cloud. AWS provides over &lt;strong&gt;200 services&lt;/strong&gt;, operating on a global scale. AWS delivers flexible and cost-effective computing solutions, including: &lt;strong&gt;computing power, data storage, content distribution&lt;/strong&gt;, etc.&lt;/p&gt;
+&lt;p&gt;🖥 &lt;strong&gt;Example:&lt;/strong&gt; Create an EC2 instance using AWS CLI&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -513,21 +513,21 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;aws ec2 run-instances --image-id ami-12345678 --count &lt;span class="m"&gt;1&lt;/span&gt; --instance-type t2.micro --key-name MyKeyPair --security-groups MySecurityGroup
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Tài nguyên miễn phí để tìm hiểu:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Free resources to learn:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=zA8guDqfv40" target="_blank" rel="noopener"
-&gt;100 giờ khóa học AWS - 2024&lt;/a&gt;&lt;/li&gt;
+&gt;100 hours AWS course - 2024&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;🔗 &lt;a class="link" href="https://aws.amazon.com/" target="_blank" rel="noopener"
-&gt;Trang chủ AWS&lt;/a&gt;&lt;/li&gt;
+&gt;AWS Homepage&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;📄 &lt;a class="link" href="https://grapplingdev.com/tutorials/how-to-create-aws-account" target="_blank" rel="noopener"
-&gt;Hướng dẫn tạo tài khoản AWS&lt;/a&gt;&lt;/li&gt;
+&gt;Guide to creating AWS account&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;🌍 &lt;a class="link" href="https://app.daily.dev/tags/aws?ref=roadmapsh" target="_blank" rel="noopener"
-&gt;Bài viết hay về AWS&lt;/a&gt;&lt;/li&gt;
+&gt;Great articles about AWS&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="microsoft-azure"&gt;Microsoft Azure
-&lt;/h2&gt;&lt;p&gt;Azure là nền tảng điện toán đám mây của Microsoft, cung cấp &lt;strong&gt;IaaS, PaaS, SaaS&lt;/strong&gt; cùng nhiều dịch vụ như &lt;strong&gt;phân tích, AI, máy học, bảo mật&lt;/strong&gt;. Azure hỗ trợ nhiều công cụ và ngôn ngữ lập trình, giúp doanh nghiệp phát triển nhanh chóng.&lt;/p&gt;
-&lt;p&gt;🖥 &lt;strong&gt;Ví dụ:&lt;/strong&gt; Triển khai ứng dụng trên Azure App Service&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;Azure is Microsoft&amp;rsquo;s cloud computing platform, providing &lt;strong&gt;IaaS, PaaS, SaaS&lt;/strong&gt; along with many services like &lt;strong&gt;analytics, AI, machine learning, security&lt;/strong&gt;. Azure supports multiple tools and programming languages, helping businesses develop rapidly.&lt;/p&gt;
+&lt;p&gt;🖥 &lt;strong&gt;Example:&lt;/strong&gt; Deploy application on Azure App Service&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -536,21 +536,21 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;az webapp create --resource-group MyResourceGroup --plan MyAppServicePlan --name MyUniqueApp --runtime &lt;span class="s2"&gt;&amp;#34;PYTHON:3.8&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Tài nguyên miễn phí để tìm hiểu:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Free resources to learn:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;🔗 &lt;a class="link" href="https://azure.microsoft.com/en-us/" target="_blank" rel="noopener"
-&gt;Trang chủ Azure&lt;/a&gt;&lt;/li&gt;
+&gt;Azure Homepage&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;📖 &lt;a class="link" href="https://github.com/mikeroyal/Azure-Guide" target="_blank" rel="noopener"
-&gt;Hướng dẫn về Microsoft Azure&lt;/a&gt;&lt;/li&gt;
+&gt;Microsoft Azure Guide&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=5abffC-K40c" target="_blank" rel="noopener"
-&gt;Chứng chỉ Azure Fundamentals (AZ-900)&lt;/a&gt;&lt;/li&gt;
+&gt;Azure Fundamentals Certification (AZ-900)&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;🌍 &lt;a class="link" href="https://app.daily.dev/tags/azure?ref=roadmapsh" target="_blank" rel="noopener"
-&gt;Bài viết hay về Azure&lt;/a&gt;&lt;/li&gt;
+&gt;Great articles about Azure&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="google-cloud-platform-gcp"&gt;Google Cloud Platform (GCP)
-&lt;/h2&gt;&lt;p&gt;Google Cloud cung cấp hơn &lt;strong&gt;150 dịch vụ&lt;/strong&gt;, hoạt động trên cùng hạ tầng với các sản phẩm của Google như &lt;strong&gt;Search, Gmail, YouTube&lt;/strong&gt;. Dịch vụ bao gồm: &lt;strong&gt;VMs, cơ sở dữ liệu, AI/ML, Kubernetes&lt;/strong&gt;, v.v.&lt;/p&gt;
-&lt;p&gt;🖥 &lt;strong&gt;Ví dụ:&lt;/strong&gt; Tạo một VM trên Google Cloud&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;Google Cloud provides over &lt;strong&gt;150 services&lt;/strong&gt;, running on the same infrastructure as Google products like &lt;strong&gt;Search, Gmail, YouTube&lt;/strong&gt;. Services include: &lt;strong&gt;VMs, databases, AI/ML, Kubernetes&lt;/strong&gt;, etc.&lt;/p&gt;
+&lt;p&gt;🖥 &lt;strong&gt;Example:&lt;/strong&gt; Create a VM on Google Cloud&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -559,21 +559,21 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;gcloud compute instances create my-instance --machine-type&lt;span class="o"&gt;=&lt;/span&gt;e2-medium --image-project&lt;span class="o"&gt;=&lt;/span&gt;debian-cloud --image-family&lt;span class="o"&gt;=&lt;/span&gt;debian-11
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Tài nguyên miễn phí để tìm hiểu:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Free resources to learn:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;🔗 &lt;a class="link" href="https://cloud.google.com/" target="_blank" rel="noopener"
-&gt;Trang chủ Google Cloud&lt;/a&gt;&lt;/li&gt;
+&gt;Google Cloud Homepage&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;📖 &lt;a class="link" href="https://thenewstack.io/5-tips-to-become-a-google-cloud-certified-professional-architect/" target="_blank" rel="noopener"
-&gt;5 mẹo để trở thành Google Cloud Certified&lt;/a&gt;&lt;/li&gt;
+&gt;5 tips to become Google Cloud Certified&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=fZOz13joN0o" target="_blank" rel="noopener"
-&gt;Khóa học Google Cloud Platform - 2023&lt;/a&gt;&lt;/li&gt;
+&gt;Google Cloud Platform Course - 2023&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;🌍 &lt;a class="link" href="https://app.daily.dev/tags/cloud?ref=roadmapsh" target="_blank" rel="noopener"
-&gt;Bài viết hay về Google Cloud&lt;/a&gt;&lt;/li&gt;
+&gt;Great articles about Google Cloud&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="digitalocean"&gt;DigitalOcean
-&lt;/h2&gt;&lt;p&gt;DigitalOcean là nhà cung cấp cơ sở hạ tầng đám mây tập trung vào sự &lt;strong&gt;đơn giản, chi phí thấp, dễ sử dụng&lt;/strong&gt;. DigitalOcean cung cấp dịch vụ như &lt;strong&gt;máy ảo (Droplets), cơ sở dữ liệu, Kubernetes, lưu trữ đối tượng&lt;/strong&gt;, phù hợp với &lt;strong&gt;startup và developer&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;🖥 &lt;strong&gt;Ví dụ:&lt;/strong&gt; Tạo một Droplet trên DigitalOcean bằng API&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;DigitalOcean is a cloud infrastructure provider focused on &lt;strong&gt;simplicity, low cost, ease of use&lt;/strong&gt;. DigitalOcean provides services like &lt;strong&gt;virtual machines (Droplets), databases, Kubernetes, object storage&lt;/strong&gt;, suitable for &lt;strong&gt;startups and developers&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;🖥 &lt;strong&gt;Example:&lt;/strong&gt; Create a Droplet on DigitalOcean using API&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -582,25 +582,25 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl -X POST -H &lt;span class="s2"&gt;&amp;#34;Content-Type: application/json&amp;#34;&lt;/span&gt; -H &lt;span class="s2"&gt;&amp;#34;Authorization: Bearer YOUR_TOKEN&amp;#34;&lt;/span&gt; -d &lt;span class="s1"&gt;&amp;#39;{&amp;#34;name&amp;#34;:&amp;#34;example-droplet&amp;#34;,&amp;#34;region&amp;#34;:&amp;#34;nyc3&amp;#34;,&amp;#34;size&amp;#34;:&amp;#34;s-1vcpu-1gb&amp;#34;,&amp;#34;image&amp;#34;:&amp;#34;ubuntu-20-04-x64&amp;#34;}&amp;#39;&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;https://api.digitalocean.com/v2/droplets&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Tài nguyên miễn phí để tìm hiểu:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Free resources to learn:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;🔗 &lt;a class="link" href="https://www.digitalocean.com/" target="_blank" rel="noopener"
-&gt;Trang chủ DigitalOcean&lt;/a&gt;&lt;/li&gt;
+&gt;DigitalOcean Homepage&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;📄 &lt;a class="link" href="https://hacktoberfest.com/" target="_blank" rel="noopener"
-&gt;Hacktoberfest của DigitalOcean&lt;/a&gt;&lt;/li&gt;
+&gt;DigitalOcean&amp;rsquo;s Hacktoberfest&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=cJKdo-glRD0" target="_blank" rel="noopener"
-&gt;Hướng dẫn Kubernetes trên DigitalOcean&lt;/a&gt;&lt;/li&gt;
+&gt;Kubernetes on DigitalOcean Tutorial&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;🌍 &lt;a class="link" href="https://app.daily.dev/tags/digitalocean?ref=roadmapsh" target="_blank" rel="noopener"
-&gt;Bài viết hay về DigitalOcean&lt;/a&gt;&lt;/li&gt;
+&gt;Great articles about DigitalOcean&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="kết-luận"&gt;Kết Luận
-&lt;/h2&gt;&lt;p&gt;Các nhà cung cấp dịch vụ cloud như &lt;strong&gt;AWS, Azure, GCP, DigitalOcean&lt;/strong&gt; cung cấp giải pháp linh hoạt cho mọi nhu cầu &lt;strong&gt;máy chủ, lưu trữ, AI, DevOps&lt;/strong&gt;. Mỗi nền tảng có ưu điểm riêng:&lt;/p&gt;
+&lt;h2 id="conclusion"&gt;Conclusion
+&lt;/h2&gt;&lt;p&gt;Cloud service providers like &lt;strong&gt;AWS, Azure, GCP, DigitalOcean&lt;/strong&gt; provide flexible solutions for all &lt;strong&gt;server, storage, AI, DevOps&lt;/strong&gt; needs. Each platform has its own advantages:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;AWS&lt;/strong&gt;: Toàn diện, nhiều dịch vụ nhất.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Azure&lt;/strong&gt;: Tích hợp tốt với hệ sinh thái Microsoft.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;GCP&lt;/strong&gt;: Tối ưu cho AI, dữ liệu lớn.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;DigitalOcean&lt;/strong&gt;: Đơn giản, phù hợp với startup.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;AWS&lt;/strong&gt;: Comprehensive, most services available.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Azure&lt;/strong&gt;: Good integration with Microsoft ecosystem.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;GCP&lt;/strong&gt;: Optimized for AI, big data.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;DigitalOcean&lt;/strong&gt;: Simple, suitable for startups.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Việc chọn nền tảng phù hợp phụ thuộc vào &lt;strong&gt;mục tiêu, ngân sách, nhu cầu kỹ thuật&lt;/strong&gt; của bạn. 🚀&lt;/p&gt;
-&lt;p&gt;👉 &lt;strong&gt;Bước tiếp theo:&lt;/strong&gt; Tìm hiểu về &lt;em&gt;&lt;strong&gt;Serverless&lt;/strong&gt;&lt;/em&gt; mô hình điện toán đám mây cho phép chạy ứng dụng mà không cần quản lý máy chủ. Các nhà cung cấp cloud tự động phân bổ tài nguyên, mở rộng quy mô và tính phí dựa trên lượng tài nguyên thực tế được sử dụng, giúp tối ưu chi phí và đơn giản hóa triển khai.&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;Choosing the right platform depends on your &lt;strong&gt;goals, budget, technical requirements&lt;/strong&gt;. 🚀&lt;/p&gt;
+&lt;p&gt;👉 &lt;strong&gt;Next step:&lt;/strong&gt; Learn about &lt;em&gt;&lt;strong&gt;Serverless&lt;/strong&gt;&lt;/em&gt; - a cloud computing model that allows running applications without managing servers. Cloud providers automatically allocate resources, scale, and charge based on actual resource usage, helping optimize costs and simplify deployment.&lt;/p&gt;</description></item></channel></rss>

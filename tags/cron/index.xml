@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Cron on Hoàng Dương</title><link>https://tech.nguuyen.io.vn/tags/cron/</link><description>Recent content in Cron on Hoàng Dương</description><generator>Hugo -- gohugo.io</generator><language>vi</language><lastBuildDate>Sun, 28 Jun 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/cron/index.xml" rel="self" type="application/rss+xml"/><item><title>Cron Job với Bash: tự động hóa theo lịch cho DevOps</title><link>https://tech.nguuyen.io.vn/posts/bash/bash-step-eight/</link><pubDate>Sun, 28 Jun 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/bash/bash-step-eight/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/bash/bash-step-eight.jpg" alt="Featured image of post Cron Job với Bash: tự động hóa theo lịch cho DevOps" /&gt;&lt;h2 id="cron-job-trong-bash-cho-devops"&gt;Cron job trong Bash cho DevOps
-&lt;/h2&gt;&lt;p&gt;Ở &lt;a class="link" href="https://tech.nguuyen.io.vn/posts/bash/bash-step-seven/" &gt;bài trước&lt;/a&gt; chúng ta đã quản lý biến, &lt;code&gt;.env&lt;/code&gt;, tham số CLI và các biến đặc biệt trong Bash. Khi script đã chạy ổn định bằng tay, bước tiếp theo thường là: &lt;strong&gt;làm sao để nó tự chạy đúng thời điểm?&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;&lt;code&gt;cron&lt;/code&gt; là công cụ kinh điển trên Linux/Unix để chạy command hoặc script theo lịch. Với DevOps, cron thường dùng cho backup định kỳ, dọn log, healthcheck, đồng bộ file, tạo report, kiểm tra chứng chỉ SSL hoặc gọi một endpoint bảo trì nhẹ.&lt;/p&gt;
-&lt;p&gt;Điểm quan trọng: cron chạy trong môi trường tối giản hơn terminal của bạn. Vì vậy script chạy đúng khi gọi tay chưa chắc chạy đúng trong cron nếu thiếu &lt;code&gt;PATH&lt;/code&gt;, working directory, biến môi trường hoặc log rõ ràng.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Cron on Hoang Duong</title><link>https://tech.nguuyen.io.vn/tags/cron/</link><description>Recent content in Cron on Hoang Duong</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Tue, 07 Jul 2026 00:00:00 +0700</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/cron/index.xml" rel="self" type="application/rss+xml"/><item><title>Cron Jobs with Bash: Scheduled Automation for DevOps</title><link>https://tech.nguuyen.io.vn/posts/bash/bash-step-eight/</link><pubDate>Sun, 28 Jun 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/bash/bash-step-eight/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/bash/bash-step-eight.jpg" alt="Featured image of post Cron Jobs with Bash: Scheduled Automation for DevOps" /&gt;&lt;h2 id="cron-jobs-in-bash-for-devops"&gt;Cron jobs in Bash for DevOps
+&lt;/h2&gt;&lt;p&gt;In the &lt;a class="link" href="https://tech.nguuyen.io.vn/en/posts/bash/bash-step-seven/" &gt;previous article&lt;/a&gt; we managed variables, &lt;code&gt;.env&lt;/code&gt; files, CLI arguments, and special Bash variables. Once a script works reliably when you run it manually, the next question is: &lt;strong&gt;how do you make it run at the right time automatically?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;code&gt;cron&lt;/code&gt; is the classic Linux/Unix tool for running commands or scripts on a schedule. In DevOps, cron is often used for periodic backups, log cleanup, health checks, file sync, reports, SSL certificate checks, or lightweight maintenance endpoints.&lt;/p&gt;
+&lt;p&gt;The important detail is that cron runs with a much smaller environment than your interactive terminal. A script that works manually may still fail in cron if it depends on &lt;code&gt;PATH&lt;/code&gt;, the current directory, environment variables, or clear logging.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="cron-và-crontab-là-gì"&gt;Cron và crontab là gì
-&lt;/h2&gt;&lt;p&gt;&lt;code&gt;cron&lt;/code&gt; là daemon chạy nền, đọc các bảng lịch và thực thi command khi tới thời điểm phù hợp. Bảng lịch đó thường được gọi là &lt;code&gt;crontab&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;Một số lệnh cơ bản:&lt;/p&gt;
+&lt;h2 id="what-are-cron-and-crontab"&gt;What are cron and crontab?
+&lt;/h2&gt;&lt;p&gt;&lt;code&gt;cron&lt;/code&gt; is a background daemon that reads schedule tables and runs commands when their time matches. Those schedule tables are commonly called &lt;code&gt;crontab&lt;/code&gt; files.&lt;/p&gt;
+&lt;p&gt;Basic commands:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -13,13 +13,13 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;3
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;crontab -l &lt;span class="c1"&gt;# xem crontab của user hiện tại&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;crontab -e &lt;span class="c1"&gt;# chỉnh crontab&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;crontab -r &lt;span class="c1"&gt;# xóa crontab của user hiện tại&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;crontab -l &lt;span class="c1"&gt;# list the current user&amp;#39;s crontab&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;crontab -e &lt;span class="c1"&gt;# edit the current user&amp;#39;s crontab&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;crontab -r &lt;span class="c1"&gt;# remove the current user&amp;#39;s crontab&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Bạn có thể chỉnh crontab của user hiện tại bằng &lt;code&gt;crontab -e&lt;/code&gt;. Trên server production, hãy cẩn thận với &lt;code&gt;crontab -r&lt;/code&gt; vì lệnh này xóa toàn bộ lịch của user đó.&lt;/p&gt;
-&lt;p&gt;Ví dụ một dòng cron đơn giản:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;You usually edit your own schedule with &lt;code&gt;crontab -e&lt;/code&gt;. Be careful with &lt;code&gt;crontab -r&lt;/code&gt; on production servers because it removes all jobs for that user.&lt;/p&gt;
+&lt;p&gt;A simple cron entry:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -28,10 +28,10 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-gdscript3" data-lang="gdscript3"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;*/&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;opt&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;scripts&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;check&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;health&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sh&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="k"&gt;var&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nb"&gt;log&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;check&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;health&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;log&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&amp;amp;&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Dòng trên chạy script mỗi 5 phút và ghi cả stdout/stderr vào file log.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;This runs the script every five minutes and appends both stdout and stderr to a log file.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="cú-pháp-lịch-5-trường"&gt;Cú pháp lịch 5 trường
-&lt;/h2&gt;&lt;p&gt;Một cron job phổ biến có 5 trường thời gian, sau đó là command:&lt;/p&gt;
+&lt;h2 id="the-five-field-schedule-syntax"&gt;The five-field schedule syntax
+&lt;/h2&gt;&lt;p&gt;A common cron job has five time fields followed by the command:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -45,14 +45,14 @@
 &lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;* * * * * command-to-run
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│ │ │ │ │
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│ │ │ │ └── day of week: 0-7 (0 hoặc 7 thường là Chủ nhật)
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│ │ │ │ └── day of week: 0-7 (0 or 7 usually means Sunday)
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│ │ │ └──── month: 1-12
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│ │ └────── day of month: 1-31
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;│ └──────── hour: 0-23
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;└────────── minute: 0-59
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Một vài ví dụ hay gặp:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Common examples:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -63,29 +63,29 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;6
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;* * * * * # mỗi phút
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;*/5 * * * * # mỗi 5 phút
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;0 * * * * # đầu mỗi giờ
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;30 2 * * * # 02:30 mỗi ngày
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;0 3 * * 0 # 03:00 Chủ nhật hằng tuần
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;0 1 1 * * # 01:00 ngày đầu mỗi tháng
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;* * * * * # every minute
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;*/5 * * * * # every 5 minutes
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;0 * * * * # at the start of every hour
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;30 2 * * * # every day at 02:30
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;0 3 * * 0 # every Sunday at 03:00
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;0 1 1 * * # at 01:00 on the first day of every month
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Cron cũng hỗ trợ danh sách, range và bước nhảy:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Cron also supports lists, ranges, and step values:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
 &lt;/span&gt;&lt;span class="lnt"&gt;2
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;0 9,17 * * 1-5 # 09:00 và 17:00 từ thứ Hai đến thứ Sáu
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;*/10 8-18 * * * # mỗi 10 phút trong khung 08:00-18:59
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;0 9,17 * * 1-5 # 09:00 and 17:00 from Monday to Friday
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;*/10 8-18 * * * # every 10 minutes from 08:00 through 18:59
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Khi viết lịch cho production, nên thêm comment phía trên để người sau hiểu mục đích của job.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;For production schedules, add a comment above each job so the next operator understands why it exists.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="shortcut-daily-hourly-reboot"&gt;Shortcut &lt;code&gt;@daily&lt;/code&gt;, &lt;code&gt;@hourly&lt;/code&gt;, &lt;code&gt;@reboot&lt;/code&gt;
-&lt;/h2&gt;&lt;p&gt;Nhiều hệ thống cron hỗ trợ các shortcut giúp crontab dễ đọc hơn:&lt;/p&gt;
+&lt;h2 id="shortcuts-daily-hourly-reboot"&gt;Shortcuts: &lt;code&gt;@daily&lt;/code&gt;, &lt;code&gt;@hourly&lt;/code&gt;, &lt;code&gt;@reboot&lt;/code&gt;
+&lt;/h2&gt;&lt;p&gt;Many cron implementations support shortcuts that make crontab easier to read:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -102,12 +102,12 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;@reboot /opt/scripts/start-worker.sh
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;code&gt;@daily&lt;/code&gt; thường tương đương chạy một lần mỗi ngày vào nửa đêm. &lt;code&gt;@reboot&lt;/code&gt; chạy khi cron daemon khởi động, thường dùng cho tác vụ nhẹ sau khi server boot.&lt;/p&gt;
-&lt;p&gt;Không nên lạm dụng &lt;code&gt;@reboot&lt;/code&gt; cho service quan trọng. Với daemon dài hạn, &lt;code&gt;systemd&lt;/code&gt; service thường phù hợp hơn vì có restart policy, dependency và log rõ ràng qua &lt;code&gt;journalctl&lt;/code&gt;.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;@daily&lt;/code&gt; usually means once per day at midnight. &lt;code&gt;@reboot&lt;/code&gt; runs when the cron daemon starts and is useful for small boot-time tasks.&lt;/p&gt;
+&lt;p&gt;Do not overuse &lt;code&gt;@reboot&lt;/code&gt; for important long-running services. A &lt;code&gt;systemd&lt;/code&gt; service is usually better for daemons because it provides restart policies, dependencies, and clear logs through &lt;code&gt;journalctl&lt;/code&gt;.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="viết-script-bash-thân-thiện-với-cron"&gt;Viết script Bash thân thiện với cron
-&lt;/h2&gt;&lt;p&gt;Script chạy từ cron nên tự chuẩn bị môi trường cần thiết thay vì phụ thuộc vào shell tương tác.&lt;/p&gt;
-&lt;p&gt;Ví dụ khung script tốt:&lt;/p&gt;
+&lt;h2 id="write-cron-friendly-bash-scripts"&gt;Write cron-friendly Bash scripts
+&lt;/h2&gt;&lt;p&gt;A script executed by cron should prepare its own environment instead of depending on an interactive shell.&lt;/p&gt;
+&lt;p&gt;A good starter structure:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -152,19 +152,19 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;log_info &lt;span class="s2"&gt;&amp;#34;Script started&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Các điểm cần chú ý:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Key points:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Khai báo shebang rõ ràng.&lt;/li&gt;
-&lt;li&gt;Bật &lt;code&gt;set -euo pipefail&lt;/code&gt; để lỗi không bị nuốt im lặng.&lt;/li&gt;
-&lt;li&gt;Đặt &lt;code&gt;PATH&lt;/code&gt; trong script hoặc trong crontab.&lt;/li&gt;
-&lt;li&gt;Dùng path tuyệt đối cho file quan trọng.&lt;/li&gt;
-&lt;li&gt;Ghi log có timestamp.&lt;/li&gt;
-&lt;li&gt;Không giả định cron chạy từ thư mục project.&lt;/li&gt;
+&lt;li&gt;Use a clear shebang.&lt;/li&gt;
+&lt;li&gt;Enable &lt;code&gt;set -euo pipefail&lt;/code&gt; so failures are not silently ignored.&lt;/li&gt;
+&lt;li&gt;Define &lt;code&gt;PATH&lt;/code&gt; in the script or in crontab.&lt;/li&gt;
+&lt;li&gt;Use absolute paths for important files.&lt;/li&gt;
+&lt;li&gt;Log with timestamps.&lt;/li&gt;
+&lt;li&gt;Do not assume cron runs from your project directory.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="redirect-log-trong-cron"&gt;Redirect log trong cron
-&lt;/h2&gt;&lt;p&gt;Cron có thể gửi output qua mail nội bộ nếu hệ thống cấu hình mail. Trong thực tế DevOps, ghi log vào file thường dễ kiểm soát hơn.&lt;/p&gt;
-&lt;p&gt;Ví dụ redirect stdout và stderr:&lt;/p&gt;
+&lt;h2 id="redirect-logs-in-cron"&gt;Redirect logs in cron
+&lt;/h2&gt;&lt;p&gt;Cron can send output through local mail if the system is configured for it. In real DevOps work, writing to log files is often easier to control.&lt;/p&gt;
+&lt;p&gt;Redirect stdout and stderr:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -173,12 +173,12 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-gdscript3" data-lang="gdscript3"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;*/&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;opt&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;scripts&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;check&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;health&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sh&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="k"&gt;var&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nb"&gt;log&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;check&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;health&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;log&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&amp;amp;&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Ý nghĩa:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Meaning:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;&amp;gt;&amp;gt; /var/log/check-health.log&lt;/code&gt;: append stdout vào file.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;2&amp;gt;&amp;amp;1&lt;/code&gt;: chuyển stderr vào cùng nơi với stdout.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;gt;&amp;gt; /var/log/check-health.log&lt;/code&gt;: append stdout to the file.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;2&amp;gt;&amp;amp;1&lt;/code&gt;: send stderr to the same destination as stdout.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Nếu muốn tách log lỗi riêng:&lt;/p&gt;
+&lt;p&gt;If you want separate error logs:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -187,11 +187,11 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-gdscript3" data-lang="gdscript3"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;*/&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;opt&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;scripts&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;check&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;health&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sh&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="k"&gt;var&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nb"&gt;log&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;check&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;health&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;out&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="k"&gt;var&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nb"&gt;log&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;check&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;health&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;err&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Với job chạy thường xuyên, cần có chiến lược rotate log bằng &lt;code&gt;logrotate&lt;/code&gt; hoặc tự giới hạn dung lượng, nếu không file log có thể đầy disk.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;For frequent jobs, make sure you rotate or limit logs. Otherwise a log file can eventually fill the disk.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="kiểm-tra-log-cron"&gt;Kiểm tra log cron
-&lt;/h2&gt;&lt;p&gt;Vị trí log cron phụ thuộc distro và cấu hình logging.&lt;/p&gt;
-&lt;p&gt;Trên nhiều hệ thống Ubuntu/Debian dùng syslog:&lt;/p&gt;
+&lt;h2 id="check-cron-logs"&gt;Check cron logs
+&lt;/h2&gt;&lt;p&gt;Cron log locations depend on the distribution and logging setup.&lt;/p&gt;
+&lt;p&gt;On many Ubuntu/Debian systems using syslog:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -200,7 +200,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;grep CRON /var/log/syslog
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Trên hệ thống dùng &lt;code&gt;systemd&lt;/code&gt; journal:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;On systems using the &lt;code&gt;systemd&lt;/code&gt; journal:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -211,7 +211,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;journalctl -u crond
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Một số distro dùng service tên &lt;code&gt;crond&lt;/code&gt; thay vì &lt;code&gt;cron&lt;/code&gt;. Nếu không chắc, kiểm tra service:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Some distributions name the service &lt;code&gt;crond&lt;/code&gt; instead of &lt;code&gt;cron&lt;/code&gt;. If you are not sure, check both:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -222,11 +222,11 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;systemctl status crond
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Lưu ý: log cron thường chỉ cho biết cron đã gọi command hay chưa, không đảm bảo command thành công. Muốn biết script lỗi gì, bạn vẫn cần redirect output hoặc tự ghi log trong script.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Remember that cron logs usually tell you whether cron started the command. They do not prove that the command completed successfully. For that, redirect output or write logs inside the script.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="vấn-đề-path-và-environment-trong-cron"&gt;Vấn đề &lt;code&gt;PATH&lt;/code&gt; và environment trong cron
-&lt;/h2&gt;&lt;p&gt;Cron không load đầy đủ &lt;code&gt;.bashrc&lt;/code&gt;, &lt;code&gt;.profile&lt;/code&gt; hoặc environment giống terminal của bạn. Đây là nguyên nhân phổ biến khiến script chạy tay thì đúng, nhưng vào cron lại lỗi &lt;code&gt;command not found&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;Ví dụ nên đặt &lt;code&gt;PATH&lt;/code&gt; ở đầu crontab:&lt;/p&gt;
+&lt;h2 id="path-and-environment-problems-in-cron"&gt;&lt;code&gt;PATH&lt;/code&gt; and environment problems in cron
+&lt;/h2&gt;&lt;p&gt;Cron does not load your full &lt;code&gt;.bashrc&lt;/code&gt;, &lt;code&gt;.profile&lt;/code&gt;, or terminal environment. This is a common reason why a script works manually but fails in cron with &lt;code&gt;command not found&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;Define &lt;code&gt;PATH&lt;/code&gt; at the top of crontab:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -241,7 +241,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;*/&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;opt&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;scripts&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;check&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;health&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sh&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="k"&gt;var&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nb"&gt;log&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;check&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;health&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;log&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&amp;amp;&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Hoặc dùng path tuyệt đối cho command trong script:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Or use absolute paths in the script:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -250,7 +250,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;/usr/bin/curl --fail --silent --show-error https://example.com/health
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Với biến môi trường riêng của app, ưu tiên load từ file config do bạn kiểm soát:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;For app-specific variables, prefer loading a config file you control:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -267,10 +267,10 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;: &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;DATABASE_URL&lt;/span&gt;&lt;span class="p"&gt;:?DATABASE_URL is required&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Không đặt secret trực tiếp trong crontab nếu nhiều người có quyền đọc crontab hoặc backup hệ thống. Với secret quan trọng, dùng secret manager, file quyền hạn chặt chẽ hoặc cơ chế secret của nền tảng đang dùng.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Avoid putting secrets directly in crontab if multiple people can read crontabs or system backups. For important secrets, use a secret manager, a tightly permissioned file, or the secret mechanism of your platform.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="thực-hành-devops-backup-database-hằng-đêm"&gt;Thực hành DevOps: backup database hằng đêm
-&lt;/h2&gt;&lt;p&gt;Ví dụ dưới đây minh họa script backup PostgreSQL hằng đêm. Script dùng biến môi trường từ file cấu hình, tạo thư mục backup, nén output và xóa bản backup cũ.&lt;/p&gt;
+&lt;h2 id="devops-practice-nightly-database-backup"&gt;DevOps practice: nightly database backup
+&lt;/h2&gt;&lt;p&gt;The example below shows a nightly PostgreSQL backup script. It loads variables from a config file, creates a backup directory, compresses the dump, and deletes old backups.&lt;/p&gt;
 &lt;p&gt;File &lt;code&gt;/opt/scripts/backup-db.sh&lt;/code&gt;:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -379,7 +379,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;RETENTION_DAYS&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="m"&gt;14&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Đặt quyền file config chặt chẽ:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Set strict permissions:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -392,7 +392,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo chmod &lt;span class="m"&gt;700&lt;/span&gt; /opt/scripts/backup-db.sh
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Thêm cron job chạy lúc 02:30 mỗi ngày:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Add a cron job that runs every day at 02:30:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -401,10 +401,10 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-gdscript3" data-lang="gdscript3"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="mi"&gt;30&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;opt&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;scripts&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;backup&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;db&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sh&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="k"&gt;var&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nb"&gt;log&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;backup&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;db&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;log&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&amp;amp;&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Trong môi trường thật, hãy test restore định kỳ. Backup chỉ có giá trị khi bạn biết chắc có thể khôi phục được.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;In a real environment, test restores regularly. A backup is only useful when you know it can be restored.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="thực-hành-devops-healthcheck-mỗi-5-phút"&gt;Thực hành DevOps: healthcheck mỗi 5 phút
-&lt;/h2&gt;&lt;p&gt;Ví dụ script kiểm tra endpoint &lt;code&gt;/health&lt;/code&gt;, retry nhẹ rồi ghi log. Nếu endpoint vẫn lỗi, script trả exit code khác &lt;code&gt;0&lt;/code&gt; để cron log lại trạng thái lỗi.&lt;/p&gt;
+&lt;h2 id="devops-practice-healthcheck-every-five-minutes"&gt;DevOps practice: healthcheck every five minutes
+&lt;/h2&gt;&lt;p&gt;This script checks a &lt;code&gt;/health&lt;/code&gt; endpoint, retries a few times, and writes logs. If the endpoint still fails, the script exits with a non-zero code so the failure appears in logs.&lt;/p&gt;
 &lt;p&gt;File &lt;code&gt;/opt/scripts/check-health.sh&lt;/code&gt;:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -481,11 +481,11 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-gdscript3" data-lang="gdscript3"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;*/&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;HEALTH_URL&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="n"&gt;https&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="o"&gt;//&lt;/span&gt;&lt;span class="n"&gt;example&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;com&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;health&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;opt&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;scripts&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;check&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;health&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sh&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="k"&gt;var&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nb"&gt;log&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;check&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;health&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;log&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&amp;amp;&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Inline environment variable như trên phù hợp với giá trị không nhạy cảm. Nếu cần token hoặc header bí mật, hãy load từ file quyền hạn chặt chẽ hoặc secret manager thay vì đặt thẳng trong crontab.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;An inline environment variable is fine for non-sensitive values. If you need a token or secret header, load it from a tightly permissioned file or a secret manager instead of putting it directly in crontab.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="tránh-job-chạy-chồng-lên-nhau"&gt;Tránh job chạy chồng lên nhau
-&lt;/h2&gt;&lt;p&gt;Nếu một job chạy lâu hơn chu kỳ cron, lần chạy mới có thể bắt đầu khi lần cũ chưa xong. Điều này nguy hiểm với backup, cleanup hoặc deploy.&lt;/p&gt;
-&lt;p&gt;Một cách phổ biến là dùng &lt;code&gt;flock&lt;/code&gt;:&lt;/p&gt;
+&lt;h2 id="avoid-overlapping-jobs"&gt;Avoid overlapping jobs
+&lt;/h2&gt;&lt;p&gt;If a job runs longer than its schedule interval, the next run can start before the previous run finishes. This is risky for backups, cleanup tasks, and deployments.&lt;/p&gt;
+&lt;p&gt;A common solution is &lt;code&gt;flock&lt;/code&gt;:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -494,7 +494,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-gdscript3" data-lang="gdscript3"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;*/&lt;/span&gt;&lt;span class="mi"&gt;5&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;flock&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;tmp&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;check&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;health&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;lock&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;opt&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;scripts&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;check&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;health&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sh&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="k"&gt;var&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nb"&gt;log&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;check&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;health&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;log&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&amp;amp;&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;code&gt;flock -n&lt;/code&gt; sẽ không chờ lock. Nếu job cũ còn chạy, job mới thoát ngay. Với backup:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;flock -n&lt;/code&gt; does not wait for the lock. If the previous job is still running, the new one exits immediately. For backup:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -503,62 +503,62 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-gdscript3" data-lang="gdscript3"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="mi"&gt;30&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="o"&gt;*&lt;/span&gt; &lt;span class="n"&gt;flock&lt;/span&gt; &lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;n&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;tmp&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;backup&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;db&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;lock&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;opt&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;scripts&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;backup&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;db&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;sh&lt;/span&gt; &lt;span class="o"&gt;&amp;gt;&amp;gt;&lt;/span&gt; &lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="k"&gt;var&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="nb"&gt;log&lt;/span&gt;&lt;span class="o"&gt;/&lt;/span&gt;&lt;span class="n"&gt;backup&lt;/span&gt;&lt;span class="o"&gt;-&lt;/span&gt;&lt;span class="n"&gt;db&lt;/span&gt;&lt;span class="o"&gt;.&lt;/span&gt;&lt;span class="n"&gt;log&lt;/span&gt; &lt;span class="mi"&gt;2&lt;/span&gt;&lt;span class="o"&gt;&amp;gt;&amp;amp;&lt;/span&gt;&lt;span class="mi"&gt;1&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Không phải hệ thống nào cũng cài sẵn &lt;code&gt;flock&lt;/code&gt;, nhưng trên nhiều distro Linux nó nằm trong gói &lt;code&gt;util-linux&lt;/code&gt;. Nếu môi trường của bạn không có &lt;code&gt;flock&lt;/code&gt;, cần dùng cơ chế lock khác và xử lý stale lock cẩn thận.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Not every system has &lt;code&gt;flock&lt;/code&gt; installed, but on many Linux distributions it comes from &lt;code&gt;util-linux&lt;/code&gt;. If your environment does not have it, use another locking mechanism and handle stale locks carefully.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="sai-sót-thường-gặp"&gt;Sai sót thường gặp
+&lt;h2 id="common-mistakes"&gt;Common mistakes
 &lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Quên redirect log:&lt;/strong&gt; Job lỗi nhưng không có output để debug.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Phụ thuộc vào working directory:&lt;/strong&gt; Cron không đảm bảo chạy trong thư mục project.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Thiếu &lt;code&gt;PATH&lt;/code&gt;:&lt;/strong&gt; Command như &lt;code&gt;docker&lt;/code&gt;, &lt;code&gt;kubectl&lt;/code&gt;, &lt;code&gt;node&lt;/code&gt;, &lt;code&gt;python&lt;/code&gt; có thể không tìm thấy.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Dùng path tương đối:&lt;/strong&gt; File config, log, backup nên dùng path tuyệt đối.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Không kiểm soát job chạy chồng:&lt;/strong&gt; Backup/cleanup có thể chạy đồng thời và gây hỏng dữ liệu.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Đặt secret trực tiếp trong crontab:&lt;/strong&gt; Khó quản lý quyền và audit.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Không test command trước khi lưu crontab:&lt;/strong&gt; Nên chạy script bằng đúng user sẽ chạy cron.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Forgetting log redirection:&lt;/strong&gt; The job fails but you have no output to debug.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Depending on the working directory:&lt;/strong&gt; Cron does not guarantee your project directory.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Missing &lt;code&gt;PATH&lt;/code&gt;:&lt;/strong&gt; Commands such as &lt;code&gt;docker&lt;/code&gt;, &lt;code&gt;kubectl&lt;/code&gt;, &lt;code&gt;node&lt;/code&gt;, or &lt;code&gt;python&lt;/code&gt; may not be found.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Using relative paths:&lt;/strong&gt; Config, log, and backup files should use absolute paths.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Allowing overlapping runs:&lt;/strong&gt; Backup or cleanup jobs may run concurrently and damage data.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Putting secrets directly in crontab:&lt;/strong&gt; This is hard to manage, audit, and protect.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Not testing the command before saving crontab:&lt;/strong&gt; Run the script as the same user that cron will use.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="ghi-chú-triển-khai"&gt;Ghi chú triển khai
+&lt;h2 id="implementation-notes"&gt;Implementation notes
 &lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Khi áp dụng vào dự án của bạn&lt;/strong&gt;, hãy chuẩn hóa mỗi cron job theo checklist nhỏ:
+&lt;li&gt;&lt;strong&gt;When applying this to your project&lt;/strong&gt;, standardize each cron job with a small checklist:
 &lt;ul&gt;
-&lt;li&gt;Script có shebang, &lt;code&gt;set -euo pipefail&lt;/code&gt; và path tuyệt đối.&lt;/li&gt;
-&lt;li&gt;Crontab có comment mô tả mục đích job.&lt;/li&gt;
-&lt;li&gt;Output được redirect vào log hoặc gửi về hệ thống logging.&lt;/li&gt;
-&lt;li&gt;Job dài có lock để tránh chạy chồng.&lt;/li&gt;
-&lt;li&gt;Secret nằm trong nơi phù hợp, không hardcode trong script public.&lt;/li&gt;
+&lt;li&gt;The script has a shebang, &lt;code&gt;set -euo pipefail&lt;/code&gt;, and absolute paths.&lt;/li&gt;
+&lt;li&gt;The crontab includes a comment explaining the job.&lt;/li&gt;
+&lt;li&gt;Output is redirected to a log file or centralized logging system.&lt;/li&gt;
+&lt;li&gt;Long-running jobs use a lock to avoid overlap.&lt;/li&gt;
+&lt;li&gt;Secrets live in an appropriate place, not hardcoded in public scripts.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Best practices:&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;Test script bằng tay với đúng user: &lt;code&gt;sudo -u &amp;lt;app-user&amp;gt; /opt/scripts/job.sh&lt;/code&gt;.&lt;/li&gt;
-&lt;li&gt;Ghi timestamp trong log để dễ đối chiếu sự cố.&lt;/li&gt;
-&lt;li&gt;Đặt &lt;code&gt;PATH&lt;/code&gt; rõ ràng trong script hoặc crontab.&lt;/li&gt;
-&lt;li&gt;Dùng &lt;code&gt;flock&lt;/code&gt; cho job có thể chạy lâu.&lt;/li&gt;
-&lt;li&gt;Theo dõi dung lượng log/backup bằng &lt;code&gt;logrotate&lt;/code&gt; hoặc retention policy.&lt;/li&gt;
+&lt;li&gt;Test the script manually as the correct user: &lt;code&gt;sudo -u &amp;lt;app-user&amp;gt; /opt/scripts/job.sh&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Include timestamps in logs for incident analysis.&lt;/li&gt;
+&lt;li&gt;Define &lt;code&gt;PATH&lt;/code&gt; clearly in the script or crontab.&lt;/li&gt;
+&lt;li&gt;Use &lt;code&gt;flock&lt;/code&gt; for jobs that may run longer than expected.&lt;/li&gt;
+&lt;li&gt;Watch log and backup size with &lt;code&gt;logrotate&lt;/code&gt; or a retention policy.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Troubleshooting:&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;Job không chạy? → Kiểm tra &lt;code&gt;crontab -l&lt;/code&gt;, cú pháp lịch, timezone và log cron.&lt;/li&gt;
-&lt;li&gt;Job chạy nhưng command lỗi? → Kiểm tra file log riêng của script.&lt;/li&gt;
-&lt;li&gt;Chạy tay đúng nhưng cron sai? → Kiểm tra &lt;code&gt;PATH&lt;/code&gt;, working directory, permission và biến môi trường.&lt;/li&gt;
+&lt;li&gt;Job not running? → Check &lt;code&gt;crontab -l&lt;/code&gt;, schedule syntax, timezone, and cron logs.&lt;/li&gt;
+&lt;li&gt;Job runs but the command fails? → Check the script&amp;rsquo;s own log file.&lt;/li&gt;
+&lt;li&gt;Works manually but fails in cron? → Check &lt;code&gt;PATH&lt;/code&gt;, working directory, permissions, and environment variables.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="lời-kết"&gt;Lời kết
-&lt;/h2&gt;&lt;p&gt;Cron giúp Bash script trở thành một phần của lịch vận hành tự động: backup hằng đêm, healthcheck định kỳ, cleanup log hoặc tạo report. Nhưng để cron job đáng tin cậy, bạn cần viết script tự chủ về môi trường, dùng path tuyệt đối, ghi log rõ ràng và tránh chạy chồng khi job có thể kéo dài.&lt;/p&gt;
-&lt;p&gt;Ở bài tiếp theo, chúng ta sẽ đi vào &lt;strong&gt;debug script Bash&lt;/strong&gt;: &lt;code&gt;bash -x&lt;/code&gt;, &lt;code&gt;bash -n&lt;/code&gt;, &lt;code&gt;set -x&lt;/code&gt;, &lt;code&gt;set -e&lt;/code&gt;, &lt;code&gt;set -u&lt;/code&gt;, &lt;code&gt;pipefail&lt;/code&gt;, &lt;code&gt;trap ERR&lt;/code&gt;, &lt;code&gt;PS4&lt;/code&gt; và &lt;code&gt;shellcheck&lt;/code&gt; để tìm lỗi nhanh hơn.&lt;/p&gt;
+&lt;h2 id="conclusion"&gt;Conclusion
+&lt;/h2&gt;&lt;p&gt;Cron turns Bash scripts into scheduled operational automation: nightly backups, periodic health checks, log cleanup, and reports. To make cron jobs reliable, write scripts that control their own environment, use absolute paths, log clearly, and prevent overlapping runs when jobs may take longer than expected.&lt;/p&gt;
+&lt;p&gt;In the next article, we will debug Bash scripts with &lt;code&gt;bash -x&lt;/code&gt;, &lt;code&gt;bash -n&lt;/code&gt;, &lt;code&gt;set -x&lt;/code&gt;, &lt;code&gt;set -e&lt;/code&gt;, &lt;code&gt;set -u&lt;/code&gt;, &lt;code&gt;pipefail&lt;/code&gt;, &lt;code&gt;trap ERR&lt;/code&gt;, &lt;code&gt;PS4&lt;/code&gt;, and &lt;code&gt;shellcheck&lt;/code&gt; so problems become easier to find.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="tài-liệu-tham-khảo"&gt;Tài liệu tham khảo
+&lt;h2 id="references"&gt;References
 &lt;/h2&gt;&lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://man7.org/linux/man-pages/man5/crontab.5.html" target="_blank" rel="noopener"
-&gt;man7.org — crontab(5)&lt;/a&gt; — Tham khảo cú pháp crontab, 5 trường thời gian và các biến môi trường trong cron.&lt;/li&gt;
+&gt;man7.org — crontab(5)&lt;/a&gt; — crontab syntax, the five time fields, and cron environment variables.&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://man7.org/linux/man-pages/man8/cron.8.html" target="_blank" rel="noopener"
-&gt;man7.org — cron(8)&lt;/a&gt; — Mô tả cron daemon và cách cron xử lý lịch chạy.&lt;/li&gt;
+&gt;man7.org — cron(8)&lt;/a&gt; — cron daemon behavior and schedule processing.&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://man7.org/linux/man-pages/man1/flock.1.html" target="_blank" rel="noopener"
-&gt;man7.org — flock(1)&lt;/a&gt; — Tham khảo &lt;code&gt;flock&lt;/code&gt; để tránh job chạy chồng.&lt;/li&gt;
+&gt;man7.org — flock(1)&lt;/a&gt; — using &lt;code&gt;flock&lt;/code&gt; to avoid overlapping jobs.&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.postgresql.org/docs/current/app-pgdump.html" target="_blank" rel="noopener"
-&gt;PostgreSQL Documentation — pg_dump&lt;/a&gt; — Tài liệu chính thức về &lt;code&gt;pg_dump&lt;/code&gt; dùng trong ví dụ backup.&lt;/li&gt;
+&gt;PostgreSQL Documentation — pg_dump&lt;/a&gt; — official documentation for &lt;code&gt;pg_dump&lt;/code&gt; used in the backup example.&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://curl.se/docs/manpage.html" target="_blank" rel="noopener"
-&gt;curl Documentation&lt;/a&gt; — Tham khảo &lt;code&gt;--fail&lt;/code&gt;, &lt;code&gt;--silent&lt;/code&gt;, &lt;code&gt;--show-error&lt;/code&gt;, &lt;code&gt;--max-time&lt;/code&gt; dùng trong ví dụ healthcheck.&lt;/li&gt;
+&gt;curl Documentation&lt;/a&gt; — reference for &lt;code&gt;--fail&lt;/code&gt;, &lt;code&gt;--silent&lt;/code&gt;, &lt;code&gt;--show-error&lt;/code&gt;, and &lt;code&gt;--max-time&lt;/code&gt; used in the healthcheck example.&lt;/li&gt;
 &lt;/ul&gt;</description></item></channel></rss>

@@ -1,25 +1,431 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Installation Guides on Hoàng Dương</title><link>https://tech.nguuyen.io.vn/categories/installation-guides/</link><description>Recent content in Installation Guides on Hoàng Dương</description><generator>Hugo -- gohugo.io</generator><language>vi</language><lastBuildDate>Sun, 30 Nov 2025 23:55:00 +0700</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/categories/installation-guides/index.xml" rel="self" type="application/rss+xml"/><item><title>Cách cài đặt Docker trên Ubuntu</title><link>https://tech.nguuyen.io.vn/posts/installation-guides/setup-docker-on-ubuntu/</link><pubDate>Sun, 30 Nov 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/installation-guides/setup-docker-on-ubuntu/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/installation-guides/docker-installation-ubuntu.jpg" alt="Featured image of post Cách cài đặt Docker trên Ubuntu" /&gt;&lt;h2 id="giới-thiệu-về-docker"&gt;Giới thiệu về Docker
-&lt;/h2&gt;&lt;p&gt;Docker là một nền tảng phổ biến trong DevOps để triển khai ứng dụng bằng &lt;strong&gt;container&lt;/strong&gt;. Container cho phép bạn đóng gói ứng dụng cùng với tất cả các dependencies và cấu hình cần thiết, giúp ứng dụng chạy nhất quán trên mọi môi trường từ development đến production.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Lợi ích của Docker:&lt;/strong&gt;&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Installation Guides on Hoang Duong</title><link>https://tech.nguuyen.io.vn/categories/installation-guides/</link><description>Recent content in Installation Guides on Hoang Duong</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sun, 12 Apr 2026 00:00:00 +0700</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/categories/installation-guides/index.xml" rel="self" type="application/rss+xml"/><item><title>Install Docker with a Bash Script – One Command Setup</title><link>https://tech.nguuyen.io.vn/posts/docker/install-docker-bash-script/</link><pubDate>Sun, 12 Apr 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/docker/install-docker-bash-script/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/installation-guides/docker-installation-ubuntu.webp" alt="Featured image of post Install Docker with a Bash Script – One Command Setup" /&gt;&lt;h2 id="why-use-a-bash-script-to-install-docker"&gt;Why Use a Bash Script to Install Docker?
+&lt;/h2&gt;&lt;p&gt;Installing Docker manually works fine for a single server, but when you need to set up &lt;strong&gt;multiple machines&lt;/strong&gt; or want a &lt;strong&gt;repeatable, error-free process&lt;/strong&gt;, a bash script is the way to go.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Benefits of scripted installation:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;⚡ &lt;strong&gt;Tính nhất quán&lt;/strong&gt;: Ứng dụng chạy giống nhau trên mọi môi trường&lt;/li&gt;
-&lt;li&gt;🚀 &lt;strong&gt;Tốc độ&lt;/strong&gt;: Khởi động container nhanh hơn so với virtual machine&lt;/li&gt;
-&lt;li&gt;📦 &lt;strong&gt;Đóng gói&lt;/strong&gt;: Dễ dàng chia sẻ và triển khai ứng dụng&lt;/li&gt;
-&lt;li&gt;🔄 &lt;strong&gt;Scalability&lt;/strong&gt;: Dễ dàng mở rộng và quản lý nhiều container&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;Bài viết này hướng dẫn bạn cách cài đặt Docker trên Ubuntu 20.04 và 22.04 một cách đơn giản và hiệu quả, sử dụng repository chính thức của Docker để đảm bảo bạn luôn có phiên bản mới nhất và ổn định.&lt;/p&gt;
-&lt;hr&gt;
-&lt;h2 id="yêu-cầu-trước-khi-cài-đặt"&gt;Yêu cầu trước khi cài đặt
-&lt;/h2&gt;&lt;p&gt;Trước khi bắt đầu, hãy đảm bảo bạn có:&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;🖥 &lt;strong&gt;Máy chủ Ubuntu 20.04 hoặc 22.04&lt;/strong&gt; đã được cài đặt&lt;/li&gt;
-&lt;li&gt;🔐 &lt;strong&gt;Quyền sudo&lt;/strong&gt; để thực thi các lệnh quản trị&lt;/li&gt;
-&lt;li&gt;🌐 &lt;strong&gt;Kết nối internet&lt;/strong&gt; để tải các gói cài đặt&lt;/li&gt;
-&lt;li&gt;⏱ &lt;strong&gt;Thời gian&lt;/strong&gt;: Quá trình cài đặt mất khoảng 5-10 phút&lt;/li&gt;
+&lt;li&gt;⚡ &lt;strong&gt;Speed&lt;/strong&gt;: Install Docker in one command instead of running multiple steps&lt;/li&gt;
+&lt;li&gt;🔄 &lt;strong&gt;Consistency&lt;/strong&gt;: Every server gets the exact same setup&lt;/li&gt;
+&lt;li&gt;🚀 &lt;strong&gt;Automation&lt;/strong&gt;: Perfect for provisioning new servers in CI/CD pipelines&lt;/li&gt;
+&lt;li&gt;📋 &lt;strong&gt;Documentation&lt;/strong&gt;: The script itself serves as documentation of your setup process&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="cập-nhật-hệ-thống"&gt;Cập nhật hệ thống
-&lt;/h2&gt;&lt;p&gt;Trước khi cài đặt Docker, hãy đảm bảo hệ thống được cập nhật đầy đủ. Điều này giúp đảm bảo bạn có các bản vá bảo mật mới nhất và các gói phụ thuộc cần thiết.&lt;/p&gt;
+&lt;h2 id="prerequisites"&gt;Prerequisites
+&lt;/h2&gt;&lt;p&gt;Before running the script, make sure you have:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;🖥 &lt;strong&gt;Ubuntu 20.04, 22.04, or 24.04&lt;/strong&gt; server&lt;/li&gt;
+&lt;li&gt;🔐 &lt;strong&gt;Sudo privileges&lt;/strong&gt; to execute administrative commands&lt;/li&gt;
+&lt;li&gt;🌐 &lt;strong&gt;Internet connection&lt;/strong&gt; to download packages&lt;/li&gt;
+&lt;li&gt;⏱ &lt;strong&gt;Time&lt;/strong&gt;: The script takes approximately 2-5 minutes to complete&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="the-installation-script"&gt;The Installation Script
+&lt;/h2&gt;&lt;p&gt;Below is a complete bash script that handles the entire Docker installation process, including cleanup of old versions, repository setup, installation, and user permission configuration.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Create the script file:&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;nano install-docker.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Paste the following content:&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;span class="lnt"&gt;15
+&lt;/span&gt;&lt;span class="lnt"&gt;16
+&lt;/span&gt;&lt;span class="lnt"&gt;17
+&lt;/span&gt;&lt;span class="lnt"&gt;18
+&lt;/span&gt;&lt;span class="lnt"&gt;19
+&lt;/span&gt;&lt;span class="lnt"&gt;20
+&lt;/span&gt;&lt;span class="lnt"&gt;21
+&lt;/span&gt;&lt;span class="lnt"&gt;22
+&lt;/span&gt;&lt;span class="lnt"&gt;23
+&lt;/span&gt;&lt;span class="lnt"&gt;24
+&lt;/span&gt;&lt;span class="lnt"&gt;25
+&lt;/span&gt;&lt;span class="lnt"&gt;26
+&lt;/span&gt;&lt;span class="lnt"&gt;27
+&lt;/span&gt;&lt;span class="lnt"&gt;28
+&lt;/span&gt;&lt;span class="lnt"&gt;29
+&lt;/span&gt;&lt;span class="lnt"&gt;30
+&lt;/span&gt;&lt;span class="lnt"&gt;31
+&lt;/span&gt;&lt;span class="lnt"&gt;32
+&lt;/span&gt;&lt;span class="lnt"&gt;33
+&lt;/span&gt;&lt;span class="lnt"&gt;34
+&lt;/span&gt;&lt;span class="lnt"&gt;35
+&lt;/span&gt;&lt;span class="lnt"&gt;36
+&lt;/span&gt;&lt;span class="lnt"&gt;37
+&lt;/span&gt;&lt;span class="lnt"&gt;38
+&lt;/span&gt;&lt;span class="lnt"&gt;39
+&lt;/span&gt;&lt;span class="lnt"&gt;40
+&lt;/span&gt;&lt;span class="lnt"&gt;41
+&lt;/span&gt;&lt;span class="lnt"&gt;42
+&lt;/span&gt;&lt;span class="lnt"&gt;43
+&lt;/span&gt;&lt;span class="lnt"&gt;44
+&lt;/span&gt;&lt;span class="lnt"&gt;45
+&lt;/span&gt;&lt;span class="lnt"&gt;46
+&lt;/span&gt;&lt;span class="lnt"&gt;47
+&lt;/span&gt;&lt;span class="lnt"&gt;48
+&lt;/span&gt;&lt;span class="lnt"&gt;49
+&lt;/span&gt;&lt;span class="lnt"&gt;50
+&lt;/span&gt;&lt;span class="lnt"&gt;51
+&lt;/span&gt;&lt;span class="lnt"&gt;52
+&lt;/span&gt;&lt;span class="lnt"&gt;53
+&lt;/span&gt;&lt;span class="lnt"&gt;54
+&lt;/span&gt;&lt;span class="lnt"&gt;55
+&lt;/span&gt;&lt;span class="lnt"&gt;56
+&lt;/span&gt;&lt;span class="lnt"&gt;57
+&lt;/span&gt;&lt;span class="lnt"&gt;58
+&lt;/span&gt;&lt;span class="lnt"&gt;59
+&lt;/span&gt;&lt;span class="lnt"&gt;60
+&lt;/span&gt;&lt;span class="lnt"&gt;61
+&lt;/span&gt;&lt;span class="lnt"&gt;62
+&lt;/span&gt;&lt;span class="lnt"&gt;63
+&lt;/span&gt;&lt;span class="lnt"&gt;64
+&lt;/span&gt;&lt;span class="lnt"&gt;65
+&lt;/span&gt;&lt;span class="lnt"&gt;66
+&lt;/span&gt;&lt;span class="lnt"&gt;67
+&lt;/span&gt;&lt;span class="lnt"&gt;68
+&lt;/span&gt;&lt;span class="lnt"&gt;69
+&lt;/span&gt;&lt;span class="lnt"&gt;70
+&lt;/span&gt;&lt;span class="lnt"&gt;71
+&lt;/span&gt;&lt;span class="lnt"&gt;72
+&lt;/span&gt;&lt;span class="lnt"&gt;73
+&lt;/span&gt;&lt;span class="lnt"&gt;74
+&lt;/span&gt;&lt;span class="lnt"&gt;75
+&lt;/span&gt;&lt;span class="lnt"&gt;76
+&lt;/span&gt;&lt;span class="lnt"&gt;77
+&lt;/span&gt;&lt;span class="lnt"&gt;78
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="cp"&gt;#!/bin/bash
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;set&lt;/span&gt; -e
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;GREEN&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;\033[0;32m&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;RED&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;\033[0;31m&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;YELLOW&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;\033[1;33m&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s1"&gt;&amp;#39;\033[0m&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;GREEN&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;========================================&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;GREEN&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; Docker Installation Script for Ubuntu &lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;GREEN&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;========================================&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Check if running as root or with sudo&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$EUID&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; -ne &lt;span class="m"&gt;0&lt;/span&gt; &lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;RED&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;[ERROR] Please run this script with sudo or as root.&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;exit&lt;/span&gt; &lt;span class="m"&gt;1&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Detect Ubuntu version&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;UBUNTU_VERSION&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;lsb_release -cs&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;YELLOW&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;[INFO] Detected Ubuntu version: &lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;UBUNTU_VERSION&lt;/span&gt;&lt;span class="si"&gt;}${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Step 1: Remove old Docker versions&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;YELLOW&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;[1/6] Removing old Docker versions (if any)...&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;apt-get remove -y docker docker-engine docker.io containerd runc 2&amp;gt;/dev/null &lt;span class="o"&gt;||&lt;/span&gt; &lt;span class="nb"&gt;true&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Step 2: Update system and install dependencies&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;YELLOW&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;[2/6] Updating system and installing dependencies...&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;apt-get update -y
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;apt-get install -y &lt;span class="se"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; apt-transport-https &lt;span class="se"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ca-certificates &lt;span class="se"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; curl &lt;span class="se"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; gnupg &lt;span class="se"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; lsb-release &lt;span class="se"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; software-properties-common
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Step 3: Add Docker&amp;#39;s official GPG key&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;YELLOW&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;[3/6] Adding Docker GPG key...&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;install -m &lt;span class="m"&gt;0755&lt;/span&gt; -d /etc/apt/keyrings
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl -fsSL https://download.docker.com/linux/ubuntu/gpg &lt;span class="p"&gt;|&lt;/span&gt; gpg --dearmor -o /etc/apt/keyrings/docker.gpg
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;chmod a+r /etc/apt/keyrings/docker.gpg
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Step 4: Add Docker repository&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;YELLOW&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;[4/6] Adding Docker repository...&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="se"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="s2"&gt;&amp;#34;deb [arch=&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;dpkg --print-architecture&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt; signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/ubuntu \
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s2"&gt; &lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;UBUNTU_VERSION&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; stable&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; tee /etc/apt/sources.list.d/docker.list &amp;gt; /dev/null
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Step 5: Install Docker Engine&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;YELLOW&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;[5/6] Installing Docker Engine...&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;apt-get update -y
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;apt-get install -y docker-ce docker-ce-cli containerd.io docker-buildx-plugin docker-compose-plugin
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Step 6: Enable and start Docker&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;YELLOW&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;[6/6] Enabling and starting Docker service...&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; docker
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;systemctl start docker
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Add current user to docker group (if run via sudo)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;if&lt;/span&gt; &lt;span class="o"&gt;[&lt;/span&gt; -n &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$SUDO_USER&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; &lt;span class="o"&gt;]&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="k"&gt;then&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; usermod -aG docker &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$SUDO_USER&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;GREEN&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;[INFO] User &amp;#39;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;SUDO_USER&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#39; added to the docker group.&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;YELLOW&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;[NOTE] Log out and back in for group changes to take effect.&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;fi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Verify installation&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;GREEN&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;========================================&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;GREEN&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; Installation Complete! 🎉 &lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;GREEN&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;========================================&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker --version
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker compose version
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;GREEN&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;[SUCCESS] Docker is installed and running.&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;YELLOW&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;[TIP] Run &amp;#39;docker run hello-world&amp;#39; to verify.&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="how-to-use-the-script"&gt;How to Use the Script
+&lt;/h2&gt;&lt;h3 id="run-directly"&gt;Run Directly
+&lt;/h3&gt;&lt;p&gt;Make the script executable and run it:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;chmod +x install-docker.sh
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo ./install-docker.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id="run-without-downloading"&gt;Run Without Downloading
+&lt;/h3&gt;&lt;p&gt;You can also run the script directly from a URL using &lt;code&gt;curl&lt;/code&gt; (useful for remote server provisioning):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl -fsSL https://your-server.com/install-docker.sh &lt;span class="p"&gt;|&lt;/span&gt; sudo bash
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;⚠ Security Note:&lt;/strong&gt; Always review scripts before piping them to &lt;code&gt;bash&lt;/code&gt;. Only use this method with scripts you trust or host yourself.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="what-the-script-does"&gt;What the Script Does
+&lt;/h2&gt;&lt;p&gt;Here&amp;rsquo;s a breakdown of each step:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Step&lt;/th&gt;
+&lt;th&gt;Action&lt;/th&gt;
+&lt;th&gt;Purpose&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;1&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Remove old Docker versions&lt;/td&gt;
+&lt;td&gt;Prevents conflicts with previous installations&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;2&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Update system &amp;amp; install dependencies&lt;/td&gt;
+&lt;td&gt;Ensures required packages are available&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;3&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Add Docker GPG key&lt;/td&gt;
+&lt;td&gt;Authenticates packages from Docker&amp;rsquo;s repository&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;4&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Add Docker repository&lt;/td&gt;
+&lt;td&gt;Configures APT to pull packages from Docker&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;5&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Install Docker Engine&lt;/td&gt;
+&lt;td&gt;Installs Docker CE, CLI, containerd, Buildx, and Compose&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;strong&gt;6&lt;/strong&gt;&lt;/td&gt;
+&lt;td&gt;Enable &amp;amp; start Docker&lt;/td&gt;
+&lt;td&gt;Ensures Docker runs now and on every boot&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;hr&gt;
+&lt;h2 id="verifying-the-installation"&gt;Verifying the Installation
+&lt;/h2&gt;&lt;p&gt;After the script completes, verify everything is working:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Check Docker version:&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker --version
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Check Docker Compose version:&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker compose version
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Run the test container:&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker run hello-world
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;If you see the &amp;ldquo;Hello from Docker!&amp;rdquo; message, the installation was successful! 🎉&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Check Docker service status:&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl status docker
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;You should see &lt;code&gt;active (running)&lt;/code&gt; in the output.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="customizing-the-script"&gt;Customizing the Script
+&lt;/h2&gt;&lt;p&gt;You can extend the script to fit your needs:&lt;/p&gt;
+&lt;h3 id="add-docker-compose-standalone"&gt;Add Docker Compose Standalone
+&lt;/h3&gt;&lt;p&gt;If you need the standalone &lt;code&gt;docker-compose&lt;/code&gt; command (v1 syntax):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Add this to the end of the script&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;COMPOSE_VERSION&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;curl -s https://api.github.com/repos/docker/compose/releases/latest &lt;span class="p"&gt;|&lt;/span&gt; grep tag_name &lt;span class="p"&gt;|&lt;/span&gt; cut -d &lt;span class="s1"&gt;&amp;#39;&amp;#34;&amp;#39;&lt;/span&gt; -f 4&lt;span class="k"&gt;)&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl -L &lt;span class="s2"&gt;&amp;#34;https://github.com/docker/compose/releases/download/&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;COMPOSE_VERSION&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;/docker-compose-&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;uname -s&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;-&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;uname -m&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt; -o /usr/local/bin/docker-compose
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;chmod +x /usr/local/bin/docker-compose
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id="add-automatic-cleanup"&gt;Add Automatic Cleanup
+&lt;/h3&gt;&lt;p&gt;Add a cleanup step to remove unnecessary packages after installation:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Add this before the final success message&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;apt-get autoremove -y
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;apt-get clean
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="troubleshooting"&gt;Troubleshooting
+&lt;/h2&gt;&lt;h3 id="script-fails-with-permission-denied"&gt;Script fails with &amp;ldquo;Permission denied&amp;rdquo;
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Cause:&lt;/strong&gt; The script was not run with &lt;code&gt;sudo&lt;/code&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Solution:&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo ./install-docker.sh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id="script-fails-at-gpg-key-step"&gt;Script fails at GPG key step
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Cause:&lt;/strong&gt; Network issues or DNS resolution problems.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Solution:&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Check internet connectivity&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ping -c &lt;span class="m"&gt;3&lt;/span&gt; download.docker.com
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# If DNS fails, try using Google&amp;#39;s DNS&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;nameserver 8.8.8.8&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; sudo tee /etc/resolv.conf
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;h3 id="docker-commands-require-sudo-after-script"&gt;Docker commands require sudo after script
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Cause:&lt;/strong&gt; Group changes haven&amp;rsquo;t taken effect yet.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Solution:&lt;/strong&gt;&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Log out and log back in, or run:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;newgrp docker
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Verify group membership&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;groups
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="conclusion"&gt;Conclusion
+&lt;/h2&gt;&lt;p&gt;Using a bash script to install Docker saves time and eliminates manual errors. Whether you&amp;rsquo;re setting up a single development machine or provisioning a fleet of production servers, this script provides a reliable and repeatable process. 🚀&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Key takeaways:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;📜 &lt;strong&gt;One command&lt;/strong&gt; to install Docker completely&lt;/li&gt;
+&lt;li&gt;🔄 &lt;strong&gt;Idempotent&lt;/strong&gt; — safe to run multiple times&lt;/li&gt;
+&lt;li&gt;🛠 &lt;strong&gt;Customizable&lt;/strong&gt; — extend the script for your specific needs&lt;/li&gt;
+&lt;li&gt;🚀 &lt;strong&gt;Production-ready&lt;/strong&gt; — includes Docker Compose plugin and Buildx&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;strong&gt;📖 References:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;a class="link" href="https://docs.docker.com/engine/install/ubuntu/" target="_blank" rel="noopener"
+&gt;Official Docker Installation Guide&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://docs.docker.com/engine/install/linux-postinstall/" target="_blank" rel="noopener"
+&gt;Docker Post-Installation Steps&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a class="link" href="https://docs.docker.com/compose/install/linux/" target="_blank" rel="noopener"
+&gt;Docker Compose Plugin&lt;/a&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Happy automating! 🚀😊&lt;/p&gt;</description></item><item><title>How to Install Docker on Ubuntu</title><link>https://tech.nguuyen.io.vn/posts/installation-guides/setup-docker-on-ubuntu/</link><pubDate>Sun, 30 Nov 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/installation-guides/setup-docker-on-ubuntu/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/installation-guides/docker-installation-ubuntu.jpg" alt="Featured image of post How to Install Docker on Ubuntu" /&gt;&lt;h2 id="introduction-to-docker"&gt;Introduction to Docker
+&lt;/h2&gt;&lt;p&gt;Docker is a popular platform in DevOps for deploying applications using &lt;strong&gt;containers&lt;/strong&gt;. Containers allow you to package applications together with all their dependencies and necessary configurations, ensuring consistent execution across all environments from development to production.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Benefits of Docker:&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;⚡ &lt;strong&gt;Consistency&lt;/strong&gt;: Applications run identically across all environments&lt;/li&gt;
+&lt;li&gt;🚀 &lt;strong&gt;Speed&lt;/strong&gt;: Containers start faster than virtual machines&lt;/li&gt;
+&lt;li&gt;📦 &lt;strong&gt;Packaging&lt;/strong&gt;: Easy to share and deploy applications&lt;/li&gt;
+&lt;li&gt;🔄 &lt;strong&gt;Scalability&lt;/strong&gt;: Easy to scale and manage multiple containers&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;This guide walks you through installing Docker on Ubuntu 20.04 and 22.04 in a straightforward and efficient manner, using Docker&amp;rsquo;s official repository to ensure you always have the latest stable version.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="prerequisites"&gt;Prerequisites
+&lt;/h2&gt;&lt;p&gt;Before you begin, make sure you have:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;🖥 &lt;strong&gt;Ubuntu 20.04 or 22.04 server&lt;/strong&gt; installed&lt;/li&gt;
+&lt;li&gt;🔐 &lt;strong&gt;Sudo privileges&lt;/strong&gt; to execute administrative commands&lt;/li&gt;
+&lt;li&gt;🌐 &lt;strong&gt;Internet connection&lt;/strong&gt; to download packages&lt;/li&gt;
+&lt;li&gt;⏱ &lt;strong&gt;Time&lt;/strong&gt;: Installation takes approximately 5-10 minutes&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="update-the-system"&gt;Update the System
+&lt;/h2&gt;&lt;p&gt;Before installing Docker, ensure your system is fully updated. This guarantees you have the latest security patches and necessary dependencies.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -28,21 +434,21 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt update &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo apt upgrade -y
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Lưu ý:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Notes:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Lệnh &lt;code&gt;apt update&lt;/code&gt; cập nhật danh sách các gói có sẵn từ repository&lt;/li&gt;
-&lt;li&gt;Lệnh &lt;code&gt;apt upgrade -y&lt;/code&gt; tự động cài đặt các bản cập nhật mà không cần xác nhận&lt;/li&gt;
-&lt;li&gt;Quá trình này có thể mất vài phút tùy thuộc vào số lượng gói cần cập nhật&lt;/li&gt;
+&lt;li&gt;The &lt;code&gt;apt update&lt;/code&gt; command updates the list of available packages from repositories&lt;/li&gt;
+&lt;li&gt;The &lt;code&gt;apt upgrade -y&lt;/code&gt; command automatically installs updates without prompting&lt;/li&gt;
+&lt;li&gt;This process may take several minutes depending on the number of packages to update&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="cài-đặt-docker"&gt;Cài đặt Docker
-&lt;/h2&gt;&lt;h3 id="cài-đặt-các-gói-phụ-thuộc"&gt;Cài đặt các gói phụ thuộc
-&lt;/h3&gt;&lt;p&gt;Các gói này cần thiết để Docker có thể tải và xác thực các gói từ repository chính thức:&lt;/p&gt;
+&lt;h2 id="install-docker"&gt;Install Docker
+&lt;/h2&gt;&lt;h3 id="install-required-dependencies"&gt;Install Required Dependencies
+&lt;/h3&gt;&lt;p&gt;These packages are necessary for Docker to download and authenticate packages from the official repository:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;apt-transport-https&lt;/code&gt;: Cho phép APT sử dụng giao thức HTTPS&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;ca-certificates&lt;/code&gt;: Cung cấp chứng chỉ SSL/TLS để xác thực kết nối bảo mật&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;curl&lt;/code&gt;: Công cụ để tải xuống các file từ internet&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;software-properties-common&lt;/code&gt;: Cung cấp các tiện ích để quản lý repository&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;apt-transport-https&lt;/code&gt;: Allows APT to use HTTPS protocol&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ca-certificates&lt;/code&gt;: Provides SSL/TLS certificates for secure connection authentication&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;curl&lt;/code&gt;: Tool to download files from the internet&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;software-properties-common&lt;/code&gt;: Provides utilities for managing repositories&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -52,10 +458,10 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="thêm-repository-docker-chính-thức"&gt;Thêm repository Docker chính thức
-&lt;/h3&gt;&lt;p&gt;Để cài đặt Docker từ nguồn chính thức, chúng ta cần thêm GPG key và repository của Docker vào hệ thống. Điều này đảm bảo bạn nhận được các bản cập nhật chính thức và bảo mật từ Docker.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Bước 1: Thêm GPG key của Docker&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;GPG key được sử dụng để xác thực tính toàn vẹn của các gói Docker:&lt;/p&gt;
+&lt;/div&gt;&lt;h3 id="add-the-official-docker-repository"&gt;Add the Official Docker Repository
+&lt;/h3&gt;&lt;p&gt;To install Docker from the official source, we need to add Docker&amp;rsquo;s GPG key and repository to the system. This ensures you receive official and security updates from Docker.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Step 1: Add Docker&amp;rsquo;s GPG Key&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The GPG key is used to authenticate the integrity of Docker packages:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -64,8 +470,8 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl -fsSL https://download.docker.com/linux/ubuntu/gpg &lt;span class="p"&gt;|&lt;/span&gt; sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Bước 2: Thêm Docker repository&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;Thêm repository Docker vào danh sách nguồn của APT. Lệnh này tự động phát hiện phiên bản Ubuntu của bạn (&lt;code&gt;$(lsb_release -cs)&lt;/code&gt;) và thêm repository phù hợp:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Step 2: Add Docker Repository&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Add Docker repository to APT&amp;rsquo;s sources list. This command automatically detects your Ubuntu version (&lt;code&gt;$(lsb_release -cs)&lt;/code&gt;) and adds the appropriate repository:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -74,15 +480,15 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu &lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;lsb_release -cs&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt; stable&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; sudo tee /etc/apt/sources.list.d/docker.list &amp;gt; /dev/null
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Giải thích:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Explanation:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;arch=amd64&lt;/code&gt;: Chỉ định kiến trúc 64-bit&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;signed-by&lt;/code&gt;: Chỉ định GPG key để xác thực&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;$(lsb_release -cs)&lt;/code&gt;: Tự động lấy tên code name của Ubuntu (ví dụ: jammy cho Ubuntu 22.04)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;stable&lt;/code&gt;: Sử dụng channel ổn định (có thể dùng &lt;code&gt;test&lt;/code&gt; hoặc &lt;code&gt;nightly&lt;/code&gt; cho các phiên bản thử nghiệm)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;arch=amd64&lt;/code&gt;: Specifies 64-bit architecture&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;signed-by&lt;/code&gt;: Specifies the GPG key for authentication&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;$(lsb_release -cs)&lt;/code&gt;: Automatically retrieves Ubuntu&amp;rsquo;s code name (e.g., jammy for Ubuntu 22.04)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;stable&lt;/code&gt;: Uses the stable channel (you can use &lt;code&gt;test&lt;/code&gt; or &lt;code&gt;nightly&lt;/code&gt; for experimental versions)&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h3 id="cài-đặt-docker-engine"&gt;Cài đặt Docker Engine
-&lt;/h3&gt;&lt;p&gt;Sau khi đã thêm repository, cập nhật danh sách gói và cài đặt Docker Engine:&lt;/p&gt;
+&lt;h3 id="install-docker-engine"&gt;Install Docker Engine
+&lt;/h3&gt;&lt;p&gt;After adding the repository, update the package list and install Docker Engine:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -93,16 +499,16 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt install -y docker-ce docker-ce-cli containerd.io
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;📦 Các gói được cài đặt:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;📦 Packages Being Installed:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;docker-ce&lt;/code&gt;: Docker Community Edition - phiên bản mã nguồn mở của Docker&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;docker-ce-cli&lt;/code&gt;: Docker Command Line Interface - công cụ dòng lệnh để tương tác với Docker&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;containerd.io&lt;/code&gt;: Container runtime - công cụ quản lý vòng đời container ở mức thấp&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;docker-ce&lt;/code&gt;: Docker Community Edition - the open-source version of Docker&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;docker-ce-cli&lt;/code&gt;: Docker Command Line Interface - command-line tool to interact with Docker&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;containerd.io&lt;/code&gt;: Container runtime - low-level tool for managing container lifecycle&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;⏱ Thời gian cài đặt:&lt;/strong&gt; Quá trình này thường mất 2-5 phút tùy thuộc vào tốc độ internet của bạn.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;⏱ Installation Time:&lt;/strong&gt; This process typically takes 2-5 minutes depending on your internet speed.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="kiểm-tra-docker"&gt;Kiểm tra Docker
-&lt;/h2&gt;&lt;p&gt;Sau khi cài đặt, hãy kiểm tra xem Docker đã được khởi động và hoạt động chưa:&lt;/p&gt;
+&lt;h2 id="verify-docker"&gt;Verify Docker
+&lt;/h2&gt;&lt;p&gt;After installation, verify that Docker is running properly:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -111,8 +517,8 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl status docker
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Kết quả mong đợi:&lt;/strong&gt; Bạn sẽ thấy trạng thái &lt;code&gt;active (running)&lt;/code&gt; nếu Docker đã khởi động thành công.&lt;/p&gt;
-&lt;p&gt;Nếu Docker chưa chạy, bạn có thể khởi động và kích hoạt Docker để tự động khởi động khi hệ thống boot:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Expected Result:&lt;/strong&gt; You should see the status &lt;code&gt;active (running)&lt;/code&gt; if Docker started successfully.&lt;/p&gt;
+&lt;p&gt;If Docker isn&amp;rsquo;t running, you can start it and enable auto-start on boot:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -123,14 +529,14 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; docker
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Giải thích các lệnh:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Command Explanations:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;systemctl start docker&lt;/code&gt;: Khởi động dịch vụ Docker ngay lập tức&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;systemctl enable docker&lt;/code&gt;: Cấu hình Docker tự động khởi động khi hệ thống khởi động lại&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl start docker&lt;/code&gt;: Starts the Docker service immediately&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;systemctl enable docker&lt;/code&gt;: Configures Docker to auto-start on system boot&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="chạy-thử-docker"&gt;Chạy thử Docker
-&lt;/h2&gt;&lt;p&gt;Để xác nhận Docker đã hoạt động đúng, chạy container mẫu &lt;code&gt;hello-world&lt;/code&gt;:&lt;/p&gt;
+&lt;h2 id="test-docker"&gt;Test Docker
+&lt;/h2&gt;&lt;p&gt;To confirm Docker is working correctly, run the sample &lt;code&gt;hello-world&lt;/code&gt; container:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -139,16 +545,16 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo docker run hello-world
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Kết quả mong đợi:&lt;/strong&gt; Nếu thấy thông báo &amp;ldquo;Hello from Docker!&amp;rdquo; cùng với các thông tin về Docker, nghĩa là bạn đã cài đặt thành công! 🎉&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;🔍 Container &lt;code&gt;hello-world&lt;/code&gt; làm gì?&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Expected Result:&lt;/strong&gt; If you see the &amp;ldquo;Hello from Docker!&amp;rdquo; message along with Docker information, congratulations, installation successful! 🎉&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;🔍 What does the &lt;code&gt;hello-world&lt;/code&gt; container do?&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Container này tải xuống image &lt;code&gt;hello-world&lt;/code&gt; từ Docker Hub (nếu chưa có)&lt;/li&gt;
-&lt;li&gt;Chạy container và hiển thị thông báo chào mừng&lt;/li&gt;
-&lt;li&gt;Tự động dừng sau khi hoàn thành&lt;/li&gt;
+&lt;li&gt;Downloads the &lt;code&gt;hello-world&lt;/code&gt; image from Docker Hub (if not already present)&lt;/li&gt;
+&lt;li&gt;Runs the container and displays a welcome message&lt;/li&gt;
+&lt;li&gt;Automatically stops after completion&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="cấu-hình-quyền-cho-user"&gt;Cấu hình quyền cho user
-&lt;/h2&gt;&lt;p&gt;Mặc định, Docker yêu cầu quyền root để chạy các lệnh. Để chạy Docker không cần &lt;code&gt;sudo&lt;/code&gt;, bạn cần thêm user hiện tại vào nhóm &lt;code&gt;docker&lt;/code&gt;:&lt;/p&gt;
+&lt;h2 id="configure-user-permissions"&gt;Configure User Permissions
+&lt;/h2&gt;&lt;p&gt;By default, Docker requires root privileges to run commands. To run Docker without &lt;code&gt;sudo&lt;/code&gt;, add your current user to the &lt;code&gt;docker&lt;/code&gt; group:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -159,19 +565,19 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;newgrp docker
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Giải thích:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Explanation:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;usermod -aG docker $USER&lt;/code&gt;: Thêm user hiện tại vào nhóm &lt;code&gt;docker&lt;/code&gt; (nhóm này có quyền truy cập Docker daemon)&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;newgrp docker&lt;/code&gt;: Áp dụng thay đổi nhóm ngay lập tức mà không cần đăng xuất&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;usermod -aG docker $USER&lt;/code&gt;: Adds the current user to the &lt;code&gt;docker&lt;/code&gt; group (which has Docker daemon access privileges)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;newgrp docker&lt;/code&gt;: Applies group changes immediately without needing to log out&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;⚠ Lưu ý quan trọng:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;⚠ Important Notes:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Sau khi thực hiện lệnh này, bạn có thể cần đăng xuất và đăng nhập lại để thay đổi có hiệu lực&lt;/li&gt;
-&lt;li&gt;Hoặc bạn có thể mở terminal mới để áp dụng thay đổi&lt;/li&gt;
-&lt;li&gt;Việc thêm user vào nhóm &lt;code&gt;docker&lt;/code&gt; cho phép user đó có quyền tương đương root trên Docker daemon, vì vậy chỉ thêm những user đáng tin cậy&lt;/li&gt;
+&lt;li&gt;After executing this command, you may need to log out and log back in for changes to take effect&lt;/li&gt;
+&lt;li&gt;Alternatively, you can open a new terminal window to apply changes&lt;/li&gt;
+&lt;li&gt;Adding a user to the &lt;code&gt;docker&lt;/code&gt; group grants equivalent root privileges on the Docker daemon, so only add trusted users&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Kiểm tra quyền mới:&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;Sau khi cấu hình, thử chạy Docker không cần &lt;code&gt;sudo&lt;/code&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Verify New Permissions:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;After configuration, try running Docker without &lt;code&gt;sudo&lt;/code&gt;:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -180,11 +586,11 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker run hello-world
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Nếu lệnh chạy thành công mà không cần &lt;code&gt;sudo&lt;/code&gt;, bạn đã cấu hình đúng! ✅&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;If the command succeeds without &lt;code&gt;sudo&lt;/code&gt;, you&amp;rsquo;ve configured it correctly! ✅&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="gỡ-cài-đặt-docker-nếu-cần"&gt;Gỡ cài đặt Docker (nếu cần)
-&lt;/h2&gt;&lt;p&gt;Nếu bạn muốn gỡ cài đặt Docker hoàn toàn khỏi hệ thống, thực hiện các bước sau:&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Bước 1: Gỡ cài đặt các gói Docker&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id="uninstall-docker-if-needed"&gt;Uninstall Docker (if needed)
+&lt;/h2&gt;&lt;p&gt;If you want to completely remove Docker from your system, follow these steps:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Step 1: Remove Docker Packages&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -193,8 +599,8 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt remove -y docker-ce docker-ce-cli containerd.io
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Bước 2: Xóa dữ liệu Docker&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;Dữ liệu Docker (images, containers, volumes, networks) được lưu trong &lt;code&gt;/var/lib/docker&lt;/code&gt;. Để xóa hoàn toàn:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Step 2: Delete Docker Data&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Docker data (images, containers, volumes, networks) is stored in &lt;code&gt;/var/lib/docker&lt;/code&gt;. To remove completely:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -203,15 +609,15 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo rm -rf /var/lib/docker
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;⚠ Cảnh báo:&lt;/strong&gt; Lệnh này sẽ xóa &lt;strong&gt;TẤT CẢ&lt;/strong&gt; dữ liệu Docker bao gồm:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;⚠ Warning:&lt;/strong&gt; This command will delete &lt;strong&gt;ALL&lt;/strong&gt; Docker data including:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Tất cả images đã tải về&lt;/li&gt;
-&lt;li&gt;Tất cả containers (đang chạy và đã dừng)&lt;/li&gt;
-&lt;li&gt;Tất cả volumes và networks&lt;/li&gt;
-&lt;li&gt;Tất cả dữ liệu trong containers&lt;/li&gt;
+&lt;li&gt;All downloaded images&lt;/li&gt;
+&lt;li&gt;All containers (running and stopped)&lt;/li&gt;
+&lt;li&gt;All volumes and networks&lt;/li&gt;
+&lt;li&gt;All data within containers&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Bước 3: Xóa cấu hình Docker (tùy chọn)&lt;/strong&gt;&lt;/p&gt;
-&lt;p&gt;Nếu muốn xóa hoàn toàn mọi dấu vết của Docker:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Step 3: Remove Docker Configuration (optional)&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;To completely remove all traces of Docker:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -223,59 +629,59 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
-&lt;h2 id="các-lệnh-docker-cơ-bản"&gt;Các lệnh Docker cơ bản
-&lt;/h2&gt;&lt;p&gt;Sau khi cài đặt Docker, đây là một số lệnh cơ bản bạn nên biết:&lt;/p&gt;
+&lt;h2 id="basic-docker-commands"&gt;Basic Docker Commands
+&lt;/h2&gt;&lt;p&gt;After installation, here are some basic commands you should know:&lt;/p&gt;
 &lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
-&lt;th&gt;Lệnh&lt;/th&gt;
-&lt;th&gt;Mô tả&lt;/th&gt;
+&lt;th&gt;Command&lt;/th&gt;
+&lt;th&gt;Description&lt;/th&gt;
 &lt;/tr&gt;
 &lt;/thead&gt;
 &lt;tbody&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;docker --version&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Kiểm tra phiên bản Docker&lt;/td&gt;
+&lt;td&gt;Check Docker version&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;docker ps&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Liệt kê các container đang chạy&lt;/td&gt;
+&lt;td&gt;List running containers&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;docker ps -a&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Liệt kê tất cả containers (bao gồm đã dừng)&lt;/td&gt;
+&lt;td&gt;List all containers (including stopped)&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;docker images&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Liệt kê tất cả images&lt;/td&gt;
+&lt;td&gt;List all images&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;docker pull &amp;lt;image&amp;gt;&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Tải image từ Docker Hub&lt;/td&gt;
+&lt;td&gt;Download image from Docker Hub&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;docker run &amp;lt;image&amp;gt;&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Chạy container từ image&lt;/td&gt;
+&lt;td&gt;Run container from image&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;docker stop &amp;lt;container&amp;gt;&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Dừng container đang chạy&lt;/td&gt;
+&lt;td&gt;Stop running container&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;docker rm &amp;lt;container&amp;gt;&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Xóa container&lt;/td&gt;
+&lt;td&gt;Remove container&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;docker rmi &amp;lt;image&amp;gt;&lt;/code&gt;&lt;/td&gt;
-&lt;td&gt;Xóa image&lt;/td&gt;
+&lt;td&gt;Remove image&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;hr&gt;
 &lt;h2 id="troubleshooting"&gt;Troubleshooting
-&lt;/h2&gt;&lt;h3 id="vấn-đề-docker-daemon-không-khởi-động"&gt;Vấn đề: Docker daemon không khởi động
-&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Nguyên nhân:&lt;/strong&gt; Có thể do xung đột với các dịch vụ khác hoặc cấu hình sai.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Giải pháp:&lt;/strong&gt;&lt;/p&gt;
+&lt;/h2&gt;&lt;h3 id="issue-docker-daemon-wont-start"&gt;Issue: Docker daemon won&amp;rsquo;t start
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Cause:&lt;/strong&gt; May be due to conflicts with other services or misconfiguration.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Solution:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -285,16 +691,16 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;5
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Kiểm tra log của Docker&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Check Docker logs&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo journalctl -u docker
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Khởi động lại Docker&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Restart Docker&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl restart docker
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="vấn-đề-permission-denied-khi-chạy-docker"&gt;Vấn đề: Permission denied khi chạy Docker
-&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Nguyên nhân:&lt;/strong&gt; User chưa được thêm vào nhóm &lt;code&gt;docker&lt;/code&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Giải pháp:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;h3 id="issue-permission-denied-when-running-docker"&gt;Issue: Permission denied when running Docker
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Cause:&lt;/strong&gt; User hasn&amp;rsquo;t been added to the &lt;code&gt;docker&lt;/code&gt; group.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Solution:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -304,16 +710,16 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;5
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Thêm user vào nhóm docker&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Add user to docker group&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo usermod -aG docker &lt;span class="nv"&gt;$USER&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Đăng xuất và đăng nhập lại, hoặc chạy:&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Log out and log back in, or run:&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;newgrp docker
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="vấn-đề-không-thể-kết-nối-đến-docker-daemon"&gt;Vấn đề: Không thể kết nối đến Docker daemon
-&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Nguyên nhân:&lt;/strong&gt; Docker daemon chưa được khởi động.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Giải pháp:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;h3 id="issue-cannot-connect-to-docker-daemon"&gt;Issue: Cannot connect to Docker daemon
+&lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Cause:&lt;/strong&gt; Docker daemon hasn&amp;rsquo;t been started.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Solution:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -323,46 +729,46 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;5
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Kiểm tra trạng thái&lt;/span&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Check status&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl status docker
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Khởi động Docker&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Start Docker&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl start docker
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
-&lt;h2 id="lời-kết"&gt;Lời kết
-&lt;/h2&gt;&lt;p&gt;Vậy là chúng ta đã hoàn tất cài đặt Docker trên Ubuntu! 🎉 Giờ đây, bạn có thể bắt đầu:&lt;/p&gt;
+&lt;h2 id="conclusion"&gt;Conclusion
+&lt;/h2&gt;&lt;p&gt;Congratulations on completing Docker installation on Ubuntu! 🎉 Now you can:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🐳 &lt;strong&gt;Tạo và chạy containers&lt;/strong&gt; cho các ứng dụng của mình&lt;/li&gt;
-&lt;li&gt;📦 &lt;strong&gt;Sử dụng Docker images&lt;/strong&gt; có sẵn từ Docker Hub&lt;/li&gt;
-&lt;li&gt;🚀 &lt;strong&gt;Triển khai ứng dụng&lt;/strong&gt; một cách nhất quán và dễ dàng&lt;/li&gt;
-&lt;li&gt;🔄 &lt;strong&gt;Quản lý môi trường development&lt;/strong&gt; và production hiệu quả hơn&lt;/li&gt;
+&lt;li&gt;🐳 &lt;strong&gt;Create and run containers&lt;/strong&gt; for your applications&lt;/li&gt;
+&lt;li&gt;📦 &lt;strong&gt;Use Docker images&lt;/strong&gt; available from Docker Hub&lt;/li&gt;
+&lt;li&gt;🚀 &lt;strong&gt;Deploy applications&lt;/strong&gt; consistently and easily&lt;/li&gt;
+&lt;li&gt;🔄 &lt;strong&gt;Manage development and production environments&lt;/strong&gt; more efficiently&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Docker là một công cụ mạnh mẽ trong thế giới DevOps. Hãy tiếp tục khám phá các tính năng của Docker như Docker Compose, Docker Swarm, và tích hợp với các công cụ CI/CD để tối ưu hóa quy trình phát triển của bạn!&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;📖 Tài liệu tham khảo:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;Docker is a powerful tool in the DevOps world. Continue exploring Docker features like Docker Compose, Docker Swarm, and CI/CD integration to optimize your development workflow!&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;📖 References:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://docs.docker.com/" target="_blank" rel="noopener"
-&gt;Tài liệu chính thức của Docker&lt;/a&gt;&lt;/li&gt;
+&gt;Official Docker Documentation&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://hub.docker.com/" target="_blank" rel="noopener"
-&gt;Docker Hub&lt;/a&gt; - Kho lưu trữ images lớn nhất&lt;/li&gt;
+&gt;Docker Hub&lt;/a&gt; - The largest image repository&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://docs.docker.com/develop/dev-best-practices/" target="_blank" rel="noopener"
-&gt;Best practices cho Docker&lt;/a&gt;&lt;/li&gt;
+&gt;Docker Best Practices&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Chúc bạn thành công với Docker! 🚀😊&lt;/p&gt;</description></item><item><title>Hướng dẫn cài đặt Nginx trên Ubuntu 24.04</title><link>https://tech.nguuyen.io.vn/posts/installation-guides/how-to-install-nginx/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/installation-guides/how-to-install-nginx/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/website/how-to-install-nginx.jpg" alt="Featured image of post Hướng dẫn cài đặt Nginx trên Ubuntu 24.04 " /&gt;&lt;h2 id="giới-thiệu"&gt;Giới thiệu
-&lt;/h2&gt;&lt;p&gt;Nginx là một ứng dụng web server mã nguồn mở giúp triển khai các ứng dụng web tĩnh và động trên máy chủ. Nginx có thể hoạt động như một web server, load balancer, reverse proxy hoặc HTTP cache, hỗ trợ tích hợp với các ứng dụng hiện có để xây dựng một hệ thống hoàn chỉnh hoặc phân phối ứng dụng web qua địa chỉ IP hoặc tên miền.&lt;/p&gt;
-&lt;p&gt;Bài viết này hướng dẫn cách cài đặt Nginx trên Ubuntu 24.04 và thiết lập ứng dụng web mẫu để chạy trên máy chủ của bạn.&lt;/p&gt;
-&lt;h2 id="yêu-cầu-trước-khi-bắt-đầu"&gt;Yêu cầu trước khi bắt đầu
-&lt;/h2&gt;&lt;p&gt;Trước khi tiến hành, hãy đảm bảo bạn đã thực hiện các bước sau:&lt;/p&gt;
+&lt;p&gt;Good luck with Docker! 🚀😊&lt;/p&gt;</description></item><item><title>How to Install Nginx on Ubuntu 24.04</title><link>https://tech.nguuyen.io.vn/posts/installation-guides/how-to-install-nginx/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/installation-guides/how-to-install-nginx/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/website/how-to-install-nginx.jpg" alt="Featured image of post How to Install Nginx on Ubuntu 24.04 " /&gt;&lt;h2 id="introduction"&gt;Introduction
+&lt;/h2&gt;&lt;p&gt;Nginx is an open-source web server that can serve static and dynamic web applications. It can run as a web server, load balancer, reverse proxy, or HTTP cache, and integrates with existing applications to build complete systems or distribute web apps via IP or domain.&lt;/p&gt;
+&lt;p&gt;This guide shows how to install Nginx on Ubuntu 24.04 and set up a sample web app on your server.&lt;/p&gt;
+&lt;h2 id="prerequisites"&gt;Prerequisites
+&lt;/h2&gt;&lt;p&gt;Before you begin, make sure you:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🚀 Triển khai một máy chủ Ubuntu 24.04.&lt;/li&gt;
-&lt;li&gt;🌍 Tạo một bản ghi A (A record) cho tên miền hoặc subdomain trỏ đến địa chỉ IP của máy chủ. Ví dụ: &lt;code&gt;app.example.com&lt;/code&gt;.&lt;/li&gt;
-&lt;li&gt;🔐 Truy cập máy chủ qua SSH và tạo một người dùng không phải root có quyền sudo.&lt;/li&gt;
-&lt;li&gt;🔄 Cập nhật hệ thống.&lt;/li&gt;
+&lt;li&gt;🚀 Provision an Ubuntu 24.04 server.&lt;/li&gt;
+&lt;li&gt;🌍 Create an A record pointing your domain or subdomain to the server IP (e.g., &lt;code&gt;app.example.com&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;🔐 Access the server via SSH and create a non-root sudo user.&lt;/li&gt;
+&lt;li&gt;🔄 Update the system packages.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;h2 id="cài-đặt-nginx-trên-ubuntu-2404"&gt;Cài đặt NGINX trên Ubuntu 24.04
-&lt;/h2&gt;&lt;p&gt;Gói NGINX mới nhất có sẵn trong kho APT mặc định trên Ubuntu 24.04. Thực hiện các bước sau để cập nhật hệ thống và cài đặt NGINX.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;🔄 Cập nhật danh sách gói hệ thống&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id="install-nginx-on-ubuntu-2404"&gt;Install NGINX on Ubuntu 24.04
+&lt;/h2&gt;&lt;p&gt;The latest NGINX package is available in Ubuntu 24.04&amp;rsquo;s default APT repository. Follow these steps to update the system and install NGINX.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;🔄 Update package lists&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -371,7 +777,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt update
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;📦 Cài đặt NGINX&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;📦 Install NGINX&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -380,7 +786,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt install nginx -y
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🔍 Kiểm tra phiên bản NGINX đã cài đặt&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🔍 Check installed NGINX version&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -389,7 +795,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo nginx -version
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Kết quả đầu ra sẽ tương tự như sau:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Sample output:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -399,9 +805,9 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
-&lt;h2 id="quản-lý-dịch-vụ-nginx"&gt;Quản lý dịch vụ NGINX
-&lt;/h2&gt;&lt;p&gt;NGINX sử dụng dịch vụ &lt;code&gt;nginx&lt;/code&gt; trong &lt;code&gt;systemd&lt;/code&gt; để quản lý thời gian chạy và các tiến trình của web server trên máy chủ. Thực hiện các bước sau để kích hoạt dịch vụ NGINX và quản lý các tiến trình web server.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;🚀 Kích hoạt dịch vụ NGINX khởi động cùng hệ thống&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id="manage-the-nginx-service"&gt;Manage the NGINX service
+&lt;/h2&gt;&lt;p&gt;NGINX uses the &lt;code&gt;nginx&lt;/code&gt; systemd service to manage runtime and processes. Use the commands below to enable and manage the service.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;🚀 Enable NGINX to start on boot&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -410,7 +816,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; nginx
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Kết quả:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Result:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -421,7 +827,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Executing: /usr/lib/systemd/systemd-sysv-install enable nginx
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;▶ Khởi động dịch vụ NGINX&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;▶ Start NGINX&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -430,7 +836,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl start nginx
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;⏹ Dừng dịch vụ NGINX&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;⏹ Stop NGINX&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -439,7 +845,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl stop nginx
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🔄 Khởi động lại dịch vụ NGINX&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🔄 Restart NGINX&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -448,7 +854,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl restart nginx
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🔍 Kiểm tra trạng thái dịch vụ NGINX&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🔍 Check NGINX status&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -457,7 +863,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl status nginx
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Kết quả mẫu:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Sample output:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -491,14 +897,14 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;ul&gt;
-&lt;li&gt;Dựa vào giá trị &lt;code&gt;Active: active (running)&lt;/code&gt;, NGINX đang chạy trên máy chủ. Nếu trạng thái hiển thị &lt;code&gt;Active: active (failed)&lt;/code&gt;, hãy kiểm tra và dừng bất kỳ tiến trình nào đang sử dụng cổng HTTP &lt;code&gt;80&lt;/code&gt;, sau đó khởi động lại dịch vụ NGINX.&lt;/li&gt;
+&lt;li&gt;If &lt;code&gt;Active: active (running)&lt;/code&gt; appears, NGINX is running. If you see &lt;code&gt;Active: active (failed)&lt;/code&gt;, stop any process using HTTP port &lt;code&gt;80&lt;/code&gt;, then restart NGINX.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="tạo-nginx-virtual-host"&gt;Tạo nginx virtual host
-&lt;/h2&gt;&lt;p&gt;Nginx virtual host bao gồm các cấu hình đặc biệt giúp máy chủ web phân phối các tệp ứng dụng web từ một thư mục cụ thể bằng một tên miền cụ thể trên máy chủ của bạn. các bước sau đây sẽ hướng dẫn tạo một cấu hình virtual host mẫu để phân phối tệp ứng dụng web một cách an toàn trên máy chủ.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;📂 Tạo tệp cấu hình virtual host mới&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id="create-an-nginx-virtual-host"&gt;Create an Nginx virtual host
+&lt;/h2&gt;&lt;p&gt;An Nginx virtual host serves web app files from a specific directory using a domain name. Follow these steps to set up a sample virtual host securely.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;📂 Create a new virtual host config file&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Trong thư mục &lt;code&gt;/etc/nginx/sites-available&lt;/code&gt;, tạo một tệp cấu hình mới, ví dụ: &lt;code&gt;app.example.com.conf&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;In &lt;code&gt;/etc/nginx/sites-available&lt;/code&gt;, create a new config file, for example: &lt;code&gt;app.example.com.conf&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -509,7 +915,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;ul&gt;
-&lt;li&gt;Thêm các cấu hình sau vào tệp:&lt;/li&gt;
+&lt;li&gt;Add the following configuration:&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -544,11 +950,11 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;ul&gt;
-&lt;li&gt;Lưu và đóng tệp.&lt;/li&gt;
+&lt;li&gt;Save and close the file.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;✅ Kiểm tra cấu hình Nginx&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;✅ Test Nginx configuration&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Kiểm tra xem cấu hình Nginx có lỗi không:&lt;/li&gt;
+&lt;li&gt;Check the configuration for errors:&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -559,7 +965,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;ul&gt;
-&lt;li&gt;Kết quả:&lt;/li&gt;
+&lt;li&gt;Result:&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -571,9 +977,9 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;nginx: configuration file /etc/nginx/nginx.conf test is successful
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🔗 Kích hoạt virtual host&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🔗 Enable the virtual host&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Liên kết tệp cấu hình vào thư mục &lt;code&gt;/etc/nginx/sites-enabled&lt;/code&gt; để kích hoạt virtual host:&lt;/li&gt;
+&lt;li&gt;Link the config file into &lt;code&gt;/etc/nginx/sites-enabled&lt;/code&gt;:&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -583,7 +989,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo ln -s /etc/nginx/sites-available/app.example.com.conf /etc/nginx/sites-enabled/
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;📁 Tạo thư mục web root&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;📁 Create the web root directory&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -592,9 +998,9 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo mkdir -p /var/www/app.example.com
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;📝 Tạo tệp html mẫu&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;📝 Create a sample HTML file&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Tạo tệp &lt;code&gt;index.html&lt;/code&gt; trong thư mục web root:&lt;/li&gt;
+&lt;li&gt;Create &lt;code&gt;index.html&lt;/code&gt; in the web root:&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -605,7 +1011,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;ul&gt;
-&lt;li&gt;Thêm nội dung sau vào tệp:&lt;/li&gt;
+&lt;li&gt;Add the following content:&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -626,9 +1032,9 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;ul&gt;
-&lt;li&gt;Lưu và đóng tệp.&lt;/li&gt;
+&lt;li&gt;Save and close the file.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;🔄 Khởi động lại nginx&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;🔄 Restart Nginx&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -637,9 +1043,9 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo systemctl restart nginx
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🌍 Kiểm tra virtual host&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🌍 Verify the virtual host&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Sử dụng lệnh &lt;code&gt;curl&lt;/code&gt; để kiểm tra virtual host:&lt;/li&gt;
+&lt;li&gt;Use &lt;code&gt;curl&lt;/code&gt; to test:&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -650,7 +1056,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;ul&gt;
-&lt;li&gt;Kết quả:&lt;/li&gt;
+&lt;li&gt;Result:&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -661,11 +1067,11 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
-&lt;h2 id="bảo-mật-máy-chủ-web-nginx"&gt;Bảo mật máy chủ web Nginx
-&lt;/h2&gt;&lt;p&gt;SSL certificates giúp mã hóa giao tiếp giữa trình duyệt của người dùng và máy chủ Nginx thông qua HTTPS. Mặc định, Nginx lắng nghe kết nối đến trên cổng HTTP 80 không an toàn. Thực hiện các bước sau để tạo chứng chỉ SSL đáng tin cậy từ Let&amp;rsquo;s Encrypt và bảo mật máy chủ Nginx để chấp nhận các yêu cầu kết nối HTTPS được mã hóa.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Cài đặt Certbot – Let&amp;rsquo;s Encrypt Client 🔧&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id="secure-the-nginx-web-server"&gt;Secure the Nginx web server
+&lt;/h2&gt;&lt;p&gt;SSL certificates encrypt communication between the browser and your server over HTTPS. By default, Nginx listens on insecure HTTP port 80. Follow these steps to obtain a trusted SSL certificate from Let&amp;rsquo;s Encrypt and enable HTTPS.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Install Certbot – Let&amp;rsquo;s Encrypt client 🔧&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Cài đặt gói Certbot sử dụng Snap:&lt;/li&gt;
+&lt;li&gt;Install Certbot using Snap:&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -676,7 +1082,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;ul&gt;
-&lt;li&gt;Kiểm tra phiên bản Certbot đã cài trên máy chủ:&lt;/li&gt;
+&lt;li&gt;Verify the Certbot version:&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -686,7 +1092,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo certbot --version
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📌 &lt;strong&gt;Đầu ra mẫu:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;📌 &lt;strong&gt;Sample output:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -695,9 +1101,9 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;certbot 2.11.0
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h2 id="tạo-chứng-chỉ-ssl-cho-nginx"&gt;Tạo chứng chỉ SSL cho Nginx
+&lt;/div&gt;&lt;h2 id="generate-an-ssl-certificate-for-nginx"&gt;Generate an SSL certificate for Nginx
 &lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;Tạo chứng chỉ SSL mới cho tên miền của bạn. Thay thế &lt;code&gt;app.example.com&lt;/code&gt; bằng tên miền thực tế trong cấu hình Virtual Host Nginx:&lt;/li&gt;
+&lt;li&gt;Create a new SSL certificate for your domain. Replace &lt;code&gt;app.example.com&lt;/code&gt; with your real domain:&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -707,15 +1113,15 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo certbot --nginx -d app.example.com --agree-tos
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Quá trình này sẽ:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;This will:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;✅ Tạo chứng chỉ SSL hợp lệ&lt;/li&gt;
-&lt;li&gt;✅ Tự động cấu hình Nginx để sử dụng SSL&lt;/li&gt;
-&lt;li&gt;✅ Kích hoạt HTTPS trên máy chủ web của bạn&lt;/li&gt;
+&lt;li&gt;✅ Generate a valid SSL certificate&lt;/li&gt;
+&lt;li&gt;✅ Automatically configure Nginx to use SSL&lt;/li&gt;
+&lt;li&gt;✅ Enable HTTPS on your web server&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Kiểm tra tự động gia hạn chứng chỉ 🔄&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Test automatic renewal 🔄&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Các chứng chỉ SSL từ Let&amp;rsquo;s Encrypt có thời hạn 90 ngày. Để đảm bảo không bị hết hạn, bạn có thể kiểm tra tiến trình tự động gia hạn:&lt;/li&gt;
+&lt;li&gt;Let&amp;rsquo;s Encrypt certificates last 90 days. Check auto-renewal with:&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -725,10 +1131,10 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo certbot renew --dry-run
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Nếu không có lỗi nào xảy ra, nghĩa là chứng chỉ sẽ được tự động gia hạn đúng hạn.&lt;/p&gt;
-&lt;h2 id="kiểm-tra-trang-web-hoạt-động-với-https"&gt;Kiểm tra trang web hoạt động với https
+&lt;/div&gt;&lt;p&gt;If no errors appear, the certificate will renew automatically.&lt;/p&gt;
+&lt;h2 id="verify-the-site-with-https"&gt;Verify the site with HTTPS
 &lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;Mở trình duyệt và truy cập:&lt;/li&gt;
+&lt;li&gt;Open the browser and visit:&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -738,13 +1144,13 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;https://app.example.com
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Nếu thấy biểu tượng ổ khóa 🔒, tức là SSL đã được cài đặt thành công! 🚀&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;If you see the lock icon 🔒, SSL is installed successfully! 🚀&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="thiết-lập-quy-tắc-tường-lửa-ufw"&gt;Thiết lập quy tắc tường lửa UFW
-&lt;/h2&gt;&lt;p&gt;Uncomplicated Firewall (UFW) được cài đặt và kích hoạt mặc định trên Ubuntu 24.04. Thực hiện các bước sau để cấu hình tường lửa, cho phép máy chủ Nginx lắng nghe kết nối HTTP và HTTPS.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Cho phép kết nối HTTP (Cổng 80)🔌&lt;/strong&gt;&lt;/p&gt;
+&lt;h2 id="configure-ufw-firewall-rules"&gt;Configure UFW firewall rules
+&lt;/h2&gt;&lt;p&gt;Uncomplicated Firewall (UFW) is installed and enabled by default on Ubuntu 24.04. Follow these steps to allow HTTP and HTTPS traffic.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Allow HTTP (Port 80) 🔌&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Chạy lệnh sau để mở kết nối HTTP:&lt;/li&gt;
+&lt;li&gt;Run:&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -754,9 +1160,9 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo ufw allow 80/tcp
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Cho phép kết nối HTTPS (Cổng 443) 🔐&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Allow HTTPS (Port 443) 🔐&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Chạy lệnh sau để mở kết nối HTTPS:&lt;/li&gt;
+&lt;li&gt;Run:&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -766,9 +1172,9 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo ufw allow 443/tcp
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Kiểm tra trạng thái tường lửa 🔢&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Check firewall status 🔢&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;Chạy lệnh sau để xác nhận quy tắc kết nối:&lt;/li&gt;
+&lt;li&gt;Run:&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -778,7 +1184,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo ufw status
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;👉 &lt;strong&gt;Đầu ra mẫu:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;👉 &lt;strong&gt;Sample output:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -805,8 +1211,8 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;443/tcp (v6) ALLOW Anywhere (v6)
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;🛡 Sau khi thiết lập xong, máy chủ sẽ chỉ cho phép kết nối an toàn qua HTTP và HTTPS&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;🛡 After setup, the server only allows HTTP and HTTPS connections.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="lời-kết"&gt;Lời kết
-&lt;/h2&gt;&lt;p&gt;Chúc bạn cài đặt thành công Nginx trên máy chủ Ubuntu 24.04 và cấu hình web server để phục vụ các ứng dụng web. Nginx hỗ trợ nhiều cấu hình virtual host giúp bạn triển khai các ứng dụng web một cách an toàn. Ngoài ra, bạn có thể tích hợp Nginx với các ứng dụng khác như MySQL và PHP để xây dựng các ứng dụng web động. Để biết thêm thông tin chi tiết và các tùy chọn cấu hình khác, vui lòng truy cập &lt;a class="link" href="https://docs.nginx.com/" target="_blank" rel="noopener"
-&gt;tài liệu chính thức&lt;/a&gt; chính thức của Nginx. 🚀😊&lt;/p&gt;</description></item></channel></rss>
+&lt;h2 id="conclusion"&gt;Conclusion
+&lt;/h2&gt;&lt;p&gt;Congratulations on installing Nginx on Ubuntu 24.04 and configuring a web server for your applications. Nginx supports multiple virtual hosts to deploy applications securely. You can also integrate Nginx with MySQL and PHP to build dynamic web apps. For more configuration options, visit the official &lt;a class="link" href="https://docs.nginx.com/" target="_blank" rel="noopener"
+&gt;Nginx documentation&lt;/a&gt;. 🚀😊&lt;/p&gt;</description></item></channel></rss>

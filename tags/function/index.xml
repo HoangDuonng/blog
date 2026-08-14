@@ -1,9 +1,9 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Function on Hoàng Dương</title><link>https://tech.nguuyen.io.vn/tags/function/</link><description>Recent content in Function on Hoàng Dương</description><generator>Hugo -- gohugo.io</generator><language>vi</language><lastBuildDate>Tue, 09 Jun 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/function/index.xml" rel="self" type="application/rss+xml"/><item><title>Function trong Bash: tái sử dụng code hiệu quả cho DevOps</title><link>https://tech.nguuyen.io.vn/posts/bash/bash-step-six/</link><pubDate>Tue, 09 Jun 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/bash/bash-step-six/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/bash/bash-step-six.jpg" alt="Featured image of post Function trong Bash: tái sử dụng code hiệu quả cho DevOps" /&gt;&lt;h2 id="function-trong-bash-cho-devops"&gt;Function trong Bash cho DevOps
-&lt;/h2&gt;&lt;p&gt;Ở &lt;a class="link" href="https://tech.nguuyen.io.vn/posts/bash/bash-step-five/" &gt;bài trước&lt;/a&gt; chúng ta đã dùng &lt;code&gt;grep&lt;/code&gt;, &lt;code&gt;awk&lt;/code&gt; và &lt;code&gt;sed&lt;/code&gt; để xử lý log/config. Khi script bắt đầu dài hơn, bạn sẽ gặp một vấn đề mới: nhiều đoạn code bị lặp lại — kiểm tra file, ghi log, validate biến môi trường, retry command, tạo backup trước khi sửa config.&lt;/p&gt;
-&lt;p&gt;Function giúp gom một nhóm lệnh thành một khối có tên, có thể gọi lại nhiều lần. Với DevOps, đây là bước quan trọng để biến các script “chạy được” thành script &lt;strong&gt;dễ đọc, dễ test và dễ bảo trì&lt;/strong&gt; hơn.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Function on Hoang Duong</title><link>https://tech.nguuyen.io.vn/tags/function/</link><description>Recent content in Function on Hoang Duong</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Tue, 23 Jun 2026 00:00:00 +0700</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/function/index.xml" rel="self" type="application/rss+xml"/><item><title>Functions in Bash: Reuse Code Effectively for DevOps</title><link>https://tech.nguuyen.io.vn/posts/bash/bash-step-six/</link><pubDate>Tue, 09 Jun 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/bash/bash-step-six/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/bash/bash-step-six.jpg" alt="Featured image of post Functions in Bash: Reuse Code Effectively for DevOps" /&gt;&lt;h2 id="bash-functions-for-devops"&gt;Bash Functions for DevOps
+&lt;/h2&gt;&lt;p&gt;In the &lt;a class="link" href="https://tech.nguuyen.io.vn/posts/bash/bash-step-five/" &gt;previous article&lt;/a&gt; we used &lt;code&gt;grep&lt;/code&gt;, &lt;code&gt;awk&lt;/code&gt;, and &lt;code&gt;sed&lt;/code&gt; to process logs and configuration files. As scripts grow longer, a new problem appears: repeated blocks of code — checking files, writing logs, validating environment variables, retrying commands, or creating backups before editing config.&lt;/p&gt;
+&lt;p&gt;Functions let you group a set of commands into a named block that can be called many times. For DevOps work, this is an important step from scripts that merely “work” to scripts that are &lt;strong&gt;easier to read, test, and maintain&lt;/strong&gt;.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="khai-báo-function-trong-bash"&gt;Khai báo function trong Bash
-&lt;/h2&gt;&lt;p&gt;Bash hỗ trợ hai kiểu khai báo phổ biến:&lt;/p&gt;
+&lt;h2 id="declaring-a-function-in-bash"&gt;Declaring a Function in Bash
+&lt;/h2&gt;&lt;p&gt;Bash supports two common function declaration styles:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -24,8 +24,8 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Trong thực tế, kiểu &lt;code&gt;name() { ...; }&lt;/code&gt; thường được dùng nhiều vì ngắn gọn và portable hơn giữa các shell kiểu POSIX. Với bài này, chúng ta tập trung vào Bash nên cả hai đều chạy được.&lt;/p&gt;
-&lt;p&gt;Gọi function giống gọi command:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;In practice, the &lt;code&gt;name() { ...; }&lt;/code&gt; style is used often because it is short and more portable across POSIX-like shells. In this article we focus on Bash, so both styles work.&lt;/p&gt;
+&lt;p&gt;Call a function like a command:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -36,7 +36,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;log_error &lt;span class="s2"&gt;&amp;#34;Deploy failed&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Lưu ý khoảng trắng và dấu &lt;code&gt;;&lt;/code&gt; khi viết một dòng:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Pay attention to spaces and the &lt;code&gt;;&lt;/code&gt; when writing a one-line function:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -45,17 +45,17 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;say_hello&lt;span class="o"&gt;()&lt;/span&gt; &lt;span class="o"&gt;{&lt;/span&gt; &lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;hello&amp;#34;&lt;/span&gt;&lt;span class="p"&gt;;&lt;/span&gt; &lt;span class="o"&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Nếu viết nhiều dòng, dấu &lt;code&gt;;&lt;/code&gt; trước &lt;code&gt;}&lt;/code&gt; không cần thiết vì newline đã kết thúc command.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;When writing multiple lines, the &lt;code&gt;;&lt;/code&gt; before &lt;code&gt;}&lt;/code&gt; is not required because the newline already ends the command.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="function-nhận-tham-số-bằng-1--"&gt;Function nhận tham số bằng &lt;code&gt;$1&lt;/code&gt;, &lt;code&gt;$@&lt;/code&gt;, &lt;code&gt;$#&lt;/code&gt;
-&lt;/h2&gt;&lt;p&gt;Trong function, Bash dùng các positional parameters giống script:&lt;/p&gt;
+&lt;h2 id="passing-parameters-with-1--and-"&gt;Passing Parameters with &lt;code&gt;$1&lt;/code&gt;, &lt;code&gt;$@&lt;/code&gt;, and &lt;code&gt;$#&lt;/code&gt;
+&lt;/h2&gt;&lt;p&gt;Inside a function, Bash uses positional parameters just like a script:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;$1&lt;/code&gt;, &lt;code&gt;$2&lt;/code&gt;, &amp;hellip;: tham số thứ nhất, thứ hai, &amp;hellip;&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;$@&lt;/code&gt;: toàn bộ tham số, giữ từng argument riêng khi được quote thành &lt;code&gt;&amp;quot;$@&amp;quot;&lt;/code&gt;.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;$#&lt;/code&gt;: số lượng tham số.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;$0&lt;/code&gt;: tên script, không phải tên function.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;$1&lt;/code&gt;, &lt;code&gt;$2&lt;/code&gt;, &amp;hellip;: the first, second, &amp;hellip; argument.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;$@&lt;/code&gt;: all arguments, preserving each argument separately when quoted as &lt;code&gt;&amp;quot;$@&amp;quot;&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;$#&lt;/code&gt;: the number of arguments.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;$0&lt;/code&gt;: the script name, not the function name.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Ví dụ function kiểm tra service:&lt;/p&gt;
+&lt;p&gt;Example function for checking a service:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -88,7 +88,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;check_service &lt;span class="s2"&gt;&amp;#34;docker&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Khi cần truyền toàn bộ argument sang command khác, dùng &lt;code&gt;&amp;quot;$@&amp;quot;&lt;/code&gt;:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;When you need to pass all arguments to another command, use &lt;code&gt;&amp;quot;$@&amp;quot;&lt;/code&gt;:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -107,10 +107,10 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;run_cmd ls -lah /var/log
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;code&gt;&amp;quot;$@&amp;quot;&lt;/code&gt; giữ nguyên ranh giới argument. Đây là lựa chọn an toàn hơn so với &lt;code&gt;$*&lt;/code&gt; khi tham số có khoảng trắng.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;&amp;quot;$@&amp;quot;&lt;/code&gt; preserves argument boundaries. It is safer than &lt;code&gt;$*&lt;/code&gt; when arguments contain spaces.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="validate-tham-số-đầu-vào"&gt;Validate tham số đầu vào
-&lt;/h2&gt;&lt;p&gt;Function nên kiểm tra tham số bắt buộc ngay từ đầu để lỗi rõ ràng hơn.&lt;/p&gt;
+&lt;h2 id="validating-input-parameters"&gt;Validating Input Parameters
+&lt;/h2&gt;&lt;p&gt;A function should validate required parameters early so errors are clear.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -161,13 +161,13 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Dùng &lt;code&gt;${1:-}&lt;/code&gt; giúp tránh lỗi “unbound variable” khi script bật &lt;code&gt;set -u&lt;/code&gt; mà function được gọi thiếu tham số.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Using &lt;code&gt;${1:-}&lt;/code&gt; avoids an “unbound variable” error when the script enables &lt;code&gt;set -u&lt;/code&gt; and the function is called without enough arguments.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="return-value-trong-bash-là-exit-code"&gt;Return value trong Bash là exit code
-&lt;/h2&gt;&lt;p&gt;Function Bash không &lt;code&gt;return&lt;/code&gt; dữ liệu dạng string như nhiều ngôn ngữ lập trình. &lt;code&gt;return&lt;/code&gt; trong Bash trả về &lt;strong&gt;exit code&lt;/strong&gt; từ &lt;code&gt;0&lt;/code&gt; đến &lt;code&gt;255&lt;/code&gt;:&lt;/p&gt;
+&lt;h2 id="return-value-in-bash-means-exit-code"&gt;Return Value in Bash Means Exit Code
+&lt;/h2&gt;&lt;p&gt;A Bash function does not &lt;code&gt;return&lt;/code&gt; string data like many programming languages. In Bash, &lt;code&gt;return&lt;/code&gt; returns an &lt;strong&gt;exit code&lt;/strong&gt; from &lt;code&gt;0&lt;/code&gt; to &lt;code&gt;255&lt;/code&gt;:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;0&lt;/code&gt;: thành công.&lt;/li&gt;
-&lt;li&gt;Khác &lt;code&gt;0&lt;/code&gt;: lỗi hoặc trạng thái đặc biệt.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;0&lt;/code&gt;: success.&lt;/li&gt;
+&lt;li&gt;Non-zero: error or a special state.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -195,8 +195,8 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;fi&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Ở ví dụ trên, function không cần viết &lt;code&gt;return&lt;/code&gt; rõ ràng. Exit code của lệnh cuối cùng (&lt;code&gt;[[ ... ]]&lt;/code&gt;) sẽ trở thành exit code của function.&lt;/p&gt;
-&lt;p&gt;Nếu muốn function “trả về dữ liệu”, hãy in ra stdout rồi dùng command substitution:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;In this example, the function does not need an explicit &lt;code&gt;return&lt;/code&gt;. The exit code of the last command (&lt;code&gt;[[ ... ]]&lt;/code&gt;) becomes the function exit code.&lt;/p&gt;
+&lt;p&gt;If you want a function to “return data”, print it to stdout and use command substitution:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -213,10 +213,10 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nv"&gt;backup_name&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;app.env.&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;get_timestamp&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;.bak&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Nguyên tắc thực dụng: dùng exit code cho đúng/sai, dùng stdout cho dữ liệu.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;A practical rule: use exit codes for success/failure, and stdout for data.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="biến-local-để-tránh-side-effect"&gt;Biến local để tránh side effect
-&lt;/h2&gt;&lt;p&gt;Theo mặc định, biến trong function Bash là global trong phạm vi shell hiện tại. Dùng &lt;code&gt;local&lt;/code&gt; để giới hạn biến trong function.&lt;/p&gt;
+&lt;h2 id="use-local-variables-to-avoid-side-effects"&gt;Use Local Variables to Avoid Side Effects
+&lt;/h2&gt;&lt;p&gt;By default, variables inside Bash functions are global within the current shell. Use &lt;code&gt;local&lt;/code&gt; to limit a variable to the function scope.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -243,8 +243,8 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Không dùng &lt;code&gt;local&lt;/code&gt;, các biến như &lt;code&gt;timestamp&lt;/code&gt; hoặc &lt;code&gt;base_name&lt;/code&gt; có thể vô tình ghi đè biến cùng tên ở nơi khác trong script. Đây là lỗi khó debug khi script lớn dần.&lt;/p&gt;
-&lt;p&gt;Một thói quen tốt là khai báo &lt;code&gt;local&lt;/code&gt; gần nơi dùng và quote biến khi truyền vào command:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Without &lt;code&gt;local&lt;/code&gt;, variables like &lt;code&gt;timestamp&lt;/code&gt; or &lt;code&gt;base_name&lt;/code&gt; can accidentally overwrite variables with the same name elsewhere in the script. This becomes hard to debug as scripts grow.&lt;/p&gt;
+&lt;p&gt;A good habit is to declare &lt;code&gt;local&lt;/code&gt; near where the variable is used and quote variables when passing them to commands:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -256,9 +256,9 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
-&lt;h2 id="tách-function-vào-file-khác-với-source"&gt;Tách function vào file khác với &lt;code&gt;source&lt;/code&gt;
-&lt;/h2&gt;&lt;p&gt;Khi nhiều script cùng cần logging, validation hoặc retry, bạn có thể tách function vào file thư viện nhỏ.&lt;/p&gt;
-&lt;p&gt;Ví dụ cấu trúc:&lt;/p&gt;
+&lt;h2 id="split-functions-into-another-file-with-source"&gt;Split Functions into Another File with &lt;code&gt;source&lt;/code&gt;
+&lt;/h2&gt;&lt;p&gt;When multiple scripts need the same logging, validation, or retry logic, you can move functions into a small library file.&lt;/p&gt;
+&lt;p&gt;Example structure:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -331,10 +331,10 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;log_error &lt;span class="s2"&gt;&amp;#34;This is an error message&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;code&gt;source&lt;/code&gt; chạy nội dung file trong shell hiện tại, nên các function trong &lt;code&gt;log.sh&lt;/code&gt; sẽ có sẵn cho &lt;code&gt;deploy.sh&lt;/code&gt;. Trong Bash, &lt;code&gt;${BASH_SOURCE[0]}&lt;/code&gt; giúp xác định đường dẫn file script hiện tại tốt hơn &lt;code&gt;$0&lt;/code&gt; khi file được source hoặc gọi từ thư mục khác.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;source&lt;/code&gt; runs a file in the current shell, so functions from &lt;code&gt;log.sh&lt;/code&gt; become available to &lt;code&gt;deploy.sh&lt;/code&gt;. In Bash, &lt;code&gt;${BASH_SOURCE[0]}&lt;/code&gt; is better than &lt;code&gt;$0&lt;/code&gt; for locating the current script file when the file is sourced or called from another directory.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="thực-hành-devops-thư-viện-logging-nhỏ"&gt;Thực hành DevOps: thư viện logging nhỏ
-&lt;/h2&gt;&lt;p&gt;Một thư viện logging tối thiểu nên có timestamp, level và tách stdout/stderr hợp lý.&lt;/p&gt;
+&lt;h2 id="devops-practice-a-small-logging-library"&gt;DevOps Practice: A Small Logging Library
+&lt;/h2&gt;&lt;p&gt;A minimal logging library should include timestamp, level, and proper stdout/stderr separation.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -381,8 +381,8 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Đặt function nội bộ tên &lt;code&gt;_log&lt;/code&gt; là convention đơn giản để báo hiệu “không gọi trực tiếp từ bên ngoài”. Bash không có private function thật sự, nên đây chỉ là quy ước.&lt;/p&gt;
-&lt;p&gt;Dùng trong script healthcheck:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Naming the internal function &lt;code&gt;_log&lt;/code&gt; is a simple convention that signals “do not call this directly from outside.” Bash does not have true private functions, so this is only a convention.&lt;/p&gt;
+&lt;p&gt;Use it in a healthcheck script:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -425,10 +425,10 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;check_url &lt;span class="s2"&gt;&amp;#34;https://example.com/health&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Ở đây &lt;code&gt;curl --fail&lt;/code&gt; giúp HTTP 4xx/5xx được xem là lỗi, &lt;code&gt;--silent --show-error&lt;/code&gt; giảm noise nhưng vẫn in lỗi cần thiết, và &lt;code&gt;--max-time&lt;/code&gt; tránh script treo quá lâu.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Here, &lt;code&gt;curl --fail&lt;/code&gt; makes HTTP 4xx/5xx responses count as errors, &lt;code&gt;--silent --show-error&lt;/code&gt; reduces noise while still showing useful errors, and &lt;code&gt;--max-time&lt;/code&gt; prevents the script from hanging too long.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="thực-hành-devops-retry-command-bằng-function"&gt;Thực hành DevOps: retry command bằng function
-&lt;/h2&gt;&lt;p&gt;Retry là pattern rất thường gặp khi gọi API, pull image, kiểm tra service vừa restart hoặc chạy lệnh có thể lỗi tạm thời.&lt;/p&gt;
+&lt;h2 id="devops-practice-retry-a-command-with-a-function"&gt;DevOps Practice: Retry a Command with a Function
+&lt;/h2&gt;&lt;p&gt;Retry is a very common pattern when calling APIs, pulling images, checking a service after restart, or running commands that can fail temporarily.&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -483,13 +483,13 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;retry &lt;span class="m"&gt;5&lt;/span&gt; &lt;span class="m"&gt;3&lt;/span&gt; curl --fail --silent --show-error https://example.com/health
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Điểm quan trọng:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Important details:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;&lt;code&gt;shift 2&lt;/code&gt; bỏ hai tham số cấu hình để phần còn lại là command cần chạy.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;&amp;quot;$@&amp;quot;&lt;/code&gt; chạy command với argument được giữ nguyên.&lt;/li&gt;
-&lt;li&gt;Function trả &lt;code&gt;0&lt;/code&gt; ngay khi command thành công, trả &lt;code&gt;1&lt;/code&gt; sau khi hết số lần thử.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;shift 2&lt;/code&gt; removes the two configuration arguments, leaving the command to run.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;&amp;quot;$@&amp;quot;&lt;/code&gt; runs the command while preserving argument boundaries.&lt;/li&gt;
+&lt;li&gt;The function returns &lt;code&gt;0&lt;/code&gt; as soon as the command succeeds, or &lt;code&gt;1&lt;/code&gt; after all attempts fail.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Bạn có thể kết hợp với logging library:&lt;/p&gt;
+&lt;p&gt;You can combine it with the logging library:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -509,8 +509,8 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
-&lt;h2 id="thực-hành-devops-deploy-script-có-function-rõ-ràng"&gt;Thực hành DevOps: deploy script có function rõ ràng
-&lt;/h2&gt;&lt;p&gt;Ví dụ script deploy nhỏ, tách từng bước thành function để dễ đọc hơn:&lt;/p&gt;
+&lt;h2 id="devops-practice-a-deploy-script-with-clear-functions"&gt;DevOps Practice: A Deploy Script with Clear Functions
+&lt;/h2&gt;&lt;p&gt;This small deploy script splits each step into a function so the flow is easier to read:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -623,58 +623,58 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;main &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="nv"&gt;$@&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Pattern &lt;code&gt;main &amp;quot;$@&amp;quot;&lt;/code&gt; giúp script có entrypoint rõ ràng. Các function phía trên định nghĩa hành vi, còn &lt;code&gt;main&lt;/code&gt; mô tả luồng chạy chính.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;The &lt;code&gt;main &amp;quot;$@&amp;quot;&lt;/code&gt; pattern gives the script a clear entrypoint. Functions above it define behavior, while &lt;code&gt;main&lt;/code&gt; describes the primary execution flow.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="sai-sót-thường-gặp"&gt;Sai sót thường gặp
+&lt;h2 id="common-mistakes"&gt;Common Mistakes
 &lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Quên &lt;code&gt;local&lt;/code&gt;:&lt;/strong&gt; Biến trong function có thể ghi đè biến global ngoài ý muốn.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Dùng &lt;code&gt;return &amp;quot;text&amp;quot;&lt;/code&gt;:&lt;/strong&gt; &lt;code&gt;return&lt;/code&gt; chỉ dành cho exit code số; muốn trả text thì &lt;code&gt;echo&lt;/code&gt;/&lt;code&gt;printf&lt;/code&gt; ra stdout.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Không quote &lt;code&gt;&amp;quot;$@&amp;quot;&lt;/code&gt;:&lt;/strong&gt; Command wrapper dễ hỏng khi argument có khoảng trắng.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Gọi function trước khi khai báo:&lt;/strong&gt; Bash đọc và chạy từ trên xuống; function phải được định nghĩa trước khi gọi.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Dùng &lt;code&gt;$1&lt;/code&gt; trực tiếp khi bật &lt;code&gt;set -u&lt;/code&gt;:&lt;/strong&gt; Nếu thiếu tham số, script lỗi ngay. Dùng &lt;code&gt;${1:-}&lt;/code&gt; rồi validate.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Ghi log lỗi ra stdout:&lt;/strong&gt; Error/warn nên đi stderr (&lt;code&gt;&amp;gt;&amp;amp;2&lt;/code&gt;) để stdout còn dùng cho dữ liệu/pipeline.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Forgetting &lt;code&gt;local&lt;/code&gt;:&lt;/strong&gt; Variables inside functions can overwrite global variables unexpectedly.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Using &lt;code&gt;return &amp;quot;text&amp;quot;&lt;/code&gt;:&lt;/strong&gt; &lt;code&gt;return&lt;/code&gt; is only for numeric exit codes; use &lt;code&gt;echo&lt;/code&gt;/&lt;code&gt;printf&lt;/code&gt; to stdout for text data.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Not quoting &lt;code&gt;&amp;quot;$@&amp;quot;&lt;/code&gt;:&lt;/strong&gt; Command wrappers can break when arguments contain spaces.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Calling a function before declaring it:&lt;/strong&gt; Bash reads and executes from top to bottom; a function must be defined before it is called.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Using &lt;code&gt;$1&lt;/code&gt; directly with &lt;code&gt;set -u&lt;/code&gt;:&lt;/strong&gt; If the argument is missing, the script fails immediately. Use &lt;code&gt;${1:-}&lt;/code&gt; and then validate.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Writing error logs to stdout:&lt;/strong&gt; Warnings and errors should go to stderr (&lt;code&gt;&amp;gt;&amp;amp;2&lt;/code&gt;) so stdout remains available for data or pipelines.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="ghi-chú-triển-khai"&gt;Ghi chú triển khai
+&lt;h2 id="implementation-notes"&gt;Implementation Notes
 &lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;Khi áp dụng vào dự án của bạn&lt;/strong&gt;, hãy bắt đầu bằng các function nhỏ cho phần lặp lại nhiều nhất:
+&lt;li&gt;&lt;strong&gt;When applying this to your own project&lt;/strong&gt;, start with small functions around the parts you repeat most:
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;log_info&lt;/code&gt;, &lt;code&gt;log_warn&lt;/code&gt;, &lt;code&gt;log_error&lt;/code&gt;.&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;require_file&lt;/code&gt;, &lt;code&gt;require_dir&lt;/code&gt;, &lt;code&gt;require_env&lt;/code&gt;.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;retry&lt;/code&gt; cho lệnh có lỗi tạm thời.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;backup_file&lt;/code&gt; trước khi sửa config.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;retry&lt;/code&gt; for commands that may fail temporarily.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;backup_file&lt;/code&gt; before editing config.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Best practices:&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;Dùng &lt;code&gt;local&lt;/code&gt; cho biến trong function.&lt;/li&gt;
-&lt;li&gt;Dùng &lt;code&gt;return&lt;/code&gt; cho trạng thái thành công/thất bại, stdout cho dữ liệu.&lt;/li&gt;
-&lt;li&gt;Dùng &lt;code&gt;&amp;quot;$@&amp;quot;&lt;/code&gt; khi wrapper function gọi command khác.&lt;/li&gt;
-&lt;li&gt;Tách thư viện chung vào &lt;code&gt;scripts/lib/*.sh&lt;/code&gt; và load bằng &lt;code&gt;source&lt;/code&gt; với đường dẫn dựa trên &lt;code&gt;${BASH_SOURCE[0]}&lt;/code&gt;.&lt;/li&gt;
-&lt;li&gt;Giữ function làm một việc rõ ràng; nếu function quá dài, tách tiếp.&lt;/li&gt;
+&lt;li&gt;Use &lt;code&gt;local&lt;/code&gt; for variables inside functions.&lt;/li&gt;
+&lt;li&gt;Use &lt;code&gt;return&lt;/code&gt; for success/failure state, and stdout for data.&lt;/li&gt;
+&lt;li&gt;Use &lt;code&gt;&amp;quot;$@&amp;quot;&lt;/code&gt; when a wrapper function calls another command.&lt;/li&gt;
+&lt;li&gt;Put shared libraries in &lt;code&gt;scripts/lib/*.sh&lt;/code&gt; and load them with &lt;code&gt;source&lt;/code&gt; using a path based on &lt;code&gt;${BASH_SOURCE[0]}&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Keep each function focused on one clear responsibility; if a function grows too long, split it again.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Troubleshooting:&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;Function trả sai trạng thái? → In thử &lt;code&gt;$?&lt;/code&gt; ngay sau khi gọi hoặc chạy &lt;code&gt;bash -x script.sh&lt;/code&gt;.&lt;/li&gt;
-&lt;li&gt;Biến bị đổi bất ngờ? → Kiểm tra function thiếu &lt;code&gt;local&lt;/code&gt;.&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;source&lt;/code&gt; không tìm thấy file? → Kiểm tra &lt;code&gt;SCRIPT_DIR&lt;/code&gt; và chạy script từ thư mục khác để test.&lt;/li&gt;
+&lt;li&gt;Function returns the wrong status? → Print &lt;code&gt;$?&lt;/code&gt; right after calling it or run &lt;code&gt;bash -x script.sh&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Variable changed unexpectedly? → Check whether a function is missing &lt;code&gt;local&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;source&lt;/code&gt; cannot find the file? → Check &lt;code&gt;SCRIPT_DIR&lt;/code&gt; and test the script from another directory.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;h2 id="lời-kết"&gt;Lời kết
-&lt;/h2&gt;&lt;p&gt;Function là bước nâng cấp tự nhiên khi bạn viết Bash cho DevOps nhiều hơn một vài dòng. Chúng giúp tái sử dụng logic, gom logging/validation/retry vào nơi chung, giảm copy-paste và làm luồng deploy/healthcheck rõ ràng hơn.&lt;/p&gt;
-&lt;p&gt;Ở bài tiếp theo, chúng ta sẽ đi vào &lt;strong&gt;quản lý biến và môi trường trong Bash&lt;/strong&gt;: biến local vs &lt;code&gt;export&lt;/code&gt;, &lt;code&gt;.env&lt;/code&gt;, &lt;code&gt;getopts&lt;/code&gt;, &lt;code&gt;$IFS&lt;/code&gt; và các biến đặc biệt như &lt;code&gt;$?&lt;/code&gt;, &lt;code&gt;$$&lt;/code&gt;, &lt;code&gt;$!&lt;/code&gt;.&lt;/p&gt;
+&lt;h2 id="conclusion"&gt;Conclusion
+&lt;/h2&gt;&lt;p&gt;Functions are the natural next step when you write Bash for DevOps beyond a few lines. They help reuse logic, centralize logging/validation/retry code, reduce copy-paste, and make deploy or healthcheck flows easier to understand.&lt;/p&gt;
+&lt;p&gt;In the next article, we will explore &lt;strong&gt;variables and environment management in Bash&lt;/strong&gt;: local variables vs &lt;code&gt;export&lt;/code&gt;, &lt;code&gt;.env&lt;/code&gt;, &lt;code&gt;getopts&lt;/code&gt;, &lt;code&gt;$IFS&lt;/code&gt;, and special variables such as &lt;code&gt;$?&lt;/code&gt;, &lt;code&gt;$$&lt;/code&gt;, and &lt;code&gt;$!&lt;/code&gt;.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="tài-liệu-tham-khảo"&gt;Tài liệu tham khảo
+&lt;h2 id="references"&gt;References
 &lt;/h2&gt;&lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.gnu.org/software/bash/manual/bash.html#Shell-Functions" target="_blank" rel="noopener"
-&gt;GNU Bash Manual — Shell Functions&lt;/a&gt; — Tài liệu chính thức về function, positional parameters và exit status.&lt;/li&gt;
+&gt;GNU Bash Manual — Shell Functions&lt;/a&gt; — Official documentation for functions, positional parameters, and exit status.&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.gnu.org/software/bash/manual/bash.html#Bourne-Shell-Builtins" target="_blank" rel="noopener"
-&gt;GNU Bash Manual — Bourne Shell Builtins&lt;/a&gt; — Tham khảo &lt;code&gt;return&lt;/code&gt;, &lt;code&gt;shift&lt;/code&gt; và các builtin liên quan.&lt;/li&gt;
+&gt;GNU Bash Manual — Bourne Shell Builtins&lt;/a&gt; — Reference for &lt;code&gt;return&lt;/code&gt;, &lt;code&gt;shift&lt;/code&gt;, and related builtins.&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.gnu.org/software/bash/manual/bash.html#Bash-Variables" target="_blank" rel="noopener"
-&gt;GNU Bash Manual — Bash Variables&lt;/a&gt; — Tham khảo &lt;code&gt;${BASH_SOURCE[@]}&lt;/code&gt; và các biến Bash đặc biệt.&lt;/li&gt;
+&gt;GNU Bash Manual — Bash Variables&lt;/a&gt; — Reference for &lt;code&gt;${BASH_SOURCE[@]}&lt;/code&gt; and special Bash variables.&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://curl.se/docs/manpage.html" target="_blank" rel="noopener"
-&gt;curl Documentation&lt;/a&gt; — Tham khảo &lt;code&gt;--fail&lt;/code&gt;, &lt;code&gt;--silent&lt;/code&gt;, &lt;code&gt;--show-error&lt;/code&gt;, &lt;code&gt;--max-time&lt;/code&gt; dùng trong ví dụ healthcheck.&lt;/li&gt;
+&gt;curl Documentation&lt;/a&gt; — Reference for &lt;code&gt;--fail&lt;/code&gt;, &lt;code&gt;--silent&lt;/code&gt;, &lt;code&gt;--show-error&lt;/code&gt;, and &lt;code&gt;--max-time&lt;/code&gt; used in the healthcheck example.&lt;/li&gt;
 &lt;/ul&gt;</description></item></channel></rss>
