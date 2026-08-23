@@ -4487,7 +4487,7 @@
 &gt;GNU Bash Reference Manual - Shell Scripts&lt;/a&gt; — Describes how Bash reads and executes a shell script.&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.gnu.org/software/bash/manual/bash.html#The-Set-Builtin" target="_blank" rel="noopener"
 &gt;GNU Bash Reference Manual - The Set Builtin&lt;/a&gt; — Reference for &lt;code&gt;set&lt;/code&gt; options, including &lt;code&gt;-u&lt;/code&gt;, &lt;code&gt;-x&lt;/code&gt;, and &lt;code&gt;-n&lt;/code&gt;.&lt;/li&gt;
-&lt;/ul&gt;</description></item><item><title>Learning Linux &amp; Operating Systems</title><link>https://tech.nguuyen.io.vn/posts/devops/devops-step-two/</link><pubDate>Sat, 22 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/devops/devops-step-two/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-two.webp" alt="Featured image of post Learning Linux &amp; Operating Systems " /&gt;&lt;h2 id="why-is-linux-important-in-devops"&gt;Why is Linux important in DevOps?
+&lt;/ul&gt;</description></item><item><title>Learning Linux &amp; Operating Systems</title><link>https://tech.nguuyen.io.vn/posts/devops/devops-step-two/</link><pubDate>Sat, 22 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/devops/devops-step-two/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-two.jpg" alt="Featured image of post Learning Linux &amp; Operating Systems " /&gt;&lt;h2 id="why-is-linux-important-in-devops"&gt;Why is Linux important in DevOps?
 &lt;/h2&gt;&lt;p&gt;Linux is the foundation of most server systems, containers (Docker, Kubernetes), and cloud platforms. DevOps professionals need to master Linux to:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;✅ Manage servers effectively.&lt;/li&gt;
