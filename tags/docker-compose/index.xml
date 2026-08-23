@@ -680,8 +680,8 @@
 &lt;li&gt;&lt;strong&gt;Deploy&lt;/strong&gt; with &lt;code&gt;docker compose up --build -d&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Update&lt;/strong&gt; with &lt;code&gt;docker compose build app &amp;amp;&amp;amp; docker compose up --no-deps -d app&lt;/code&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;This is the most basic architecture for deploying a Node.js application to production. From here, you can extend with SSL (Let&amp;rsquo;s Encrypt), databases, monitoring, and more as needed. 🚀&lt;/p&gt;
-&lt;p&gt;If you find this article helpful, feel free to ⭐ star the repo or 📱 share it with your friends! 😊&lt;/p&gt;
+&lt;p&gt;This is the most basic architecture for deploying a Node.js application to production. From here, you can extend with SSL (Let&amp;rsquo;s Encrypt), databases, monitoring, and more as needed.&lt;/p&gt;
+&lt;p&gt;If you find this article helpful, feel free to star the repo or share it with your friends!&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="references"&gt;References
 &lt;/h2&gt;&lt;ul&gt;
@@ -1310,5 +1310,5 @@
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="conclusion"&gt;Conclusion
-&lt;/h2&gt;&lt;p&gt;Docker Compose v2 is a powerful tool that helps you manage multi-container applications with ease. With the best practices above, you can build and deploy applications professionally and efficiently! 🚀&lt;/p&gt;
-&lt;p&gt;Try experimenting with the examples above and gradually apply them to your real-world projects. 😊&lt;/p&gt;</description></item></channel></rss>
+&lt;/h2&gt;&lt;p&gt;Docker Compose v2 is a powerful tool that helps you manage multi-container applications with ease. With the best practices above, you can build and deploy applications professionally and efficiently!&lt;/p&gt;
+&lt;p&gt;Try experimenting with the examples above and gradually apply them to your real-world projects.&lt;/p&gt;</description></item></channel></rss>

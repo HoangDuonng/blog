@@ -305,7 +305,7 @@
 &lt;li&gt;Cài đặt đầy đủ: Docker Engine, CLI, containerd, Buildx, và Compose V2&lt;/li&gt;
 &lt;li&gt;Tự động khởi động và enable Docker service&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Bạn có thể lưu script này vào hệ thống quản lý cấu hình (Ansible, Terraform) hoặc đơn giản clone từ repository để sử dụng trên nhiều server. 🚀&lt;/p&gt;
+&lt;p&gt;Bạn có thể lưu script này vào hệ thống quản lý cấu hình (Ansible, Terraform) hoặc đơn giản clone từ repository để sử dụng trên nhiều server.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="tài-liệu-tham-khảo"&gt;Tài liệu tham khảo
 &lt;/h2&gt;&lt;ul&gt;

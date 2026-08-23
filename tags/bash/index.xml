@@ -4491,19 +4491,19 @@
 &lt;/h2&gt;&lt;p&gt;Installing Docker manually works fine for a single server, but when you need to set up &lt;strong&gt;multiple machines&lt;/strong&gt; or want a &lt;strong&gt;repeatable, error-free process&lt;/strong&gt;, a bash script is the way to go.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Benefits of scripted installation:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;⚡ &lt;strong&gt;Speed&lt;/strong&gt;: Install Docker in one command instead of running multiple steps&lt;/li&gt;
-&lt;li&gt;🔄 &lt;strong&gt;Consistency&lt;/strong&gt;: Every server gets the exact same setup&lt;/li&gt;
-&lt;li&gt;🚀 &lt;strong&gt;Automation&lt;/strong&gt;: Perfect for provisioning new servers in CI/CD pipelines&lt;/li&gt;
-&lt;li&gt;📋 &lt;strong&gt;Documentation&lt;/strong&gt;: The script itself serves as documentation of your setup process&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Speed&lt;/strong&gt;: Install Docker in one command instead of running multiple steps&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Consistency&lt;/strong&gt;: Every server gets the exact same setup&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Automation&lt;/strong&gt;: Perfect for provisioning new servers in CI/CD pipelines&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Documentation&lt;/strong&gt;: The script itself serves as documentation of your setup process&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="prerequisites"&gt;Prerequisites
 &lt;/h2&gt;&lt;p&gt;Before running the script, make sure you have:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🖥 &lt;strong&gt;Ubuntu 20.04, 22.04, or 24.04&lt;/strong&gt; server&lt;/li&gt;
-&lt;li&gt;🔐 &lt;strong&gt;Sudo privileges&lt;/strong&gt; to execute administrative commands&lt;/li&gt;
-&lt;li&gt;🌐 &lt;strong&gt;Internet connection&lt;/strong&gt; to download packages&lt;/li&gt;
-&lt;li&gt;⏱ &lt;strong&gt;Time&lt;/strong&gt;: The script takes approximately 2-5 minutes to complete&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Ubuntu 20.04, 22.04, or 24.04&lt;/strong&gt; server&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Sudo privileges&lt;/strong&gt; to execute administrative commands&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Internet connection&lt;/strong&gt; to download packages&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Time&lt;/strong&gt;: The script takes approximately 2-5 minutes to complete&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="the-installation-script"&gt;The Installation Script
@@ -4670,7 +4670,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Verify installation&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;GREEN&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;========================================&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;GREEN&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; Installation Complete! 🎉 &lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;GREEN&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; Installation Complete! &lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;GREEN&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;========================================&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker --version
@@ -4704,7 +4704,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl -fsSL https://your-server.com/install-docker.sh &lt;span class="p"&gt;|&lt;/span&gt; sudo bash
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;⚠ Security Note:&lt;/strong&gt; Always review scripts before piping them to &lt;code&gt;bash&lt;/code&gt;. Only use this method with scripts you trust or host yourself.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Security Note:&lt;/strong&gt; Always review scripts before piping them to &lt;code&gt;bash&lt;/code&gt;. Only use this method with scripts you trust or host yourself.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="what-the-script-does"&gt;What the Script Does
 &lt;/h2&gt;&lt;p&gt;Here&amp;rsquo;s a breakdown of each step:&lt;/p&gt;
@@ -4779,7 +4779,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker run hello-world
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;If you see the &amp;ldquo;Hello from Docker!&amp;rdquo; message, the installation was successful! 🎉&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;If you see the &amp;ldquo;Hello from Docker!&amp;rdquo; message, the installation was successful!&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Check Docker service status:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -4876,15 +4876,15 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="conclusion"&gt;Conclusion
-&lt;/h2&gt;&lt;p&gt;Using a bash script to install Docker saves time and eliminates manual errors. Whether you&amp;rsquo;re setting up a single development machine or provisioning a fleet of production servers, this script provides a reliable and repeatable process. 🚀&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;Using a bash script to install Docker saves time and eliminates manual errors. Whether you&amp;rsquo;re setting up a single development machine or provisioning a fleet of production servers, this script provides a reliable and repeatable process.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Key takeaways:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;📜 &lt;strong&gt;One command&lt;/strong&gt; to install Docker completely&lt;/li&gt;
-&lt;li&gt;🔄 &lt;strong&gt;Idempotent&lt;/strong&gt; — safe to run multiple times&lt;/li&gt;
-&lt;li&gt;🛠 &lt;strong&gt;Customizable&lt;/strong&gt; — extend the script for your specific needs&lt;/li&gt;
-&lt;li&gt;🚀 &lt;strong&gt;Production-ready&lt;/strong&gt; — includes Docker Compose plugin and Buildx&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;One command&lt;/strong&gt; to install Docker completely&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Idempotent&lt;/strong&gt; — safe to run multiple times&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Customizable&lt;/strong&gt; — extend the script for your specific needs&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Production-ready&lt;/strong&gt; — includes Docker Compose plugin and Buildx&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;📖 References:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;References:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://docs.docker.com/engine/install/ubuntu/" target="_blank" rel="noopener"
 &gt;Official Docker Installation Guide&lt;/a&gt;&lt;/li&gt;
@@ -4893,18 +4893,18 @@
 &lt;li&gt;&lt;a class="link" href="https://docs.docker.com/compose/install/linux/" target="_blank" rel="noopener"
 &gt;Docker Compose Plugin&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Happy automating! 🚀😊&lt;/p&gt;</description></item><item><title>Terminal Knowledge</title><link>https://tech.nguuyen.io.vn/posts/devops/devops-step-three/</link><pubDate>Sun, 23 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/devops/devops-step-three/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-three.jpg" alt="Featured image of post Terminal Knowledge" /&gt;&lt;h2 id="terminal-knowledge"&gt;Terminal Knowledge
+&lt;p&gt;Happy automating!&lt;/p&gt;</description></item><item><title>Terminal Knowledge</title><link>https://tech.nguuyen.io.vn/posts/devops/devops-step-three/</link><pubDate>Sun, 23 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/devops/devops-step-three/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-three.jpg" alt="Featured image of post Terminal Knowledge" /&gt;&lt;h2 id="terminal-knowledge"&gt;Terminal Knowledge
 &lt;/h2&gt;&lt;p&gt;Terminal is a text interface that allows users to interact with computer systems through CLI (Command Line Interface). It is an essential tool for system management, command execution, and task automation.&lt;/p&gt;
 &lt;h3 id="free-resources"&gt;Free Resources
 &lt;/h3&gt;&lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://en.wikipedia.org/wiki/Command-line_interface" target="_blank" rel="noopener"
-&gt;📄 Article: What is CLI?&lt;/a&gt;&lt;/li&gt;
+&gt;Article: What is CLI?&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.google.com/search?q=terminal%20knowledge%20guide%20for%20devops" target="_blank" rel="noopener"
-&gt;🔍 Google Search&lt;/a&gt;&lt;/li&gt;
+&gt;Google Search&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.youtube.com/results?search_query=terminal%20knowledge%20for%20devops" target="_blank" rel="noopener"
-&gt;▶ YouTube Search&lt;/a&gt;&lt;/li&gt;
+&gt;YouTube Search&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;🔹 &lt;strong&gt;Example:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Example:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -4920,20 +4920,20 @@
 &lt;/h2&gt;&lt;p&gt;Process monitoring is the continuous observation and analysis of processes in IT systems to ensure performance, efficiency, and compliance. It helps track important metrics such as resource usage and behavior of individual processes or applications running in the system.&lt;/p&gt;
 &lt;h3 id="recommended-tools"&gt;Recommended Tools
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;🟣 lsof&lt;/strong&gt; - Lists information about files opened by processes.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;lsof&lt;/strong&gt; - Lists information about files opened by processes.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id="free-resources-1"&gt;Free Resources
 &lt;/h3&gt;&lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://neverendingsecurity.wordpress.com/2015/04/13/lsof-commands-cheatsheet/" target="_blank" rel="noopener"
-&gt;📄 Lsof Cheat Sheet&lt;/a&gt;&lt;/li&gt;
+&gt;Lsof Cheat Sheet&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://man7.org/linux/man-pages/man8/lsof.8.html" target="_blank" rel="noopener"
-&gt;📖 lsof Documentation&lt;/a&gt;&lt;/li&gt;
+&gt;lsof Documentation&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=n9nZ1ellaV0" target="_blank" rel="noopener"
-&gt;▶ Video: Linux Crash Course - lsof Command&lt;/a&gt;&lt;/li&gt;
+&gt;Video: Linux Crash Course - lsof Command&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://app.daily.dev/tags/monitoring?ref=roadmapsh" target="_blank" rel="noopener"
-&gt;📝 Great Articles on Monitoring&lt;/a&gt;&lt;/li&gt;
+&gt;Great Articles on Monitoring&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;🔹 &lt;strong&gt;Example:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Example:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -4949,20 +4949,20 @@
 &lt;/h2&gt;&lt;p&gt;Performance monitoring helps collect, analyze, and report key performance metrics from applications, networks, servers, and databases.&lt;/p&gt;
 &lt;h3 id="recommended-tools-1"&gt;Recommended Tools
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;🟣 vmstat&lt;/strong&gt; - Virtual memory and system performance monitoring tool.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;vmstat&lt;/strong&gt; - Virtual memory and system performance monitoring tool.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id="free-resources-2"&gt;Free Resources
 &lt;/h3&gt;&lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.redhat.com/sysadmin/linux-commands-vmstat" target="_blank" rel="noopener"
-&gt;📖 Linux Commands: Exploring Virtual Memory with vmstat&lt;/a&gt;&lt;/li&gt;
+&gt;Linux Commands: Exploring Virtual Memory with vmstat&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://man7.org/linux/man-pages/man8/vmstat.8.html" target="_blank" rel="noopener"
-&gt;📄 vmstat Documentation&lt;/a&gt;&lt;/li&gt;
+&gt;vmstat Documentation&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://phoenixnap.com/kb/vmstat-command" target="_blank" rel="noopener"
-&gt;▶ vmstat Tutorial&lt;/a&gt;&lt;/li&gt;
+&gt;vmstat Tutorial&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://app.daily.dev/tags/monitoring?ref=roadmapsh" target="_blank" rel="noopener"
-&gt;📝 Great Articles on Monitoring&lt;/a&gt;&lt;/li&gt;
+&gt;Great Articles on Monitoring&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;🔹 &lt;strong&gt;Example:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Example:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -4976,8 +4976,8 @@
 &lt;/h2&gt;&lt;p&gt;Networking tools support monitoring, analyzing, troubleshooting, and managing network systems.&lt;/p&gt;
 &lt;h3 id="recommended-tools-2"&gt;Recommended Tools
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;🟣 Wireshark&lt;/strong&gt; - Deep packet analysis.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;🟣 Nmap&lt;/strong&gt; - Network scanning and security testing.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Wireshark&lt;/strong&gt; - Deep packet analysis.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Nmap&lt;/strong&gt; - Network scanning and security testing.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Ping&lt;/strong&gt; - Basic connectivity testing.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Traceroute&lt;/strong&gt; - Determine packet path through network.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Netstat&lt;/strong&gt; - Display network connections.&lt;/li&gt;
@@ -4987,7 +4987,7 @@
 &lt;li&gt;&lt;strong&gt;Nslookup/Dig&lt;/strong&gt; - DNS queries.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;PuTTY&lt;/strong&gt; - Remote connection via SSH or Telnet.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;🔹 &lt;strong&gt;Example:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Example:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -5003,12 +5003,12 @@
 &lt;/h2&gt;&lt;p&gt;Tools that support editing, processing, and converting text data.&lt;/p&gt;
 &lt;h3 id="recommended-tools-3"&gt;Recommended Tools
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;🟣 sed&lt;/strong&gt; - Stream editor for data manipulation.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;🟣 awk&lt;/strong&gt; - Pattern scanning and data extraction.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;🟣 grep&lt;/strong&gt; - Text search using regular expressions.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;sed&lt;/strong&gt; - Stream editor for data manipulation.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;awk&lt;/strong&gt; - Pattern scanning and data extraction.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;grep&lt;/strong&gt; - Text search using regular expressions.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;cut, sort, tr, uniq&lt;/strong&gt; - Supporting commands for text data processing.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;🔹 &lt;strong&gt;Example:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Example:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -5022,7 +5022,7 @@
 &lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="bash-scripts"&gt;Bash Scripts
 &lt;/h2&gt;&lt;p&gt;Bash is a powerful shell on Unix/Linux that helps execute commands and automate tasks.&lt;/p&gt;
-&lt;p&gt;🔹 &lt;strong&gt;Example:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Example:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -5038,12 +5038,12 @@
 &lt;/h2&gt;&lt;p&gt;Text editors are essential tools for editing and managing text files.&lt;/p&gt;
 &lt;h3 id="recommended-tools-4"&gt;Recommended Tools
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;🟣 Vim&lt;/strong&gt; - Powerful, highly customizable, suitable for programmers.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;🟣 Emacs&lt;/strong&gt; - Flexible with many supporting plugins.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Vim&lt;/strong&gt; - Powerful, highly customizable, suitable for programmers.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Emacs&lt;/strong&gt; - Flexible with many supporting plugins.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Sublime Text&lt;/strong&gt; - High speed, user-friendly interface.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Visual Studio Code&lt;/strong&gt; - Open source, supports debugging, extensions, integrated development tools.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;🔹 &lt;strong&gt;Example:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Example:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -5056,29 +5056,29 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="conclusion"&gt;Conclusion
-&lt;/h2&gt;&lt;p&gt;Understanding and mastering these tools helps you work more efficiently in Linux and DevOps environments. Tools &lt;em&gt;&lt;strong&gt;🟣 marked&lt;/strong&gt;&lt;/em&gt; are the most popular and powerful ones, recommended by many experts. You can learn more through the accompanying free resources. If there&amp;rsquo;s anything that needs clarification or addition, please provide feedback so I can update accordingly!&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;👉 Next step:&lt;/strong&gt; Advance your knowledge of &lt;em&gt;&lt;strong&gt;Version Control Systems&lt;/strong&gt;&lt;/em&gt; to effectively track, manage, and collaborate on source code.&lt;/p&gt;</description></item><item><title>Learning Linux &amp; Operating Systems</title><link>https://tech.nguuyen.io.vn/posts/devops/devops-step-two/</link><pubDate>Sat, 22 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/devops/devops-step-two/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-two.jpg" alt="Featured image of post Learning Linux &amp; Operating Systems " /&gt;&lt;h2 id="why-is-linux-important-in-devops"&gt;Why is Linux important in DevOps?
+&lt;/h2&gt;&lt;p&gt;Understanding and mastering these tools helps you work more efficiently in Linux and DevOps environments. Tools &lt;em&gt;&lt;strong&gt;marked&lt;/strong&gt;&lt;/em&gt; are the most popular and powerful ones, recommended by many experts. You can learn more through the accompanying free resources. If there&amp;rsquo;s anything that needs clarification or addition, please provide feedback so I can update accordingly!&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Next step:&lt;/strong&gt; Advance your knowledge of &lt;em&gt;&lt;strong&gt;Version Control Systems&lt;/strong&gt;&lt;/em&gt; to effectively track, manage, and collaborate on source code.&lt;/p&gt;</description></item><item><title>Learning Linux &amp; Operating Systems</title><link>https://tech.nguuyen.io.vn/posts/devops/devops-step-two/</link><pubDate>Sat, 22 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/devops/devops-step-two/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-two.jpg" alt="Featured image of post Learning Linux &amp; Operating Systems " /&gt;&lt;h2 id="why-is-linux-important-in-devops"&gt;Why is Linux important in DevOps?
 &lt;/h2&gt;&lt;p&gt;Linux is the foundation of most server systems, containers (Docker, Kubernetes), and cloud platforms. DevOps professionals need to master Linux to:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;✅ Manage servers effectively.&lt;/li&gt;
-&lt;li&gt;✅ Write automation scripts.&lt;/li&gt;
-&lt;li&gt;✅ Handle files, users, and processes.&lt;/li&gt;
-&lt;li&gt;✅ Optimize systems and security.&lt;/li&gt;
+&lt;li&gt;Manage servers effectively.&lt;/li&gt;
+&lt;li&gt;Write automation scripts.&lt;/li&gt;
+&lt;li&gt;Handle files, users, and processes.&lt;/li&gt;
+&lt;li&gt;Optimize systems and security.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="what-is-an-operating-system"&gt;What is an Operating System?
 &lt;/h2&gt;&lt;p&gt;An operating system (OS) is software that manages computer hardware and software resources, providing common services for programs. It acts as an intermediary between applications and hardware, handling tasks such as:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🔹 Memory management.&lt;/li&gt;
-&lt;li&gt;🔹 Process scheduling.&lt;/li&gt;
-&lt;li&gt;🔹 File system management.&lt;/li&gt;
-&lt;li&gt;🔹 Device control.&lt;/li&gt;
+&lt;li&gt;Memory management.&lt;/li&gt;
+&lt;li&gt;Process scheduling.&lt;/li&gt;
+&lt;li&gt;File system management.&lt;/li&gt;
+&lt;li&gt;Device control.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id="popular-operating-systems"&gt;Popular operating systems:
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;💻 &lt;strong&gt;Personal computers&lt;/strong&gt;: Windows, macOS, Linux (Ubuntu, Fedora,&amp;hellip;)&lt;/li&gt;
-&lt;li&gt;📱 &lt;strong&gt;Mobile devices&lt;/strong&gt;: iOS, Android&lt;/li&gt;
-&lt;li&gt;🖥 &lt;strong&gt;Servers&lt;/strong&gt;: Ubuntu Server, Red Hat Enterprise Linux, Windows Server&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Personal computers&lt;/strong&gt;: Windows, macOS, Linux (Ubuntu, Fedora,&amp;hellip;)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Mobile devices&lt;/strong&gt;: iOS, Android&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Servers&lt;/strong&gt;: Ubuntu Server, Red Hat Enterprise Linux, Windows Server&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Each operating system has different characteristics, interfaces, and compatibility capabilities. They play crucial roles in system security, performance optimization, and providing consistent user experiences.&lt;/p&gt;
 &lt;hr&gt;
@@ -5164,7 +5164,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;free -m
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="-how-to-run-the-script"&gt;▶ &lt;strong&gt;How to run the script:&lt;/strong&gt;
+&lt;/div&gt;&lt;h3 id="how-to-run-the-script"&gt;&lt;strong&gt;How to run the script:&lt;/strong&gt;
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -5179,21 +5179,21 @@
 &lt;h2 id="learning-resources"&gt;Learning Resources
 &lt;/h2&gt;&lt;p&gt;Here are some free resources to learn more about operating systems:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;📖 &lt;a class="link" href="https://en.wikipedia.org/wiki/Operating_system" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://en.wikipedia.org/wiki/Operating_system" target="_blank" rel="noopener"
 &gt;Operating Systems - Wiki&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📖 &lt;a class="link" href="https://www.tpointtech.com/operating-system" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.tpointtech.com/operating-system" target="_blank" rel="noopener"
 &gt;All you need to know about OS&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📖 &lt;a class="link" href="https://www.tutorialspoint.com/operating_system/os_overview.htm" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.tutorialspoint.com/operating_system/os_overview.htm" target="_blank" rel="noopener"
 &gt;Learn Operating Systems&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=pVzRTmdd9j0" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=pVzRTmdd9j0" target="_blank" rel="noopener"
 &gt;What are Operating Systems?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=vBURTt97EkA&amp;amp;list=PLBlnK6fEyqRiVhbXDGLXDk_OQAeuVcp2O" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=vBURTt97EkA&amp;amp;list=PLBlnK6fEyqRiVhbXDGLXDk_OQAeuVcp2O" target="_blank" rel="noopener"
 &gt;Operating Systems&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="conclusion"&gt;Conclusion
 &lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;✅ Linux is a mandatory skill in DevOps.&lt;/li&gt;
-&lt;li&gt;✅ Learn to use terminal &amp;amp; Bash scripting.&lt;/li&gt;
+&lt;li&gt;Linux is a mandatory skill in DevOps.&lt;/li&gt;
+&lt;li&gt;Learn to use terminal &amp;amp; Bash scripting.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;👉 Next step:&lt;/strong&gt; Learn more about &lt;em&gt;&lt;strong&gt;terminal and CLI usage&lt;/strong&gt;&lt;/em&gt; to work effectively with systems.&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;&lt;strong&gt;Next step:&lt;/strong&gt; Learn more about &lt;em&gt;&lt;strong&gt;terminal and CLI usage&lt;/strong&gt;&lt;/em&gt; to work effectively with systems.&lt;/p&gt;</description></item></channel></rss>

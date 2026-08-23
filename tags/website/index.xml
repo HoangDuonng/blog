@@ -4,14 +4,14 @@
 &lt;h2 id="prerequisites"&gt;Prerequisites
 &lt;/h2&gt;&lt;p&gt;Before you begin, make sure you:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🚀 Provision an Ubuntu 24.04 server.&lt;/li&gt;
-&lt;li&gt;🌍 Create an A record pointing your domain or subdomain to the server IP (e.g., &lt;code&gt;app.example.com&lt;/code&gt;).&lt;/li&gt;
-&lt;li&gt;🔐 Access the server via SSH and create a non-root sudo user.&lt;/li&gt;
-&lt;li&gt;🔄 Update the system packages.&lt;/li&gt;
+&lt;li&gt;Provision an Ubuntu 24.04 server.&lt;/li&gt;
+&lt;li&gt;Create an A record pointing your domain or subdomain to the server IP (e.g., &lt;code&gt;app.example.com&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;Access the server via SSH and create a non-root sudo user.&lt;/li&gt;
+&lt;li&gt;Update the system packages.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id="install-nginx-on-ubuntu-2404"&gt;Install NGINX on Ubuntu 24.04
 &lt;/h2&gt;&lt;p&gt;The latest NGINX package is available in Ubuntu 24.04&amp;rsquo;s default APT repository. Follow these steps to update the system and install NGINX.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;🔄 Update package lists&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Update package lists&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -20,7 +20,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt update
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;📦 Install NGINX&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Install NGINX&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -29,7 +29,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt install nginx -y
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🔍 Check installed NGINX version&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Check installed NGINX version&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -50,7 +50,7 @@
 &lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="manage-the-nginx-service"&gt;Manage the NGINX service
 &lt;/h2&gt;&lt;p&gt;NGINX uses the &lt;code&gt;nginx&lt;/code&gt; systemd service to manage runtime and processes. Use the commands below to enable and manage the service.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;🚀 Enable NGINX to start on boot&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Enable NGINX to start on boot&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -70,7 +70,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Executing: /usr/lib/systemd/systemd-sysv-install enable nginx
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;▶ Start NGINX&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Start NGINX&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -79,7 +79,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl start nginx
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;⏹ Stop NGINX&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Stop NGINX&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -88,7 +88,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl stop nginx
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🔄 Restart NGINX&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Restart NGINX&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -97,7 +97,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl restart nginx
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🔍 Check NGINX status&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Check NGINX status&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -145,7 +145,7 @@
 &lt;hr&gt;
 &lt;h2 id="create-an-nginx-virtual-host"&gt;Create an Nginx virtual host
 &lt;/h2&gt;&lt;p&gt;An Nginx virtual host serves web app files from a specific directory using a domain name. Follow these steps to set up a sample virtual host securely.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;📂 Create a new virtual host config file&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Create a new virtual host config file&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;In &lt;code&gt;/etc/nginx/sites-available&lt;/code&gt;, create a new config file, for example: &lt;code&gt;app.example.com.conf&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
@@ -195,7 +195,7 @@
 &lt;/div&gt;&lt;ul&gt;
 &lt;li&gt;Save and close the file.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;✅ Test Nginx configuration&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Test Nginx configuration&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Check the configuration for errors:&lt;/li&gt;
 &lt;/ul&gt;
@@ -220,7 +220,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;nginx: configuration file /etc/nginx/nginx.conf test is successful
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🔗 Enable the virtual host&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Enable the virtual host&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Link the config file into &lt;code&gt;/etc/nginx/sites-enabled&lt;/code&gt;:&lt;/li&gt;
 &lt;/ul&gt;
@@ -232,7 +232,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo ln -s /etc/nginx/sites-available/app.example.com.conf /etc/nginx/sites-enabled/
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;📁 Create the web root directory&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Create the web root directory&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -241,7 +241,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo mkdir -p /var/www/app.example.com
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;📝 Create a sample HTML file&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Create a sample HTML file&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Create &lt;code&gt;index.html&lt;/code&gt; in the web root:&lt;/li&gt;
 &lt;/ul&gt;
@@ -277,7 +277,7 @@
 &lt;/div&gt;&lt;ul&gt;
 &lt;li&gt;Save and close the file.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;🔄 Restart Nginx&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Restart Nginx&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -286,7 +286,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo systemctl restart nginx
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🌍 Verify the virtual host&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Verify the virtual host&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Use &lt;code&gt;curl&lt;/code&gt; to test:&lt;/li&gt;
 &lt;/ul&gt;
@@ -312,7 +312,7 @@
 &lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="secure-the-nginx-web-server"&gt;Secure the Nginx web server
 &lt;/h2&gt;&lt;p&gt;SSL certificates encrypt communication between the browser and your server over HTTPS. By default, Nginx listens on insecure HTTP port 80. Follow these steps to obtain a trusted SSL certificate from Let&amp;rsquo;s Encrypt and enable HTTPS.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Install Certbot – Let&amp;rsquo;s Encrypt client 🔧&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Install Certbot – Let&amp;rsquo;s Encrypt client&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Install Certbot using Snap:&lt;/li&gt;
 &lt;/ul&gt;
@@ -335,7 +335,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo certbot --version
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📌 &lt;strong&gt;Sample output:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Sample output:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -358,11 +358,11 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;This will:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;✅ Generate a valid SSL certificate&lt;/li&gt;
-&lt;li&gt;✅ Automatically configure Nginx to use SSL&lt;/li&gt;
-&lt;li&gt;✅ Enable HTTPS on your web server&lt;/li&gt;
+&lt;li&gt;Generate a valid SSL certificate&lt;/li&gt;
+&lt;li&gt;Automatically configure Nginx to use SSL&lt;/li&gt;
+&lt;li&gt;Enable HTTPS on your web server&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Test automatic renewal 🔄&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Test automatic renewal&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Let&amp;rsquo;s Encrypt certificates last 90 days. Check auto-renewal with:&lt;/li&gt;
 &lt;/ul&gt;
@@ -387,11 +387,11 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;https://app.example.com
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;If you see the lock icon 🔒, SSL is installed successfully! 🚀&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;If you see the lock icon, SSL is installed successfully!&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="configure-ufw-firewall-rules"&gt;Configure UFW firewall rules
 &lt;/h2&gt;&lt;p&gt;Uncomplicated Firewall (UFW) is installed and enabled by default on Ubuntu 24.04. Follow these steps to allow HTTP and HTTPS traffic.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Allow HTTP (Port 80) 🔌&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Allow HTTP (Port 80)&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Run:&lt;/li&gt;
 &lt;/ul&gt;
@@ -403,7 +403,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo ufw allow 80/tcp
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Allow HTTPS (Port 443) 🔐&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Allow HTTPS (Port 443)&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Run:&lt;/li&gt;
 &lt;/ul&gt;
@@ -415,7 +415,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo ufw allow 443/tcp
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Check firewall status 🔢&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Check firewall status&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Run:&lt;/li&gt;
 &lt;/ul&gt;
@@ -427,7 +427,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo ufw status
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;👉 &lt;strong&gt;Sample output:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Sample output:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -454,11 +454,11 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;443/tcp (v6) ALLOW Anywhere (v6)
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;🛡 After setup, the server only allows HTTP and HTTPS connections.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;After setup, the server only allows HTTP and HTTPS connections.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="conclusion"&gt;Conclusion
 &lt;/h2&gt;&lt;p&gt;Congratulations on installing Nginx on Ubuntu 24.04 and configuring a web server for your applications. Nginx supports multiple virtual hosts to deploy applications securely. You can also integrate Nginx with MySQL and PHP to build dynamic web apps. For more configuration options, visit the official &lt;a class="link" href="https://docs.nginx.com/" target="_blank" rel="noopener"
-&gt;Nginx documentation&lt;/a&gt;. 🚀😊&lt;/p&gt;</description></item><item><title>Introduction to Nginx</title><link>https://tech.nguuyen.io.vn/posts/website/nginx-introduction-guide/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/website/nginx-introduction-guide/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/website/nginx-introduction-guide.jpg" alt="Featured image of post Introduction to Nginx" /&gt;&lt;h2 id="what-is-nginx"&gt;What is Nginx?
+&gt;Nginx documentation&lt;/a&gt;.&lt;/p&gt;</description></item><item><title>Introduction to Nginx</title><link>https://tech.nguuyen.io.vn/posts/website/nginx-introduction-guide/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/website/nginx-introduction-guide/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/website/nginx-introduction-guide.jpg" alt="Featured image of post Introduction to Nginx" /&gt;&lt;h2 id="what-is-nginx"&gt;What is Nginx?
 &lt;/h2&gt;&lt;p align="center"&gt;
 &lt;img src="https://wiki.matbao.net/wp-content/uploads/2019/09/nginx-la-gi.jpg" alt="NGINX is a reliable open-source web server"&gt;
 &lt;/p&gt;
@@ -483,15 +483,15 @@
 &lt;p align="center"&gt;&lt;em&gt;NGINX offers powerful features for web development&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;Nginx provides many standout features:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;⚡ Handles over 10,000 concurrent connections with low memory usage.&lt;/li&gt;
-&lt;li&gt;📂 Serves static files and file indexing.&lt;/li&gt;
-&lt;li&gt;🔄 Load balancing and reverse proxy with caching.&lt;/li&gt;
-&lt;li&gt;🚀 Supports FastCGI, uWSGI, SCGI, and Memcached.&lt;/li&gt;
-&lt;li&gt;🛠 Modular architecture with automatic gzip compression.&lt;/li&gt;
-&lt;li&gt;🔐 SSL/TLS encryption support.&lt;/li&gt;
-&lt;li&gt;🔀 URL rewrites using regular expressions.&lt;/li&gt;
-&lt;li&gt;🌐 WebSocket support and connection limits.&lt;/li&gt;
-&lt;li&gt;📡 IPv6 compatibility.&lt;/li&gt;
+&lt;li&gt;Handles over 10,000 concurrent connections with low memory usage.&lt;/li&gt;
+&lt;li&gt;Serves static files and file indexing.&lt;/li&gt;
+&lt;li&gt;Load balancing and reverse proxy with caching.&lt;/li&gt;
+&lt;li&gt;Supports FastCGI, uWSGI, SCGI, and Memcached.&lt;/li&gt;
+&lt;li&gt;Modular architecture with automatic gzip compression.&lt;/li&gt;
+&lt;li&gt;SSL/TLS encryption support.&lt;/li&gt;
+&lt;li&gt;URL rewrites using regular expressions.&lt;/li&gt;
+&lt;li&gt;WebSocket support and connection limits.&lt;/li&gt;
+&lt;li&gt;IPv6 compatibility.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id="nginx-vs-apache"&gt;Nginx vs Apache
 &lt;/h2&gt;&lt;p align="center"&gt;
@@ -525,7 +525,7 @@
 &lt;p&gt;You can also use tools like &lt;strong&gt;Pingdom&lt;/strong&gt; or &lt;strong&gt;GTmetrix&lt;/strong&gt; to check.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="conclusion"&gt;Conclusion
-&lt;/h2&gt;&lt;p&gt;Nginx has become one of the most popular web servers thanks to high performance, the ability to handle thousands of concurrent connections, and powerful features. Whether you need to serve static content, balance load, or run a reverse proxy, Nginx is a strong choice. Hopefully this guide helps you understand Nginx and how it works. If you are considering an optimized web server for your project, try Nginx and explore its benefits! 🚀😊&lt;/p&gt;</description></item><item><title>Point a Domain to Hosting</title><link>https://tech.nguuyen.io.vn/posts/website/domain-to-hosting-setup/</link><pubDate>Thu, 27 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/website/domain-to-hosting-setup/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/website/domain-to-hosting-setup.jpg" alt="Featured image of post Point a Domain to Hosting" /&gt;&lt;h2 id="why-point-a-domain-to-hosting"&gt;Why point a domain to hosting?
+&lt;/h2&gt;&lt;p&gt;Nginx has become one of the most popular web servers thanks to high performance, the ability to handle thousands of concurrent connections, and powerful features. Whether you need to serve static content, balance load, or run a reverse proxy, Nginx is a strong choice. Hopefully this guide helps you understand Nginx and how it works. If you are considering an optimized web server for your project, try Nginx and explore its benefits!&lt;/p&gt;</description></item><item><title>Point a Domain to Hosting</title><link>https://tech.nguuyen.io.vn/posts/website/domain-to-hosting-setup/</link><pubDate>Thu, 27 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/website/domain-to-hosting-setup/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/website/domain-to-hosting-setup.jpg" alt="Featured image of post Point a Domain to Hosting" /&gt;&lt;h2 id="why-point-a-domain-to-hosting"&gt;Why point a domain to hosting?
 &lt;/h2&gt;&lt;p&gt;Domain and hosting are the two essentials that keep a website online.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;Domain&lt;/strong&gt; is the website address.&lt;/li&gt;
@@ -630,19 +630,19 @@ title="YouTube Video"
 &lt;/iframe&gt;
 &lt;/div&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;/p&gt;&lt;span class="cite"&gt;&lt;span&gt;― &lt;/span&gt;&lt;span&gt;Source, &lt;/span&gt;&lt;a href="https://www.youtube.com/@F8VNOfficial"&gt;&lt;cite&gt;F8 Official ✔&lt;/cite&gt;&lt;/a&gt;&lt;/span&gt;&lt;/blockquote&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;&lt;span class="cite"&gt;&lt;span&gt;― &lt;/span&gt;&lt;span&gt;Source, &lt;/span&gt;&lt;a href="https://www.youtube.com/@F8VNOfficial"&gt;&lt;cite&gt;F8 Official&lt;/cite&gt;&lt;/a&gt;&lt;/span&gt;&lt;/blockquote&gt;&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="conclusion"&gt;Conclusion
-&lt;/h2&gt;&lt;p&gt;Pointing a domain to hosting is essential for your website to work online. Whether you use nameservers, A records, or an intermediate nameserver, double-check your settings and allow time for DNS propagation. If you encounter issues, review the configuration and try again 🔄. Good luck, and feel free to leave a comment if you need help! 💬😊&lt;/p&gt;</description></item><item><title>Deploy a Website to Hosting the Simplest Way (HTML/CSS or React/Vue.js)</title><link>https://tech.nguuyen.io.vn/posts/website/how-to-deploy-a-website/</link><pubDate>Wed, 26 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/website/how-to-deploy-a-website/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/website/upload-website-on-hosting.jpg" alt="Featured image of post Deploy a Website to Hosting the Simplest Way (HTML/CSS or React/Vue.js)" /&gt;&lt;h2 id="how-to-upload-a-website-to-hosting-via-file-manager-and-cpanel-from-a-to-z"&gt;How to upload a website to hosting via File Manager and cPanel from A to Z
+&lt;/h2&gt;&lt;p&gt;Pointing a domain to hosting is essential for your website to work online. Whether you use nameservers, A records, or an intermediate nameserver, double-check your settings and allow time for DNS propagation. If you encounter issues, review the configuration and try again. Good luck, and feel free to leave a comment if you need help!&lt;/p&gt;</description></item><item><title>Deploy a Website to Hosting the Simplest Way (HTML/CSS or React/Vue.js)</title><link>https://tech.nguuyen.io.vn/posts/website/how-to-deploy-a-website/</link><pubDate>Wed, 26 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/website/how-to-deploy-a-website/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/website/upload-website-on-hosting.jpg" alt="Featured image of post Deploy a Website to Hosting the Simplest Way (HTML/CSS or React/Vue.js)" /&gt;&lt;h2 id="how-to-upload-a-website-to-hosting-via-file-manager-and-cpanel-from-a-to-z"&gt;How to upload a website to hosting via File Manager and cPanel from A to Z
 &lt;/h2&gt;&lt;hr&gt;
 &lt;p&gt;Uploading a website to hosting is an essential step to bring your site online. It is not just about transferring files but also ensuring everything runs smoothly and securely. This guide walks you through the steps, from preparing files and databases to using the right upload tools.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="key-points-to-remember"&gt;Key points to remember
 &lt;/h2&gt;&lt;p&gt;Before you start uploading, keep these essentials in mind:&lt;/p&gt;
-&lt;p&gt;✅ &lt;strong&gt;What to prepare before uploading&lt;/strong&gt;: Website files, database, control panel access, and an FTP client like FileZilla.&lt;/p&gt;
-&lt;p&gt;✅ &lt;strong&gt;Ways to upload&lt;/strong&gt;: Choose a reliable host, then use File Manager, FTP, WordPress plugins, SSH, or provider support.&lt;/p&gt;
-&lt;p&gt;✅ &lt;strong&gt;Why upload to hosting&lt;/strong&gt;: Makes your site public, improves security, boosts speed, and simplifies management.&lt;/p&gt;
-&lt;p&gt;✅ &lt;strong&gt;Four steps to upload a website&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;What to prepare before uploading&lt;/strong&gt;: Website files, database, control panel access, and an FTP client like FileZilla.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ways to upload&lt;/strong&gt;: Choose a reliable host, then use File Manager, FTP, WordPress plugins, SSH, or provider support.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Why upload to hosting&lt;/strong&gt;: Makes your site public, improves security, boosts speed, and simplifies management.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Four steps to upload a website&lt;/strong&gt;:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Upload website files to &lt;code&gt;public_html&lt;/code&gt; via File Manager or FTP.&lt;/li&gt;
 &lt;li&gt;Verify files are in the correct location.&lt;/li&gt;
@@ -655,10 +655,10 @@ title="YouTube Video"
 &lt;li&gt;&lt;strong&gt;Website files&lt;/strong&gt;: These can be the contents of your old &lt;code&gt;public_html&lt;/code&gt; folder, source code, or the latest backup.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;📌 Note for React/Vue.js deployments&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Note for React/Vue.js deployments&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;When building a &lt;strong&gt;React&lt;/strong&gt; or &lt;strong&gt;Vue.js&lt;/strong&gt; app, you do not upload the full source code,
 only the &lt;strong&gt;static build output&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;🔹 Build and zip steps:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Build and zip steps:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Run the build command:
 &lt;ul&gt;
@@ -687,7 +687,7 @@ only the &lt;strong&gt;static build output&lt;/strong&gt;.&lt;/p&gt;
 &lt;li&gt;The output folder is usually &lt;code&gt;build/&lt;/code&gt; (&lt;strong&gt;React&lt;/strong&gt;) or &lt;code&gt;dist/&lt;/code&gt; (&lt;strong&gt;Vue.js&lt;/strong&gt;).&lt;/li&gt;
 &lt;li&gt;Zip the &lt;code&gt;build&lt;/code&gt; or &lt;code&gt;dist&lt;/code&gt; folder before uploading.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;📤 Uploading to the server:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Uploading to the server:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;With &lt;strong&gt;cPanel&lt;/strong&gt;, extract directly in &lt;code&gt;public_html&lt;/code&gt;.&lt;/li&gt;
 &lt;li&gt;With &lt;strong&gt;SSH/SFTP&lt;/strong&gt;, upload and unzip using:
@@ -838,7 +838,7 @@ alt="Ask hosting support"
 &gt;&lt;/p&gt;
 &lt;p align="center"&gt;&lt;em&gt;Figure 6: Ask hosting support&lt;/em&gt;&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;📌 &lt;strong&gt;Notes after uploading&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Notes after uploading&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;Move all data from subfolders into &lt;code&gt;public_html&lt;/code&gt;&lt;/strong&gt; so the site loads correctly.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Check file structure and database connections&lt;/strong&gt; to avoid runtime errors.&lt;/li&gt;
@@ -1039,7 +1039,7 @@ alt="Import database"
 &lt;h3 id="update-configuration-for-database-connection"&gt;Update configuration for database connection
 &lt;/h3&gt;&lt;p&gt;After upload, open your &lt;strong&gt;PHP configuration file&lt;/strong&gt; and fill in host, database name, username, and password. The file name and location depend on your software. For &lt;strong&gt;WordPress&lt;/strong&gt;, the file is &lt;code&gt;wp-config.php&lt;/code&gt; in &lt;code&gt;public_html&lt;/code&gt;.&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;⚠ &lt;strong&gt;Notes:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Notes:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Large databases should be split into smaller files to speed up uploads.&lt;/li&gt;
 &lt;li&gt;If your database contains special characters, convert them to &lt;strong&gt;ASCII&lt;/strong&gt; before upload.&lt;/li&gt;
@@ -1059,9 +1059,9 @@ alt="Import database"
 &lt;li&gt;&lt;strong&gt;Wait for DNS propagation:&lt;/strong&gt; New DNS changes can take &lt;strong&gt;24 hours&lt;/strong&gt;.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Check immediately using:&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;🖥 &lt;strong&gt;Hosts file:&lt;/strong&gt; Edit the hosts file to simulate DNS changes.&lt;/li&gt;
-&lt;li&gt;🌐 &lt;strong&gt;Online tools:&lt;/strong&gt; Use online DNS checkers.&lt;/li&gt;
-&lt;li&gt;🔌 &lt;strong&gt;Browser plugins:&lt;/strong&gt; Use plugins for virtual hosts.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Hosts file:&lt;/strong&gt; Edit the hosts file to simulate DNS changes.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Online tools:&lt;/strong&gt; Use online DNS checkers.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Browser plugins:&lt;/strong&gt; Use plugins for virtual hosts.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -1088,9 +1088,9 @@ alt="Import database"
 &lt;/h3&gt;&lt;ul&gt;
 &lt;li&gt;Performance can vary throughout the day.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;👉 &lt;strong&gt;If issues appear and you are unsure how to fix them, contact your hosting provider.&lt;/strong&gt; 🚀&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;If issues appear and you are unsure how to fix them, contact your hosting provider.&lt;/strong&gt;&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="conclusion"&gt;Conclusion
 &lt;/h2&gt;&lt;p&gt;Uploading a website to hosting is a key step for stable online operation. By preparing correctly and following the steps above, you ensure your website is ready to serve users effectively.&lt;/p&gt;
-&lt;p&gt;💡 If you have questions or need help, leave a comment below. I will respond soon.&lt;/p&gt;
-&lt;p&gt;Thanks for reading! 🚀&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;If you have questions or need help, leave a comment below. I will respond soon.&lt;/p&gt;
+&lt;p&gt;Thanks for reading!&lt;/p&gt;</description></item></channel></rss>

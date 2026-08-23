@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Cloud on Hoàng Dương</title><link>https://tech.nguuyen.io.vn/vi/tags/cloud/</link><description>Recent content in Cloud on Hoàng Dương</description><generator>Hugo -- gohugo.io</generator><language>vi</language><lastBuildDate>Tue, 25 Feb 2025 00:00:00 +0000</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/vi/tags/cloud/index.xml" rel="self" type="application/rss+xml"/><item><title>Quản lý Artifacts trong phát triển phần mềm</title><link>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-nineteen/</link><pubDate>Tue, 25 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-nineteen/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-nineteen.jpg" alt="Featured image of post Quản lý Artifacts trong phát triển phần mềm" /&gt;&lt;h2 id="artifacts-là-gì"&gt;Artifacts là gì?
 &lt;/h2&gt;&lt;p&gt;Artifacts là các sản phẩm được tạo ra trong suốt vòng đời phát triển phần mềm. Chúng có thể bao gồm:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;📜 &lt;strong&gt;Mã nguồn (Source code)&lt;/strong&gt;: Các tệp chứa logic ứng dụng.&lt;/li&gt;
-&lt;li&gt;🏗 &lt;strong&gt;Binaries&lt;/strong&gt;: Các tệp thực thi hoặc thư viện được biên dịch.&lt;/li&gt;
-&lt;li&gt;📖 &lt;strong&gt;Tài liệu (Documentation)&lt;/strong&gt;: Hướng dẫn sử dụng, API specs.&lt;/li&gt;
-&lt;li&gt;⚙ &lt;strong&gt;Tệp cấu hình (Configuration files)&lt;/strong&gt;: Các thiết lập cần thiết để chạy ứng dụng.&lt;/li&gt;
-&lt;li&gt;🛠 &lt;strong&gt;Kết quả kiểm thử (Test results)&lt;/strong&gt;: Báo cáo từ các quy trình kiểm thử.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Mã nguồn (Source code)&lt;/strong&gt;: Các tệp chứa logic ứng dụng.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Binaries&lt;/strong&gt;: Các tệp thực thi hoặc thư viện được biên dịch.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Tài liệu (Documentation)&lt;/strong&gt;: Hướng dẫn sử dụng, API specs.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Tệp cấu hình (Configuration files)&lt;/strong&gt;: Các thiết lập cần thiết để chạy ứng dụng.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Kết quả kiểm thử (Test results)&lt;/strong&gt;: Báo cáo từ các quy trình kiểm thử.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Việc quản lý artifacts giúp đảm bảo tính nhất quán, dễ dàng theo dõi và triển khai phần mềm hiệu quả hơn.&lt;/p&gt;
 &lt;hr&gt;
@@ -71,8 +71,8 @@
 &lt;hr&gt;
 &lt;h2 id="kết-luận"&gt;Kết luận
 &lt;/h2&gt;&lt;p&gt;Việc quản lý artifacts đóng vai trò quan trọng trong quy trình phát triển phần mềm. Sử dụng các công cụ như &lt;strong&gt;Artifactory, Nexus, và Cloudsmith&lt;/strong&gt; giúp đảm bảo tính tổ chức, bảo mật và hiệu quả trong việc lưu trữ và triển khai ứng dụng. Tùy vào nhu cầu của dự án, bạn có thể chọn công cụ phù hợp để tối ưu hóa quy trình DevOps của mình!&lt;/p&gt;
-&lt;p&gt;🛠 Bạn đang sử dụng công cụ nào để quản lý artifacts? Hãy chia sẻ kinh nghiệm của bạn!&lt;/p&gt;
-&lt;p&gt;👉 &lt;strong&gt;Bước tiếp theo:&lt;/strong&gt; Tìm hiểu về &lt;em&gt;&lt;strong&gt;GitOps&lt;/strong&gt;&lt;/em&gt; quá trình cung cấp và cấu hình tài nguyên (máy chủ, mạng, lưu trữ, tài khoản) để hệ thống hoặc ứng dụng có thể hoạt động hiệu quả.&lt;/p&gt;</description></item><item><title>CI/CD - Tích hợp liên tục và triển khai liên tục</title><link>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-thirteen/</link><pubDate>Mon, 24 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-thirteen/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-thirteen.jpg" alt="Featured image of post CI/CD - Tích hợp liên tục và triển khai liên tục" /&gt;&lt;h2 id="cicd-là-gì"&gt;CI/CD là gì?
+&lt;p&gt;Bạn đang sử dụng công cụ nào để quản lý artifacts? Hãy chia sẻ kinh nghiệm của bạn!&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Bước tiếp theo:&lt;/strong&gt; Tìm hiểu về &lt;em&gt;&lt;strong&gt;GitOps&lt;/strong&gt;&lt;/em&gt; quá trình cung cấp và cấu hình tài nguyên (máy chủ, mạng, lưu trữ, tài khoản) để hệ thống hoặc ứng dụng có thể hoạt động hiệu quả.&lt;/p&gt;</description></item><item><title>CI/CD - Tích hợp liên tục và triển khai liên tục</title><link>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-thirteen/</link><pubDate>Mon, 24 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-thirteen/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-thirteen.jpg" alt="Featured image of post CI/CD - Tích hợp liên tục và triển khai liên tục" /&gt;&lt;h2 id="cicd-là-gì"&gt;CI/CD là gì?
 &lt;/h2&gt;&lt;p&gt;CI/CD (Continuous Integration/Continuous Deployment) là một phương pháp giúp tự động hóa quá trình phát triển phần mềm, giúp giảm lỗi, tăng tốc độ triển khai và cải thiện chất lượng sản phẩm.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;Continuous Integration (CI):&lt;/strong&gt; Tích hợp liên tục, giúp phát hiện lỗi sớm bằng cách tự động kiểm thử mỗi khi có thay đổi trong mã nguồn.&lt;/li&gt;
@@ -82,13 +82,13 @@
 &lt;h2 id="các-công-cụ-cicd-phổ-biến"&gt;Các công cụ CI/CD phổ biến
 &lt;/h2&gt;&lt;h3 id="jenkins"&gt;Jenkins
 &lt;/h3&gt;&lt;p&gt;Jenkins là một máy chủ tự động hóa mã nguồn mở phổ biến, giúp xây dựng, kiểm thử và triển khai phần mềm một cách tự động.&lt;/p&gt;
-&lt;p&gt;📌 &lt;strong&gt;Đặc điểm nổi bật:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Đặc điểm nổi bật:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Hỗ trợ nhiều plugin, dễ dàng tích hợp với các công cụ DevOps.&lt;/li&gt;
 &lt;li&gt;Giao diện web trực quan, dễ dàng cấu hình.&lt;/li&gt;
 &lt;li&gt;Hỗ trợ cả môi trường Windows và Linux.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;💡 &lt;strong&gt;Ví dụ:&lt;/strong&gt; Cấu hình một pipeline đơn giản trong Jenkinsfile&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ví dụ:&lt;/strong&gt; Cấu hình một pipeline đơn giản trong Jenkinsfile&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -135,23 +135,23 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="o"&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Tài nguyên hữu ích:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Tài nguyên hữu ích:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.jenkins.io/" target="_blank" rel="noopener"
-&gt;🔗 Trang chủ Jenkins&lt;/a&gt;&lt;/li&gt;
+&gt;Trang chủ Jenkins&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=6YZvp2GwT0A" target="_blank" rel="noopener"
-&gt;🎥 Hướng dẫn Jenkins từ A-Z&lt;/a&gt;&lt;/li&gt;
+&gt;Hướng dẫn Jenkins từ A-Z&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h3 id="circleci"&gt;CircleCI
 &lt;/h3&gt;&lt;p&gt;CircleCI là một nền tảng CI/CD mạnh mẽ, hỗ trợ nhiều ngôn ngữ lập trình và tích hợp tốt với GitHub, Bitbucket.&lt;/p&gt;
-&lt;p&gt;📌 &lt;strong&gt;Đặc điểm nổi bật:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Đặc điểm nổi bật:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Hỗ trợ build song song để tăng tốc độ xử lý.&lt;/li&gt;
 &lt;li&gt;Tích hợp tốt với Docker và Kubernetes.&lt;/li&gt;
 &lt;li&gt;Có phiên bản cloud và self-hosted.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;💡 &lt;strong&gt;Ví dụ:&lt;/strong&gt; Cấu hình một pipeline CircleCI trong &lt;code&gt;.circleci/config.yml&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ví dụ:&lt;/strong&gt; Cấu hình một pipeline CircleCI trong &lt;code&gt;.circleci/config.yml&lt;/code&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -176,23 +176,23 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;run&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;npm test&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Tài nguyên hữu ích:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Tài nguyên hữu ích:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://circleci.com/" target="_blank" rel="noopener"
-&gt;🔗 Trang chủ CircleCI&lt;/a&gt;&lt;/li&gt;
+&gt;Trang chủ CircleCI&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=_XaYv9zvHUk" target="_blank" rel="noopener"
-&gt;🎥 Video hướng dẫn CircleCI&lt;/a&gt;&lt;/li&gt;
+&gt;Video hướng dẫn CircleCI&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h3 id="gitlab-cicd"&gt;GitLab CI/CD
 &lt;/h3&gt;&lt;p&gt;GitLab CI/CD là một hệ thống tích hợp sẵn trong GitLab, cho phép tự động hóa quá trình kiểm thử và triển khai ngay trong Git repository.&lt;/p&gt;
-&lt;p&gt;📌 &lt;strong&gt;Đặc điểm nổi bật:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Đặc điểm nổi bật:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Hỗ trợ tự động hóa toàn bộ pipeline từ build, test đến deploy.&lt;/li&gt;
 &lt;li&gt;Có sẵn trong GitLab, không cần công cụ bên ngoài.&lt;/li&gt;
 &lt;li&gt;Hỗ trợ cả chạy pipeline trên Docker container.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;💡 &lt;strong&gt;Ví dụ:&lt;/strong&gt; Cấu hình pipeline GitLab CI/CD trong &lt;code&gt;.gitlab-ci.yml&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ví dụ:&lt;/strong&gt; Cấu hình pipeline GitLab CI/CD trong &lt;code&gt;.gitlab-ci.yml&lt;/code&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -219,23 +219,23 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="l"&gt;npm test&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Tài nguyên hữu ích:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Tài nguyên hữu ích:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://gitlab.com/" target="_blank" rel="noopener"
-&gt;🔗 Trang chủ GitLab&lt;/a&gt;&lt;/li&gt;
+&gt;Trang chủ GitLab&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=z7nLsJvEyMY" target="_blank" rel="noopener"
-&gt;🎥 Hướng dẫn GitLab CI/CD&lt;/a&gt;&lt;/li&gt;
+&gt;Hướng dẫn GitLab CI/CD&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h3 id="github-actions"&gt;GitHub Actions
 &lt;/h3&gt;&lt;p&gt;GitHub Actions là công cụ CI/CD được tích hợp trực tiếp vào GitHub, giúp tự động hóa quá trình kiểm thử và triển khai mỗi khi có thay đổi trong repository.&lt;/p&gt;
-&lt;p&gt;📌 &lt;strong&gt;Đặc điểm nổi bật:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Đặc điểm nổi bật:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Tích hợp chặt chẽ với GitHub, dễ dàng thiết lập workflow.&lt;/li&gt;
 &lt;li&gt;Hỗ trợ nhiều hệ điều hành và ngôn ngữ lập trình.&lt;/li&gt;
 &lt;li&gt;Có thể sử dụng marketplace với hàng nghìn actions có sẵn.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;💡 &lt;strong&gt;Ví dụ:&lt;/strong&gt; Workflow GitHub Actions trong &lt;code&gt;.github/workflows/main.yml&lt;/code&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ví dụ:&lt;/strong&gt; Workflow GitHub Actions trong &lt;code&gt;.github/workflows/main.yml&lt;/code&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -268,29 +268,29 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;- &lt;span class="nt"&gt;run&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;npm test&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Tài nguyên hữu ích:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Tài nguyên hữu ích:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://docs.github.com/en/actions" target="_blank" rel="noopener"
-&gt;🔗 Trang chủ GitHub Actions&lt;/a&gt;&lt;/li&gt;
+&gt;Trang chủ GitHub Actions&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=nyKZTKQS_EQ" target="_blank" rel="noopener"
-&gt;🎥 Video hướng dẫn GitHub Actions&lt;/a&gt;&lt;/li&gt;
+&gt;Video hướng dẫn GitHub Actions&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="kết-luận"&gt;Kết luận
-&lt;/h2&gt;&lt;p&gt;CI/CD giúp tăng tốc quá trình phát triển phần mềm, giảm thiểu lỗi và nâng cao chất lượng sản phẩm. Tùy theo nhu cầu và môi trường làm việc, bạn có thể chọn &lt;strong&gt;Jenkins, CircleCI, GitLab CI/CD hoặc GitHub Actions&lt;/strong&gt; để triển khai hệ thống CI/CD của mình. 🚀&lt;/p&gt;
-&lt;p&gt;👉 &lt;strong&gt;Bước tiếp theo:&lt;/strong&gt; Tìm hiểu về &lt;em&gt;&lt;strong&gt;Secret Management&lt;/strong&gt;&lt;/em&gt; quá trình lưu trữ, quản lý và bảo vệ các thông tin nhạy cảm như mật khẩu, khóa API, chứng chỉ và token truy cập để ngăn chặn rò rỉ dữ liệu và đảm bảo bảo mật hệ thống. 💡&lt;/p&gt;</description></item><item><title>Quản lý cấu hình (Configuration Management)</title><link>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-twelve/</link><pubDate>Mon, 24 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-twelve/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-twelve.jpg" alt="Featured image of post Quản lý cấu hình (Configuration Management)" /&gt;&lt;h2 id="quản-lý-cấu-hình-configuration-management"&gt;Quản lý cấu hình (Configuration Management)
+&lt;/h2&gt;&lt;p&gt;CI/CD giúp tăng tốc quá trình phát triển phần mềm, giảm thiểu lỗi và nâng cao chất lượng sản phẩm. Tùy theo nhu cầu và môi trường làm việc, bạn có thể chọn &lt;strong&gt;Jenkins, CircleCI, GitLab CI/CD hoặc GitHub Actions&lt;/strong&gt; để triển khai hệ thống CI/CD của mình.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Bước tiếp theo:&lt;/strong&gt; Tìm hiểu về &lt;em&gt;&lt;strong&gt;Secret Management&lt;/strong&gt;&lt;/em&gt; quá trình lưu trữ, quản lý và bảo vệ các thông tin nhạy cảm như mật khẩu, khóa API, chứng chỉ và token truy cập để ngăn chặn rò rỉ dữ liệu và đảm bảo bảo mật hệ thống.&lt;/p&gt;</description></item><item><title>Quản lý cấu hình (Configuration Management)</title><link>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-twelve/</link><pubDate>Mon, 24 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-twelve/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-twelve.jpg" alt="Featured image of post Quản lý cấu hình (Configuration Management)" /&gt;&lt;h2 id="quản-lý-cấu-hình-configuration-management"&gt;Quản lý cấu hình (Configuration Management)
 &lt;/h2&gt;&lt;p&gt;Quản lý cấu hình là quy trình quản lý và duy trì tính nhất quán của các thành phần trong hệ thống công nghệ thông tin. Trong lĩnh vực phần mềm, nó bao gồm việc giám sát, theo dõi và quản lý các thay đổi cấu hình của hệ thống trong suốt vòng đời sản phẩm. Việc áp dụng quản lý cấu hình giúp tăng tính đồng bộ, giảm nguy cơ lỗi, và đảm bảo sự tuân thủ các tiêu chuẩn trong quy trình CI/CD (Continuous Integration and Continuous Deployment).&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="các-công-cụ-quản-lý-cấu-hình-phổ-biến"&gt;Các công cụ quản lý cấu hình phổ biến
 &lt;/h2&gt;&lt;h3 id="ansible"&gt;Ansible
 &lt;/h3&gt;&lt;p&gt;Ansible là một công cụ tự động hóa mở, chủ yếu dùng cho quản lý cấu hình, triển khai ứng dụng và tự động hóa tác vụ.&lt;/p&gt;
-&lt;p&gt;🔄 &lt;strong&gt;Đặc điểm:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Đặc điểm:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Sử dụng YAML (playbooks) để xác định trạng thái mong muốn.&lt;/li&gt;
 &lt;li&gt;Hoạt động không cần cài đặt agent.&lt;/li&gt;
 &lt;li&gt;Phù hợp với quy mô nhỏ đến lớn.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;💡 &lt;strong&gt;Ví dụ sử dụng Ansible:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ví dụ sử dụng Ansible:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -321,25 +321,25 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="nt"&gt;state&lt;/span&gt;&lt;span class="p"&gt;:&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="l"&gt;started&lt;/span&gt;&lt;span class="w"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Tài nguyên miễn phí hữu ích:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Tài nguyên miễn phí hữu ích:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=9Ua2b06oAr4" target="_blank" rel="noopener"
-&gt;📚 Khóa học Ansible đầy đủ cho người mới bắt đầu&lt;/a&gt;&lt;/li&gt;
+&gt;Khóa học Ansible đầy đủ cho người mới bắt đầu&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.ansible.com/" target="_blank" rel="noopener"
-&gt;🔗 Trang web chính thức của Ansible&lt;/a&gt;&lt;/li&gt;
+&gt;Trang web chính thức của Ansible&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=xRMPKQweySE" target="_blank" rel="noopener"
-&gt;🎥 Ansible trong 100 giây&lt;/a&gt;&lt;/li&gt;
+&gt;Ansible trong 100 giây&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h3 id="chef"&gt;Chef
 &lt;/h3&gt;&lt;p&gt;Chef (hiện thuộc Progress Chef) là một trong những công cụ quản lý cấu hình đầu tiên. Nó sử dụng ngôn ngữ Ruby và đề cao tính idempotence (đảm bảo chạy n nhiều lần vẫn cùng kết quả).&lt;/p&gt;
-&lt;p&gt;🔄 &lt;strong&gt;Đặc điểm:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Đặc điểm:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Dựa trên client/server.&lt;/li&gt;
 &lt;li&gt;Có Chef-Solo cho triển khai độc lập.&lt;/li&gt;
 &lt;li&gt;Phù hợp với môi trường doanh nghiệp.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;💡 &lt;strong&gt;Ví dụ sử dụng Chef:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ví dụ sử dụng Chef:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -360,25 +360,25 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;end&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Tài nguyên miễn phí hữu ích:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Tài nguyên miễn phí hữu ích:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.chef.io/products/chef-infra" target="_blank" rel="noopener"
-&gt;🔗 Trang web chính thức của Chef&lt;/a&gt;&lt;/li&gt;
+&gt;Trang web chính thức của Chef&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.tutorialspoint.com/chef/index.htm" target="_blank" rel="noopener"
-&gt;📚 Hướng dẫn Chef&lt;/a&gt;&lt;/li&gt;
+&gt;Hướng dẫn Chef&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://github.com/chef/chef" target="_blank" rel="noopener"
-&gt;🎥 Video hướng dẫn Chef&lt;/a&gt;&lt;/li&gt;
+&gt;Video hướng dẫn Chef&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h3 id="puppet"&gt;Puppet
 &lt;/h3&gt;&lt;p&gt;Puppet là một công cụ quản lý cấu hình theo mô hình declarative, hoạt động theo kiểu client/server và hỗ trợ nhiều hệ điều hành.&lt;/p&gt;
-&lt;p&gt;🔄 &lt;strong&gt;Đặc điểm:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Đặc điểm:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Quản lý quy mô lớn.&lt;/li&gt;
 &lt;li&gt;Kiểm tra và áp dụng cấu hình định kỳ.&lt;/li&gt;
 &lt;li&gt;Tích hợp với nhiều công cụ DevOps.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;💡 &lt;strong&gt;Ví dụ sử dụng Puppet:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ví dụ sử dụng Puppet:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -401,33 +401,33 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Tài nguyên miễn phí hữu ích:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Tài nguyên miễn phí hữu ích:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=Ns_tRKD20c4" target="_blank" rel="noopener"
-&gt;📚 Khóa học Puppet đầy đủ&lt;/a&gt;&lt;/li&gt;
+&gt;Khóa học Puppet đầy đủ&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://puppet.com/" target="_blank" rel="noopener"
-&gt;🔗 Trang web chính thức của Puppet&lt;/a&gt;&lt;/li&gt;
+&gt;Trang web chính thức của Puppet&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://app.daily.dev/tags/puppet?ref=roadmapsh" target="_blank" rel="noopener"
-&gt;🎥 Bài viết hay về Puppet&lt;/a&gt;&lt;/li&gt;
+&gt;Bài viết hay về Puppet&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="kết-luận"&gt;Kết luận
 &lt;/h2&gt;&lt;p&gt;Quản lý cấu hình là một yếu tố quan trọng trong quy trình DevOps, giúp đảm bảo hệ thống hoạt động nhất quán, giảm thiểu lỗi và nâng cao độ tin cậy. Tùy thuộc vào nhu cầu và quy mô, doanh nghiệp có thể chọn Ansible, Chef hoặc Puppet để quản lý hạ tầng một cách hiệu quả.&lt;/p&gt;
-&lt;p&gt;👉 &lt;strong&gt;Bước tiếp theo:&lt;/strong&gt; Tìm hiểu về &lt;em&gt;&lt;strong&gt;Continuous Integration and Continuous Deployment&lt;/strong&gt;&lt;/em&gt; (CI/CD), là quy trình tự động hóa trong phát triển phần mềm giúp tích hợp, kiểm thử và triển khai ứng dụng một cách liên tục.&lt;/p&gt;</description></item><item><title>Serverless và các nền tảng liên quan</title><link>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-ten/</link><pubDate>Mon, 24 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-ten/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-ten.jpg" alt="Featured image of post Serverless và các nền tảng liên quan " /&gt;&lt;h2 id="serverless-là-gì"&gt;Serverless là gì?
+&lt;p&gt;&lt;strong&gt;Bước tiếp theo:&lt;/strong&gt; Tìm hiểu về &lt;em&gt;&lt;strong&gt;Continuous Integration and Continuous Deployment&lt;/strong&gt;&lt;/em&gt; (CI/CD), là quy trình tự động hóa trong phát triển phần mềm giúp tích hợp, kiểm thử và triển khai ứng dụng một cách liên tục.&lt;/p&gt;</description></item><item><title>Serverless và các nền tảng liên quan</title><link>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-ten/</link><pubDate>Mon, 24 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-ten/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-ten.jpg" alt="Featured image of post Serverless và các nền tảng liên quan " /&gt;&lt;h2 id="serverless-là-gì"&gt;Serverless là gì?
 &lt;/h2&gt;&lt;p&gt;Serverless là mô hình điện toán đám mây nơi nhà cung cấp dịch vụ quản lý hoàn toàn cơ sở hạ tầng, giúp lập trình viên chỉ cần tập trung vào viết mã. Hệ thống sẽ &lt;strong&gt;tự động phân bổ tài nguyên&lt;/strong&gt; theo nhu cầu và chỉ tính phí dựa trên tài nguyên thực tế sử dụng. Kiến trúc serverless thường được áp dụng cho các &lt;strong&gt;ứng dụng microservices, xử lý sự kiện&lt;/strong&gt; và giúp giảm thiểu chi phí vận hành.&lt;/p&gt;
-&lt;p&gt;📖 &lt;strong&gt;Tài nguyên miễn phí để tìm hiểu:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tài nguyên miễn phí để tìm hiểu:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;📄 &lt;a class="link" href="https://www.redhat.com/en/topics/cloud-native-apps/what-is-serverless" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.redhat.com/en/topics/cloud-native-apps/what-is-serverless" target="_blank" rel="noopener"
 &gt;Serverless là gì?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=vxJobGtqKVM" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=vxJobGtqKVM" target="_blank" rel="noopener"
 &gt;Giới thiệu về Serverless&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🌍 &lt;a class="link" href="https://app.daily.dev/tags/serverless?ref=roadmapsh" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://app.daily.dev/tags/serverless?ref=roadmapsh" target="_blank" rel="noopener"
 &gt;Bài viết hay về Serverless&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="aws-lambda"&gt;AWS Lambda
 &lt;/h2&gt;&lt;p&gt;AWS Lambda là một dịch vụ serverless của AWS, cho phép chạy mã mà không cần quản lý máy chủ. Lambda &lt;strong&gt;tự động mở rộng&lt;/strong&gt; theo nhu cầu, hỗ trợ nhiều ngôn ngữ lập trình và dễ dàng tích hợp với các dịch vụ khác của AWS. Nó phù hợp với &lt;strong&gt;xử lý dữ liệu, tự động hóa tác vụ, xây dựng microservices&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;🖥 &lt;strong&gt;Ví dụ:&lt;/strong&gt; Triển khai một function trên AWS Lambda&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ví dụ:&lt;/strong&gt; Triển khai một function trên AWS Lambda&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -446,39 +446,39 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; &lt;span class="p"&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Tài nguyên miễn phí để tìm hiểu:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Tài nguyên miễn phí để tìm hiểu:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🔗 &lt;a class="link" href="https://docs.aws.amazon.com/lambda/latest/operatorguide/intro.html" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://docs.aws.amazon.com/lambda/latest/operatorguide/intro.html" target="_blank" rel="noopener"
 &gt;Giới thiệu AWS Lambda&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=RtiWU1DrMaM" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=RtiWU1DrMaM" target="_blank" rel="noopener"
 &gt;Hướng dẫn AWS Lambda từ A-Z&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🌍 &lt;a class="link" href="https://app.daily.dev/tags/aws?ref=roadmapsh" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://app.daily.dev/tags/aws?ref=roadmapsh" target="_blank" rel="noopener"
 &gt;Bài viết hay về AWS Lambda&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="cloudflare"&gt;Cloudflare
 &lt;/h2&gt;&lt;p&gt;Cloudflare là một công ty cung cấp dịch vụ &lt;strong&gt;CDN, bảo mật, tối ưu hiệu suất&lt;/strong&gt; cho website. Cloudflare đóng vai trò là &lt;strong&gt;proxy ngược&lt;/strong&gt;, giúp tăng tốc tải trang và bảo vệ website khỏi các cuộc tấn công. Công ty được thành lập năm 2009 và lên sàn chứng khoán vào năm 2019.&lt;/p&gt;
-&lt;p&gt;📖 &lt;strong&gt;Tài nguyên miễn phí để tìm hiểu:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tài nguyên miễn phí để tìm hiểu:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🔗 &lt;a class="link" href="https://cloudflare.com/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://cloudflare.com/" target="_blank" rel="noopener"
 &gt;Trang chủ Cloudflare&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=24cml1rKGBs" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=24cml1rKGBs" target="_blank" rel="noopener"
 &gt;Giới thiệu về Cloudflare&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🌍 &lt;a class="link" href="https://app.daily.dev/tags/cloudflare?ref=roadmapsh" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://app.daily.dev/tags/cloudflare?ref=roadmapsh" target="_blank" rel="noopener"
 &gt;Bài viết hay về Cloudflare&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="vercel"&gt;Vercel
 &lt;/h2&gt;&lt;p&gt;Vercel là nền tảng &lt;strong&gt;triển khai frontend&lt;/strong&gt; giúp đưa các ứng dụng web lên cloud một cách nhanh chóng. Nó hỗ trợ &lt;strong&gt;React, Next.js, Vue, Angular&lt;/strong&gt;, tích hợp với GitHub, và cho phép triển khai chỉ với một lệnh push.&lt;/p&gt;
-&lt;p&gt;📖 &lt;strong&gt;Tài nguyên miễn phí để tìm hiểu:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tài nguyên miễn phí để tìm hiểu:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🔗 &lt;a class="link" href="https://vercel.com/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://vercel.com/" target="_blank" rel="noopener"
 &gt;Trang chủ Vercel&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📖 &lt;a class="link" href="https://vercel.com/docs" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://vercel.com/docs" target="_blank" rel="noopener"
 &gt;Tài liệu chính thức Vercel&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=sPmat30SE4k" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=sPmat30SE4k" target="_blank" rel="noopener"
 &gt;Hướng dẫn sử dụng Vercel&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🌍 &lt;a class="link" href="https://app.daily.dev/tags/vercel?ref=roadmapsh" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://app.daily.dev/tags/vercel?ref=roadmapsh" target="_blank" rel="noopener"
 &gt;Bài viết hay về Vercel&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
@@ -489,22 +489,22 @@
 &lt;li&gt;&lt;strong&gt;Cloudflare&lt;/strong&gt;: CDN và bảo mật website.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Vercel&lt;/strong&gt;: Triển khai frontend nhanh chóng.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Việc lựa chọn nền tảng phụ thuộc vào &lt;strong&gt;nhu cầu, công nghệ và chi phí&lt;/strong&gt; của bạn. 🚀&lt;/p&gt;
-&lt;p&gt;👉 &lt;strong&gt;Bước tiếp theo:&lt;/strong&gt; Tìm hiểu về &lt;em&gt;&lt;strong&gt;Provisioning&lt;/strong&gt;&lt;/em&gt; quá trình cung cấp và cấu hình tài nguyên (máy chủ, mạng, lưu trữ, tài khoản) để hệ thống hoặc ứng dụng có thể hoạt động hiệu quả.&lt;/p&gt;</description></item><item><title>Dịch vụ Cloud</title><link>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-nine/</link><pubDate>Sun, 23 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-nine/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-nine.jpg" alt="Featured image of post Dịch vụ Cloud " /&gt;&lt;h2 id="cloud-providers"&gt;Cloud Providers
+&lt;p&gt;Việc lựa chọn nền tảng phụ thuộc vào &lt;strong&gt;nhu cầu, công nghệ và chi phí&lt;/strong&gt; của bạn.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Bước tiếp theo:&lt;/strong&gt; Tìm hiểu về &lt;em&gt;&lt;strong&gt;Provisioning&lt;/strong&gt;&lt;/em&gt; quá trình cung cấp và cấu hình tài nguyên (máy chủ, mạng, lưu trữ, tài khoản) để hệ thống hoặc ứng dụng có thể hoạt động hiệu quả.&lt;/p&gt;</description></item><item><title>Dịch vụ Cloud</title><link>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-nine/</link><pubDate>Sun, 23 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-nine/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-nine.jpg" alt="Featured image of post Dịch vụ Cloud " /&gt;&lt;h2 id="cloud-providers"&gt;Cloud Providers
 &lt;/h2&gt;&lt;p&gt;Các nhà cung cấp dịch vụ đám mây cung cấp một lớp API để trừu tượng hóa cơ sở hạ tầng, giúp triển khai tài nguyên dựa trên các tiêu chuẩn bảo mật và mô hình thanh toán. Dù thực tế các dịch vụ đám mây chạy trên các máy chủ trong trung tâm dữ liệu, nhưng nhờ vào các lớp trừu tượng, chúng tạo cảm giác như đang tương tác với một nền tảng duy nhất. Khả năng triển khai, cấu hình và bảo mật tài nguyên nhanh chóng đã giúp cloud trở thành yếu tố quan trọng trong thành công và sự phức tạp của DevOps hiện đại.&lt;/p&gt;
-&lt;p&gt;📖 &lt;strong&gt;Tài nguyên miễn phí để tìm hiểu:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tài nguyên miễn phí để tìm hiểu:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;📄 &lt;a class="link" href="https://www.techtarget.com/searchitchannel/definition/cloud-service-provider-cloud-provider" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.techtarget.com/searchitchannel/definition/cloud-service-provider-cloud-provider" target="_blank" rel="noopener"
 &gt;Cloud Service Provider&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📄 &lt;a class="link" href="https://www.redhat.com/en/topics/cloud-computing/what-are-cloud-providers" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.redhat.com/en/topics/cloud-computing/what-are-cloud-providers" target="_blank" rel="noopener"
 &gt;Cloud Providers là gì?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🌍 &lt;a class="link" href="https://app.daily.dev/tags/cloud?ref=roadmapsh" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://app.daily.dev/tags/cloud?ref=roadmapsh" target="_blank" rel="noopener"
 &gt;Bài viết hay về Cloud&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="aws-amazon-web-services"&gt;AWS (Amazon Web Services)
 &lt;/h2&gt;&lt;p&gt;AWS là nền tảng điện toán đám mây hàng đầu từ năm 2011, vượt xa Azure và Google Cloud. AWS cung cấp hơn &lt;strong&gt;200 dịch vụ&lt;/strong&gt;, hoạt động trên quy mô toàn cầu. AWS mang đến giải pháp tính toán linh hoạt và tiết kiệm chi phí, bao gồm: &lt;strong&gt;sức mạnh tính toán, lưu trữ dữ liệu, phân phối nội dung&lt;/strong&gt;, v.v.&lt;/p&gt;
-&lt;p&gt;🖥 &lt;strong&gt;Ví dụ:&lt;/strong&gt; Tạo một EC2 instance bằng AWS CLI&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ví dụ:&lt;/strong&gt; Tạo một EC2 instance bằng AWS CLI&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -513,21 +513,21 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;aws ec2 run-instances --image-id ami-12345678 --count &lt;span class="m"&gt;1&lt;/span&gt; --instance-type t2.micro --key-name MyKeyPair --security-groups MySecurityGroup
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Tài nguyên miễn phí để tìm hiểu:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Tài nguyên miễn phí để tìm hiểu:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=zA8guDqfv40" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=zA8guDqfv40" target="_blank" rel="noopener"
 &gt;100 giờ khóa học AWS - 2024&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🔗 &lt;a class="link" href="https://aws.amazon.com/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://aws.amazon.com/" target="_blank" rel="noopener"
 &gt;Trang chủ AWS&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📄 &lt;a class="link" href="https://grapplingdev.com/tutorials/how-to-create-aws-account" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://grapplingdev.com/tutorials/how-to-create-aws-account" target="_blank" rel="noopener"
 &gt;Hướng dẫn tạo tài khoản AWS&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🌍 &lt;a class="link" href="https://app.daily.dev/tags/aws?ref=roadmapsh" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://app.daily.dev/tags/aws?ref=roadmapsh" target="_blank" rel="noopener"
 &gt;Bài viết hay về AWS&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="microsoft-azure"&gt;Microsoft Azure
 &lt;/h2&gt;&lt;p&gt;Azure là nền tảng điện toán đám mây của Microsoft, cung cấp &lt;strong&gt;IaaS, PaaS, SaaS&lt;/strong&gt; cùng nhiều dịch vụ như &lt;strong&gt;phân tích, AI, máy học, bảo mật&lt;/strong&gt;. Azure hỗ trợ nhiều công cụ và ngôn ngữ lập trình, giúp doanh nghiệp phát triển nhanh chóng.&lt;/p&gt;
-&lt;p&gt;🖥 &lt;strong&gt;Ví dụ:&lt;/strong&gt; Triển khai ứng dụng trên Azure App Service&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ví dụ:&lt;/strong&gt; Triển khai ứng dụng trên Azure App Service&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -536,21 +536,21 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;az webapp create --resource-group MyResourceGroup --plan MyAppServicePlan --name MyUniqueApp --runtime &lt;span class="s2"&gt;&amp;#34;PYTHON:3.8&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Tài nguyên miễn phí để tìm hiểu:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Tài nguyên miễn phí để tìm hiểu:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🔗 &lt;a class="link" href="https://azure.microsoft.com/en-us/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://azure.microsoft.com/en-us/" target="_blank" rel="noopener"
 &gt;Trang chủ Azure&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📖 &lt;a class="link" href="https://github.com/mikeroyal/Azure-Guide" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://github.com/mikeroyal/Azure-Guide" target="_blank" rel="noopener"
 &gt;Hướng dẫn về Microsoft Azure&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=5abffC-K40c" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=5abffC-K40c" target="_blank" rel="noopener"
 &gt;Chứng chỉ Azure Fundamentals (AZ-900)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🌍 &lt;a class="link" href="https://app.daily.dev/tags/azure?ref=roadmapsh" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://app.daily.dev/tags/azure?ref=roadmapsh" target="_blank" rel="noopener"
 &gt;Bài viết hay về Azure&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="google-cloud-platform-gcp"&gt;Google Cloud Platform (GCP)
 &lt;/h2&gt;&lt;p&gt;Google Cloud cung cấp hơn &lt;strong&gt;150 dịch vụ&lt;/strong&gt;, hoạt động trên cùng hạ tầng với các sản phẩm của Google như &lt;strong&gt;Search, Gmail, YouTube&lt;/strong&gt;. Dịch vụ bao gồm: &lt;strong&gt;VMs, cơ sở dữ liệu, AI/ML, Kubernetes&lt;/strong&gt;, v.v.&lt;/p&gt;
-&lt;p&gt;🖥 &lt;strong&gt;Ví dụ:&lt;/strong&gt; Tạo một VM trên Google Cloud&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ví dụ:&lt;/strong&gt; Tạo một VM trên Google Cloud&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -559,21 +559,21 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;gcloud compute instances create my-instance --machine-type&lt;span class="o"&gt;=&lt;/span&gt;e2-medium --image-project&lt;span class="o"&gt;=&lt;/span&gt;debian-cloud --image-family&lt;span class="o"&gt;=&lt;/span&gt;debian-11
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Tài nguyên miễn phí để tìm hiểu:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Tài nguyên miễn phí để tìm hiểu:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🔗 &lt;a class="link" href="https://cloud.google.com/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://cloud.google.com/" target="_blank" rel="noopener"
 &gt;Trang chủ Google Cloud&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📖 &lt;a class="link" href="https://thenewstack.io/5-tips-to-become-a-google-cloud-certified-professional-architect/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://thenewstack.io/5-tips-to-become-a-google-cloud-certified-professional-architect/" target="_blank" rel="noopener"
 &gt;5 mẹo để trở thành Google Cloud Certified&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=fZOz13joN0o" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=fZOz13joN0o" target="_blank" rel="noopener"
 &gt;Khóa học Google Cloud Platform - 2023&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🌍 &lt;a class="link" href="https://app.daily.dev/tags/cloud?ref=roadmapsh" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://app.daily.dev/tags/cloud?ref=roadmapsh" target="_blank" rel="noopener"
 &gt;Bài viết hay về Google Cloud&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="digitalocean"&gt;DigitalOcean
 &lt;/h2&gt;&lt;p&gt;DigitalOcean là nhà cung cấp cơ sở hạ tầng đám mây tập trung vào sự &lt;strong&gt;đơn giản, chi phí thấp, dễ sử dụng&lt;/strong&gt;. DigitalOcean cung cấp dịch vụ như &lt;strong&gt;máy ảo (Droplets), cơ sở dữ liệu, Kubernetes, lưu trữ đối tượng&lt;/strong&gt;, phù hợp với &lt;strong&gt;startup và developer&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;🖥 &lt;strong&gt;Ví dụ:&lt;/strong&gt; Tạo một Droplet trên DigitalOcean bằng API&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ví dụ:&lt;/strong&gt; Tạo một Droplet trên DigitalOcean bằng API&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -582,15 +582,15 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl -X POST -H &lt;span class="s2"&gt;&amp;#34;Content-Type: application/json&amp;#34;&lt;/span&gt; -H &lt;span class="s2"&gt;&amp;#34;Authorization: Bearer YOUR_TOKEN&amp;#34;&lt;/span&gt; -d &lt;span class="s1"&gt;&amp;#39;{&amp;#34;name&amp;#34;:&amp;#34;example-droplet&amp;#34;,&amp;#34;region&amp;#34;:&amp;#34;nyc3&amp;#34;,&amp;#34;size&amp;#34;:&amp;#34;s-1vcpu-1gb&amp;#34;,&amp;#34;image&amp;#34;:&amp;#34;ubuntu-20-04-x64&amp;#34;}&amp;#39;&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;https://api.digitalocean.com/v2/droplets&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📖 &lt;strong&gt;Tài nguyên miễn phí để tìm hiểu:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Tài nguyên miễn phí để tìm hiểu:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🔗 &lt;a class="link" href="https://www.digitalocean.com/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.digitalocean.com/" target="_blank" rel="noopener"
 &gt;Trang chủ DigitalOcean&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📄 &lt;a class="link" href="https://hacktoberfest.com/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://hacktoberfest.com/" target="_blank" rel="noopener"
 &gt;Hacktoberfest của DigitalOcean&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=cJKdo-glRD0" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=cJKdo-glRD0" target="_blank" rel="noopener"
 &gt;Hướng dẫn Kubernetes trên DigitalOcean&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🌍 &lt;a class="link" href="https://app.daily.dev/tags/digitalocean?ref=roadmapsh" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://app.daily.dev/tags/digitalocean?ref=roadmapsh" target="_blank" rel="noopener"
 &gt;Bài viết hay về DigitalOcean&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
@@ -602,5 +602,5 @@
 &lt;li&gt;&lt;strong&gt;GCP&lt;/strong&gt;: Tối ưu cho AI, dữ liệu lớn.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;DigitalOcean&lt;/strong&gt;: Đơn giản, phù hợp với startup.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Việc chọn nền tảng phù hợp phụ thuộc vào &lt;strong&gt;mục tiêu, ngân sách, nhu cầu kỹ thuật&lt;/strong&gt; của bạn. 🚀&lt;/p&gt;
-&lt;p&gt;👉 &lt;strong&gt;Bước tiếp theo:&lt;/strong&gt; Tìm hiểu về &lt;em&gt;&lt;strong&gt;Serverless&lt;/strong&gt;&lt;/em&gt; mô hình điện toán đám mây cho phép chạy ứng dụng mà không cần quản lý máy chủ. Các nhà cung cấp cloud tự động phân bổ tài nguyên, mở rộng quy mô và tính phí dựa trên lượng tài nguyên thực tế được sử dụng, giúp tối ưu chi phí và đơn giản hóa triển khai.&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;Việc chọn nền tảng phù hợp phụ thuộc vào &lt;strong&gt;mục tiêu, ngân sách, nhu cầu kỹ thuật&lt;/strong&gt; của bạn.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Bước tiếp theo:&lt;/strong&gt; Tìm hiểu về &lt;em&gt;&lt;strong&gt;Serverless&lt;/strong&gt;&lt;/em&gt; mô hình điện toán đám mây cho phép chạy ứng dụng mà không cần quản lý máy chủ. Các nhà cung cấp cloud tự động phân bổ tài nguyên, mở rộng quy mô và tính phí dựa trên lượng tài nguyên thực tế được sử dụng, giúp tối ưu chi phí và đơn giản hóa triển khai.&lt;/p&gt;</description></item></channel></rss>

@@ -4794,7 +4794,7 @@
 &lt;li&gt;Cài đặt đầy đủ: Docker Engine, CLI, containerd, Buildx, và Compose V2&lt;/li&gt;
 &lt;li&gt;Tự động khởi động và enable Docker service&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Bạn có thể lưu script này vào hệ thống quản lý cấu hình (Ansible, Terraform) hoặc đơn giản clone từ repository để sử dụng trên nhiều server. 🚀&lt;/p&gt;
+&lt;p&gt;Bạn có thể lưu script này vào hệ thống quản lý cấu hình (Ansible, Terraform) hoặc đơn giản clone từ repository để sử dụng trên nhiều server.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="tài-liệu-tham-khảo"&gt;Tài liệu tham khảo
 &lt;/h2&gt;&lt;ul&gt;
@@ -5461,7 +5461,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ↓
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Push image lên GHCR (nếu không phải PR)
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ↓
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Image sẵn sàng để deploy 🚀
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Image sẵn sàng để deploy
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
@@ -5552,12 +5552,12 @@
 &lt;h2 id="lời-kết"&gt;Lời kết
 &lt;/h2&gt;&lt;p&gt;GitHub Actions + Docker là combo mạnh mẽ để &lt;strong&gt;tự động hóa pipeline&lt;/strong&gt; từ code đến container image. Với các workflow trong bài viết này, bạn có thể:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;✅ Tự động build Docker image mỗi khi push code&lt;/li&gt;
-&lt;li&gt;✅ Push image lên Docker Hub hoặc GHCR&lt;/li&gt;
-&lt;li&gt;✅ Tự động tạo tags theo Git metadata (branch, tag, SHA)&lt;/li&gt;
-&lt;li&gt;✅ Tối ưu tốc độ build với cache&lt;/li&gt;
+&lt;li&gt;Tự động build Docker image mỗi khi push code&lt;/li&gt;
+&lt;li&gt;Push image lên Docker Hub hoặc GHCR&lt;/li&gt;
+&lt;li&gt;Tự động tạo tags theo Git metadata (branch, tag, SHA)&lt;/li&gt;
+&lt;li&gt;Tối ưu tốc độ build với cache&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Nếu bạn thấy bài viết này hữu ích, hãy nhớ ⭐ star repo hoặc 📱 chia sẻ với bạn bè nhé! 😊&lt;/p&gt;
+&lt;p&gt;Nếu bạn thấy bài viết này hữu ích, hãy nhớ star repo hoặc chia sẻ với bạn bè nhé!&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="tài-liệu-tham-khảo"&gt;Tài liệu tham khảo
 &lt;/h2&gt;&lt;ul&gt;

@@ -38,12 +38,12 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;192.168.1.100 mycustomdomain.com
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;🔗 &lt;strong&gt;Tài nguyên tham khảo:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Tài nguyên tham khảo:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://howdns.works/" target="_blank" rel="noopener"
-&gt;📄 Cách hoạt động của DNS&lt;/a&gt;&lt;/li&gt;
+&gt;Cách hoạt động của DNS&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=Wj0od2ag5sk" target="_blank" rel="noopener"
-&gt;🎥 Video giải thích DNS&lt;/a&gt;&lt;/li&gt;
+&gt;Video giải thích DNS&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="giao-thức-http"&gt;Giao thức HTTP
@@ -69,12 +69,12 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; -d &lt;span class="s1"&gt;&amp;#39;{&amp;#34;title&amp;#34;: &amp;#34;Hello&amp;#34;, &amp;#34;body&amp;#34;: &amp;#34;World&amp;#34;}&amp;#39;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;🔗 &lt;strong&gt;Tài nguyên tham khảo:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Tài nguyên tham khảo:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.cloudflare.com/en-gb/learning/ddos/glossary/hypertext-transfer-protocol-http/" target="_blank" rel="noopener"
-&gt;📄 Tìm hiểu về HTTP&lt;/a&gt;&lt;/li&gt;
+&gt;Tìm hiểu về HTTP&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=iYM2zFP3Zn0" target="_blank" rel="noopener"
-&gt;🎥 Video hướng dẫn HTTP&lt;/a&gt;&lt;/li&gt;
+&gt;Video hướng dẫn HTTP&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="https-và-bảo-mật-ssltls"&gt;HTTPS và bảo mật (SSL/TLS)
@@ -98,12 +98,12 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;🔗 &lt;strong&gt;Tài nguyên tham khảo:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Tài nguyên tham khảo:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.cloudflare.com/en-gb/learning/ssl/what-is-https/" target="_blank" rel="noopener"
-&gt;📄 HTTPS là gì?&lt;/a&gt;&lt;/li&gt;
+&gt;HTTPS là gì?&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=25mXesOV9-8" target="_blank" rel="noopener"
-&gt;🎥 Video HTTPS hoạt động như thế nào&lt;/a&gt;&lt;/li&gt;
+&gt;Video HTTPS hoạt động như thế nào&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="ssh---kết-nối-bảo-mật"&gt;SSH - Kết nối bảo mật
@@ -125,14 +125,14 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;scp user@example.com:/path/to/file ./localfile
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;🔗 &lt;strong&gt;Tài nguyên tham khảo:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Tài nguyên tham khảo:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.baeldung.com/cs/ssh-intro" target="_blank" rel="noopener"
-&gt;📄 Hướng dẫn SSH&lt;/a&gt;&lt;/li&gt;
+&gt;Hướng dẫn SSH&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=5JvLV2-ngCI" target="_blank" rel="noopener"
-&gt;🎥 Video cách SSH hoạt động&lt;/a&gt;&lt;/li&gt;
+&gt;Video cách SSH hoạt động&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="kết-luận"&gt;Kết Luận
-&lt;/h2&gt;&lt;p&gt;Giao thức mạng là nền tảng của mọi hệ thống trực tuyến, từ duyệt web đến gửi email. Hiểu và biết cách sử dụng chúng giúp cải thiện bảo mật và hiệu suất của hệ thống. Hãy thử áp dụng các lệnh trên để kiểm tra và cấu hình hệ thống của bạn! 🚀&lt;/p&gt;
-&lt;p&gt;👉 &lt;strong&gt;Bước tiếp theo:&lt;/strong&gt; Tìm hiểu về &lt;em&gt;&lt;strong&gt;Cloud Providers&lt;/strong&gt;&lt;/em&gt; các công ty cung cấp dịch vụ điện toán đám mây, cho phép cá nhân và doanh nghiệp truy cập tài nguyên như máy chủ, lưu trữ, cơ sở dữ liệu, AI, và các dịch vụ khác qua internet mà không cần đầu tư hạ tầng phần cứng.&lt;/p&gt;</description></item></channel></rss>
+&lt;/h2&gt;&lt;p&gt;Giao thức mạng là nền tảng của mọi hệ thống trực tuyến, từ duyệt web đến gửi email. Hiểu và biết cách sử dụng chúng giúp cải thiện bảo mật và hiệu suất của hệ thống. Hãy thử áp dụng các lệnh trên để kiểm tra và cấu hình hệ thống của bạn!&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Bước tiếp theo:&lt;/strong&gt; Tìm hiểu về &lt;em&gt;&lt;strong&gt;Cloud Providers&lt;/strong&gt;&lt;/em&gt; các công ty cung cấp dịch vụ điện toán đám mây, cho phép cá nhân và doanh nghiệp truy cập tài nguyên như máy chủ, lưu trữ, cơ sở dữ liệu, AI, và các dịch vụ khác qua internet mà không cần đầu tư hạ tầng phần cứng.&lt;/p&gt;</description></item></channel></rss>

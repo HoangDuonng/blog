@@ -252,7 +252,7 @@ Tổng hợp các kênh kết nối cá nhân, kho mã nguồn dự án tiêu bi
 &lt;svg viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" class="link-icon"&gt;&lt;polyline points="4 17 10 11 4 5"&gt;&lt;/polyline&gt;&lt;line x1="12" y1="19" x2="20" y2="19"&gt;&lt;/line&gt;&lt;/svg&gt;
 &lt;span&gt;DevOps Blog&lt;/span&gt;
 &lt;/h3&gt;
-&lt;p class="link-card-desc"&gt;Blog kỹ thuật chuyên sâu về DevOps, tối ưu hóa container Docker, cấu hình Nginx Reverse Proxy, tự động hóa CI/CD pipelines và quản trị hệ thống Linux với thiết kế Ampcode Chronicle.&lt;/p&gt;
+&lt;p class="link-card-desc"&gt;Blog kỹ thuật chuyên sâu về DevOps, tối ưu hóa container Docker, cấu hình Nginx Reverse Proxy, tự động hóa CI/CD pipelines và quản trị hệ thống Linux với thiết kế Hoang Duong Blog.&lt;/p&gt;
 &lt;/div&gt;
 &lt;div class="link-card-footer"&gt;
 &lt;span class="link-card-url"&gt;github.com/HoangDuonng/Manage_Blog&lt;/span&gt;

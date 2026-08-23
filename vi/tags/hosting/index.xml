@@ -103,19 +103,19 @@ title="YouTube Video"
 &lt;/iframe&gt;
 &lt;/div&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;/p&gt;&lt;span class="cite"&gt;&lt;span&gt;― &lt;/span&gt;&lt;span&gt;Nguồn, &lt;/span&gt;&lt;a href="https://www.youtube.com/@F8VNOfficial"&gt;&lt;cite&gt;F8 Official ✔&lt;/cite&gt;&lt;/a&gt;&lt;/span&gt;&lt;/blockquote&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;&lt;span class="cite"&gt;&lt;span&gt;― &lt;/span&gt;&lt;span&gt;Nguồn, &lt;/span&gt;&lt;a href="https://www.youtube.com/@F8VNOfficial"&gt;&lt;cite&gt;F8 Official&lt;/cite&gt;&lt;/a&gt;&lt;/span&gt;&lt;/blockquote&gt;&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="lời-kết"&gt;Lời kết
-&lt;/h2&gt;&lt;p&gt;Việc trỏ tên miền về hosting là một bước quan trọng để website của bạn có thể hoạt động chính xác trên Internet. Dù thực hiện theo cách nào—sử dụng nameserver, A record, hay nameserver trung gian—bạn cũng cần kiểm tra kỹ thông tin và kiên nhẫn chờ DNS cập nhật. Nếu gặp lỗi, hãy xem lại cài đặt và thử lại 🔄. Chúc bạn thực hiện thành công và website hoạt động ổn định! 🚀 Nếu có vấn đề, cứ để lại comment, tôi sẽ xem thử nhé! 💬😊&lt;/p&gt;</description></item><item><title>Deploy Website lên hosting đơn giản nhất (HTML/CSS hoặc React/Vue.js)</title><link>https://tech.nguuyen.io.vn/vi/posts/website/how-to-deploy-a-website/</link><pubDate>Wed, 26 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/website/how-to-deploy-a-website/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/website/upload-website-on-hosting.jpg" alt="Featured image of post Deploy Website lên hosting đơn giản nhất (HTML/CSS hoặc React/Vue.js)" /&gt;&lt;h2 id="cách-up-website-lên-hosting-thông-qua-file-manager-và-cpanel-nhanh-nhất-từ-a-z"&gt;Cách up website lên Hosting thông qua File Manager và cPanel nhanh nhất từ A-Z
+&lt;/h2&gt;&lt;p&gt;Việc trỏ tên miền về hosting là một bước quan trọng để website của bạn có thể hoạt động chính xác trên Internet. Dù thực hiện theo cách nào—sử dụng nameserver, A record, hay nameserver trung gian—bạn cũng cần kiểm tra kỹ thông tin và kiên nhẫn chờ DNS cập nhật. Nếu gặp lỗi, hãy xem lại cài đặt và thử lại. Chúc bạn thực hiện thành công và website hoạt động ổn định! Nếu có vấn đề, cứ để lại comment, tôi sẽ xem thử nhé!&lt;/p&gt;</description></item><item><title>Deploy Website lên hosting đơn giản nhất (HTML/CSS hoặc React/Vue.js)</title><link>https://tech.nguuyen.io.vn/vi/posts/website/how-to-deploy-a-website/</link><pubDate>Wed, 26 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/website/how-to-deploy-a-website/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/website/upload-website-on-hosting.jpg" alt="Featured image of post Deploy Website lên hosting đơn giản nhất (HTML/CSS hoặc React/Vue.js)" /&gt;&lt;h2 id="cách-up-website-lên-hosting-thông-qua-file-manager-và-cpanel-nhanh-nhất-từ-a-z"&gt;Cách up website lên Hosting thông qua File Manager và cPanel nhanh nhất từ A-Z
 &lt;/h2&gt;&lt;hr&gt;
 &lt;p&gt;Việc upload website lên hosting là bước thiết yếu để đưa website của bạn hoạt động trên internet. Quá trình này không chỉ đơn giản là chuyển dữ liệu, mà còn liên quan đến việc đảm bảo mọi thứ hoạt động mượt mà và an toàn. Bài viết này sẽ giúp bạn hiểu rõ các bước cần thiết, từ chuẩn bị file và database, đến các công cụ hỗ trợ upload hiệu quả.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="điểm-chính-cần-nắm"&gt;Điểm chính cần nắm
 &lt;/h2&gt;&lt;p&gt;Trước khi bắt tay vào việc upload website lên hosting, bạn cần lưu ý một số yếu tố quan trọng. Mình sẽ giúp bạn dễ dàng hiểu và nắm bắt các bước thực hiện:&lt;/p&gt;
-&lt;p&gt;✅ &lt;strong&gt;Bạn cần chuẩn bị gì khi upload website lên hosting&lt;/strong&gt;: Chuẩn bị file website, database, quyền truy cập control panel và phần mềm FTP như FileZilla.&lt;/p&gt;
-&lt;p&gt;✅ &lt;strong&gt;Các cách upload website lên hosting&lt;/strong&gt;: Chọn hosting uy tín, sau đó sử dụng File Manager, FTP, plugin WordPress, SSH hoặc nhờ hỗ trợ từ nhà cung cấp.&lt;/p&gt;
-&lt;p&gt;✅ &lt;strong&gt;Lý do cần upload website lên hosting&lt;/strong&gt;: Giúp công khai website, tăng bảo mật, cải thiện tốc độ và dễ quản lý.&lt;/p&gt;
-&lt;p&gt;✅ &lt;strong&gt;Bốn bước để upload web lên hosting&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Bạn cần chuẩn bị gì khi upload website lên hosting&lt;/strong&gt;: Chuẩn bị file website, database, quyền truy cập control panel và phần mềm FTP như FileZilla.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Các cách upload website lên hosting&lt;/strong&gt;: Chọn hosting uy tín, sau đó sử dụng File Manager, FTP, plugin WordPress, SSH hoặc nhờ hỗ trợ từ nhà cung cấp.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Lý do cần upload website lên hosting&lt;/strong&gt;: Giúp công khai website, tăng bảo mật, cải thiện tốc độ và dễ quản lý.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Bốn bước để upload web lên hosting&lt;/strong&gt;:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Upload file website vào thư mục &lt;code&gt;public_html&lt;/code&gt; qua File Manager hoặc FTP.&lt;/li&gt;
 &lt;li&gt;Kiểm tra xem các file đã đúng vị trí chưa.&lt;/li&gt;
@@ -128,10 +128,10 @@ title="YouTube Video"
 &lt;li&gt;&lt;strong&gt;File website&lt;/strong&gt;: Những file này có thể là toàn bộ dữ liệu bên trong phần &lt;code&gt;public_html&lt;/code&gt; cũ hoặc file source code hay bản backup (sao lưu) dữ liệu mới nhất thay cho source code.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;📌 Lưu ý khi triển khai website React/Vue.js&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Lưu ý khi triển khai website React/Vue.js&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;Khi build một ứng dụng &lt;strong&gt;React&lt;/strong&gt; hoặc &lt;strong&gt;Vue.js&lt;/strong&gt;, ta không tải toàn bộ mã nguồn lên máy chủ,&lt;br&gt;
 mà chỉ cần upload &lt;strong&gt;thư mục chứa các file tĩnh đã được build&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;🔹 Các bước build và nén tệp:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Các bước build và nén tệp:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Chạy lệnh build:
 &lt;ul&gt;
@@ -160,7 +160,7 @@ mà chỉ cần upload &lt;strong&gt;thư mục chứa các file tĩnh đã đư
 &lt;li&gt;Sau khi build xong, thư mục output thường là &lt;code&gt;build/&lt;/code&gt; (&lt;strong&gt;React&lt;/strong&gt;) hoặc &lt;code&gt;dist/&lt;/code&gt; (&lt;strong&gt;Vue.js&lt;/strong&gt;).&lt;/li&gt;
 &lt;li&gt;Nén thư mục &lt;code&gt;build&lt;/code&gt; hoặc &lt;code&gt;dist&lt;/code&gt; thành file ZIP trước khi tải lên máy chủ.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;📤 Khi tải lên máy chủ:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Khi tải lên máy chủ:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Nếu dùng &lt;strong&gt;cPanel&lt;/strong&gt;, có thể giải nén trực tiếp trong thư mục &lt;code&gt;public_html&lt;/code&gt;.&lt;/li&gt;
 &lt;li&gt;Nếu dùng &lt;strong&gt;SSH/SFTP&lt;/strong&gt;, tải lên và giải nén bằng lệnh:
@@ -312,7 +312,7 @@ alt="Nhờ sự hỗ trợ từ nhà cung cấp hosting"
 &gt;&lt;/p&gt;
 &lt;p align="center"&gt;&lt;em&gt;Hình 6: Nhờ sự hỗ trợ từ nhà cung cấp hosting&lt;/em&gt;&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;📌 &lt;strong&gt;Lưu ý sau khi upload website lên hosting&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Lưu ý sau khi upload website lên hosting&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;Di chuyển toàn bộ dữ liệu từ thư mục con (nếu có) ra ngoài &lt;code&gt;public_html&lt;/code&gt;&lt;/strong&gt; để website hoạt động chính xác.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Kiểm tra lại cấu trúc file và kết nối database (nếu có)&lt;/strong&gt; để tránh lỗi khi vận hành.&lt;/li&gt;
@@ -513,7 +513,7 @@ alt="Import dữ liệu vào database"
 &lt;h3 id="cập-nhật-file-cấu-hình-để-kết-nối-website-và-database"&gt;Cập nhật file cấu hình để kết nối website và database
 &lt;/h3&gt;&lt;p&gt;Sau khi tải database lên server, bạn cần mở &lt;strong&gt;file cấu hình PHP&lt;/strong&gt; script để điền thông tin như host, tên database, tên người dùng và mật khẩu. File cấu hình có thể có tên và vị trí khác nhau tùy thuộc vào phần mềm bạn sử dụng. Ví dụ, với &lt;strong&gt;WordPress&lt;/strong&gt;, file cấu hình là &lt;code&gt;wp-config.php&lt;/code&gt; và nằm trong thư mục chứa &lt;strong&gt;WordPress&lt;/strong&gt; (thường là &lt;code&gt;public_html&lt;/code&gt;).&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;⚠ &lt;strong&gt;Lưu ý:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Lưu ý:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Nếu cơ sở dữ liệu của bạn có kích thước lớn, hãy cân nhắc chia nhỏ database thành nhiều file để quá trình tải lên diễn ra nhanh chóng hơn.&lt;/li&gt;
 &lt;li&gt;Nếu database chứa các ký tự đặc biệt, nhớ chuyển đổi chúng sang định dạng &lt;strong&gt;ASCII&lt;/strong&gt; trước khi thực hiện upload.&lt;/li&gt;
@@ -533,9 +533,9 @@ alt="Import dữ liệu vào database"
 &lt;li&gt;&lt;strong&gt;Chờ DNS cập nhật:&lt;/strong&gt; Nếu tên miền vừa được cập nhật, bạn có thể cần đợi khoảng &lt;strong&gt;24 giờ&lt;/strong&gt; để DNS được quảng bá rộng rãi.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Kiểm tra ngay lập tức bằng:&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;🖥 &lt;strong&gt;Sử dụng file host:&lt;/strong&gt; Chỉnh sửa file host trên máy tính để mô phỏng thay đổi DNS.&lt;/li&gt;
-&lt;li&gt;🌐 &lt;strong&gt;Công cụ online:&lt;/strong&gt; Kiểm tra website bằng các dịch vụ kiểm tra DNS trực tuyến.&lt;/li&gt;
-&lt;li&gt;🔌 &lt;strong&gt;Plugin browser:&lt;/strong&gt; Cài đặt plugin giúp tạo file host ảo để kiểm tra các thay đổi DNS.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Sử dụng file host:&lt;/strong&gt; Chỉnh sửa file host trên máy tính để mô phỏng thay đổi DNS.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Công cụ online:&lt;/strong&gt; Kiểm tra website bằng các dịch vụ kiểm tra DNS trực tuyến.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Plugin browser:&lt;/strong&gt; Cài đặt plugin giúp tạo file host ảo để kiểm tra các thay đổi DNS.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -562,9 +562,9 @@ alt="Import dữ liệu vào database"
 &lt;/h3&gt;&lt;ul&gt;
 &lt;li&gt;Website có thể hoạt động khác nhau vào những thời điểm khác nhau.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;👉 &lt;strong&gt;Nếu phát hiện lỗi nhưng không biết cách xử lý, hãy liên hệ với nhà cung cấp hosting để được hỗ trợ.&lt;/strong&gt; 🚀&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Nếu phát hiện lỗi nhưng không biết cách xử lý, hãy liên hệ với nhà cung cấp hosting để được hỗ trợ.&lt;/strong&gt;&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="lời-kết"&gt;Lời kết
 &lt;/h2&gt;&lt;p&gt;Upload website lên hosting là một bước quan trọng để website của bạn có thể hoạt động ổn định trên môi trường trực tuyến. Bằng cách chuẩn bị đúng đắn và thực hiện theo các bước hướng dẫn, bạn sẽ đảm bảo rằng website của mình luôn sẵn sàng phục vụ người dùng một cách hiệu quả.&lt;/p&gt;
-&lt;p&gt;💡 Nếu bạn có bất kỳ câu hỏi nào hoặc cần hỗ trợ thêm, hãy để lại câu hỏi trong phần bình luận dưới đây. Mình sẽ sớm giúp bạn tìm ra lời giải đáp.&lt;/p&gt;
-&lt;p&gt;Cảm ơn bạn đã theo dõi bài viết 🚀&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;Nếu bạn có bất kỳ câu hỏi nào hoặc cần hỗ trợ thêm, hãy để lại câu hỏi trong phần bình luận dưới đây. Mình sẽ sớm giúp bạn tìm ra lời giải đáp.&lt;/p&gt;
+&lt;p&gt;Cảm ơn bạn đã theo dõi bài viết&lt;/p&gt;</description></item></channel></rss>

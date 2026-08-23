@@ -680,8 +680,8 @@
 &lt;li&gt;&lt;strong&gt;Deploy&lt;/strong&gt; with &lt;code&gt;docker compose up --build -d&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Update&lt;/strong&gt; with &lt;code&gt;docker compose build app &amp;amp;&amp;amp; docker compose up --no-deps -d app&lt;/code&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;This is the most basic architecture for deploying a Node.js application to production. From here, you can extend with SSL (Let&amp;rsquo;s Encrypt), databases, monitoring, and more as needed. 🚀&lt;/p&gt;
-&lt;p&gt;If you find this article helpful, feel free to ⭐ star the repo or 📱 share it with your friends! 😊&lt;/p&gt;
+&lt;p&gt;This is the most basic architecture for deploying a Node.js application to production. From here, you can extend with SSL (Let&amp;rsquo;s Encrypt), databases, monitoring, and more as needed.&lt;/p&gt;
+&lt;p&gt;If you find this article helpful, feel free to star the repo or share it with your friends!&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="references"&gt;References
 &lt;/h2&gt;&lt;ul&gt;
@@ -699,14 +699,14 @@
 &lt;h2 id="prerequisites"&gt;Prerequisites
 &lt;/h2&gt;&lt;p&gt;Before you begin, make sure you:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🚀 Provision an Ubuntu 24.04 server.&lt;/li&gt;
-&lt;li&gt;🌍 Create an A record pointing your domain or subdomain to the server IP (e.g., &lt;code&gt;app.example.com&lt;/code&gt;).&lt;/li&gt;
-&lt;li&gt;🔐 Access the server via SSH and create a non-root sudo user.&lt;/li&gt;
-&lt;li&gt;🔄 Update the system packages.&lt;/li&gt;
+&lt;li&gt;Provision an Ubuntu 24.04 server.&lt;/li&gt;
+&lt;li&gt;Create an A record pointing your domain or subdomain to the server IP (e.g., &lt;code&gt;app.example.com&lt;/code&gt;).&lt;/li&gt;
+&lt;li&gt;Access the server via SSH and create a non-root sudo user.&lt;/li&gt;
+&lt;li&gt;Update the system packages.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id="install-nginx-on-ubuntu-2404"&gt;Install NGINX on Ubuntu 24.04
 &lt;/h2&gt;&lt;p&gt;The latest NGINX package is available in Ubuntu 24.04&amp;rsquo;s default APT repository. Follow these steps to update the system and install NGINX.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;🔄 Update package lists&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Update package lists&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -715,7 +715,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt update
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;📦 Install NGINX&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Install NGINX&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -724,7 +724,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt install nginx -y
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🔍 Check installed NGINX version&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Check installed NGINX version&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -745,7 +745,7 @@
 &lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="manage-the-nginx-service"&gt;Manage the NGINX service
 &lt;/h2&gt;&lt;p&gt;NGINX uses the &lt;code&gt;nginx&lt;/code&gt; systemd service to manage runtime and processes. Use the commands below to enable and manage the service.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;🚀 Enable NGINX to start on boot&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Enable NGINX to start on boot&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -765,7 +765,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Executing: /usr/lib/systemd/systemd-sysv-install enable nginx
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;▶ Start NGINX&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Start NGINX&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -774,7 +774,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl start nginx
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;⏹ Stop NGINX&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Stop NGINX&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -783,7 +783,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl stop nginx
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🔄 Restart NGINX&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Restart NGINX&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -792,7 +792,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl restart nginx
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🔍 Check NGINX status&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Check NGINX status&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -840,7 +840,7 @@
 &lt;hr&gt;
 &lt;h2 id="create-an-nginx-virtual-host"&gt;Create an Nginx virtual host
 &lt;/h2&gt;&lt;p&gt;An Nginx virtual host serves web app files from a specific directory using a domain name. Follow these steps to set up a sample virtual host securely.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;📂 Create a new virtual host config file&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Create a new virtual host config file&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;In &lt;code&gt;/etc/nginx/sites-available&lt;/code&gt;, create a new config file, for example: &lt;code&gt;app.example.com.conf&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
@@ -890,7 +890,7 @@
 &lt;/div&gt;&lt;ul&gt;
 &lt;li&gt;Save and close the file.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;✅ Test Nginx configuration&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Test Nginx configuration&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Check the configuration for errors:&lt;/li&gt;
 &lt;/ul&gt;
@@ -915,7 +915,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;nginx: configuration file /etc/nginx/nginx.conf test is successful
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🔗 Enable the virtual host&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Enable the virtual host&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Link the config file into &lt;code&gt;/etc/nginx/sites-enabled&lt;/code&gt;:&lt;/li&gt;
 &lt;/ul&gt;
@@ -927,7 +927,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo ln -s /etc/nginx/sites-available/app.example.com.conf /etc/nginx/sites-enabled/
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;📁 Create the web root directory&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Create the web root directory&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -936,7 +936,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo mkdir -p /var/www/app.example.com
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;📝 Create a sample HTML file&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Create a sample HTML file&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Create &lt;code&gt;index.html&lt;/code&gt; in the web root:&lt;/li&gt;
 &lt;/ul&gt;
@@ -972,7 +972,7 @@
 &lt;/div&gt;&lt;ul&gt;
 &lt;li&gt;Save and close the file.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;🔄 Restart Nginx&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Restart Nginx&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -981,7 +981,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo systemctl restart nginx
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🌍 Verify the virtual host&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Verify the virtual host&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Use &lt;code&gt;curl&lt;/code&gt; to test:&lt;/li&gt;
 &lt;/ul&gt;
@@ -1007,7 +1007,7 @@
 &lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="secure-the-nginx-web-server"&gt;Secure the Nginx web server
 &lt;/h2&gt;&lt;p&gt;SSL certificates encrypt communication between the browser and your server over HTTPS. By default, Nginx listens on insecure HTTP port 80. Follow these steps to obtain a trusted SSL certificate from Let&amp;rsquo;s Encrypt and enable HTTPS.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Install Certbot – Let&amp;rsquo;s Encrypt client 🔧&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Install Certbot – Let&amp;rsquo;s Encrypt client&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Install Certbot using Snap:&lt;/li&gt;
 &lt;/ul&gt;
@@ -1030,7 +1030,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo certbot --version
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📌 &lt;strong&gt;Sample output:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Sample output:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -1053,11 +1053,11 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;This will:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;✅ Generate a valid SSL certificate&lt;/li&gt;
-&lt;li&gt;✅ Automatically configure Nginx to use SSL&lt;/li&gt;
-&lt;li&gt;✅ Enable HTTPS on your web server&lt;/li&gt;
+&lt;li&gt;Generate a valid SSL certificate&lt;/li&gt;
+&lt;li&gt;Automatically configure Nginx to use SSL&lt;/li&gt;
+&lt;li&gt;Enable HTTPS on your web server&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Test automatic renewal 🔄&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Test automatic renewal&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Let&amp;rsquo;s Encrypt certificates last 90 days. Check auto-renewal with:&lt;/li&gt;
 &lt;/ul&gt;
@@ -1082,11 +1082,11 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;https://app.example.com
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;If you see the lock icon 🔒, SSL is installed successfully! 🚀&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;If you see the lock icon, SSL is installed successfully!&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="configure-ufw-firewall-rules"&gt;Configure UFW firewall rules
 &lt;/h2&gt;&lt;p&gt;Uncomplicated Firewall (UFW) is installed and enabled by default on Ubuntu 24.04. Follow these steps to allow HTTP and HTTPS traffic.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Allow HTTP (Port 80) 🔌&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Allow HTTP (Port 80)&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Run:&lt;/li&gt;
 &lt;/ul&gt;
@@ -1098,7 +1098,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo ufw allow 80/tcp
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Allow HTTPS (Port 443) 🔐&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Allow HTTPS (Port 443)&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Run:&lt;/li&gt;
 &lt;/ul&gt;
@@ -1110,7 +1110,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo ufw allow 443/tcp
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Check firewall status 🔢&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Check firewall status&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Run:&lt;/li&gt;
 &lt;/ul&gt;
@@ -1122,7 +1122,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo ufw status
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;👉 &lt;strong&gt;Sample output:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Sample output:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -1149,11 +1149,11 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;443/tcp (v6) ALLOW Anywhere (v6)
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;🛡 After setup, the server only allows HTTP and HTTPS connections.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;After setup, the server only allows HTTP and HTTPS connections.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="conclusion"&gt;Conclusion
 &lt;/h2&gt;&lt;p&gt;Congratulations on installing Nginx on Ubuntu 24.04 and configuring a web server for your applications. Nginx supports multiple virtual hosts to deploy applications securely. You can also integrate Nginx with MySQL and PHP to build dynamic web apps. For more configuration options, visit the official &lt;a class="link" href="https://docs.nginx.com/" target="_blank" rel="noopener"
-&gt;Nginx documentation&lt;/a&gt;. 🚀😊&lt;/p&gt;</description></item><item><title>Introduction to Nginx</title><link>https://tech.nguuyen.io.vn/posts/website/nginx-introduction-guide/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/website/nginx-introduction-guide/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/website/nginx-introduction-guide.jpg" alt="Featured image of post Introduction to Nginx" /&gt;&lt;h2 id="what-is-nginx"&gt;What is Nginx?
+&gt;Nginx documentation&lt;/a&gt;.&lt;/p&gt;</description></item><item><title>Introduction to Nginx</title><link>https://tech.nguuyen.io.vn/posts/website/nginx-introduction-guide/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/website/nginx-introduction-guide/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/website/nginx-introduction-guide.jpg" alt="Featured image of post Introduction to Nginx" /&gt;&lt;h2 id="what-is-nginx"&gt;What is Nginx?
 &lt;/h2&gt;&lt;p align="center"&gt;
 &lt;img src="https://wiki.matbao.net/wp-content/uploads/2019/09/nginx-la-gi.jpg" alt="NGINX is a reliable open-source web server"&gt;
 &lt;/p&gt;
@@ -1178,15 +1178,15 @@
 &lt;p align="center"&gt;&lt;em&gt;NGINX offers powerful features for web development&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;Nginx provides many standout features:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;⚡ Handles over 10,000 concurrent connections with low memory usage.&lt;/li&gt;
-&lt;li&gt;📂 Serves static files and file indexing.&lt;/li&gt;
-&lt;li&gt;🔄 Load balancing and reverse proxy with caching.&lt;/li&gt;
-&lt;li&gt;🚀 Supports FastCGI, uWSGI, SCGI, and Memcached.&lt;/li&gt;
-&lt;li&gt;🛠 Modular architecture with automatic gzip compression.&lt;/li&gt;
-&lt;li&gt;🔐 SSL/TLS encryption support.&lt;/li&gt;
-&lt;li&gt;🔀 URL rewrites using regular expressions.&lt;/li&gt;
-&lt;li&gt;🌐 WebSocket support and connection limits.&lt;/li&gt;
-&lt;li&gt;📡 IPv6 compatibility.&lt;/li&gt;
+&lt;li&gt;Handles over 10,000 concurrent connections with low memory usage.&lt;/li&gt;
+&lt;li&gt;Serves static files and file indexing.&lt;/li&gt;
+&lt;li&gt;Load balancing and reverse proxy with caching.&lt;/li&gt;
+&lt;li&gt;Supports FastCGI, uWSGI, SCGI, and Memcached.&lt;/li&gt;
+&lt;li&gt;Modular architecture with automatic gzip compression.&lt;/li&gt;
+&lt;li&gt;SSL/TLS encryption support.&lt;/li&gt;
+&lt;li&gt;URL rewrites using regular expressions.&lt;/li&gt;
+&lt;li&gt;WebSocket support and connection limits.&lt;/li&gt;
+&lt;li&gt;IPv6 compatibility.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id="nginx-vs-apache"&gt;Nginx vs Apache
 &lt;/h2&gt;&lt;p align="center"&gt;
@@ -1220,19 +1220,19 @@
 &lt;p&gt;You can also use tools like &lt;strong&gt;Pingdom&lt;/strong&gt; or &lt;strong&gt;GTmetrix&lt;/strong&gt; to check.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="conclusion"&gt;Conclusion
-&lt;/h2&gt;&lt;p&gt;Nginx has become one of the most popular web servers thanks to high performance, the ability to handle thousands of concurrent connections, and powerful features. Whether you need to serve static content, balance load, or run a reverse proxy, Nginx is a strong choice. Hopefully this guide helps you understand Nginx and how it works. If you are considering an optimized web server for your project, try Nginx and explore its benefits! 🚀😊&lt;/p&gt;</description></item><item><title>Application Gateway</title><link>https://tech.nguuyen.io.vn/posts/devops/devops-step-seven/</link><pubDate>Sun, 23 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/devops/devops-step-seven/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-seven.jpg" alt="Featured image of post Application Gateway" /&gt;&lt;h2 id="setting-up-important-network-components"&gt;Setting up important network components
+&lt;/h2&gt;&lt;p&gt;Nginx has become one of the most popular web servers thanks to high performance, the ability to handle thousands of concurrent connections, and powerful features. Whether you need to serve static content, balance load, or run a reverse proxy, Nginx is a strong choice. Hopefully this guide helps you understand Nginx and how it works. If you are considering an optimized web server for your project, try Nginx and explore its benefits!&lt;/p&gt;</description></item><item><title>Application Gateway</title><link>https://tech.nguuyen.io.vn/posts/devops/devops-step-seven/</link><pubDate>Sun, 23 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/devops/devops-step-seven/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-seven.jpg" alt="Featured image of post Application Gateway" /&gt;&lt;h2 id="setting-up-important-network-components"&gt;Setting up important network components
 &lt;/h2&gt;&lt;p&gt;This article will help you understand important network components:&lt;/p&gt;
-&lt;p&gt;🔹 &lt;strong&gt;Forward Proxy&lt;/strong&gt;&lt;br&gt;
-🔹 &lt;strong&gt;Reverse Proxy&lt;/strong&gt;&lt;br&gt;
-🔹 &lt;strong&gt;Load Balancer&lt;/strong&gt;&lt;br&gt;
-🔹 &lt;strong&gt;Firewall&lt;/strong&gt;&lt;br&gt;
-🔹 &lt;strong&gt;Caching Server&lt;/strong&gt;&lt;br&gt;
-🔹 &lt;strong&gt;Web Server&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Forward Proxy&lt;/strong&gt;&lt;br&gt;
+&lt;strong&gt;Reverse Proxy&lt;/strong&gt;&lt;br&gt;
+&lt;strong&gt;Load Balancer&lt;/strong&gt;&lt;br&gt;
+&lt;strong&gt;Firewall&lt;/strong&gt;&lt;br&gt;
+&lt;strong&gt;Caching Server&lt;/strong&gt;&lt;br&gt;
+&lt;strong&gt;Web Server&lt;/strong&gt;&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="load-balancer"&gt;Load Balancer
 &lt;/h2&gt;&lt;p&gt;&lt;strong&gt;Load Balancer&lt;/strong&gt; works like a &amp;ldquo;traffic cop&amp;rdquo; standing in front of servers and directing client requests to appropriate servers. This helps optimize speed, efficiently utilize resources, and avoid overload situations.&lt;/p&gt;
-&lt;p&gt;🔹 If a server fails, the Load Balancer will redirect traffic to the remaining servers.&lt;/p&gt;
-&lt;p&gt;🔹 Can be deployed with algorithms like Round Robin, Least Connections, IP Hash&amp;hellip;&lt;/p&gt;
+&lt;p&gt;If a server fails, the Load Balancer will redirect traffic to the remaining servers.&lt;/p&gt;
+&lt;p&gt;Can be deployed with algorithms like Round Robin, Least Connections, IP Hash&amp;hellip;&lt;/p&gt;
 &lt;h3 id="example-load-balancer-configuration-with-nginx"&gt;Example Load Balancer configuration with Nginx:
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -1262,20 +1262,20 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📚 &lt;strong&gt;Further reading:&lt;/strong&gt;&lt;br&gt;
-📄 &lt;a class="link" href="https://www.nginx.com/resources/glossary/load-balancing/" target="_blank" rel="noopener"
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Further reading:&lt;/strong&gt;&lt;br&gt;
+&lt;a class="link" href="https://www.nginx.com/resources/glossary/load-balancing/" target="_blank" rel="noopener"
 &gt;What is Load Balancing?&lt;/a&gt;&lt;br&gt;
-📄 &lt;a class="link" href="https://www.cloudflare.com/en-gb/learning/performance/what-is-load-balancing/#" target="_blank" rel="noopener"
+&lt;a class="link" href="https://www.cloudflare.com/en-gb/learning/performance/what-is-load-balancing/#" target="_blank" rel="noopener"
 &gt;Load Balancing Algorithms&lt;/a&gt;&lt;br&gt;
-📄 &lt;a class="link" href="https://dzone.com/articles/nginx-reverse-proxy-and-load-balancing" target="_blank" rel="noopener"
+&lt;a class="link" href="https://dzone.com/articles/nginx-reverse-proxy-and-load-balancing" target="_blank" rel="noopener"
 &gt;Nginx Reverse Proxy &amp;amp; Load Balancing&lt;/a&gt;&lt;br&gt;
-🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=sCR3SAVdyCc" target="_blank" rel="noopener"
+&lt;a class="link" href="https://www.youtube.com/watch?v=sCR3SAVdyCc" target="_blank" rel="noopener"
 &gt;Video: How does Load Balancer work?&lt;/a&gt;&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="forward-proxy"&gt;Forward Proxy
 &lt;/h2&gt;&lt;p&gt;&lt;strong&gt;Forward Proxy&lt;/strong&gt; is an intermediary server standing between client and internet, forwarding requests from client to destination server. It helps with anonymity, security, access control, and content caching.&lt;/p&gt;
-&lt;p&gt;🔹 Commonly used in enterprise networks to monitor and control access.&lt;/p&gt;
-&lt;p&gt;🔹 Supports bypassing censorship and geographical restrictions.&lt;/p&gt;
+&lt;p&gt;Commonly used in enterprise networks to monitor and control access.&lt;/p&gt;
+&lt;p&gt;Supports bypassing censorship and geographical restrictions.&lt;/p&gt;
 &lt;h3 id="example-forward-proxy-configuration-with-squid"&gt;Example Forward Proxy configuration with Squid:
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -1305,18 +1305,18 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;systemctl restart squid
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📚 &lt;strong&gt;Further reading:&lt;/strong&gt;&lt;br&gt;
-📄 &lt;a class="link" href="https://www.fortinet.com/resources/cyberglossary/proxy-server" target="_blank" rel="noopener"
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Further reading:&lt;/strong&gt;&lt;br&gt;
+&lt;a class="link" href="https://www.fortinet.com/resources/cyberglossary/proxy-server" target="_blank" rel="noopener"
 &gt;What is Forward Proxy?&lt;/a&gt;&lt;br&gt;
-📄 &lt;a class="link" href="https://oxylabs.io/blog/reverse-proxy-vs-forward-proxy" target="_blank" rel="noopener"
+&lt;a class="link" href="https://oxylabs.io/blog/reverse-proxy-vs-forward-proxy" target="_blank" rel="noopener"
 &gt;Forward Proxy vs Reverse Proxy comparison&lt;/a&gt;&lt;br&gt;
-🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=HrG0MHkSsCA" target="_blank" rel="noopener"
+&lt;a class="link" href="https://www.youtube.com/watch?v=HrG0MHkSsCA" target="_blank" rel="noopener"
 &gt;Video: How does Proxy work?&lt;/a&gt;&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="reverse-proxy"&gt;Reverse Proxy
 &lt;/h2&gt;&lt;p&gt;&lt;strong&gt;Reverse Proxy&lt;/strong&gt; is an intermediary server that receives requests from clients and forwards them to appropriate backend servers. It helps with load balancing, caching, security, and SSL termination.&lt;/p&gt;
-&lt;p&gt;🔹 Helps hide backend server information to enhance security.&lt;/p&gt;
-&lt;p&gt;🔹 Supports traffic distribution and application performance optimization.&lt;/p&gt;
+&lt;p&gt;Helps hide backend server information to enhance security.&lt;/p&gt;
+&lt;p&gt;Supports traffic distribution and application performance optimization.&lt;/p&gt;
 &lt;h3 id="example-reverse-proxy-configuration-with-nginx"&gt;Example Reverse Proxy configuration with Nginx:
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -1344,18 +1344,18 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📚 &lt;strong&gt;Further reading:&lt;/strong&gt;&lt;br&gt;
-📄 &lt;a class="link" href="https://www.cloudflare.com/en-gb/learning/cdn/glossary/reverse-proxy/" target="_blank" rel="noopener"
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Further reading:&lt;/strong&gt;&lt;br&gt;
+&lt;a class="link" href="https://www.cloudflare.com/en-gb/learning/cdn/glossary/reverse-proxy/" target="_blank" rel="noopener"
 &gt;What is Reverse Proxy?&lt;/a&gt;&lt;br&gt;
-📄 &lt;a class="link" href="https://www.nginx.com/resources/glossary/reverse-proxy-server/" target="_blank" rel="noopener"
+&lt;a class="link" href="https://www.nginx.com/resources/glossary/reverse-proxy-server/" target="_blank" rel="noopener"
 &gt;Nginx Reverse Proxy Guide&lt;/a&gt;&lt;br&gt;
-🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=4NB0NDtOwIQ" target="_blank" rel="noopener"
+&lt;a class="link" href="https://www.youtube.com/watch?v=4NB0NDtOwIQ" target="_blank" rel="noopener"
 &gt;Video: Reverse Proxy and practical applications&lt;/a&gt;&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="firewall"&gt;Firewall
 &lt;/h2&gt;&lt;p&gt;&lt;strong&gt;Firewall&lt;/strong&gt; is a network security device that monitors and filters incoming/outgoing traffic based on organization&amp;rsquo;s security policies.&lt;/p&gt;
-&lt;p&gt;🔹 Prevents unauthorized access to internal systems.&lt;/p&gt;
-&lt;p&gt;🔹 Supports data traffic control rules.&lt;/p&gt;
+&lt;p&gt;Prevents unauthorized access to internal systems.&lt;/p&gt;
+&lt;p&gt;Supports data traffic control rules.&lt;/p&gt;
 &lt;h3 id="example-firewall-configuration-with-ufw-uncomplicated-firewall"&gt;Example Firewall configuration with UFW (Uncomplicated Firewall):
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -1385,18 +1385,18 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ufw &lt;span class="nb"&gt;enable&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📚 &lt;strong&gt;Further reading:&lt;/strong&gt;&lt;br&gt;
-📄 &lt;a class="link" href="https://www.checkpoint.com/cyber-hub/network-security/what-is-firewall/" target="_blank" rel="noopener"
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Further reading:&lt;/strong&gt;&lt;br&gt;
+&lt;a class="link" href="https://www.checkpoint.com/cyber-hub/network-security/what-is-firewall/" target="_blank" rel="noopener"
 &gt;What is Firewall?&lt;/a&gt;&lt;br&gt;
-📄 &lt;a class="link" href="https://www.cisco.com/c/en_in/products/security/firewalls/what-is-a-firewall.html" target="_blank" rel="noopener"
+&lt;a class="link" href="https://www.cisco.com/c/en_in/products/security/firewalls/what-is-a-firewall.html" target="_blank" rel="noopener"
 &gt;Common Firewall types&lt;/a&gt;&lt;br&gt;
-🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=9GZlVOafYTg" target="_blank" rel="noopener"
+&lt;a class="link" href="https://www.youtube.com/watch?v=9GZlVOafYTg" target="_blank" rel="noopener"
 &gt;Video: Introduction to Firewall&lt;/a&gt;&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="nginx"&gt;Nginx
 &lt;/h2&gt;&lt;p&gt;&lt;strong&gt;Nginx&lt;/strong&gt; is an open-source web server, widely used for its ability to handle many concurrent connections with high performance.&lt;/p&gt;
-&lt;p&gt;🔹 Supports web server, reverse proxy, load balancing, caching.&lt;/p&gt;
-&lt;p&gt;🔹 Suitable for microservices systems and containers.&lt;/p&gt;
+&lt;p&gt;Supports web server, reverse proxy, load balancing, caching.&lt;/p&gt;
+&lt;p&gt;Suitable for microservices systems and containers.&lt;/p&gt;
 &lt;h3 id="example-simple-nginx-configuration"&gt;Example simple Nginx configuration:
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -1416,16 +1416,16 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="p"&gt;}&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📚 &lt;strong&gt;Further reading:&lt;/strong&gt;&lt;br&gt;
-📄 &lt;a class="link" href="https://swissmade.host/en/blog/basic-nginx-setup-ubuntu-guide-to-a-functional-and-secure-website-serving" target="_blank" rel="noopener"
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Further reading:&lt;/strong&gt;&lt;br&gt;
+&lt;a class="link" href="https://swissmade.host/en/blog/basic-nginx-setup-ubuntu-guide-to-a-functional-and-secure-website-serving" target="_blank" rel="noopener"
 &gt;Nginx installation guide on Ubuntu&lt;/a&gt;&lt;br&gt;
-🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=JKxlsvZXG7c" target="_blank" rel="noopener"
+&lt;a class="link" href="https://www.youtube.com/watch?v=JKxlsvZXG7c" target="_blank" rel="noopener"
 &gt;Video: Nginx in 100 seconds&lt;/a&gt;&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="apache"&gt;Apache
 &lt;/h2&gt;&lt;p&gt;&lt;strong&gt;Apache&lt;/strong&gt; is one of the most popular web servers, supporting many extension modules and compatible with many operating systems.&lt;/p&gt;
-&lt;p&gt;🔹 Easy to configure with &lt;code&gt;.conf&lt;/code&gt; files.&lt;/p&gt;
-&lt;p&gt;🔹 Supports SSL/TLS, user authentication, URL rewriting&amp;hellip;&lt;/p&gt;
+&lt;p&gt;Easy to configure with &lt;code&gt;.conf&lt;/code&gt; files.&lt;/p&gt;
+&lt;p&gt;Supports SSL/TLS, user authentication, URL rewriting&amp;hellip;&lt;/p&gt;
 &lt;h3 id="example-simple-apache-configuration"&gt;Example simple Apache configuration:
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -1449,17 +1449,17 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nt"&gt;&amp;lt;/VirtualHost&amp;gt;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📚 &lt;strong&gt;Further reading:&lt;/strong&gt;&lt;br&gt;
-📄 &lt;a class="link" href="https://httpd.apache.org/" target="_blank" rel="noopener"
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Further reading:&lt;/strong&gt;&lt;br&gt;
+&lt;a class="link" href="https://httpd.apache.org/" target="_blank" rel="noopener"
 &gt;Apache homepage&lt;/a&gt;&lt;br&gt;
-🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=VXSgEvZKp-8" target="_blank" rel="noopener"
+&lt;a class="link" href="https://www.youtube.com/watch?v=VXSgEvZKp-8" target="_blank" rel="noopener"
 &gt;Video: Installing Apache on Ubuntu&lt;/a&gt;&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="conclusion"&gt;Conclusion
-&lt;/h2&gt;&lt;p&gt;🔹 &lt;strong&gt;Load Balancer&lt;/strong&gt; helps distribute traffic efficiently, reducing server load.&lt;br&gt;
-🔹 &lt;strong&gt;Forward Proxy&lt;/strong&gt; supports anonymity, caching, and access control from client.&lt;br&gt;
-🔹 &lt;strong&gt;Reverse Proxy&lt;/strong&gt; helps enhance security, caching, and optimize backend systems.&lt;br&gt;
-🔹 &lt;strong&gt;Firewall&lt;/strong&gt; protects systems from unauthorized access.&lt;br&gt;
-🔹 &lt;strong&gt;Nginx &amp;amp; Apache&lt;/strong&gt; are two popular web servers, serving web content and applications.&lt;/p&gt;
-&lt;p&gt;By implementing these components, you can build a powerful, secure, and efficient network system. 🚀&lt;/p&gt;
-&lt;p&gt;👉 &lt;strong&gt;Next step:&lt;/strong&gt; Learn about &lt;em&gt;&lt;strong&gt;Networking Protocols&lt;/strong&gt;&lt;/em&gt; - a set of rules and standards that define how devices in a network communicate with each other. They ensure data is transmitted accurately, securely, and efficiently between different systems.&lt;/p&gt;</description></item></channel></rss>
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;Load Balancer&lt;/strong&gt; helps distribute traffic efficiently, reducing server load.&lt;br&gt;
+&lt;strong&gt;Forward Proxy&lt;/strong&gt; supports anonymity, caching, and access control from client.&lt;br&gt;
+&lt;strong&gt;Reverse Proxy&lt;/strong&gt; helps enhance security, caching, and optimize backend systems.&lt;br&gt;
+&lt;strong&gt;Firewall&lt;/strong&gt; protects systems from unauthorized access.&lt;br&gt;
+&lt;strong&gt;Nginx &amp;amp; Apache&lt;/strong&gt; are two popular web servers, serving web content and applications.&lt;/p&gt;
+&lt;p&gt;By implementing these components, you can build a powerful, secure, and efficient network system.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Next step:&lt;/strong&gt; Learn about &lt;em&gt;&lt;strong&gt;Networking Protocols&lt;/strong&gt;&lt;/em&gt; - a set of rules and standards that define how devices in a network communicate with each other. They ensure data is transmitted accurately, securely, and efficiently between different systems.&lt;/p&gt;</description></item></channel></rss>

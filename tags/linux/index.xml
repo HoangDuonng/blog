@@ -4490,25 +4490,25 @@
 &lt;/ul&gt;</description></item><item><title>Learning Linux &amp; Operating Systems</title><link>https://tech.nguuyen.io.vn/posts/devops/devops-step-two/</link><pubDate>Sat, 22 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/devops/devops-step-two/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-two.jpg" alt="Featured image of post Learning Linux &amp; Operating Systems " /&gt;&lt;h2 id="why-is-linux-important-in-devops"&gt;Why is Linux important in DevOps?
 &lt;/h2&gt;&lt;p&gt;Linux is the foundation of most server systems, containers (Docker, Kubernetes), and cloud platforms. DevOps professionals need to master Linux to:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;✅ Manage servers effectively.&lt;/li&gt;
-&lt;li&gt;✅ Write automation scripts.&lt;/li&gt;
-&lt;li&gt;✅ Handle files, users, and processes.&lt;/li&gt;
-&lt;li&gt;✅ Optimize systems and security.&lt;/li&gt;
+&lt;li&gt;Manage servers effectively.&lt;/li&gt;
+&lt;li&gt;Write automation scripts.&lt;/li&gt;
+&lt;li&gt;Handle files, users, and processes.&lt;/li&gt;
+&lt;li&gt;Optimize systems and security.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="what-is-an-operating-system"&gt;What is an Operating System?
 &lt;/h2&gt;&lt;p&gt;An operating system (OS) is software that manages computer hardware and software resources, providing common services for programs. It acts as an intermediary between applications and hardware, handling tasks such as:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🔹 Memory management.&lt;/li&gt;
-&lt;li&gt;🔹 Process scheduling.&lt;/li&gt;
-&lt;li&gt;🔹 File system management.&lt;/li&gt;
-&lt;li&gt;🔹 Device control.&lt;/li&gt;
+&lt;li&gt;Memory management.&lt;/li&gt;
+&lt;li&gt;Process scheduling.&lt;/li&gt;
+&lt;li&gt;File system management.&lt;/li&gt;
+&lt;li&gt;Device control.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id="popular-operating-systems"&gt;Popular operating systems:
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;💻 &lt;strong&gt;Personal computers&lt;/strong&gt;: Windows, macOS, Linux (Ubuntu, Fedora,&amp;hellip;)&lt;/li&gt;
-&lt;li&gt;📱 &lt;strong&gt;Mobile devices&lt;/strong&gt;: iOS, Android&lt;/li&gt;
-&lt;li&gt;🖥 &lt;strong&gt;Servers&lt;/strong&gt;: Ubuntu Server, Red Hat Enterprise Linux, Windows Server&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Personal computers&lt;/strong&gt;: Windows, macOS, Linux (Ubuntu, Fedora,&amp;hellip;)&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Mobile devices&lt;/strong&gt;: iOS, Android&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Servers&lt;/strong&gt;: Ubuntu Server, Red Hat Enterprise Linux, Windows Server&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Each operating system has different characteristics, interfaces, and compatibility capabilities. They play crucial roles in system security, performance optimization, and providing consistent user experiences.&lt;/p&gt;
 &lt;hr&gt;
@@ -4594,7 +4594,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;free -m
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;h3 id="-how-to-run-the-script"&gt;▶ &lt;strong&gt;How to run the script:&lt;/strong&gt;
+&lt;/div&gt;&lt;h3 id="how-to-run-the-script"&gt;&lt;strong&gt;How to run the script:&lt;/strong&gt;
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -4609,21 +4609,21 @@
 &lt;h2 id="learning-resources"&gt;Learning Resources
 &lt;/h2&gt;&lt;p&gt;Here are some free resources to learn more about operating systems:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;📖 &lt;a class="link" href="https://en.wikipedia.org/wiki/Operating_system" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://en.wikipedia.org/wiki/Operating_system" target="_blank" rel="noopener"
 &gt;Operating Systems - Wiki&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📖 &lt;a class="link" href="https://www.tpointtech.com/operating-system" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.tpointtech.com/operating-system" target="_blank" rel="noopener"
 &gt;All you need to know about OS&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📖 &lt;a class="link" href="https://www.tutorialspoint.com/operating_system/os_overview.htm" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.tutorialspoint.com/operating_system/os_overview.htm" target="_blank" rel="noopener"
 &gt;Learn Operating Systems&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=pVzRTmdd9j0" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=pVzRTmdd9j0" target="_blank" rel="noopener"
 &gt;What are Operating Systems?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=vBURTt97EkA&amp;amp;list=PLBlnK6fEyqRiVhbXDGLXDk_OQAeuVcp2O" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=vBURTt97EkA&amp;amp;list=PLBlnK6fEyqRiVhbXDGLXDk_OQAeuVcp2O" target="_blank" rel="noopener"
 &gt;Operating Systems&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="conclusion"&gt;Conclusion
 &lt;/h2&gt;&lt;ul&gt;
-&lt;li&gt;✅ Linux is a mandatory skill in DevOps.&lt;/li&gt;
-&lt;li&gt;✅ Learn to use terminal &amp;amp; Bash scripting.&lt;/li&gt;
+&lt;li&gt;Linux is a mandatory skill in DevOps.&lt;/li&gt;
+&lt;li&gt;Learn to use terminal &amp;amp; Bash scripting.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;👉 Next step:&lt;/strong&gt; Learn more about &lt;em&gt;&lt;strong&gt;terminal and CLI usage&lt;/strong&gt;&lt;/em&gt; to work effectively with systems.&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;&lt;strong&gt;Next step:&lt;/strong&gt; Learn more about &lt;em&gt;&lt;strong&gt;terminal and CLI usage&lt;/strong&gt;&lt;/em&gt; to work effectively with systems.&lt;/p&gt;</description></item></channel></rss>

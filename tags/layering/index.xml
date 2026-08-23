@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Layering on Hoang Duong</title><link>https://tech.nguuyen.io.vn/tags/layering/</link><description>Recent content in Layering on Hoang Duong</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sun, 22 Mar 2026 20:00:00 +0700</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/layering/index.xml" rel="self" type="application/rss+xml"/><item><title>Docker Build Cache &amp; Layering</title><link>https://tech.nguuyen.io.vn/posts/docker/docker-build-cache-layering/</link><pubDate>Sun, 22 Mar 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/docker/docker-build-cache-layering/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/docker/docker-build-cache-layering.jpg" alt="Featured image of post Docker Build Cache &amp; Layering" /&gt;&lt;h2 id="docker-build-cache--layering"&gt;Docker Build Cache &amp;amp; Layering
-&lt;/h2&gt;&lt;p&gt;Have you ever wondered why the &lt;strong&gt;first build&lt;/strong&gt; takes 5–10 minutes, but the &lt;strong&gt;second build&lt;/strong&gt; finishes in just a few seconds? That&amp;rsquo;s thanks to &lt;strong&gt;Build Cache&lt;/strong&gt;. But sometimes, changing just one line of code causes Docker to rebuild everything — that&amp;rsquo;s because you don&amp;rsquo;t yet understand how &lt;strong&gt;Layering&lt;/strong&gt; works. 🧱&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;Have you ever wondered why the &lt;strong&gt;first build&lt;/strong&gt; takes 5–10 minutes, but the &lt;strong&gt;second build&lt;/strong&gt; finishes in just a few seconds? That&amp;rsquo;s thanks to &lt;strong&gt;Build Cache&lt;/strong&gt;. But sometimes, changing just one line of code causes Docker to rebuild everything — that&amp;rsquo;s because you don&amp;rsquo;t yet understand how &lt;strong&gt;Layering&lt;/strong&gt; works.&lt;/p&gt;
 &lt;p&gt;In this article, I&amp;rsquo;ll explain in detail how Layers and Build Cache work, how Docker decides when to use cache versus rebuild, and techniques to optimize for faster builds.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="what-is-a-layer-in-docker"&gt;What Is a Layer in Docker?
@@ -85,9 +85,9 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;5
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Instruction 1 → Cache hit? ✅ Reuse → Continue
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Instruction 2 → Cache hit? ✅ Reuse → Continue
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Instruction 3 → Cache hit? ❌ Cache miss → Rebuild from here onward
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Instruction 1 → Cache hit? Reuse → Continue
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Instruction 2 → Cache hit? Reuse → Continue
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Instruction 3 → Cache hit? Cache miss → Rebuild from here onward
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Instruction 4 → Must rebuild (because instruction 3 changed)
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Instruction 5 → Must rebuild
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
@@ -105,27 +105,27 @@
 &lt;tbody&gt;
 &lt;tr&gt;
 &lt;td&gt;Dockerfile instruction changed&lt;/td&gt;
-&lt;td&gt;✅ Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
 &lt;td&gt;Docker compares instruction strings — different → rebuild&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Files in &lt;code&gt;COPY&lt;/code&gt;/&lt;code&gt;ADD&lt;/code&gt; changed&lt;/td&gt;
-&lt;td&gt;✅ Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
 &lt;td&gt;Docker computes file checksums — different → rebuild&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Only file &lt;code&gt;mtime&lt;/code&gt; changed&lt;/td&gt;
-&lt;td&gt;❌ No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
 &lt;td&gt;Docker ignores modification time, only checks content&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;RUN&lt;/code&gt; instruction identical to last&lt;/td&gt;
-&lt;td&gt;❌ No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
 &lt;td&gt;Same instruction string → use cache (even if outdated)&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Previous layer was invalidated&lt;/td&gt;
-&lt;td&gt;✅ Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
 &lt;td&gt;All subsequent layers must rebuild&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
@@ -140,11 +140,11 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;5
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-dockerfile" data-lang="dockerfile"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;FROM&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;node:18-alpine&lt;/span&gt; &lt;span class="c1"&gt;# ✅ Cache hit (unchanged)&lt;/span&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;WORKDIR&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;/app&lt;/span&gt; &lt;span class="c1"&gt;# ✅ Cache hit (unchanged)&lt;/span&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;COPY&lt;/span&gt; . . &lt;span class="c1"&gt;# ❌ Cache miss (you edited a .js file)&lt;/span&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm install &lt;span class="c1"&gt;# ❌ Must rebuild (because COPY above missed)&lt;/span&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm run build &lt;span class="c1"&gt;# ❌ Must rebuild (because previous layer missed)&lt;/span&gt;&lt;span class="err"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-dockerfile" data-lang="dockerfile"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;FROM&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;node:18-alpine&lt;/span&gt; &lt;span class="c1"&gt;# Cache hit (unchanged)&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;WORKDIR&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;/app&lt;/span&gt; &lt;span class="c1"&gt;# Cache hit (unchanged)&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;COPY&lt;/span&gt; . . &lt;span class="c1"&gt;# Cache miss (you edited a .js file)&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm install &lt;span class="c1"&gt;# Must rebuild (because COPY above missed)&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm run build &lt;span class="c1"&gt;# Must rebuild (because previous layer missed)&lt;/span&gt;&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;You only edited one small &lt;code&gt;.js&lt;/code&gt; file, but &lt;code&gt;npm install&lt;/code&gt; has to run again even though &lt;code&gt;package.json&lt;/code&gt; hasn&amp;rsquo;t changed. This is the most common issue with unoptimized Dockerfiles.&lt;/p&gt;
@@ -152,7 +152,7 @@
 &lt;h2 id="techniques-to-optimize-build-cache"&gt;Techniques to Optimize Build Cache
 &lt;/h2&gt;&lt;h3 id="order-instructions-by-change-frequency"&gt;Order Instructions by Change Frequency
 &lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Principle:&lt;/strong&gt; Instructions that rarely change → place first. Instructions that change often → place last.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;❌ Not optimized:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Not optimized:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -169,7 +169,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm run build&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;✅ Optimized:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Optimized:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -328,13 +328,13 @@
 &lt;td&gt;builder&lt;/td&gt;
 &lt;td&gt;Build application&lt;/td&gt;
 &lt;td&gt;~500 MB&lt;/td&gt;
-&lt;td&gt;❌ No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;production&lt;/td&gt;
 &lt;td&gt;Run application&lt;/td&gt;
 &lt;td&gt;~30 MB&lt;/td&gt;
-&lt;td&gt;✅ Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
@@ -361,10 +361,10 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;&lt;strong&gt;Issues:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;❌ Large base image (&lt;code&gt;node:18&lt;/code&gt; ~ 900 MB)&lt;/li&gt;
-&lt;li&gt;❌ &lt;code&gt;COPY . .&lt;/code&gt; before &lt;code&gt;npm install&lt;/code&gt; → any code change rebuilds dependencies&lt;/li&gt;
-&lt;li&gt;❌ No &lt;code&gt;.dockerignore&lt;/code&gt; → copies &lt;code&gt;node_modules&lt;/code&gt;, &lt;code&gt;.git&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;❌ No multi-stage → final image includes devDependencies&lt;/li&gt;
+&lt;li&gt;Large base image (&lt;code&gt;node:18&lt;/code&gt; ~ 900 MB)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;COPY . .&lt;/code&gt; before &lt;code&gt;npm install&lt;/code&gt; → any code change rebuilds dependencies&lt;/li&gt;
+&lt;li&gt;No &lt;code&gt;.dockerignore&lt;/code&gt; → copies &lt;code&gt;node_modules&lt;/code&gt;, &lt;code&gt;.git&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;No multi-stage → final image includes devDependencies&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id="optimized-dockerfile"&gt;Optimized Dockerfile
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
@@ -429,11 +429,11 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;&lt;strong&gt;Improvements:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;✅ Small base image (&lt;code&gt;node:18-alpine&lt;/code&gt; ~ 170 MB)&lt;/li&gt;
-&lt;li&gt;✅ Separate &lt;code&gt;COPY package.json&lt;/code&gt; → efficient dependency caching&lt;/li&gt;
-&lt;li&gt;✅ Cache mount for npm → faster re-downloads on rebuild&lt;/li&gt;
-&lt;li&gt;✅ Multi-stage → final image only contains production dependencies&lt;/li&gt;
-&lt;li&gt;✅ Uses &lt;code&gt;npm ci&lt;/code&gt; instead of &lt;code&gt;npm install&lt;/code&gt; → ensures reproducible builds&lt;/li&gt;
+&lt;li&gt;Small base image (&lt;code&gt;node:18-alpine&lt;/code&gt; ~ 170 MB)&lt;/li&gt;
+&lt;li&gt;Separate &lt;code&gt;COPY package.json&lt;/code&gt; → efficient dependency caching&lt;/li&gt;
+&lt;li&gt;Cache mount for npm → faster re-downloads on rebuild&lt;/li&gt;
+&lt;li&gt;Multi-stage → final image only contains production dependencies&lt;/li&gt;
+&lt;li&gt;Uses &lt;code&gt;npm ci&lt;/code&gt; instead of &lt;code&gt;npm install&lt;/code&gt; → ensures reproducible builds&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id="results-comparison"&gt;Results Comparison
 &lt;/h3&gt;&lt;table&gt;
@@ -560,8 +560,8 @@
 &lt;li&gt;&lt;strong&gt;Cache invalidation&lt;/strong&gt; = when a layer changes, all subsequent layers must rebuild&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Optimization&lt;/strong&gt; = proper instruction ordering + &lt;code&gt;.dockerignore&lt;/code&gt; + cache mounts + multi-stage builds&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;By understanding and applying these 4 techniques, you can reduce Docker build times from &lt;strong&gt;5 minutes to under 30 seconds&lt;/strong&gt; in most cases. 🚀&lt;/p&gt;
-&lt;p&gt;If you find this article helpful, feel free to ⭐ star the repo or 📱 share it with your friends! 😊&lt;/p&gt;
+&lt;p&gt;By understanding and applying these 4 techniques, you can reduce Docker build times from &lt;strong&gt;5 minutes to under 30 seconds&lt;/strong&gt; in most cases.&lt;/p&gt;
+&lt;p&gt;If you find this article helpful, feel free to star the repo or share it with your friends!&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="references"&gt;References
 &lt;/h2&gt;&lt;ul&gt;

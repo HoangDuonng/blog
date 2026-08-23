@@ -23,15 +23,15 @@
 &lt;p align="center"&gt;&lt;em&gt;Máy chủ NGINX có nhiều tính năng và ưu điểm vượt trội trong lập trình&lt;/em&gt;&lt;/p&gt;
 &lt;p&gt;Nginx sở hữu nhiều tính năng vượt trội:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;⚡ xử lý hơn 10.000 kết nối đồng thời với mức sử dụng bộ nhớ thấp.&lt;/li&gt;
-&lt;li&gt;📂 phục vụ tập tin tĩnh (static files) và lập chỉ mục tập tin.&lt;/li&gt;
-&lt;li&gt;🔄 cân bằng tải và hỗ trợ proxy ngược với bộ nhớ đệm (cache).&lt;/li&gt;
-&lt;li&gt;🚀 hỗ trợ fastcgi, uwsgi, scgi và memcached.&lt;/li&gt;
-&lt;li&gt;🛠 kiến trúc modular và nén gzip tự động.&lt;/li&gt;
-&lt;li&gt;🔐 hỗ trợ mã hóa ssl/tls.&lt;/li&gt;
-&lt;li&gt;🔀 rewrite url bằng regular expressions.&lt;/li&gt;
-&lt;li&gt;🌐 hỗ trợ websockets và giới hạn số kết nối đồng thời.&lt;/li&gt;
-&lt;li&gt;📡 tương thích với ipv6.&lt;/li&gt;
+&lt;li&gt;xử lý hơn 10.000 kết nối đồng thời với mức sử dụng bộ nhớ thấp.&lt;/li&gt;
+&lt;li&gt;phục vụ tập tin tĩnh (static files) và lập chỉ mục tập tin.&lt;/li&gt;
+&lt;li&gt;cân bằng tải và hỗ trợ proxy ngược với bộ nhớ đệm (cache).&lt;/li&gt;
+&lt;li&gt;hỗ trợ fastcgi, uwsgi, scgi và memcached.&lt;/li&gt;
+&lt;li&gt;kiến trúc modular và nén gzip tự động.&lt;/li&gt;
+&lt;li&gt;hỗ trợ mã hóa ssl/tls.&lt;/li&gt;
+&lt;li&gt;rewrite url bằng regular expressions.&lt;/li&gt;
+&lt;li&gt;hỗ trợ websockets và giới hạn số kết nối đồng thời.&lt;/li&gt;
+&lt;li&gt;tương thích với ipv6.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id="so-sánh-nginx-và-apache-server"&gt;So sánh Nginx và Apache server
 &lt;/h2&gt;&lt;p align="center"&gt;
@@ -65,20 +65,20 @@
 &lt;p&gt;Ngoài ra, bạn có thể sử dụng công cụ như &lt;strong&gt;pingdom&lt;/strong&gt; hoặc &lt;strong&gt;gtmetrix&lt;/strong&gt; để kiểm tra.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="lời-kết"&gt;Lời kết
-&lt;/h2&gt;&lt;p&gt;Nginx đã và đang trở thành một trong những web server phổ biến nhất nhờ hiệu suất cao, khả năng xử lý hàng nghìn kết nối đồng thời và nhiều tính năng mạnh mẽ. Dù bạn cần một giải pháp để phục vụ nội dung tĩnh, cân bằng tải hay làm reverse proxy, Nginx đều có thể đáp ứng một cách hiệu quả. Hy vọng bài viết này giúp bạn hiểu rõ hơn về Nginx và cách nó hoạt động. Nếu bạn đang cân nhắc triển khai một web server tối ưu cho dự án của mình, hãy thử nghiệm Nginx và khám phá những lợi ích mà nó mang lại! 🚀😊&lt;/p&gt;</description></item><item><title>Hướng dẫn cài đặt Nginx trên Ubuntu 24.04</title><link>https://tech.nguuyen.io.vn/vi/posts/installation-guides/how-to-install-nginx/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/installation-guides/how-to-install-nginx/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/website/how-to-install-nginx.jpg" alt="Featured image of post Hướng dẫn cài đặt Nginx trên Ubuntu 24.04 " /&gt;&lt;h2 id="giới-thiệu"&gt;Giới thiệu
+&lt;/h2&gt;&lt;p&gt;Nginx đã và đang trở thành một trong những web server phổ biến nhất nhờ hiệu suất cao, khả năng xử lý hàng nghìn kết nối đồng thời và nhiều tính năng mạnh mẽ. Dù bạn cần một giải pháp để phục vụ nội dung tĩnh, cân bằng tải hay làm reverse proxy, Nginx đều có thể đáp ứng một cách hiệu quả. Hy vọng bài viết này giúp bạn hiểu rõ hơn về Nginx và cách nó hoạt động. Nếu bạn đang cân nhắc triển khai một web server tối ưu cho dự án của mình, hãy thử nghiệm Nginx và khám phá những lợi ích mà nó mang lại!&lt;/p&gt;</description></item><item><title>Hướng dẫn cài đặt Nginx trên Ubuntu 24.04</title><link>https://tech.nguuyen.io.vn/vi/posts/installation-guides/how-to-install-nginx/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/installation-guides/how-to-install-nginx/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/website/how-to-install-nginx.jpg" alt="Featured image of post Hướng dẫn cài đặt Nginx trên Ubuntu 24.04 " /&gt;&lt;h2 id="giới-thiệu"&gt;Giới thiệu
 &lt;/h2&gt;&lt;p&gt;Nginx là một ứng dụng web server mã nguồn mở giúp triển khai các ứng dụng web tĩnh và động trên máy chủ. Nginx có thể hoạt động như một web server, load balancer, reverse proxy hoặc HTTP cache, hỗ trợ tích hợp với các ứng dụng hiện có để xây dựng một hệ thống hoàn chỉnh hoặc phân phối ứng dụng web qua địa chỉ IP hoặc tên miền.&lt;/p&gt;
 &lt;p&gt;Bài viết này hướng dẫn cách cài đặt Nginx trên Ubuntu 24.04 và thiết lập ứng dụng web mẫu để chạy trên máy chủ của bạn.&lt;/p&gt;
 &lt;h2 id="yêu-cầu-trước-khi-bắt-đầu"&gt;Yêu cầu trước khi bắt đầu
 &lt;/h2&gt;&lt;p&gt;Trước khi tiến hành, hãy đảm bảo bạn đã thực hiện các bước sau:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🚀 Triển khai một máy chủ Ubuntu 24.04.&lt;/li&gt;
-&lt;li&gt;🌍 Tạo một bản ghi A (A record) cho tên miền hoặc subdomain trỏ đến địa chỉ IP của máy chủ. Ví dụ: &lt;code&gt;app.example.com&lt;/code&gt;.&lt;/li&gt;
-&lt;li&gt;🔐 Truy cập máy chủ qua SSH và tạo một người dùng không phải root có quyền sudo.&lt;/li&gt;
-&lt;li&gt;🔄 Cập nhật hệ thống.&lt;/li&gt;
+&lt;li&gt;Triển khai một máy chủ Ubuntu 24.04.&lt;/li&gt;
+&lt;li&gt;Tạo một bản ghi A (A record) cho tên miền hoặc subdomain trỏ đến địa chỉ IP của máy chủ. Ví dụ: &lt;code&gt;app.example.com&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Truy cập máy chủ qua SSH và tạo một người dùng không phải root có quyền sudo.&lt;/li&gt;
+&lt;li&gt;Cập nhật hệ thống.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id="cài-đặt-nginx-trên-ubuntu-2404"&gt;Cài đặt NGINX trên Ubuntu 24.04
 &lt;/h2&gt;&lt;p&gt;Gói NGINX mới nhất có sẵn trong kho APT mặc định trên Ubuntu 24.04. Thực hiện các bước sau để cập nhật hệ thống và cài đặt NGINX.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;🔄 Cập nhật danh sách gói hệ thống&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Cập nhật danh sách gói hệ thống&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -87,7 +87,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt update
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;📦 Cài đặt NGINX&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Cài đặt NGINX&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -96,7 +96,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt install nginx -y
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🔍 Kiểm tra phiên bản NGINX đã cài đặt&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Kiểm tra phiên bản NGINX đã cài đặt&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -117,7 +117,7 @@
 &lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="quản-lý-dịch-vụ-nginx"&gt;Quản lý dịch vụ NGINX
 &lt;/h2&gt;&lt;p&gt;NGINX sử dụng dịch vụ &lt;code&gt;nginx&lt;/code&gt; trong &lt;code&gt;systemd&lt;/code&gt; để quản lý thời gian chạy và các tiến trình của web server trên máy chủ. Thực hiện các bước sau để kích hoạt dịch vụ NGINX và quản lý các tiến trình web server.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;🚀 Kích hoạt dịch vụ NGINX khởi động cùng hệ thống&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Kích hoạt dịch vụ NGINX khởi động cùng hệ thống&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -137,7 +137,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Executing: /usr/lib/systemd/systemd-sysv-install enable nginx
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;▶ Khởi động dịch vụ NGINX&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Khởi động dịch vụ NGINX&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -146,7 +146,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl start nginx
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;⏹ Dừng dịch vụ NGINX&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Dừng dịch vụ NGINX&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -155,7 +155,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl stop nginx
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🔄 Khởi động lại dịch vụ NGINX&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Khởi động lại dịch vụ NGINX&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -164,7 +164,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl restart nginx
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🔍 Kiểm tra trạng thái dịch vụ NGINX&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Kiểm tra trạng thái dịch vụ NGINX&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -212,7 +212,7 @@
 &lt;hr&gt;
 &lt;h2 id="tạo-nginx-virtual-host"&gt;Tạo nginx virtual host
 &lt;/h2&gt;&lt;p&gt;Nginx virtual host bao gồm các cấu hình đặc biệt giúp máy chủ web phân phối các tệp ứng dụng web từ một thư mục cụ thể bằng một tên miền cụ thể trên máy chủ của bạn. các bước sau đây sẽ hướng dẫn tạo một cấu hình virtual host mẫu để phân phối tệp ứng dụng web một cách an toàn trên máy chủ.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;📂 Tạo tệp cấu hình virtual host mới&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tạo tệp cấu hình virtual host mới&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Trong thư mục &lt;code&gt;/etc/nginx/sites-available&lt;/code&gt;, tạo một tệp cấu hình mới, ví dụ: &lt;code&gt;app.example.com.conf&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
@@ -262,7 +262,7 @@
 &lt;/div&gt;&lt;ul&gt;
 &lt;li&gt;Lưu và đóng tệp.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;✅ Kiểm tra cấu hình Nginx&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Kiểm tra cấu hình Nginx&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Kiểm tra xem cấu hình Nginx có lỗi không:&lt;/li&gt;
 &lt;/ul&gt;
@@ -287,7 +287,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;nginx: configuration file /etc/nginx/nginx.conf test is successful
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🔗 Kích hoạt virtual host&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Kích hoạt virtual host&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Liên kết tệp cấu hình vào thư mục &lt;code&gt;/etc/nginx/sites-enabled&lt;/code&gt; để kích hoạt virtual host:&lt;/li&gt;
 &lt;/ul&gt;
@@ -299,7 +299,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo ln -s /etc/nginx/sites-available/app.example.com.conf /etc/nginx/sites-enabled/
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;📁 Tạo thư mục web root&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Tạo thư mục web root&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -308,7 +308,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo mkdir -p /var/www/app.example.com
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;📝 Tạo tệp html mẫu&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Tạo tệp html mẫu&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Tạo tệp &lt;code&gt;index.html&lt;/code&gt; trong thư mục web root:&lt;/li&gt;
 &lt;/ul&gt;
@@ -344,7 +344,7 @@
 &lt;/div&gt;&lt;ul&gt;
 &lt;li&gt;Lưu và đóng tệp.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;🔄 Khởi động lại nginx&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Khởi động lại nginx&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -353,7 +353,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo systemctl restart nginx
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🌍 Kiểm tra virtual host&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Kiểm tra virtual host&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Sử dụng lệnh &lt;code&gt;curl&lt;/code&gt; để kiểm tra virtual host:&lt;/li&gt;
 &lt;/ul&gt;
@@ -379,7 +379,7 @@
 &lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="bảo-mật-máy-chủ-web-nginx"&gt;Bảo mật máy chủ web Nginx
 &lt;/h2&gt;&lt;p&gt;SSL certificates giúp mã hóa giao tiếp giữa trình duyệt của người dùng và máy chủ Nginx thông qua HTTPS. Mặc định, Nginx lắng nghe kết nối đến trên cổng HTTP 80 không an toàn. Thực hiện các bước sau để tạo chứng chỉ SSL đáng tin cậy từ Let&amp;rsquo;s Encrypt và bảo mật máy chủ Nginx để chấp nhận các yêu cầu kết nối HTTPS được mã hóa.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Cài đặt Certbot – Let&amp;rsquo;s Encrypt Client 🔧&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Cài đặt Certbot – Let&amp;rsquo;s Encrypt Client&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Cài đặt gói Certbot sử dụng Snap:&lt;/li&gt;
 &lt;/ul&gt;
@@ -402,7 +402,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo certbot --version
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📌 &lt;strong&gt;Đầu ra mẫu:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Đầu ra mẫu:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -425,11 +425,11 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;Quá trình này sẽ:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;✅ Tạo chứng chỉ SSL hợp lệ&lt;/li&gt;
-&lt;li&gt;✅ Tự động cấu hình Nginx để sử dụng SSL&lt;/li&gt;
-&lt;li&gt;✅ Kích hoạt HTTPS trên máy chủ web của bạn&lt;/li&gt;
+&lt;li&gt;Tạo chứng chỉ SSL hợp lệ&lt;/li&gt;
+&lt;li&gt;Tự động cấu hình Nginx để sử dụng SSL&lt;/li&gt;
+&lt;li&gt;Kích hoạt HTTPS trên máy chủ web của bạn&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Kiểm tra tự động gia hạn chứng chỉ 🔄&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Kiểm tra tự động gia hạn chứng chỉ&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Các chứng chỉ SSL từ Let&amp;rsquo;s Encrypt có thời hạn 90 ngày. Để đảm bảo không bị hết hạn, bạn có thể kiểm tra tiến trình tự động gia hạn:&lt;/li&gt;
 &lt;/ul&gt;
@@ -454,11 +454,11 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;https://app.example.com
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Nếu thấy biểu tượng ổ khóa 🔒, tức là SSL đã được cài đặt thành công! 🚀&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Nếu thấy biểu tượng ổ khóa, tức là SSL đã được cài đặt thành công!&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="thiết-lập-quy-tắc-tường-lửa-ufw"&gt;Thiết lập quy tắc tường lửa UFW
 &lt;/h2&gt;&lt;p&gt;Uncomplicated Firewall (UFW) được cài đặt và kích hoạt mặc định trên Ubuntu 24.04. Thực hiện các bước sau để cấu hình tường lửa, cho phép máy chủ Nginx lắng nghe kết nối HTTP và HTTPS.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Cho phép kết nối HTTP (Cổng 80)🔌&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Cho phép kết nối HTTP (Cổng 80)&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Chạy lệnh sau để mở kết nối HTTP:&lt;/li&gt;
 &lt;/ul&gt;
@@ -470,7 +470,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo ufw allow 80/tcp
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Cho phép kết nối HTTPS (Cổng 443) 🔐&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Cho phép kết nối HTTPS (Cổng 443)&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Chạy lệnh sau để mở kết nối HTTPS:&lt;/li&gt;
 &lt;/ul&gt;
@@ -482,7 +482,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo ufw allow 443/tcp
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Kiểm tra trạng thái tường lửa 🔢&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Kiểm tra trạng thái tường lửa&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Chạy lệnh sau để xác nhận quy tắc kết nối:&lt;/li&gt;
 &lt;/ul&gt;
@@ -494,7 +494,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo ufw status
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;👉 &lt;strong&gt;Đầu ra mẫu:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Đầu ra mẫu:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -521,11 +521,11 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;443/tcp (v6) ALLOW Anywhere (v6)
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;🛡 Sau khi thiết lập xong, máy chủ sẽ chỉ cho phép kết nối an toàn qua HTTP và HTTPS&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Sau khi thiết lập xong, máy chủ sẽ chỉ cho phép kết nối an toàn qua HTTP và HTTPS&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="lời-kết"&gt;Lời kết
 &lt;/h2&gt;&lt;p&gt;Chúc bạn cài đặt thành công Nginx trên máy chủ Ubuntu 24.04 và cấu hình web server để phục vụ các ứng dụng web. Nginx hỗ trợ nhiều cấu hình virtual host giúp bạn triển khai các ứng dụng web một cách an toàn. Ngoài ra, bạn có thể tích hợp Nginx với các ứng dụng khác như MySQL và PHP để xây dựng các ứng dụng web động. Để biết thêm thông tin chi tiết và các tùy chọn cấu hình khác, vui lòng truy cập &lt;a class="link" href="https://docs.nginx.com/" target="_blank" rel="noopener"
-&gt;tài liệu chính thức&lt;/a&gt; chính thức của Nginx. 🚀😊&lt;/p&gt;</description></item><item><title>Trỏ tên miền về hosting</title><link>https://tech.nguuyen.io.vn/vi/posts/website/domain-to-hosting-setup/</link><pubDate>Thu, 27 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/website/domain-to-hosting-setup/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/website/domain-to-hosting-setup.jpg" alt="Featured image of post Trỏ tên miền về hosting" /&gt;&lt;h2 id="tại-sao-cần-phải-trỏ-tên-miền-về-hosting"&gt;Tại sao cần phải trỏ tên miền về hosting?
+&gt;tài liệu chính thức&lt;/a&gt; chính thức của Nginx.&lt;/p&gt;</description></item><item><title>Trỏ tên miền về hosting</title><link>https://tech.nguuyen.io.vn/vi/posts/website/domain-to-hosting-setup/</link><pubDate>Thu, 27 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/website/domain-to-hosting-setup/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/website/domain-to-hosting-setup.jpg" alt="Featured image of post Trỏ tên miền về hosting" /&gt;&lt;h2 id="tại-sao-cần-phải-trỏ-tên-miền-về-hosting"&gt;Tại sao cần phải trỏ tên miền về hosting?
 &lt;/h2&gt;&lt;p&gt;Tên miền và hosting là hai yếu tố quan trọng giúp website hoạt động.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;Tên miền&lt;/strong&gt; là địa chỉ website.&lt;/li&gt;
@@ -630,19 +630,19 @@ title="YouTube Video"
 &lt;/iframe&gt;
 &lt;/div&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;/p&gt;&lt;span class="cite"&gt;&lt;span&gt;― &lt;/span&gt;&lt;span&gt;Nguồn, &lt;/span&gt;&lt;a href="https://www.youtube.com/@F8VNOfficial"&gt;&lt;cite&gt;F8 Official ✔&lt;/cite&gt;&lt;/a&gt;&lt;/span&gt;&lt;/blockquote&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;&lt;span class="cite"&gt;&lt;span&gt;― &lt;/span&gt;&lt;span&gt;Nguồn, &lt;/span&gt;&lt;a href="https://www.youtube.com/@F8VNOfficial"&gt;&lt;cite&gt;F8 Official&lt;/cite&gt;&lt;/a&gt;&lt;/span&gt;&lt;/blockquote&gt;&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="lời-kết"&gt;Lời kết
-&lt;/h2&gt;&lt;p&gt;Việc trỏ tên miền về hosting là một bước quan trọng để website của bạn có thể hoạt động chính xác trên Internet. Dù thực hiện theo cách nào—sử dụng nameserver, A record, hay nameserver trung gian—bạn cũng cần kiểm tra kỹ thông tin và kiên nhẫn chờ DNS cập nhật. Nếu gặp lỗi, hãy xem lại cài đặt và thử lại 🔄. Chúc bạn thực hiện thành công và website hoạt động ổn định! 🚀 Nếu có vấn đề, cứ để lại comment, tôi sẽ xem thử nhé! 💬😊&lt;/p&gt;</description></item><item><title>Deploy Website lên hosting đơn giản nhất (HTML/CSS hoặc React/Vue.js)</title><link>https://tech.nguuyen.io.vn/vi/posts/website/how-to-deploy-a-website/</link><pubDate>Wed, 26 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/website/how-to-deploy-a-website/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/website/upload-website-on-hosting.jpg" alt="Featured image of post Deploy Website lên hosting đơn giản nhất (HTML/CSS hoặc React/Vue.js)" /&gt;&lt;h2 id="cách-up-website-lên-hosting-thông-qua-file-manager-và-cpanel-nhanh-nhất-từ-a-z"&gt;Cách up website lên Hosting thông qua File Manager và cPanel nhanh nhất từ A-Z
+&lt;/h2&gt;&lt;p&gt;Việc trỏ tên miền về hosting là một bước quan trọng để website của bạn có thể hoạt động chính xác trên Internet. Dù thực hiện theo cách nào—sử dụng nameserver, A record, hay nameserver trung gian—bạn cũng cần kiểm tra kỹ thông tin và kiên nhẫn chờ DNS cập nhật. Nếu gặp lỗi, hãy xem lại cài đặt và thử lại. Chúc bạn thực hiện thành công và website hoạt động ổn định! Nếu có vấn đề, cứ để lại comment, tôi sẽ xem thử nhé!&lt;/p&gt;</description></item><item><title>Deploy Website lên hosting đơn giản nhất (HTML/CSS hoặc React/Vue.js)</title><link>https://tech.nguuyen.io.vn/vi/posts/website/how-to-deploy-a-website/</link><pubDate>Wed, 26 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/website/how-to-deploy-a-website/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/website/upload-website-on-hosting.jpg" alt="Featured image of post Deploy Website lên hosting đơn giản nhất (HTML/CSS hoặc React/Vue.js)" /&gt;&lt;h2 id="cách-up-website-lên-hosting-thông-qua-file-manager-và-cpanel-nhanh-nhất-từ-a-z"&gt;Cách up website lên Hosting thông qua File Manager và cPanel nhanh nhất từ A-Z
 &lt;/h2&gt;&lt;hr&gt;
 &lt;p&gt;Việc upload website lên hosting là bước thiết yếu để đưa website của bạn hoạt động trên internet. Quá trình này không chỉ đơn giản là chuyển dữ liệu, mà còn liên quan đến việc đảm bảo mọi thứ hoạt động mượt mà và an toàn. Bài viết này sẽ giúp bạn hiểu rõ các bước cần thiết, từ chuẩn bị file và database, đến các công cụ hỗ trợ upload hiệu quả.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="điểm-chính-cần-nắm"&gt;Điểm chính cần nắm
 &lt;/h2&gt;&lt;p&gt;Trước khi bắt tay vào việc upload website lên hosting, bạn cần lưu ý một số yếu tố quan trọng. Mình sẽ giúp bạn dễ dàng hiểu và nắm bắt các bước thực hiện:&lt;/p&gt;
-&lt;p&gt;✅ &lt;strong&gt;Bạn cần chuẩn bị gì khi upload website lên hosting&lt;/strong&gt;: Chuẩn bị file website, database, quyền truy cập control panel và phần mềm FTP như FileZilla.&lt;/p&gt;
-&lt;p&gt;✅ &lt;strong&gt;Các cách upload website lên hosting&lt;/strong&gt;: Chọn hosting uy tín, sau đó sử dụng File Manager, FTP, plugin WordPress, SSH hoặc nhờ hỗ trợ từ nhà cung cấp.&lt;/p&gt;
-&lt;p&gt;✅ &lt;strong&gt;Lý do cần upload website lên hosting&lt;/strong&gt;: Giúp công khai website, tăng bảo mật, cải thiện tốc độ và dễ quản lý.&lt;/p&gt;
-&lt;p&gt;✅ &lt;strong&gt;Bốn bước để upload web lên hosting&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Bạn cần chuẩn bị gì khi upload website lên hosting&lt;/strong&gt;: Chuẩn bị file website, database, quyền truy cập control panel và phần mềm FTP như FileZilla.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Các cách upload website lên hosting&lt;/strong&gt;: Chọn hosting uy tín, sau đó sử dụng File Manager, FTP, plugin WordPress, SSH hoặc nhờ hỗ trợ từ nhà cung cấp.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Lý do cần upload website lên hosting&lt;/strong&gt;: Giúp công khai website, tăng bảo mật, cải thiện tốc độ và dễ quản lý.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Bốn bước để upload web lên hosting&lt;/strong&gt;:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Upload file website vào thư mục &lt;code&gt;public_html&lt;/code&gt; qua File Manager hoặc FTP.&lt;/li&gt;
 &lt;li&gt;Kiểm tra xem các file đã đúng vị trí chưa.&lt;/li&gt;
@@ -655,10 +655,10 @@ title="YouTube Video"
 &lt;li&gt;&lt;strong&gt;File website&lt;/strong&gt;: Những file này có thể là toàn bộ dữ liệu bên trong phần &lt;code&gt;public_html&lt;/code&gt; cũ hoặc file source code hay bản backup (sao lưu) dữ liệu mới nhất thay cho source code.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;📌 Lưu ý khi triển khai website React/Vue.js&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Lưu ý khi triển khai website React/Vue.js&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;Khi build một ứng dụng &lt;strong&gt;React&lt;/strong&gt; hoặc &lt;strong&gt;Vue.js&lt;/strong&gt;, ta không tải toàn bộ mã nguồn lên máy chủ,&lt;br&gt;
 mà chỉ cần upload &lt;strong&gt;thư mục chứa các file tĩnh đã được build&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;🔹 Các bước build và nén tệp:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Các bước build và nén tệp:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Chạy lệnh build:
 &lt;ul&gt;
@@ -687,7 +687,7 @@ mà chỉ cần upload &lt;strong&gt;thư mục chứa các file tĩnh đã đư
 &lt;li&gt;Sau khi build xong, thư mục output thường là &lt;code&gt;build/&lt;/code&gt; (&lt;strong&gt;React&lt;/strong&gt;) hoặc &lt;code&gt;dist/&lt;/code&gt; (&lt;strong&gt;Vue.js&lt;/strong&gt;).&lt;/li&gt;
 &lt;li&gt;Nén thư mục &lt;code&gt;build&lt;/code&gt; hoặc &lt;code&gt;dist&lt;/code&gt; thành file ZIP trước khi tải lên máy chủ.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;📤 Khi tải lên máy chủ:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Khi tải lên máy chủ:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Nếu dùng &lt;strong&gt;cPanel&lt;/strong&gt;, có thể giải nén trực tiếp trong thư mục &lt;code&gt;public_html&lt;/code&gt;.&lt;/li&gt;
 &lt;li&gt;Nếu dùng &lt;strong&gt;SSH/SFTP&lt;/strong&gt;, tải lên và giải nén bằng lệnh:
@@ -839,7 +839,7 @@ alt="Nhờ sự hỗ trợ từ nhà cung cấp hosting"
 &gt;&lt;/p&gt;
 &lt;p align="center"&gt;&lt;em&gt;Hình 6: Nhờ sự hỗ trợ từ nhà cung cấp hosting&lt;/em&gt;&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;📌 &lt;strong&gt;Lưu ý sau khi upload website lên hosting&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Lưu ý sau khi upload website lên hosting&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;Di chuyển toàn bộ dữ liệu từ thư mục con (nếu có) ra ngoài &lt;code&gt;public_html&lt;/code&gt;&lt;/strong&gt; để website hoạt động chính xác.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Kiểm tra lại cấu trúc file và kết nối database (nếu có)&lt;/strong&gt; để tránh lỗi khi vận hành.&lt;/li&gt;
@@ -1040,7 +1040,7 @@ alt="Import dữ liệu vào database"
 &lt;h3 id="cập-nhật-file-cấu-hình-để-kết-nối-website-và-database"&gt;Cập nhật file cấu hình để kết nối website và database
 &lt;/h3&gt;&lt;p&gt;Sau khi tải database lên server, bạn cần mở &lt;strong&gt;file cấu hình PHP&lt;/strong&gt; script để điền thông tin như host, tên database, tên người dùng và mật khẩu. File cấu hình có thể có tên và vị trí khác nhau tùy thuộc vào phần mềm bạn sử dụng. Ví dụ, với &lt;strong&gt;WordPress&lt;/strong&gt;, file cấu hình là &lt;code&gt;wp-config.php&lt;/code&gt; và nằm trong thư mục chứa &lt;strong&gt;WordPress&lt;/strong&gt; (thường là &lt;code&gt;public_html&lt;/code&gt;).&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;⚠ &lt;strong&gt;Lưu ý:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Lưu ý:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Nếu cơ sở dữ liệu của bạn có kích thước lớn, hãy cân nhắc chia nhỏ database thành nhiều file để quá trình tải lên diễn ra nhanh chóng hơn.&lt;/li&gt;
 &lt;li&gt;Nếu database chứa các ký tự đặc biệt, nhớ chuyển đổi chúng sang định dạng &lt;strong&gt;ASCII&lt;/strong&gt; trước khi thực hiện upload.&lt;/li&gt;
@@ -1060,9 +1060,9 @@ alt="Import dữ liệu vào database"
 &lt;li&gt;&lt;strong&gt;Chờ DNS cập nhật:&lt;/strong&gt; Nếu tên miền vừa được cập nhật, bạn có thể cần đợi khoảng &lt;strong&gt;24 giờ&lt;/strong&gt; để DNS được quảng bá rộng rãi.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Kiểm tra ngay lập tức bằng:&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;🖥 &lt;strong&gt;Sử dụng file host:&lt;/strong&gt; Chỉnh sửa file host trên máy tính để mô phỏng thay đổi DNS.&lt;/li&gt;
-&lt;li&gt;🌐 &lt;strong&gt;Công cụ online:&lt;/strong&gt; Kiểm tra website bằng các dịch vụ kiểm tra DNS trực tuyến.&lt;/li&gt;
-&lt;li&gt;🔌 &lt;strong&gt;Plugin browser:&lt;/strong&gt; Cài đặt plugin giúp tạo file host ảo để kiểm tra các thay đổi DNS.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Sử dụng file host:&lt;/strong&gt; Chỉnh sửa file host trên máy tính để mô phỏng thay đổi DNS.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Công cụ online:&lt;/strong&gt; Kiểm tra website bằng các dịch vụ kiểm tra DNS trực tuyến.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Plugin browser:&lt;/strong&gt; Cài đặt plugin giúp tạo file host ảo để kiểm tra các thay đổi DNS.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -1089,9 +1089,9 @@ alt="Import dữ liệu vào database"
 &lt;/h3&gt;&lt;ul&gt;
 &lt;li&gt;Website có thể hoạt động khác nhau vào những thời điểm khác nhau.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;👉 &lt;strong&gt;Nếu phát hiện lỗi nhưng không biết cách xử lý, hãy liên hệ với nhà cung cấp hosting để được hỗ trợ.&lt;/strong&gt; 🚀&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Nếu phát hiện lỗi nhưng không biết cách xử lý, hãy liên hệ với nhà cung cấp hosting để được hỗ trợ.&lt;/strong&gt;&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="lời-kết"&gt;Lời kết
 &lt;/h2&gt;&lt;p&gt;Upload website lên hosting là một bước quan trọng để website của bạn có thể hoạt động ổn định trên môi trường trực tuyến. Bằng cách chuẩn bị đúng đắn và thực hiện theo các bước hướng dẫn, bạn sẽ đảm bảo rằng website của mình luôn sẵn sàng phục vụ người dùng một cách hiệu quả.&lt;/p&gt;
-&lt;p&gt;💡 Nếu bạn có bất kỳ câu hỏi nào hoặc cần hỗ trợ thêm, hãy để lại câu hỏi trong phần bình luận dưới đây. Mình sẽ sớm giúp bạn tìm ra lời giải đáp.&lt;/p&gt;
-&lt;p&gt;Cảm ơn bạn đã theo dõi bài viết 🚀&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;Nếu bạn có bất kỳ câu hỏi nào hoặc cần hỗ trợ thêm, hãy để lại câu hỏi trong phần bình luận dưới đây. Mình sẽ sớm giúp bạn tìm ra lời giải đáp.&lt;/p&gt;
+&lt;p&gt;Cảm ơn bạn đã theo dõi bài viết&lt;/p&gt;</description></item></channel></rss>

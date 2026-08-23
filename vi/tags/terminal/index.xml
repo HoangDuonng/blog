@@ -3,13 +3,13 @@
 &lt;h3 id="tài-nguyên-miễn-phí"&gt;Tài Nguyên Miễn Phí
 &lt;/h3&gt;&lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://en.wikipedia.org/wiki/Command-line_interface" target="_blank" rel="noopener"
-&gt;📄 Bài viết: CLI là gì?&lt;/a&gt;&lt;/li&gt;
+&gt;Bài viết: CLI là gì?&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.google.com/search?q=terminal%20knowledge%20guide%20for%20devops" target="_blank" rel="noopener"
-&gt;🔍 Tìm kiếm trên Google&lt;/a&gt;&lt;/li&gt;
+&gt;Tìm kiếm trên Google&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.youtube.com/results?search_query=terminal%20knowledge%20for%20devops" target="_blank" rel="noopener"
-&gt;▶ Tìm kiếm trên YouTube&lt;/a&gt;&lt;/li&gt;
+&gt;Tìm kiếm trên YouTube&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;🔹 &lt;strong&gt;Ví dụ:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ví dụ:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -25,20 +25,20 @@
 &lt;/h2&gt;&lt;p&gt;Giám sát tiến trình là quá trình quan sát và phân tích liên tục các tiến trình trong hệ thống IT để đảm bảo hiệu suất, hiệu quả và tuân thủ quy định. Nó giúp theo dõi các thông số quan trọng như tài nguyên sử dụng, hành vi của từng tiến trình hoặc ứng dụng đang chạy trong hệ thống.&lt;/p&gt;
 &lt;h3 id="công-cụ-được-đề-xuất"&gt;Công Cụ Được Đề Xuất
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;🟣 lsof&lt;/strong&gt; - Liệt kê thông tin về các tệp được mở bởi tiến trình.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;lsof&lt;/strong&gt; - Liệt kê thông tin về các tệp được mở bởi tiến trình.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id="tài-nguyên-miễn-phí-1"&gt;Tài Nguyên Miễn Phí
 &lt;/h3&gt;&lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://neverendingsecurity.wordpress.com/2015/04/13/lsof-commands-cheatsheet/" target="_blank" rel="noopener"
-&gt;📄 Lsof Cheat Sheet&lt;/a&gt;&lt;/li&gt;
+&gt;Lsof Cheat Sheet&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://man7.org/linux/man-pages/man8/lsof.8.html" target="_blank" rel="noopener"
-&gt;📖 Tài liệu lsof&lt;/a&gt;&lt;/li&gt;
+&gt;Tài liệu lsof&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=n9nZ1ellaV0" target="_blank" rel="noopener"
-&gt;▶ Video: Linux Crash Course - Lệnh lsof&lt;/a&gt;&lt;/li&gt;
+&gt;Video: Linux Crash Course - Lệnh lsof&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://app.daily.dev/tags/monitoring?ref=roadmapsh" target="_blank" rel="noopener"
-&gt;📝 Bài viết hay về Giám sát&lt;/a&gt;&lt;/li&gt;
+&gt;Bài viết hay về Giám sát&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;🔹 &lt;strong&gt;Ví dụ:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ví dụ:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -54,20 +54,20 @@
 &lt;/h2&gt;&lt;p&gt;Giám sát hiệu suất giúp thu thập, phân tích và báo cáo các chỉ số hiệu suất chính từ ứng dụng, mạng, máy chủ và cơ sở dữ liệu.&lt;/p&gt;
 &lt;h3 id="công-cụ-được-đề-xuất-1"&gt;Công Cụ Được Đề Xuất
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;🟣 vmstat&lt;/strong&gt; - Công cụ theo dõi bộ nhớ ảo và hiệu suất hệ thống.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;vmstat&lt;/strong&gt; - Công cụ theo dõi bộ nhớ ảo và hiệu suất hệ thống.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id="tài-nguyên-miễn-phí-2"&gt;Tài Nguyên Miễn Phí
 &lt;/h3&gt;&lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.redhat.com/sysadmin/linux-commands-vmstat" target="_blank" rel="noopener"
-&gt;📖 Lệnh Linux: Khám phá bộ nhớ ảo với vmstat&lt;/a&gt;&lt;/li&gt;
+&gt;Lệnh Linux: Khám phá bộ nhớ ảo với vmstat&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://man7.org/linux/man-pages/man8/vmstat.8.html" target="_blank" rel="noopener"
-&gt;📄 Tài liệu vmstat&lt;/a&gt;&lt;/li&gt;
+&gt;Tài liệu vmstat&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://phoenixnap.com/kb/vmstat-command" target="_blank" rel="noopener"
-&gt;▶ Hướng dẫn vmstat&lt;/a&gt;&lt;/li&gt;
+&gt;Hướng dẫn vmstat&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://app.daily.dev/tags/monitoring?ref=roadmapsh" target="_blank" rel="noopener"
-&gt;📝 Bài viết hay về Giám sát&lt;/a&gt;&lt;/li&gt;
+&gt;Bài viết hay về Giám sát&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;🔹 &lt;strong&gt;Ví dụ:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ví dụ:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -81,8 +81,8 @@
 &lt;/h2&gt;&lt;p&gt;Các công cụ mạng hỗ trợ giám sát, phân tích, khắc phục sự cố và quản lý hệ thống mạng.&lt;/p&gt;
 &lt;h3 id="công-cụ-được-đề-xuất-2"&gt;Công Cụ Được Đề Xuất
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;🟣 Wireshark&lt;/strong&gt; - Phân tích gói tin sâu.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;🟣 Nmap&lt;/strong&gt; - Quét mạng và kiểm tra bảo mật.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Wireshark&lt;/strong&gt; - Phân tích gói tin sâu.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Nmap&lt;/strong&gt; - Quét mạng và kiểm tra bảo mật.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Ping&lt;/strong&gt; - Kiểm tra kết nối cơ bản.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Traceroute&lt;/strong&gt; - Xác định đường đi của gói tin trong mạng.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Netstat&lt;/strong&gt; - Hiển thị kết nối mạng.&lt;/li&gt;
@@ -92,7 +92,7 @@
 &lt;li&gt;&lt;strong&gt;Nslookup/Dig&lt;/strong&gt; - Truy vấn DNS.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;PuTTY&lt;/strong&gt; - Kết nối từ xa qua SSH hoặc Telnet.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;🔹 &lt;strong&gt;Ví dụ:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ví dụ:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -108,12 +108,12 @@
 &lt;/h2&gt;&lt;p&gt;Các công cụ hỗ trợ chỉnh sửa, xử lý và chuyển đổi dữ liệu văn bản.&lt;/p&gt;
 &lt;h3 id="công-cụ-được-đề-xuất-3"&gt;Công Cụ Được Đề Xuất
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;🟣 sed&lt;/strong&gt; - Chỉnh sửa luồng dữ liệu.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;🟣 awk&lt;/strong&gt; - Quét mẫu và trích xuất dữ liệu.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;🟣 grep&lt;/strong&gt; - Tìm kiếm văn bản bằng biểu thức chính quy.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;sed&lt;/strong&gt; - Chỉnh sửa luồng dữ liệu.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;awk&lt;/strong&gt; - Quét mẫu và trích xuất dữ liệu.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;grep&lt;/strong&gt; - Tìm kiếm văn bản bằng biểu thức chính quy.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;cut, sort, tr, uniq&lt;/strong&gt; - Các lệnh hỗ trợ xử lý dữ liệu văn bản.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;🔹 &lt;strong&gt;Ví dụ:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ví dụ:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -127,7 +127,7 @@
 &lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="bash-scripts"&gt;Bash Scripts
 &lt;/h2&gt;&lt;p&gt;Bash là một shell mạnh mẽ trên Unix/Linux, giúp thực hiện lệnh và tự động hóa tác vụ.&lt;/p&gt;
-&lt;p&gt;🔹 &lt;strong&gt;Ví dụ:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ví dụ:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -143,12 +143,12 @@
 &lt;/h2&gt;&lt;p&gt;Trình soạn thảo văn bản là công cụ quan trọng để chỉnh sửa và quản lý tệp văn bản.&lt;/p&gt;
 &lt;h3 id="công-cụ-được-đề-xuất-4"&gt;Công Cụ Được Đề Xuất
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;&lt;strong&gt;🟣 Vim&lt;/strong&gt; - Mạnh mẽ, tùy biến cao, phù hợp cho lập trình viên.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;🟣 Emacs&lt;/strong&gt; - Linh hoạt, có nhiều plugin hỗ trợ.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Vim&lt;/strong&gt; - Mạnh mẽ, tùy biến cao, phù hợp cho lập trình viên.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Emacs&lt;/strong&gt; - Linh hoạt, có nhiều plugin hỗ trợ.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Sublime Text&lt;/strong&gt; - Tốc độ cao, giao diện thân thiện.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Visual Studio Code&lt;/strong&gt; - Mã nguồn mở, hỗ trợ gỡ lỗi, mở rộng, tích hợp công cụ phát triển.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;🔹 &lt;strong&gt;Ví dụ:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ví dụ:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -161,5 +161,5 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="kết-luận"&gt;Kết Luận
-&lt;/h2&gt;&lt;p&gt;Hiểu và sử dụng thành thạo các công cụ trên giúp bạn làm việc hiệu quả hơn trong môi trường Linux và DevOps. Các công cụ &lt;em&gt;&lt;strong&gt;🟣 được đánh dấu&lt;/strong&gt;&lt;/em&gt; là những công cụ phổ biến và mạnh mẽ nhất, được nhiều chuyên gia khuyến nghị. Bạn có thể tìm hiểu sâu hơn thông qua các tài nguyên miễn phí đi kèm. Nếu có điều gì cần làm rõ hoặc bổ sung, hãy phản hồi để mình cập nhật nhé!&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;👉 Bước tiếp theo:&lt;/strong&gt; Nâng cao kiến thức về hệ thống quản lý phiên bản (&lt;em&gt;&lt;strong&gt;Version Control Systems&lt;/strong&gt;&lt;/em&gt;) để theo dõi, quản lý và cộng tác hiệu quả trên mã nguồn.&lt;/p&gt;</description></item></channel></rss>
+&lt;/h2&gt;&lt;p&gt;Hiểu và sử dụng thành thạo các công cụ trên giúp bạn làm việc hiệu quả hơn trong môi trường Linux và DevOps. Các công cụ &lt;em&gt;&lt;strong&gt;được đánh dấu&lt;/strong&gt;&lt;/em&gt; là những công cụ phổ biến và mạnh mẽ nhất, được nhiều chuyên gia khuyến nghị. Bạn có thể tìm hiểu sâu hơn thông qua các tài nguyên miễn phí đi kèm. Nếu có điều gì cần làm rõ hoặc bổ sung, hãy phản hồi để mình cập nhật nhé!&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Bước tiếp theo:&lt;/strong&gt; Nâng cao kiến thức về hệ thống quản lý phiên bản (&lt;em&gt;&lt;strong&gt;Version Control Systems&lt;/strong&gt;&lt;/em&gt;) để theo dõi, quản lý và cộng tác hiệu quả trên mã nguồn.&lt;/p&gt;</description></item></channel></rss>

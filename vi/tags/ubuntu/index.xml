@@ -305,7 +305,7 @@
 &lt;li&gt;Cài đặt đầy đủ: Docker Engine, CLI, containerd, Buildx, và Compose V2&lt;/li&gt;
 &lt;li&gt;Tự động khởi động và enable Docker service&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Bạn có thể lưu script này vào hệ thống quản lý cấu hình (Ansible, Terraform) hoặc đơn giản clone từ repository để sử dụng trên nhiều server. 🚀&lt;/p&gt;
+&lt;p&gt;Bạn có thể lưu script này vào hệ thống quản lý cấu hình (Ansible, Terraform) hoặc đơn giản clone từ repository để sử dụng trên nhiều server.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="tài-liệu-tham-khảo"&gt;Tài liệu tham khảo
 &lt;/h2&gt;&lt;ul&gt;
@@ -319,20 +319,20 @@
 &lt;/h2&gt;&lt;p&gt;Docker là một nền tảng phổ biến trong DevOps để triển khai ứng dụng bằng &lt;strong&gt;container&lt;/strong&gt;. Container cho phép bạn đóng gói ứng dụng cùng với tất cả các dependencies và cấu hình cần thiết, giúp ứng dụng chạy nhất quán trên mọi môi trường từ development đến production.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Lợi ích của Docker:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;⚡ &lt;strong&gt;Tính nhất quán&lt;/strong&gt;: Ứng dụng chạy giống nhau trên mọi môi trường&lt;/li&gt;
-&lt;li&gt;🚀 &lt;strong&gt;Tốc độ&lt;/strong&gt;: Khởi động container nhanh hơn so với virtual machine&lt;/li&gt;
-&lt;li&gt;📦 &lt;strong&gt;Đóng gói&lt;/strong&gt;: Dễ dàng chia sẻ và triển khai ứng dụng&lt;/li&gt;
-&lt;li&gt;🔄 &lt;strong&gt;Scalability&lt;/strong&gt;: Dễ dàng mở rộng và quản lý nhiều container&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Tính nhất quán&lt;/strong&gt;: Ứng dụng chạy giống nhau trên mọi môi trường&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Tốc độ&lt;/strong&gt;: Khởi động container nhanh hơn so với virtual machine&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Đóng gói&lt;/strong&gt;: Dễ dàng chia sẻ và triển khai ứng dụng&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Scalability&lt;/strong&gt;: Dễ dàng mở rộng và quản lý nhiều container&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Bài viết này hướng dẫn bạn cách cài đặt Docker trên Ubuntu 20.04 và 22.04 một cách đơn giản và hiệu quả, sử dụng repository chính thức của Docker để đảm bảo bạn luôn có phiên bản mới nhất và ổn định.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="yêu-cầu-trước-khi-cài-đặt"&gt;Yêu cầu trước khi cài đặt
 &lt;/h2&gt;&lt;p&gt;Trước khi bắt đầu, hãy đảm bảo bạn có:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🖥 &lt;strong&gt;Máy chủ Ubuntu 20.04 hoặc 22.04&lt;/strong&gt; đã được cài đặt&lt;/li&gt;
-&lt;li&gt;🔐 &lt;strong&gt;Quyền sudo&lt;/strong&gt; để thực thi các lệnh quản trị&lt;/li&gt;
-&lt;li&gt;🌐 &lt;strong&gt;Kết nối internet&lt;/strong&gt; để tải các gói cài đặt&lt;/li&gt;
-&lt;li&gt;⏱ &lt;strong&gt;Thời gian&lt;/strong&gt;: Quá trình cài đặt mất khoảng 5-10 phút&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Máy chủ Ubuntu 20.04 hoặc 22.04&lt;/strong&gt; đã được cài đặt&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Quyền sudo&lt;/strong&gt; để thực thi các lệnh quản trị&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Kết nối internet&lt;/strong&gt; để tải các gói cài đặt&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Thời gian&lt;/strong&gt;: Quá trình cài đặt mất khoảng 5-10 phút&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="cập-nhật-hệ-thống"&gt;Cập nhật hệ thống
@@ -345,7 +345,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt update &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo apt upgrade -y
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Lưu ý:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Lưu ý:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Lệnh &lt;code&gt;apt update&lt;/code&gt; cập nhật danh sách các gói có sẵn từ repository&lt;/li&gt;
 &lt;li&gt;Lệnh &lt;code&gt;apt upgrade -y&lt;/code&gt; tự động cài đặt các bản cập nhật mà không cần xác nhận&lt;/li&gt;
@@ -391,7 +391,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu &lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;lsb_release -cs&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt; stable&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; sudo tee /etc/apt/sources.list.d/docker.list &amp;gt; /dev/null
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Giải thích:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Giải thích:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;arch=amd64&lt;/code&gt;: Chỉ định kiến trúc 64-bit&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;signed-by&lt;/code&gt;: Chỉ định GPG key để xác thực&lt;/li&gt;
@@ -410,13 +410,13 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt install -y docker-ce docker-ce-cli containerd.io
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;📦 Các gói được cài đặt:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Các gói được cài đặt:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;docker-ce&lt;/code&gt;: Docker Community Edition - phiên bản mã nguồn mở của Docker&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;docker-ce-cli&lt;/code&gt;: Docker Command Line Interface - công cụ dòng lệnh để tương tác với Docker&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;containerd.io&lt;/code&gt;: Container runtime - công cụ quản lý vòng đời container ở mức thấp&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;⏱ Thời gian cài đặt:&lt;/strong&gt; Quá trình này thường mất 2-5 phút tùy thuộc vào tốc độ internet của bạn.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Thời gian cài đặt:&lt;/strong&gt; Quá trình này thường mất 2-5 phút tùy thuộc vào tốc độ internet của bạn.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="kiểm-tra-docker"&gt;Kiểm tra Docker
 &lt;/h2&gt;&lt;p&gt;Sau khi cài đặt, hãy kiểm tra xem Docker đã được khởi động và hoạt động chưa:&lt;/p&gt;
@@ -440,7 +440,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; docker
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Giải thích các lệnh:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Giải thích các lệnh:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;systemctl start docker&lt;/code&gt;: Khởi động dịch vụ Docker ngay lập tức&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;systemctl enable docker&lt;/code&gt;: Cấu hình Docker tự động khởi động khi hệ thống khởi động lại&lt;/li&gt;
@@ -456,8 +456,8 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo docker run hello-world
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Kết quả mong đợi:&lt;/strong&gt; Nếu thấy thông báo &amp;ldquo;Hello from Docker!&amp;rdquo; cùng với các thông tin về Docker, nghĩa là bạn đã cài đặt thành công! 🎉&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;🔍 Container &lt;code&gt;hello-world&lt;/code&gt; làm gì?&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Kết quả mong đợi:&lt;/strong&gt; Nếu thấy thông báo &amp;ldquo;Hello from Docker!&amp;rdquo; cùng với các thông tin về Docker, nghĩa là bạn đã cài đặt thành công!&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Container &lt;code&gt;hello-world&lt;/code&gt; làm gì?&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Container này tải xuống image &lt;code&gt;hello-world&lt;/code&gt; từ Docker Hub (nếu chưa có)&lt;/li&gt;
 &lt;li&gt;Chạy container và hiển thị thông báo chào mừng&lt;/li&gt;
@@ -476,12 +476,12 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;newgrp docker
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Giải thích:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Giải thích:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;usermod -aG docker $USER&lt;/code&gt;: Thêm user hiện tại vào nhóm &lt;code&gt;docker&lt;/code&gt; (nhóm này có quyền truy cập Docker daemon)&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;newgrp docker&lt;/code&gt;: Áp dụng thay đổi nhóm ngay lập tức mà không cần đăng xuất&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;⚠ Lưu ý quan trọng:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Lưu ý quan trọng:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Sau khi thực hiện lệnh này, bạn có thể cần đăng xuất và đăng nhập lại để thay đổi có hiệu lực&lt;/li&gt;
 &lt;li&gt;Hoặc bạn có thể mở terminal mới để áp dụng thay đổi&lt;/li&gt;
@@ -497,7 +497,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker run hello-world
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Nếu lệnh chạy thành công mà không cần &lt;code&gt;sudo&lt;/code&gt;, bạn đã cấu hình đúng! ✅&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Nếu lệnh chạy thành công mà không cần &lt;code&gt;sudo&lt;/code&gt;, bạn đã cấu hình đúng!&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="gỡ-cài-đặt-docker-nếu-cần"&gt;Gỡ cài đặt Docker (nếu cần)
 &lt;/h2&gt;&lt;p&gt;Nếu bạn muốn gỡ cài đặt Docker hoàn toàn khỏi hệ thống, thực hiện các bước sau:&lt;/p&gt;
@@ -520,7 +520,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo rm -rf /var/lib/docker
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;⚠ Cảnh báo:&lt;/strong&gt; Lệnh này sẽ xóa &lt;strong&gt;TẤT CẢ&lt;/strong&gt; dữ liệu Docker bao gồm:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Cảnh báo:&lt;/strong&gt; Lệnh này sẽ xóa &lt;strong&gt;TẤT CẢ&lt;/strong&gt; dữ liệu Docker bao gồm:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Tất cả images đã tải về&lt;/li&gt;
 &lt;li&gt;Tất cả containers (đang chạy và đã dừng)&lt;/li&gt;
@@ -649,15 +649,15 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="lời-kết"&gt;Lời kết
-&lt;/h2&gt;&lt;p&gt;Vậy là chúng ta đã hoàn tất cài đặt Docker trên Ubuntu! 🎉 Giờ đây, bạn có thể bắt đầu:&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;Vậy là chúng ta đã hoàn tất cài đặt Docker trên Ubuntu! Giờ đây, bạn có thể bắt đầu:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🐳 &lt;strong&gt;Tạo và chạy containers&lt;/strong&gt; cho các ứng dụng của mình&lt;/li&gt;
-&lt;li&gt;📦 &lt;strong&gt;Sử dụng Docker images&lt;/strong&gt; có sẵn từ Docker Hub&lt;/li&gt;
-&lt;li&gt;🚀 &lt;strong&gt;Triển khai ứng dụng&lt;/strong&gt; một cách nhất quán và dễ dàng&lt;/li&gt;
-&lt;li&gt;🔄 &lt;strong&gt;Quản lý môi trường development&lt;/strong&gt; và production hiệu quả hơn&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Tạo và chạy containers&lt;/strong&gt; cho các ứng dụng của mình&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Sử dụng Docker images&lt;/strong&gt; có sẵn từ Docker Hub&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Triển khai ứng dụng&lt;/strong&gt; một cách nhất quán và dễ dàng&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Quản lý môi trường development&lt;/strong&gt; và production hiệu quả hơn&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Docker là một công cụ mạnh mẽ trong thế giới DevOps. Hãy tiếp tục khám phá các tính năng của Docker như Docker Compose, Docker Swarm, và tích hợp với các công cụ CI/CD để tối ưu hóa quy trình phát triển của bạn!&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;📖 Tài liệu tham khảo:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tài liệu tham khảo:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://docs.docker.com/" target="_blank" rel="noopener"
 &gt;Tài liệu chính thức của Docker&lt;/a&gt;&lt;/li&gt;
@@ -666,4 +666,4 @@
 &lt;li&gt;&lt;a class="link" href="https://docs.docker.com/develop/dev-best-practices/" target="_blank" rel="noopener"
 &gt;Best practices cho Docker&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Chúc bạn thành công với Docker! 🚀😊&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;Chúc bạn thành công với Docker!&lt;/p&gt;</description></item></channel></rss>

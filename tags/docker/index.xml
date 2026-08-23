@@ -2,19 +2,19 @@
 &lt;/h2&gt;&lt;p&gt;Installing Docker manually works fine for a single server, but when you need to set up &lt;strong&gt;multiple machines&lt;/strong&gt; or want a &lt;strong&gt;repeatable, error-free process&lt;/strong&gt;, a bash script is the way to go.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Benefits of scripted installation:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;⚡ &lt;strong&gt;Speed&lt;/strong&gt;: Install Docker in one command instead of running multiple steps&lt;/li&gt;
-&lt;li&gt;🔄 &lt;strong&gt;Consistency&lt;/strong&gt;: Every server gets the exact same setup&lt;/li&gt;
-&lt;li&gt;🚀 &lt;strong&gt;Automation&lt;/strong&gt;: Perfect for provisioning new servers in CI/CD pipelines&lt;/li&gt;
-&lt;li&gt;📋 &lt;strong&gt;Documentation&lt;/strong&gt;: The script itself serves as documentation of your setup process&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Speed&lt;/strong&gt;: Install Docker in one command instead of running multiple steps&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Consistency&lt;/strong&gt;: Every server gets the exact same setup&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Automation&lt;/strong&gt;: Perfect for provisioning new servers in CI/CD pipelines&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Documentation&lt;/strong&gt;: The script itself serves as documentation of your setup process&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="prerequisites"&gt;Prerequisites
 &lt;/h2&gt;&lt;p&gt;Before running the script, make sure you have:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🖥 &lt;strong&gt;Ubuntu 20.04, 22.04, or 24.04&lt;/strong&gt; server&lt;/li&gt;
-&lt;li&gt;🔐 &lt;strong&gt;Sudo privileges&lt;/strong&gt; to execute administrative commands&lt;/li&gt;
-&lt;li&gt;🌐 &lt;strong&gt;Internet connection&lt;/strong&gt; to download packages&lt;/li&gt;
-&lt;li&gt;⏱ &lt;strong&gt;Time&lt;/strong&gt;: The script takes approximately 2-5 minutes to complete&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Ubuntu 20.04, 22.04, or 24.04&lt;/strong&gt; server&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Sudo privileges&lt;/strong&gt; to execute administrative commands&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Internet connection&lt;/strong&gt; to download packages&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Time&lt;/strong&gt;: The script takes approximately 2-5 minutes to complete&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="the-installation-script"&gt;The Installation Script
@@ -181,7 +181,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Verify installation&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;GREEN&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;========================================&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;GREEN&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; Installation Complete! 🎉 &lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;GREEN&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; Installation Complete! &lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;GREEN&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;========================================&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker --version
@@ -215,7 +215,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl -fsSL https://your-server.com/install-docker.sh &lt;span class="p"&gt;|&lt;/span&gt; sudo bash
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;⚠ Security Note:&lt;/strong&gt; Always review scripts before piping them to &lt;code&gt;bash&lt;/code&gt;. Only use this method with scripts you trust or host yourself.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Security Note:&lt;/strong&gt; Always review scripts before piping them to &lt;code&gt;bash&lt;/code&gt;. Only use this method with scripts you trust or host yourself.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="what-the-script-does"&gt;What the Script Does
 &lt;/h2&gt;&lt;p&gt;Here&amp;rsquo;s a breakdown of each step:&lt;/p&gt;
@@ -290,7 +290,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker run hello-world
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;If you see the &amp;ldquo;Hello from Docker!&amp;rdquo; message, the installation was successful! 🎉&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;If you see the &amp;ldquo;Hello from Docker!&amp;rdquo; message, the installation was successful!&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Check Docker service status:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -387,15 +387,15 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="conclusion"&gt;Conclusion
-&lt;/h2&gt;&lt;p&gt;Using a bash script to install Docker saves time and eliminates manual errors. Whether you&amp;rsquo;re setting up a single development machine or provisioning a fleet of production servers, this script provides a reliable and repeatable process. 🚀&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;Using a bash script to install Docker saves time and eliminates manual errors. Whether you&amp;rsquo;re setting up a single development machine or provisioning a fleet of production servers, this script provides a reliable and repeatable process.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Key takeaways:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;📜 &lt;strong&gt;One command&lt;/strong&gt; to install Docker completely&lt;/li&gt;
-&lt;li&gt;🔄 &lt;strong&gt;Idempotent&lt;/strong&gt; — safe to run multiple times&lt;/li&gt;
-&lt;li&gt;🛠 &lt;strong&gt;Customizable&lt;/strong&gt; — extend the script for your specific needs&lt;/li&gt;
-&lt;li&gt;🚀 &lt;strong&gt;Production-ready&lt;/strong&gt; — includes Docker Compose plugin and Buildx&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;One command&lt;/strong&gt; to install Docker completely&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Idempotent&lt;/strong&gt; — safe to run multiple times&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Customizable&lt;/strong&gt; — extend the script for your specific needs&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Production-ready&lt;/strong&gt; — includes Docker Compose plugin and Buildx&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;📖 References:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;References:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://docs.docker.com/engine/install/ubuntu/" target="_blank" rel="noopener"
 &gt;Official Docker Installation Guide&lt;/a&gt;&lt;/li&gt;
@@ -404,8 +404,8 @@
 &lt;li&gt;&lt;a class="link" href="https://docs.docker.com/compose/install/linux/" target="_blank" rel="noopener"
 &gt;Docker Compose Plugin&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Happy automating! 🚀😊&lt;/p&gt;</description></item><item><title>Docker Build Cache &amp; Layering</title><link>https://tech.nguuyen.io.vn/posts/docker/docker-build-cache-layering/</link><pubDate>Sun, 22 Mar 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/docker/docker-build-cache-layering/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/docker/docker-build-cache-layering.jpg" alt="Featured image of post Docker Build Cache &amp; Layering" /&gt;&lt;h2 id="docker-build-cache--layering"&gt;Docker Build Cache &amp;amp; Layering
-&lt;/h2&gt;&lt;p&gt;Have you ever wondered why the &lt;strong&gt;first build&lt;/strong&gt; takes 5–10 minutes, but the &lt;strong&gt;second build&lt;/strong&gt; finishes in just a few seconds? That&amp;rsquo;s thanks to &lt;strong&gt;Build Cache&lt;/strong&gt;. But sometimes, changing just one line of code causes Docker to rebuild everything — that&amp;rsquo;s because you don&amp;rsquo;t yet understand how &lt;strong&gt;Layering&lt;/strong&gt; works. 🧱&lt;/p&gt;
+&lt;p&gt;Happy automating!&lt;/p&gt;</description></item><item><title>Docker Build Cache &amp; Layering</title><link>https://tech.nguuyen.io.vn/posts/docker/docker-build-cache-layering/</link><pubDate>Sun, 22 Mar 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/docker/docker-build-cache-layering/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/docker/docker-build-cache-layering.jpg" alt="Featured image of post Docker Build Cache &amp; Layering" /&gt;&lt;h2 id="docker-build-cache--layering"&gt;Docker Build Cache &amp;amp; Layering
+&lt;/h2&gt;&lt;p&gt;Have you ever wondered why the &lt;strong&gt;first build&lt;/strong&gt; takes 5–10 minutes, but the &lt;strong&gt;second build&lt;/strong&gt; finishes in just a few seconds? That&amp;rsquo;s thanks to &lt;strong&gt;Build Cache&lt;/strong&gt;. But sometimes, changing just one line of code causes Docker to rebuild everything — that&amp;rsquo;s because you don&amp;rsquo;t yet understand how &lt;strong&gt;Layering&lt;/strong&gt; works.&lt;/p&gt;
 &lt;p&gt;In this article, I&amp;rsquo;ll explain in detail how Layers and Build Cache work, how Docker decides when to use cache versus rebuild, and techniques to optimize for faster builds.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="what-is-a-layer-in-docker"&gt;What Is a Layer in Docker?
@@ -491,9 +491,9 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;5
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Instruction 1 → Cache hit? ✅ Reuse → Continue
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Instruction 2 → Cache hit? ✅ Reuse → Continue
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Instruction 3 → Cache hit? ❌ Cache miss → Rebuild from here onward
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Instruction 1 → Cache hit? Reuse → Continue
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Instruction 2 → Cache hit? Reuse → Continue
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Instruction 3 → Cache hit? Cache miss → Rebuild from here onward
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Instruction 4 → Must rebuild (because instruction 3 changed)
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Instruction 5 → Must rebuild
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
@@ -511,27 +511,27 @@
 &lt;tbody&gt;
 &lt;tr&gt;
 &lt;td&gt;Dockerfile instruction changed&lt;/td&gt;
-&lt;td&gt;✅ Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
 &lt;td&gt;Docker compares instruction strings — different → rebuild&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Files in &lt;code&gt;COPY&lt;/code&gt;/&lt;code&gt;ADD&lt;/code&gt; changed&lt;/td&gt;
-&lt;td&gt;✅ Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
 &lt;td&gt;Docker computes file checksums — different → rebuild&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Only file &lt;code&gt;mtime&lt;/code&gt; changed&lt;/td&gt;
-&lt;td&gt;❌ No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
 &lt;td&gt;Docker ignores modification time, only checks content&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;&lt;code&gt;RUN&lt;/code&gt; instruction identical to last&lt;/td&gt;
-&lt;td&gt;❌ No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
 &lt;td&gt;Same instruction string → use cache (even if outdated)&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Previous layer was invalidated&lt;/td&gt;
-&lt;td&gt;✅ Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
 &lt;td&gt;All subsequent layers must rebuild&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
@@ -546,11 +546,11 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;5
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-dockerfile" data-lang="dockerfile"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;FROM&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;node:18-alpine&lt;/span&gt; &lt;span class="c1"&gt;# ✅ Cache hit (unchanged)&lt;/span&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;WORKDIR&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;/app&lt;/span&gt; &lt;span class="c1"&gt;# ✅ Cache hit (unchanged)&lt;/span&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;COPY&lt;/span&gt; . . &lt;span class="c1"&gt;# ❌ Cache miss (you edited a .js file)&lt;/span&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm install &lt;span class="c1"&gt;# ❌ Must rebuild (because COPY above missed)&lt;/span&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm run build &lt;span class="c1"&gt;# ❌ Must rebuild (because previous layer missed)&lt;/span&gt;&lt;span class="err"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-dockerfile" data-lang="dockerfile"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;FROM&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;node:18-alpine&lt;/span&gt; &lt;span class="c1"&gt;# Cache hit (unchanged)&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;WORKDIR&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;/app&lt;/span&gt; &lt;span class="c1"&gt;# Cache hit (unchanged)&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;COPY&lt;/span&gt; . . &lt;span class="c1"&gt;# Cache miss (you edited a .js file)&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm install &lt;span class="c1"&gt;# Must rebuild (because COPY above missed)&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm run build &lt;span class="c1"&gt;# Must rebuild (because previous layer missed)&lt;/span&gt;&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;You only edited one small &lt;code&gt;.js&lt;/code&gt; file, but &lt;code&gt;npm install&lt;/code&gt; has to run again even though &lt;code&gt;package.json&lt;/code&gt; hasn&amp;rsquo;t changed. This is the most common issue with unoptimized Dockerfiles.&lt;/p&gt;
@@ -558,7 +558,7 @@
 &lt;h2 id="techniques-to-optimize-build-cache"&gt;Techniques to Optimize Build Cache
 &lt;/h2&gt;&lt;h3 id="order-instructions-by-change-frequency"&gt;Order Instructions by Change Frequency
 &lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Principle:&lt;/strong&gt; Instructions that rarely change → place first. Instructions that change often → place last.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;❌ Not optimized:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Not optimized:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -575,7 +575,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm run build&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;✅ Optimized:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Optimized:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -734,13 +734,13 @@
 &lt;td&gt;builder&lt;/td&gt;
 &lt;td&gt;Build application&lt;/td&gt;
 &lt;td&gt;~500 MB&lt;/td&gt;
-&lt;td&gt;❌ No&lt;/td&gt;
+&lt;td&gt;No&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;production&lt;/td&gt;
 &lt;td&gt;Run application&lt;/td&gt;
 &lt;td&gt;~30 MB&lt;/td&gt;
-&lt;td&gt;✅ Yes&lt;/td&gt;
+&lt;td&gt;Yes&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
@@ -767,10 +767,10 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;&lt;strong&gt;Issues:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;❌ Large base image (&lt;code&gt;node:18&lt;/code&gt; ~ 900 MB)&lt;/li&gt;
-&lt;li&gt;❌ &lt;code&gt;COPY . .&lt;/code&gt; before &lt;code&gt;npm install&lt;/code&gt; → any code change rebuilds dependencies&lt;/li&gt;
-&lt;li&gt;❌ No &lt;code&gt;.dockerignore&lt;/code&gt; → copies &lt;code&gt;node_modules&lt;/code&gt;, &lt;code&gt;.git&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;❌ No multi-stage → final image includes devDependencies&lt;/li&gt;
+&lt;li&gt;Large base image (&lt;code&gt;node:18&lt;/code&gt; ~ 900 MB)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;COPY . .&lt;/code&gt; before &lt;code&gt;npm install&lt;/code&gt; → any code change rebuilds dependencies&lt;/li&gt;
+&lt;li&gt;No &lt;code&gt;.dockerignore&lt;/code&gt; → copies &lt;code&gt;node_modules&lt;/code&gt;, &lt;code&gt;.git&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;No multi-stage → final image includes devDependencies&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id="optimized-dockerfile"&gt;Optimized Dockerfile
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
@@ -835,11 +835,11 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;&lt;strong&gt;Improvements:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;✅ Small base image (&lt;code&gt;node:18-alpine&lt;/code&gt; ~ 170 MB)&lt;/li&gt;
-&lt;li&gt;✅ Separate &lt;code&gt;COPY package.json&lt;/code&gt; → efficient dependency caching&lt;/li&gt;
-&lt;li&gt;✅ Cache mount for npm → faster re-downloads on rebuild&lt;/li&gt;
-&lt;li&gt;✅ Multi-stage → final image only contains production dependencies&lt;/li&gt;
-&lt;li&gt;✅ Uses &lt;code&gt;npm ci&lt;/code&gt; instead of &lt;code&gt;npm install&lt;/code&gt; → ensures reproducible builds&lt;/li&gt;
+&lt;li&gt;Small base image (&lt;code&gt;node:18-alpine&lt;/code&gt; ~ 170 MB)&lt;/li&gt;
+&lt;li&gt;Separate &lt;code&gt;COPY package.json&lt;/code&gt; → efficient dependency caching&lt;/li&gt;
+&lt;li&gt;Cache mount for npm → faster re-downloads on rebuild&lt;/li&gt;
+&lt;li&gt;Multi-stage → final image only contains production dependencies&lt;/li&gt;
+&lt;li&gt;Uses &lt;code&gt;npm ci&lt;/code&gt; instead of &lt;code&gt;npm install&lt;/code&gt; → ensures reproducible builds&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id="results-comparison"&gt;Results Comparison
 &lt;/h3&gt;&lt;table&gt;
@@ -966,8 +966,8 @@
 &lt;li&gt;&lt;strong&gt;Cache invalidation&lt;/strong&gt; = when a layer changes, all subsequent layers must rebuild&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Optimization&lt;/strong&gt; = proper instruction ordering + &lt;code&gt;.dockerignore&lt;/code&gt; + cache mounts + multi-stage builds&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;By understanding and applying these 4 techniques, you can reduce Docker build times from &lt;strong&gt;5 minutes to under 30 seconds&lt;/strong&gt; in most cases. 🚀&lt;/p&gt;
-&lt;p&gt;If you find this article helpful, feel free to ⭐ star the repo or 📱 share it with your friends! 😊&lt;/p&gt;
+&lt;p&gt;By understanding and applying these 4 techniques, you can reduce Docker build times from &lt;strong&gt;5 minutes to under 30 seconds&lt;/strong&gt; in most cases.&lt;/p&gt;
+&lt;p&gt;If you find this article helpful, feel free to star the repo or share it with your friends!&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="references"&gt;References
 &lt;/h2&gt;&lt;ul&gt;
@@ -1661,8 +1661,8 @@
 &lt;li&gt;&lt;strong&gt;Deploy&lt;/strong&gt; with &lt;code&gt;docker compose up --build -d&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Update&lt;/strong&gt; with &lt;code&gt;docker compose build app &amp;amp;&amp;amp; docker compose up --no-deps -d app&lt;/code&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;This is the most basic architecture for deploying a Node.js application to production. From here, you can extend with SSL (Let&amp;rsquo;s Encrypt), databases, monitoring, and more as needed. 🚀&lt;/p&gt;
-&lt;p&gt;If you find this article helpful, feel free to ⭐ star the repo or 📱 share it with your friends! 😊&lt;/p&gt;
+&lt;p&gt;This is the most basic architecture for deploying a Node.js application to production. From here, you can extend with SSL (Let&amp;rsquo;s Encrypt), databases, monitoring, and more as needed.&lt;/p&gt;
+&lt;p&gt;If you find this article helpful, feel free to star the repo or share it with your friends!&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="references"&gt;References
 &lt;/h2&gt;&lt;ul&gt;
@@ -2291,9 +2291,9 @@
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="conclusion"&gt;Conclusion
-&lt;/h2&gt;&lt;p&gt;Docker Compose v2 is a powerful tool that helps you manage multi-container applications with ease. With the best practices above, you can build and deploy applications professionally and efficiently! 🚀&lt;/p&gt;
-&lt;p&gt;Try experimenting with the examples above and gradually apply them to your real-world projects. 😊&lt;/p&gt;</description></item><item><title>Docker Basics: Image vs Container</title><link>https://tech.nguuyen.io.vn/posts/docker/docker-basics-image-vs-container/</link><pubDate>Sun, 25 Jan 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/docker/docker-basics-image-vs-container/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/docker/docker-basics-image-vs-container.jpg" alt="Featured image of post Docker Basics: Image vs Container" /&gt;&lt;h2 id="docker-image-and-container---two-essential-concepts"&gt;Docker Image and Container - Two Essential Concepts
-&lt;/h2&gt;&lt;p&gt;When starting with Docker, the two most important concepts you need to understand are &lt;strong&gt;Image&lt;/strong&gt; and &lt;strong&gt;Container&lt;/strong&gt;. Beginners often confuse them, but in reality, they play different roles in the Docker ecosystem. Image is like a &lt;strong&gt;recipe repository&lt;/strong&gt; (cooking instructions), while Container is &lt;strong&gt;the actual execution&lt;/strong&gt; (the prepared dish). 🍳&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;Docker Compose v2 is a powerful tool that helps you manage multi-container applications with ease. With the best practices above, you can build and deploy applications professionally and efficiently!&lt;/p&gt;
+&lt;p&gt;Try experimenting with the examples above and gradually apply them to your real-world projects.&lt;/p&gt;</description></item><item><title>Docker Basics: Image vs Container</title><link>https://tech.nguuyen.io.vn/posts/docker/docker-basics-image-vs-container/</link><pubDate>Sun, 25 Jan 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/docker/docker-basics-image-vs-container/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/docker/docker-basics-image-vs-container.jpg" alt="Featured image of post Docker Basics: Image vs Container" /&gt;&lt;h2 id="docker-image-and-container---two-essential-concepts"&gt;Docker Image and Container - Two Essential Concepts
+&lt;/h2&gt;&lt;p&gt;When starting with Docker, the two most important concepts you need to understand are &lt;strong&gt;Image&lt;/strong&gt; and &lt;strong&gt;Container&lt;/strong&gt;. Beginners often confuse them, but in reality, they play different roles in the Docker ecosystem. Image is like a &lt;strong&gt;recipe repository&lt;/strong&gt; (cooking instructions), while Container is &lt;strong&gt;the actual execution&lt;/strong&gt; (the prepared dish).&lt;/p&gt;
 &lt;p&gt;In this article, I&amp;rsquo;ll explain the detailed differences between Image and Container, how they work together, and provide real examples for better understanding.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="i-what-is-a-docker-image"&gt;I. What is a Docker Image?
@@ -2716,11 +2716,11 @@
 &lt;h2 id="v-best-practices-with-image-and-container"&gt;V. Best Practices with Image and Container
 &lt;/h2&gt;&lt;h3 id="image-management"&gt;Image Management
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;✅ Use specific versions (e.g., &lt;code&gt;node:18.12-alpine&lt;/code&gt; instead of &lt;code&gt;node:latest&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;✅ Reduce size using minimal base images (alpine, distroless)&lt;/li&gt;
-&lt;li&gt;✅ Leverage layer cache by ordering commands properly&lt;/li&gt;
-&lt;li&gt;✅ Use &lt;code&gt;.dockerignore&lt;/code&gt; to exclude unnecessary files&lt;/li&gt;
-&lt;li&gt;✅ Regularly remove unused images with &lt;code&gt;docker image prune&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Use specific versions (e.g., &lt;code&gt;node:18.12-alpine&lt;/code&gt; instead of &lt;code&gt;node:latest&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Reduce size using minimal base images (alpine, distroless)&lt;/li&gt;
+&lt;li&gt;Leverage layer cache by ordering commands properly&lt;/li&gt;
+&lt;li&gt;Use &lt;code&gt;.dockerignore&lt;/code&gt; to exclude unnecessary files&lt;/li&gt;
+&lt;li&gt;Regularly remove unused images with &lt;code&gt;docker image prune&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -2738,11 +2738,11 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;h3 id="container-management"&gt;Container Management
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;✅ Name containers clearly (&lt;code&gt;--name app-container&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;✅ Use &lt;code&gt;-d&lt;/code&gt; (detached mode) to run containers in background&lt;/li&gt;
-&lt;li&gt;✅ Regularly check logs for debugging (&lt;code&gt;docker logs -f&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;✅ Use volumes if data persistence is needed&lt;/li&gt;
-&lt;li&gt;✅ Limit resources with &lt;code&gt;--cpus&lt;/code&gt;, &lt;code&gt;--memory&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Name containers clearly (&lt;code&gt;--name app-container&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Use &lt;code&gt;-d&lt;/code&gt; (detached mode) to run containers in background&lt;/li&gt;
+&lt;li&gt;Regularly check logs for debugging (&lt;code&gt;docker logs -f&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Use volumes if data persistence is needed&lt;/li&gt;
+&lt;li&gt;Limit resources with &lt;code&gt;--cpus&lt;/code&gt;, &lt;code&gt;--memory&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -2892,8 +2892,8 @@
 &lt;li&gt;Use &lt;code&gt;docker run&lt;/code&gt; to create container from image&lt;/li&gt;
 &lt;li&gt;Use &lt;code&gt;docker commit&lt;/code&gt; to update container as a new image&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Now you understand the differences between Image and Container. Next step: learn how to use Dockerfile to build images and Docker Compose to manage multiple containers. 🚀&lt;/p&gt;
-&lt;p&gt;If you found this article helpful, remember to ⭐ star the repo or 📱 share with friends! 😊&lt;/p&gt;
+&lt;p&gt;Now you understand the differences between Image and Container. Next step: learn how to use Dockerfile to build images and Docker Compose to manage multiple containers.&lt;/p&gt;
+&lt;p&gt;If you found this article helpful, remember to star the repo or share with friends!&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="references"&gt;References
 &lt;/h2&gt;&lt;ul&gt;
@@ -2905,20 +2905,20 @@
 &lt;/h2&gt;&lt;p&gt;Docker is a popular platform in DevOps for deploying applications using &lt;strong&gt;containers&lt;/strong&gt;. Containers allow you to package applications together with all their dependencies and necessary configurations, ensuring consistent execution across all environments from development to production.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Benefits of Docker:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;⚡ &lt;strong&gt;Consistency&lt;/strong&gt;: Applications run identically across all environments&lt;/li&gt;
-&lt;li&gt;🚀 &lt;strong&gt;Speed&lt;/strong&gt;: Containers start faster than virtual machines&lt;/li&gt;
-&lt;li&gt;📦 &lt;strong&gt;Packaging&lt;/strong&gt;: Easy to share and deploy applications&lt;/li&gt;
-&lt;li&gt;🔄 &lt;strong&gt;Scalability&lt;/strong&gt;: Easy to scale and manage multiple containers&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Consistency&lt;/strong&gt;: Applications run identically across all environments&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Speed&lt;/strong&gt;: Containers start faster than virtual machines&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Packaging&lt;/strong&gt;: Easy to share and deploy applications&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Scalability&lt;/strong&gt;: Easy to scale and manage multiple containers&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;This guide walks you through installing Docker on Ubuntu 20.04 and 22.04 in a straightforward and efficient manner, using Docker&amp;rsquo;s official repository to ensure you always have the latest stable version.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="prerequisites"&gt;Prerequisites
 &lt;/h2&gt;&lt;p&gt;Before you begin, make sure you have:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🖥 &lt;strong&gt;Ubuntu 20.04 or 22.04 server&lt;/strong&gt; installed&lt;/li&gt;
-&lt;li&gt;🔐 &lt;strong&gt;Sudo privileges&lt;/strong&gt; to execute administrative commands&lt;/li&gt;
-&lt;li&gt;🌐 &lt;strong&gt;Internet connection&lt;/strong&gt; to download packages&lt;/li&gt;
-&lt;li&gt;⏱ &lt;strong&gt;Time&lt;/strong&gt;: Installation takes approximately 5-10 minutes&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Ubuntu 20.04 or 22.04 server&lt;/strong&gt; installed&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Sudo privileges&lt;/strong&gt; to execute administrative commands&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Internet connection&lt;/strong&gt; to download packages&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Time&lt;/strong&gt;: Installation takes approximately 5-10 minutes&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="update-the-system"&gt;Update the System
@@ -2931,7 +2931,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt update &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo apt upgrade -y
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Notes:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Notes:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;The &lt;code&gt;apt update&lt;/code&gt; command updates the list of available packages from repositories&lt;/li&gt;
 &lt;li&gt;The &lt;code&gt;apt upgrade -y&lt;/code&gt; command automatically installs updates without prompting&lt;/li&gt;
@@ -2977,7 +2977,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu &lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;lsb_release -cs&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt; stable&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; sudo tee /etc/apt/sources.list.d/docker.list &amp;gt; /dev/null
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Explanation:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Explanation:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;arch=amd64&lt;/code&gt;: Specifies 64-bit architecture&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;signed-by&lt;/code&gt;: Specifies the GPG key for authentication&lt;/li&gt;
@@ -2996,13 +2996,13 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt install -y docker-ce docker-ce-cli containerd.io
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;📦 Packages Being Installed:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Packages Being Installed:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;docker-ce&lt;/code&gt;: Docker Community Edition - the open-source version of Docker&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;docker-ce-cli&lt;/code&gt;: Docker Command Line Interface - command-line tool to interact with Docker&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;containerd.io&lt;/code&gt;: Container runtime - low-level tool for managing container lifecycle&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;⏱ Installation Time:&lt;/strong&gt; This process typically takes 2-5 minutes depending on your internet speed.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Installation Time:&lt;/strong&gt; This process typically takes 2-5 minutes depending on your internet speed.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="verify-docker"&gt;Verify Docker
 &lt;/h2&gt;&lt;p&gt;After installation, verify that Docker is running properly:&lt;/p&gt;
@@ -3026,7 +3026,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; docker
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Command Explanations:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Command Explanations:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;systemctl start docker&lt;/code&gt;: Starts the Docker service immediately&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;systemctl enable docker&lt;/code&gt;: Configures Docker to auto-start on system boot&lt;/li&gt;
@@ -3042,8 +3042,8 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo docker run hello-world
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Expected Result:&lt;/strong&gt; If you see the &amp;ldquo;Hello from Docker!&amp;rdquo; message along with Docker information, congratulations, installation successful! 🎉&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;🔍 What does the &lt;code&gt;hello-world&lt;/code&gt; container do?&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Expected Result:&lt;/strong&gt; If you see the &amp;ldquo;Hello from Docker!&amp;rdquo; message along with Docker information, congratulations, installation successful!&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;What does the &lt;code&gt;hello-world&lt;/code&gt; container do?&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Downloads the &lt;code&gt;hello-world&lt;/code&gt; image from Docker Hub (if not already present)&lt;/li&gt;
 &lt;li&gt;Runs the container and displays a welcome message&lt;/li&gt;
@@ -3062,12 +3062,12 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;newgrp docker
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Explanation:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Explanation:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;usermod -aG docker $USER&lt;/code&gt;: Adds the current user to the &lt;code&gt;docker&lt;/code&gt; group (which has Docker daemon access privileges)&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;newgrp docker&lt;/code&gt;: Applies group changes immediately without needing to log out&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;⚠ Important Notes:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Important Notes:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;After executing this command, you may need to log out and log back in for changes to take effect&lt;/li&gt;
 &lt;li&gt;Alternatively, you can open a new terminal window to apply changes&lt;/li&gt;
@@ -3083,7 +3083,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker run hello-world
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;If the command succeeds without &lt;code&gt;sudo&lt;/code&gt;, you&amp;rsquo;ve configured it correctly! ✅&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;If the command succeeds without &lt;code&gt;sudo&lt;/code&gt;, you&amp;rsquo;ve configured it correctly!&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="uninstall-docker-if-needed"&gt;Uninstall Docker (if needed)
 &lt;/h2&gt;&lt;p&gt;If you want to completely remove Docker from your system, follow these steps:&lt;/p&gt;
@@ -3106,7 +3106,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo rm -rf /var/lib/docker
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;⚠ Warning:&lt;/strong&gt; This command will delete &lt;strong&gt;ALL&lt;/strong&gt; Docker data including:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Warning:&lt;/strong&gt; This command will delete &lt;strong&gt;ALL&lt;/strong&gt; Docker data including:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;All downloaded images&lt;/li&gt;
 &lt;li&gt;All containers (running and stopped)&lt;/li&gt;
@@ -3235,15 +3235,15 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="conclusion"&gt;Conclusion
-&lt;/h2&gt;&lt;p&gt;Congratulations on completing Docker installation on Ubuntu! 🎉 Now you can:&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;Congratulations on completing Docker installation on Ubuntu! Now you can:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🐳 &lt;strong&gt;Create and run containers&lt;/strong&gt; for your applications&lt;/li&gt;
-&lt;li&gt;📦 &lt;strong&gt;Use Docker images&lt;/strong&gt; available from Docker Hub&lt;/li&gt;
-&lt;li&gt;🚀 &lt;strong&gt;Deploy applications&lt;/strong&gt; consistently and easily&lt;/li&gt;
-&lt;li&gt;🔄 &lt;strong&gt;Manage development and production environments&lt;/strong&gt; more efficiently&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Create and run containers&lt;/strong&gt; for your applications&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Use Docker images&lt;/strong&gt; available from Docker Hub&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Deploy applications&lt;/strong&gt; consistently and easily&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Manage development and production environments&lt;/strong&gt; more efficiently&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Docker is a powerful tool in the DevOps world. Continue exploring Docker features like Docker Compose, Docker Swarm, and CI/CD integration to optimize your development workflow!&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;📖 References:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;References:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://docs.docker.com/" target="_blank" rel="noopener"
 &gt;Official Docker Documentation&lt;/a&gt;&lt;/li&gt;
@@ -3252,7 +3252,7 @@
 &lt;li&gt;&lt;a class="link" href="https://docs.docker.com/develop/dev-best-practices/" target="_blank" rel="noopener"
 &gt;Docker Best Practices&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Good luck with Docker! 🚀😊&lt;/p&gt;</description></item><item><title>Optimize Docker for Java</title><link>https://tech.nguuyen.io.vn/posts/docker-optimization/docker-opt-java/</link><pubDate>Sat, 29 Nov 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/docker-optimization/docker-opt-java/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/docker-optimization/docker-optimization-java.jpg" alt="Featured image of post Optimize Docker for Java" /&gt;&lt;h2 id="dockerfile-contest-2025--extreme-java-optimization"&gt;Dockerfile Contest 2025 – Extreme Java Optimization
+&lt;p&gt;Good luck with Docker!&lt;/p&gt;</description></item><item><title>Optimize Docker for Java</title><link>https://tech.nguuyen.io.vn/posts/docker-optimization/docker-opt-java/</link><pubDate>Sat, 29 Nov 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/docker-optimization/docker-opt-java/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/docker-optimization/docker-optimization-java.jpg" alt="Featured image of post Optimize Docker for Java" /&gt;&lt;h2 id="dockerfile-contest-2025--extreme-java-optimization"&gt;Dockerfile Contest 2025 – Extreme Java Optimization
 &lt;/h2&gt;&lt;p&gt;Dockerfile Contest 2025 encourages the Vietnamese DevOps community to rethink how Dockerfiles are written to achieve &lt;strong&gt;security, optimization, and clarity&lt;/strong&gt;. This article focuses on the &lt;strong&gt;Java Spring Boot&lt;/strong&gt; category, where authors optimize the JRE, reduce image size, and standardize build workflows.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="i-java-category-spring-boot-service"&gt;I. JAVA Category (Spring Boot Service)
@@ -8292,19 +8292,19 @@
 &lt;/h2&gt;&lt;p&gt;Containers are an operating system-level virtualization method that allows running multiple isolated applications on the same kernel. Unlike virtual machines (VMs) that require separate operating systems for each environment, containers only use the host operating system&amp;rsquo;s kernel, helping reduce resource costs and increase performance.&lt;/p&gt;
 &lt;h3 id="key-characteristics-of-containers"&gt;Key Characteristics of Containers
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;🏋 &lt;strong&gt;Lightweight&lt;/strong&gt;: Share kernel with host operating system, reducing resource consumption.&lt;/li&gt;
-&lt;li&gt;🚀 &lt;strong&gt;Portable&lt;/strong&gt;: Run consistently across multiple platforms from personal computers to cloud.&lt;/li&gt;
-&lt;li&gt;🔒 &lt;strong&gt;Isolated&lt;/strong&gt;: Applications and libraries are packaged separately.&lt;/li&gt;
-&lt;li&gt;📈 &lt;strong&gt;High Performance&lt;/strong&gt;: No need to boot separate operating systems like virtual machines.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Lightweight&lt;/strong&gt;: Share kernel with host operating system, reducing resource consumption.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Portable&lt;/strong&gt;: Run consistently across multiple platforms from personal computers to cloud.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Isolated&lt;/strong&gt;: Applications and libraries are packaged separately.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;High Performance&lt;/strong&gt;: No need to boot separate operating systems like virtual machines.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id="docker---the-most-popular-container-platform"&gt;Docker - The Most Popular Container Platform
 &lt;/h2&gt;&lt;p&gt;&lt;a class="link" href="https://www.docker.com/" target="_blank" rel="noopener"
 &gt;Docker&lt;/a&gt; is an open-source platform that helps automate application deployment using container technology. Docker helps package applications with all necessary libraries and configurations to run across different environments.&lt;/p&gt;
 &lt;h3 id="notable-features-of-docker"&gt;Notable Features of Docker
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;📦 &lt;strong&gt;Docker Engine&lt;/strong&gt;: Tool for creating and running containers.&lt;/li&gt;
-&lt;li&gt;🔄 &lt;strong&gt;Docker Compose&lt;/strong&gt;: Manage multiple containers in one application.&lt;/li&gt;
-&lt;li&gt;🏗 &lt;strong&gt;Docker Hub&lt;/strong&gt;: Repository for storing and sharing container images.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Docker Engine&lt;/strong&gt;: Tool for creating and running containers.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Docker Compose&lt;/strong&gt;: Manage multiple containers in one application.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Docker Hub&lt;/strong&gt;: Repository for storing and sharing container images.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id="docker-usage-example"&gt;Docker Usage Example:
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
@@ -8316,20 +8316,20 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;The above command will run an Nginx container on port 80.&lt;/p&gt;
-&lt;p&gt;📚 &lt;strong&gt;Useful Resources:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Useful Resources:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;📖 &lt;a class="link" href="https://docs.docker.com/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://docs.docker.com/" target="_blank" rel="noopener"
 &gt;Docker Documentation&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=RqTEHSBrYFw" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=RqTEHSBrYFw" target="_blank" rel="noopener"
 &gt;Docker in 5 Minutes&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id="lxc---linux-containers"&gt;LXC - Linux Containers
 &lt;/h2&gt;&lt;p&gt;LXC (Linux Containers) is an operating system-level virtualization method that allows running multiple isolated Linux systems on the same kernel.&lt;/p&gt;
 &lt;h3 id="lxc-characteristics"&gt;LXC Characteristics:
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;🏗 Creates environments similar to virtual machines but with higher performance.&lt;/li&gt;
-&lt;li&gt;⚡ Faster startup compared to traditional VMs.&lt;/li&gt;
-&lt;li&gt;🔍 Uses Linux technologies like cgroups and namespaces.&lt;/li&gt;
+&lt;li&gt;Creates environments similar to virtual machines but with higher performance.&lt;/li&gt;
+&lt;li&gt;Faster startup compared to traditional VMs.&lt;/li&gt;
+&lt;li&gt;Uses Linux technologies like cgroups and namespaces.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id="example-of-creating-an-lxc-container"&gt;Example of Creating an LXC Container:
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
@@ -8342,13 +8342,13 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;lxc-start -n my-container -d
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📚 &lt;strong&gt;Useful Resources:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Useful Resources:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;📖 &lt;a class="link" href="https://linuxcontainers.org/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://linuxcontainers.org/" target="_blank" rel="noopener"
 &gt;LXC Homepage&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=CWmkSj_B-wo" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=CWmkSj_B-wo" target="_blank" rel="noopener"
 &gt;LXC Usage Guide&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id="conclusion"&gt;Conclusion
-&lt;/h2&gt;&lt;p&gt;Containers help deploy applications quickly, efficiently, and save resources. &lt;strong&gt;Docker&lt;/strong&gt; is a popular choice for application development, while &lt;strong&gt;LXC&lt;/strong&gt; is more suitable for full operating system simulation. Choose the tool that fits your needs! 🚀&lt;/p&gt;
-&lt;p&gt;👉 &lt;strong&gt;Next Step:&lt;/strong&gt; Learn about &lt;em&gt;&lt;strong&gt;Application Gateway&lt;/strong&gt;&lt;/em&gt; - an application-layer traffic management service that helps optimize, secure, and control access flow between clients and backends. It can act as a reverse proxy, protecting the system and ensuring requests are processed correctly.&lt;/p&gt;</description></item></channel></rss>
+&lt;/h2&gt;&lt;p&gt;Containers help deploy applications quickly, efficiently, and save resources. &lt;strong&gt;Docker&lt;/strong&gt; is a popular choice for application development, while &lt;strong&gt;LXC&lt;/strong&gt; is more suitable for full operating system simulation. Choose the tool that fits your needs!&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Next Step:&lt;/strong&gt; Learn about &lt;em&gt;&lt;strong&gt;Application Gateway&lt;/strong&gt;&lt;/em&gt; - an application-layer traffic management service that helps optimize, secure, and control access flow between clients and backends. It can act as a reverse proxy, protecting the system and ensuring requests are processed correctly.&lt;/p&gt;</description></item></channel></rss>

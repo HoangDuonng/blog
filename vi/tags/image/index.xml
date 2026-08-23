@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Image on Hoàng Dương</title><link>https://tech.nguuyen.io.vn/vi/tags/image/</link><description>Recent content in Image on Hoàng Dương</description><generator>Hugo -- gohugo.io</generator><language>vi</language><lastBuildDate>Sun, 25 Jan 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/vi/tags/image/index.xml" rel="self" type="application/rss+xml"/><item><title>Docker cơ bản: Image vs Container</title><link>https://tech.nguuyen.io.vn/vi/posts/docker/docker-basics-image-vs-container/</link><pubDate>Sun, 25 Jan 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/docker/docker-basics-image-vs-container/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/docker/docker-basics-image-vs-container.jpg" alt="Featured image of post Docker cơ bản: Image vs Container" /&gt;&lt;h2 id="docker-image-và-container---hai-khái-niệm-thiết-yếu"&gt;Docker Image và Container - Hai khái niệm thiết yếu
-&lt;/h2&gt;&lt;p&gt;Khi bắt đầu với Docker, hai khái niệm quan trọng nhất bạn cần hiểu là &lt;strong&gt;Image&lt;/strong&gt; và &lt;strong&gt;Container&lt;/strong&gt;. Nhiều người mới thường nhầm lẫn giữa chúng, nhưng thực chất chúng đóng vai trò khác nhau trong hệ sinh thái Docker. Image giống như &lt;strong&gt;kho chứa recipe&lt;/strong&gt; (làm công thức), còn Container là &lt;strong&gt;thực tế thực thi&lt;/strong&gt; (món ăn được chuẩn bị). 🍳&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;Khi bắt đầu với Docker, hai khái niệm quan trọng nhất bạn cần hiểu là &lt;strong&gt;Image&lt;/strong&gt; và &lt;strong&gt;Container&lt;/strong&gt;. Nhiều người mới thường nhầm lẫn giữa chúng, nhưng thực chất chúng đóng vai trò khác nhau trong hệ sinh thái Docker. Image giống như &lt;strong&gt;kho chứa recipe&lt;/strong&gt; (làm công thức), còn Container là &lt;strong&gt;thực tế thực thi&lt;/strong&gt; (món ăn được chuẩn bị).&lt;/p&gt;
 &lt;p&gt;Trong bài viết này, tôi sẽ giải thích chi tiết sự khác biệt giữa Image và Container, cách chúng hoạt động cùng nhau, và cung cấp ví dụ thực tế để bạn dễ hiểu hơn.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="i-docker-image-là-gì"&gt;I. Docker Image là gì?
@@ -422,11 +422,11 @@
 &lt;h2 id="v-best-practices-với-image-và-container"&gt;V. Best practices với Image và Container
 &lt;/h2&gt;&lt;h3 id="quản-lý-image"&gt;Quản lý Image
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;✅ Sử dụng cụ thể hơn (ex: &lt;code&gt;node:18.12-alpine&lt;/code&gt; thay vì &lt;code&gt;node:latest&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;✅ Giảm kích thước bằng base image nhỏ (alpine, distroless)&lt;/li&gt;
-&lt;li&gt;✅ Tận dụng cache layer bằng cách xếp lệnh theo thứ tự&lt;/li&gt;
-&lt;li&gt;✅ Sử dụng &lt;code&gt;.dockerignore&lt;/code&gt; để loại bỏ file không cần thiết&lt;/li&gt;
-&lt;li&gt;✅ Xóa image unused thường xuyên với &lt;code&gt;docker image prune&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Sử dụng cụ thể hơn (ex: &lt;code&gt;node:18.12-alpine&lt;/code&gt; thay vì &lt;code&gt;node:latest&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Giảm kích thước bằng base image nhỏ (alpine, distroless)&lt;/li&gt;
+&lt;li&gt;Tận dụng cache layer bằng cách xếp lệnh theo thứ tự&lt;/li&gt;
+&lt;li&gt;Sử dụng &lt;code&gt;.dockerignore&lt;/code&gt; để loại bỏ file không cần thiết&lt;/li&gt;
+&lt;li&gt;Xóa image unused thường xuyên với &lt;code&gt;docker image prune&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -444,11 +444,11 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;h3 id="quản-lý-container"&gt;Quản lý Container
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;✅ Đặt tên container rõ ràng (&lt;code&gt;--name app-container&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;✅ Sử dụng &lt;code&gt;-d&lt;/code&gt; (detached mode) để chạy container background&lt;/li&gt;
-&lt;li&gt;✅ Thường xuyên quay lại logs khi debug (&lt;code&gt;docker logs -f&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;✅ Sử dụng volumes nếu cần persistence dữ liệu&lt;/li&gt;
-&lt;li&gt;✅ Giới hạn resource với &lt;code&gt;--cpus&lt;/code&gt;, &lt;code&gt;--memory&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Đặt tên container rõ ràng (&lt;code&gt;--name app-container&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Sử dụng &lt;code&gt;-d&lt;/code&gt; (detached mode) để chạy container background&lt;/li&gt;
+&lt;li&gt;Thường xuyên quay lại logs khi debug (&lt;code&gt;docker logs -f&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Sử dụng volumes nếu cần persistence dữ liệu&lt;/li&gt;
+&lt;li&gt;Giới hạn resource với &lt;code&gt;--cpus&lt;/code&gt;, &lt;code&gt;--memory&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -598,8 +598,8 @@
 &lt;li&gt;Dùng &lt;code&gt;docker run&lt;/code&gt; để tạo container từ image&lt;/li&gt;
 &lt;li&gt;Dùng &lt;code&gt;docker commit&lt;/code&gt; để update container thành image mới&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Bây giờ bạn đã hiểu rõ sự khác biệt giữa Image và Container. Bước tiếp theo: học cách sử dụng Dockerfile để build image, và Docker Compose để quản lý nhiều container. 🚀&lt;/p&gt;
-&lt;p&gt;Nếu bạn thấy bài viết này hữu ích, hãy nhớ ⭐ star repo hoặc 📱 chia sẻ với bạn bè nhé! 😊&lt;/p&gt;
+&lt;p&gt;Bây giờ bạn đã hiểu rõ sự khác biệt giữa Image và Container. Bước tiếp theo: học cách sử dụng Dockerfile để build image, và Docker Compose để quản lý nhiều container.&lt;/p&gt;
+&lt;p&gt;Nếu bạn thấy bài viết này hữu ích, hãy nhớ star repo hoặc chia sẻ với bạn bè nhé!&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="tài-liệu-tham-khảo"&gt;Tài liệu tham khảo
 &lt;/h2&gt;&lt;ul&gt;

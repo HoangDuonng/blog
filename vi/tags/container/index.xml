@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Container on Hoàng Dương</title><link>https://tech.nguuyen.io.vn/vi/tags/container/</link><description>Recent content in Container on Hoàng Dương</description><generator>Hugo -- gohugo.io</generator><language>vi</language><lastBuildDate>Sun, 25 Jan 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/vi/tags/container/index.xml" rel="self" type="application/rss+xml"/><item><title>Docker cơ bản: Image vs Container</title><link>https://tech.nguuyen.io.vn/vi/posts/docker/docker-basics-image-vs-container/</link><pubDate>Sun, 25 Jan 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/docker/docker-basics-image-vs-container/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/docker/docker-basics-image-vs-container.jpg" alt="Featured image of post Docker cơ bản: Image vs Container" /&gt;&lt;h2 id="docker-image-và-container---hai-khái-niệm-thiết-yếu"&gt;Docker Image và Container - Hai khái niệm thiết yếu
-&lt;/h2&gt;&lt;p&gt;Khi bắt đầu với Docker, hai khái niệm quan trọng nhất bạn cần hiểu là &lt;strong&gt;Image&lt;/strong&gt; và &lt;strong&gt;Container&lt;/strong&gt;. Nhiều người mới thường nhầm lẫn giữa chúng, nhưng thực chất chúng đóng vai trò khác nhau trong hệ sinh thái Docker. Image giống như &lt;strong&gt;kho chứa recipe&lt;/strong&gt; (làm công thức), còn Container là &lt;strong&gt;thực tế thực thi&lt;/strong&gt; (món ăn được chuẩn bị). 🍳&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;Khi bắt đầu với Docker, hai khái niệm quan trọng nhất bạn cần hiểu là &lt;strong&gt;Image&lt;/strong&gt; và &lt;strong&gt;Container&lt;/strong&gt;. Nhiều người mới thường nhầm lẫn giữa chúng, nhưng thực chất chúng đóng vai trò khác nhau trong hệ sinh thái Docker. Image giống như &lt;strong&gt;kho chứa recipe&lt;/strong&gt; (làm công thức), còn Container là &lt;strong&gt;thực tế thực thi&lt;/strong&gt; (món ăn được chuẩn bị).&lt;/p&gt;
 &lt;p&gt;Trong bài viết này, tôi sẽ giải thích chi tiết sự khác biệt giữa Image và Container, cách chúng hoạt động cùng nhau, và cung cấp ví dụ thực tế để bạn dễ hiểu hơn.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="i-docker-image-là-gì"&gt;I. Docker Image là gì?
@@ -422,11 +422,11 @@
 &lt;h2 id="v-best-practices-với-image-và-container"&gt;V. Best practices với Image và Container
 &lt;/h2&gt;&lt;h3 id="quản-lý-image"&gt;Quản lý Image
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;✅ Sử dụng cụ thể hơn (ex: &lt;code&gt;node:18.12-alpine&lt;/code&gt; thay vì &lt;code&gt;node:latest&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;✅ Giảm kích thước bằng base image nhỏ (alpine, distroless)&lt;/li&gt;
-&lt;li&gt;✅ Tận dụng cache layer bằng cách xếp lệnh theo thứ tự&lt;/li&gt;
-&lt;li&gt;✅ Sử dụng &lt;code&gt;.dockerignore&lt;/code&gt; để loại bỏ file không cần thiết&lt;/li&gt;
-&lt;li&gt;✅ Xóa image unused thường xuyên với &lt;code&gt;docker image prune&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Sử dụng cụ thể hơn (ex: &lt;code&gt;node:18.12-alpine&lt;/code&gt; thay vì &lt;code&gt;node:latest&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Giảm kích thước bằng base image nhỏ (alpine, distroless)&lt;/li&gt;
+&lt;li&gt;Tận dụng cache layer bằng cách xếp lệnh theo thứ tự&lt;/li&gt;
+&lt;li&gt;Sử dụng &lt;code&gt;.dockerignore&lt;/code&gt; để loại bỏ file không cần thiết&lt;/li&gt;
+&lt;li&gt;Xóa image unused thường xuyên với &lt;code&gt;docker image prune&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -444,11 +444,11 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;h3 id="quản-lý-container"&gt;Quản lý Container
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;✅ Đặt tên container rõ ràng (&lt;code&gt;--name app-container&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;✅ Sử dụng &lt;code&gt;-d&lt;/code&gt; (detached mode) để chạy container background&lt;/li&gt;
-&lt;li&gt;✅ Thường xuyên quay lại logs khi debug (&lt;code&gt;docker logs -f&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;✅ Sử dụng volumes nếu cần persistence dữ liệu&lt;/li&gt;
-&lt;li&gt;✅ Giới hạn resource với &lt;code&gt;--cpus&lt;/code&gt;, &lt;code&gt;--memory&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Đặt tên container rõ ràng (&lt;code&gt;--name app-container&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Sử dụng &lt;code&gt;-d&lt;/code&gt; (detached mode) để chạy container background&lt;/li&gt;
+&lt;li&gt;Thường xuyên quay lại logs khi debug (&lt;code&gt;docker logs -f&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Sử dụng volumes nếu cần persistence dữ liệu&lt;/li&gt;
+&lt;li&gt;Giới hạn resource với &lt;code&gt;--cpus&lt;/code&gt;, &lt;code&gt;--memory&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -598,8 +598,8 @@
 &lt;li&gt;Dùng &lt;code&gt;docker run&lt;/code&gt; để tạo container từ image&lt;/li&gt;
 &lt;li&gt;Dùng &lt;code&gt;docker commit&lt;/code&gt; để update container thành image mới&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Bây giờ bạn đã hiểu rõ sự khác biệt giữa Image và Container. Bước tiếp theo: học cách sử dụng Dockerfile để build image, và Docker Compose để quản lý nhiều container. 🚀&lt;/p&gt;
-&lt;p&gt;Nếu bạn thấy bài viết này hữu ích, hãy nhớ ⭐ star repo hoặc 📱 chia sẻ với bạn bè nhé! 😊&lt;/p&gt;
+&lt;p&gt;Bây giờ bạn đã hiểu rõ sự khác biệt giữa Image và Container. Bước tiếp theo: học cách sử dụng Dockerfile để build image, và Docker Compose để quản lý nhiều container.&lt;/p&gt;
+&lt;p&gt;Nếu bạn thấy bài viết này hữu ích, hãy nhớ star repo hoặc chia sẻ với bạn bè nhé!&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="tài-liệu-tham-khảo"&gt;Tài liệu tham khảo
 &lt;/h2&gt;&lt;ul&gt;
@@ -611,20 +611,20 @@
 &lt;/h2&gt;&lt;p&gt;Docker là một nền tảng phổ biến trong DevOps để triển khai ứng dụng bằng &lt;strong&gt;container&lt;/strong&gt;. Container cho phép bạn đóng gói ứng dụng cùng với tất cả các dependencies và cấu hình cần thiết, giúp ứng dụng chạy nhất quán trên mọi môi trường từ development đến production.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Lợi ích của Docker:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;⚡ &lt;strong&gt;Tính nhất quán&lt;/strong&gt;: Ứng dụng chạy giống nhau trên mọi môi trường&lt;/li&gt;
-&lt;li&gt;🚀 &lt;strong&gt;Tốc độ&lt;/strong&gt;: Khởi động container nhanh hơn so với virtual machine&lt;/li&gt;
-&lt;li&gt;📦 &lt;strong&gt;Đóng gói&lt;/strong&gt;: Dễ dàng chia sẻ và triển khai ứng dụng&lt;/li&gt;
-&lt;li&gt;🔄 &lt;strong&gt;Scalability&lt;/strong&gt;: Dễ dàng mở rộng và quản lý nhiều container&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Tính nhất quán&lt;/strong&gt;: Ứng dụng chạy giống nhau trên mọi môi trường&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Tốc độ&lt;/strong&gt;: Khởi động container nhanh hơn so với virtual machine&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Đóng gói&lt;/strong&gt;: Dễ dàng chia sẻ và triển khai ứng dụng&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Scalability&lt;/strong&gt;: Dễ dàng mở rộng và quản lý nhiều container&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Bài viết này hướng dẫn bạn cách cài đặt Docker trên Ubuntu 20.04 và 22.04 một cách đơn giản và hiệu quả, sử dụng repository chính thức của Docker để đảm bảo bạn luôn có phiên bản mới nhất và ổn định.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="yêu-cầu-trước-khi-cài-đặt"&gt;Yêu cầu trước khi cài đặt
 &lt;/h2&gt;&lt;p&gt;Trước khi bắt đầu, hãy đảm bảo bạn có:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🖥 &lt;strong&gt;Máy chủ Ubuntu 20.04 hoặc 22.04&lt;/strong&gt; đã được cài đặt&lt;/li&gt;
-&lt;li&gt;🔐 &lt;strong&gt;Quyền sudo&lt;/strong&gt; để thực thi các lệnh quản trị&lt;/li&gt;
-&lt;li&gt;🌐 &lt;strong&gt;Kết nối internet&lt;/strong&gt; để tải các gói cài đặt&lt;/li&gt;
-&lt;li&gt;⏱ &lt;strong&gt;Thời gian&lt;/strong&gt;: Quá trình cài đặt mất khoảng 5-10 phút&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Máy chủ Ubuntu 20.04 hoặc 22.04&lt;/strong&gt; đã được cài đặt&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Quyền sudo&lt;/strong&gt; để thực thi các lệnh quản trị&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Kết nối internet&lt;/strong&gt; để tải các gói cài đặt&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Thời gian&lt;/strong&gt;: Quá trình cài đặt mất khoảng 5-10 phút&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="cập-nhật-hệ-thống"&gt;Cập nhật hệ thống
@@ -637,7 +637,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt update &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo apt upgrade -y
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Lưu ý:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Lưu ý:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Lệnh &lt;code&gt;apt update&lt;/code&gt; cập nhật danh sách các gói có sẵn từ repository&lt;/li&gt;
 &lt;li&gt;Lệnh &lt;code&gt;apt upgrade -y&lt;/code&gt; tự động cài đặt các bản cập nhật mà không cần xác nhận&lt;/li&gt;
@@ -683,7 +683,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu &lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;lsb_release -cs&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt; stable&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; sudo tee /etc/apt/sources.list.d/docker.list &amp;gt; /dev/null
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Giải thích:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Giải thích:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;arch=amd64&lt;/code&gt;: Chỉ định kiến trúc 64-bit&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;signed-by&lt;/code&gt;: Chỉ định GPG key để xác thực&lt;/li&gt;
@@ -702,13 +702,13 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt install -y docker-ce docker-ce-cli containerd.io
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;📦 Các gói được cài đặt:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Các gói được cài đặt:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;docker-ce&lt;/code&gt;: Docker Community Edition - phiên bản mã nguồn mở của Docker&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;docker-ce-cli&lt;/code&gt;: Docker Command Line Interface - công cụ dòng lệnh để tương tác với Docker&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;containerd.io&lt;/code&gt;: Container runtime - công cụ quản lý vòng đời container ở mức thấp&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;⏱ Thời gian cài đặt:&lt;/strong&gt; Quá trình này thường mất 2-5 phút tùy thuộc vào tốc độ internet của bạn.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Thời gian cài đặt:&lt;/strong&gt; Quá trình này thường mất 2-5 phút tùy thuộc vào tốc độ internet của bạn.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="kiểm-tra-docker"&gt;Kiểm tra Docker
 &lt;/h2&gt;&lt;p&gt;Sau khi cài đặt, hãy kiểm tra xem Docker đã được khởi động và hoạt động chưa:&lt;/p&gt;
@@ -732,7 +732,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; docker
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Giải thích các lệnh:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Giải thích các lệnh:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;systemctl start docker&lt;/code&gt;: Khởi động dịch vụ Docker ngay lập tức&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;systemctl enable docker&lt;/code&gt;: Cấu hình Docker tự động khởi động khi hệ thống khởi động lại&lt;/li&gt;
@@ -748,8 +748,8 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo docker run hello-world
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Kết quả mong đợi:&lt;/strong&gt; Nếu thấy thông báo &amp;ldquo;Hello from Docker!&amp;rdquo; cùng với các thông tin về Docker, nghĩa là bạn đã cài đặt thành công! 🎉&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;🔍 Container &lt;code&gt;hello-world&lt;/code&gt; làm gì?&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Kết quả mong đợi:&lt;/strong&gt; Nếu thấy thông báo &amp;ldquo;Hello from Docker!&amp;rdquo; cùng với các thông tin về Docker, nghĩa là bạn đã cài đặt thành công!&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Container &lt;code&gt;hello-world&lt;/code&gt; làm gì?&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Container này tải xuống image &lt;code&gt;hello-world&lt;/code&gt; từ Docker Hub (nếu chưa có)&lt;/li&gt;
 &lt;li&gt;Chạy container và hiển thị thông báo chào mừng&lt;/li&gt;
@@ -768,12 +768,12 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;newgrp docker
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Giải thích:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Giải thích:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;usermod -aG docker $USER&lt;/code&gt;: Thêm user hiện tại vào nhóm &lt;code&gt;docker&lt;/code&gt; (nhóm này có quyền truy cập Docker daemon)&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;newgrp docker&lt;/code&gt;: Áp dụng thay đổi nhóm ngay lập tức mà không cần đăng xuất&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;⚠ Lưu ý quan trọng:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Lưu ý quan trọng:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Sau khi thực hiện lệnh này, bạn có thể cần đăng xuất và đăng nhập lại để thay đổi có hiệu lực&lt;/li&gt;
 &lt;li&gt;Hoặc bạn có thể mở terminal mới để áp dụng thay đổi&lt;/li&gt;
@@ -789,7 +789,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker run hello-world
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Nếu lệnh chạy thành công mà không cần &lt;code&gt;sudo&lt;/code&gt;, bạn đã cấu hình đúng! ✅&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Nếu lệnh chạy thành công mà không cần &lt;code&gt;sudo&lt;/code&gt;, bạn đã cấu hình đúng!&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="gỡ-cài-đặt-docker-nếu-cần"&gt;Gỡ cài đặt Docker (nếu cần)
 &lt;/h2&gt;&lt;p&gt;Nếu bạn muốn gỡ cài đặt Docker hoàn toàn khỏi hệ thống, thực hiện các bước sau:&lt;/p&gt;
@@ -812,7 +812,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo rm -rf /var/lib/docker
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;⚠ Cảnh báo:&lt;/strong&gt; Lệnh này sẽ xóa &lt;strong&gt;TẤT CẢ&lt;/strong&gt; dữ liệu Docker bao gồm:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Cảnh báo:&lt;/strong&gt; Lệnh này sẽ xóa &lt;strong&gt;TẤT CẢ&lt;/strong&gt; dữ liệu Docker bao gồm:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Tất cả images đã tải về&lt;/li&gt;
 &lt;li&gt;Tất cả containers (đang chạy và đã dừng)&lt;/li&gt;
@@ -941,15 +941,15 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="lời-kết"&gt;Lời kết
-&lt;/h2&gt;&lt;p&gt;Vậy là chúng ta đã hoàn tất cài đặt Docker trên Ubuntu! 🎉 Giờ đây, bạn có thể bắt đầu:&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;Vậy là chúng ta đã hoàn tất cài đặt Docker trên Ubuntu! Giờ đây, bạn có thể bắt đầu:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🐳 &lt;strong&gt;Tạo và chạy containers&lt;/strong&gt; cho các ứng dụng của mình&lt;/li&gt;
-&lt;li&gt;📦 &lt;strong&gt;Sử dụng Docker images&lt;/strong&gt; có sẵn từ Docker Hub&lt;/li&gt;
-&lt;li&gt;🚀 &lt;strong&gt;Triển khai ứng dụng&lt;/strong&gt; một cách nhất quán và dễ dàng&lt;/li&gt;
-&lt;li&gt;🔄 &lt;strong&gt;Quản lý môi trường development&lt;/strong&gt; và production hiệu quả hơn&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Tạo và chạy containers&lt;/strong&gt; cho các ứng dụng của mình&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Sử dụng Docker images&lt;/strong&gt; có sẵn từ Docker Hub&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Triển khai ứng dụng&lt;/strong&gt; một cách nhất quán và dễ dàng&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Quản lý môi trường development&lt;/strong&gt; và production hiệu quả hơn&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Docker là một công cụ mạnh mẽ trong thế giới DevOps. Hãy tiếp tục khám phá các tính năng của Docker như Docker Compose, Docker Swarm, và tích hợp với các công cụ CI/CD để tối ưu hóa quy trình phát triển của bạn!&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;📖 Tài liệu tham khảo:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tài liệu tham khảo:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://docs.docker.com/" target="_blank" rel="noopener"
 &gt;Tài liệu chính thức của Docker&lt;/a&gt;&lt;/li&gt;
@@ -958,36 +958,36 @@
 &lt;li&gt;&lt;a class="link" href="https://docs.docker.com/develop/dev-best-practices/" target="_blank" rel="noopener"
 &gt;Best practices cho Docker&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Chúc bạn thành công với Docker! 🚀😊&lt;/p&gt;</description></item><item><title>Container Orchestration</title><link>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-seventeen/</link><pubDate>Mon, 24 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-seventeen/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-seventeen.jpg" alt="Featured image of post Container Orchestration" /&gt;&lt;h2 id="container-orchestration-là-gì"&gt;Container Orchestration là gì?
+&lt;p&gt;Chúc bạn thành công với Docker!&lt;/p&gt;</description></item><item><title>Container Orchestration</title><link>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-seventeen/</link><pubDate>Mon, 24 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-seventeen/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-seventeen.jpg" alt="Featured image of post Container Orchestration" /&gt;&lt;h2 id="container-orchestration-là-gì"&gt;Container Orchestration là gì?
 &lt;/h2&gt;&lt;p&gt;Container orchestration là quá trình quản lý và tự động hóa vòng đời của container, bao gồm triển khai, mở rộng và kết nối mạng giữa các container trên nhiều máy chủ. Đây là công nghệ quan trọng để chạy các ứng dụng phức tạp trong môi trường sản xuất.&lt;/p&gt;
 &lt;p&gt;Bằng cách sử dụng các công cụ như &lt;strong&gt;Kubernetes, Docker Swarm,&lt;/strong&gt; và &lt;strong&gt;Apache Mesos&lt;/strong&gt;, các tổ chức có thể đảm bảo &lt;strong&gt;tính khả dụng cao, khả năng mở rộng và độ tin cậy&lt;/strong&gt; cho ứng dụng của mình. Container orchestration giúp tự động hóa các tác vụ vận hành và tạo nền tảng vững chắc cho &lt;strong&gt;microservices, cloud-native development,&lt;/strong&gt; và &lt;strong&gt;DevOps&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;📚 &lt;strong&gt;Tài nguyên miễn phí hữu ích:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tài nguyên miễn phí hữu ích:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;📦 &lt;a class="link" href="https://www.redhat.com/en/topics/containers/what-is-container-orchestration" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.redhat.com/en/topics/containers/what-is-container-orchestration" target="_blank" rel="noopener"
 &gt;Container Orchestration là gì?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🚀 &lt;a class="link" href="https://kubernetes.io/docs/tutorials/kubernetes-basics/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://kubernetes.io/docs/tutorials/kubernetes-basics/" target="_blank" rel="noopener"
 &gt;Kubernetes là gì?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🐳 &lt;a class="link" href="https://docs.docker.com/engine/swarm/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://docs.docker.com/engine/swarm/" target="_blank" rel="noopener"
 &gt;Docker Swarm&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=PH-2FfFD2PU" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=PH-2FfFD2PU" target="_blank" rel="noopener"
 &gt;Giới thiệu về Kubernetes&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="kubernetes"&gt;Kubernetes
 &lt;/h2&gt;&lt;p&gt;Kubernetes là nền tảng mã nguồn mở phổ biến nhất để quản lý container. Nó cho phép triển khai container trên nhiều máy chủ, xác định mức độ sẵn sàng, logic triển khai và mở rộng thông qua YAML.&lt;/p&gt;
 &lt;p&gt;Kubernetes có nguồn gốc từ &lt;strong&gt;Borg&lt;/strong&gt;, nền tảng nội bộ của Google, và đã trở thành &lt;strong&gt;kỹ năng quan trọng đối với các kỹ sư DevOps&lt;/strong&gt;. Nhiều tổ chức đã thành lập &lt;strong&gt;đội ngũ Platform Engineering&lt;/strong&gt; chuyên về Kubernetes để hỗ trợ các nhóm phát triển sản phẩm.&lt;/p&gt;
-&lt;p&gt;📚 &lt;strong&gt;Tài nguyên miễn phí hữu ích:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tài nguyên miễn phí hữu ích:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🗺 &lt;a class="link" href="https://roadmap.sh/kubernetes" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://roadmap.sh/kubernetes" target="_blank" rel="noopener"
 &gt;Lộ trình Kubernetes chuyên sâu&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🌐 &lt;a class="link" href="https://kubernetes.io/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://kubernetes.io/" target="_blank" rel="noopener"
 &gt;Trang web chính thức của Kubernetes&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📖 &lt;a class="link" href="https://thenewstack.io/primer-how-kubernetes-came-to-be-what-it-is-and-why-you-should-care/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://thenewstack.io/primer-how-kubernetes-came-to-be-what-it-is-and-why-you-should-care/" target="_blank" rel="noopener"
 &gt;Tổng quan về Kubernetes&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=2T86xAtR6Fo" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=2T86xAtR6Fo" target="_blank" rel="noopener"
 &gt;Khóa học Kubernetes hoàn chỉnh - Từ cơ bản đến nâng cao&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;📌 Ví dụ:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ví dụ:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -1036,36 +1036,36 @@
 &lt;/h3&gt;&lt;p&gt;Amazon Elastic Kubernetes Service (EKS) là dịch vụ Kubernetes được AWS cung cấp. Nó tự động quản lý control plane của Kubernetes và tích hợp với các dịch vụ AWS khác.&lt;/p&gt;
 &lt;h3 id="aks---azure-kubernetes-service"&gt;AKS - Azure Kubernetes Service
 &lt;/h3&gt;&lt;p&gt;Azure Kubernetes Service (AKS) là dịch vụ Kubernetes của Microsoft Azure. AKS hỗ trợ giám sát, bảo mật, mở rộng tự động và tích hợp với Azure DevOps.&lt;/p&gt;
-&lt;p&gt;📚 &lt;strong&gt;Tài nguyên miễn phí hữu ích:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tài nguyên miễn phí hữu ích:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;☁ &lt;a class="link" href="https://cloud.google.com/kubernetes-engine" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://cloud.google.com/kubernetes-engine" target="_blank" rel="noopener"
 &gt;Google Kubernetes Engine (GKE)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🟧 &lt;a class="link" href="https://aws.amazon.com/eks/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://aws.amazon.com/eks/" target="_blank" rel="noopener"
 &gt;Amazon Elastic Kubernetes Service (EKS)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🔵 &lt;a class="link" href="https://azure.microsoft.com/en-us/products/kubernetes-service/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://azure.microsoft.com/en-us/products/kubernetes-service/" target="_blank" rel="noopener"
 &gt;Azure Kubernetes Service (AKS)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=CukYk43agA4" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=CukYk43agA4" target="_blank" rel="noopener"
 &gt;Hướng dẫn AWS EKS&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=Rl5M1CzgEH4" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=Rl5M1CzgEH4" target="_blank" rel="noopener"
 &gt;Google Kubernetes Engine là gì?&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="ecs--fargate"&gt;ECS / Fargate
 &lt;/h2&gt;&lt;p&gt;&lt;strong&gt;ECS&lt;/strong&gt; là dịch vụ quản lý container chạy trên EC2 của AWS, cho phép kiểm soát hạ tầng máy chủ.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Fargate&lt;/strong&gt; là dịch vụ quản lý container &lt;strong&gt;serverless&lt;/strong&gt;, giúp chạy container mà không cần quản lý máy chủ hoặc cụm máy.&lt;/p&gt;
-&lt;p&gt;📚 &lt;strong&gt;Tài nguyên miễn phí hữu ích:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tài nguyên miễn phí hữu ích:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;📄 &lt;a class="link" href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html" target="_blank" rel="noopener"
 &gt;Tài liệu AWS Fargate&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📄 &lt;a class="link" href="https://docs.aws.amazon.com/ecs/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://docs.aws.amazon.com/ecs/" target="_blank" rel="noopener"
 &gt;Tài liệu AWS ECS&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=yi22xrvPnPk" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=yi22xrvPnPk" target="_blank" rel="noopener"
 &gt;Tổng quan về AWS Fargate&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=esISkPlnxL0" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=esISkPlnxL0" target="_blank" rel="noopener"
 &gt;Hướng dẫn AWS ECS&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;p&gt;&lt;strong&gt;📌 Ví dụ:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ví dụ:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -1097,19 +1097,19 @@
 &lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="docker-swarm"&gt;Docker Swarm
 &lt;/h2&gt;&lt;p&gt;Docker Swarm là tập hợp các máy (vật lý hoặc ảo) chạy Docker và được cấu hình thành một cụm (&lt;strong&gt;cluster&lt;/strong&gt;). Quản lý cụm được thực hiện bởi &lt;strong&gt;swarm manager&lt;/strong&gt;, và các máy tham gia cụm được gọi là &lt;strong&gt;nodes&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;📚 &lt;strong&gt;Tài nguyên hữu ích:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tài nguyên hữu ích:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;📄 &lt;a class="link" href="https://docs.docker.com/engine/swarm/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://docs.docker.com/engine/swarm/" target="_blank" rel="noopener"
 &gt;Tài liệu Docker Swarm&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🔧 &lt;a class="link" href="https://thenewstack.io/tutorial-manage-docker-swarm-with-portainer/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://thenewstack.io/tutorial-manage-docker-swarm-with-portainer/" target="_blank" rel="noopener"
 &gt;Quản lý Docker Swarm với Portainer&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📦 &lt;a class="link" href="https://thenewstack.io/tutorial-create-a-docker-swarm-with-persistent-storage-using-glusterfs/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://thenewstack.io/tutorial-create-a-docker-swarm-with-persistent-storage-using-glusterfs/" target="_blank" rel="noopener"
 &gt;Tạo Docker Swarm với bộ nhớ lưu trữ GlusterFS&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=Xaea-XnJTJU" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=Xaea-XnJTJU" target="_blank" rel="noopener"
 &gt;Giới thiệu Docker Swarm | Hướng dẫn từng bước&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
-&lt;p&gt;&lt;strong&gt;📌 Ví dụ:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ví dụ:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -1128,5 +1128,5 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="kết-luận"&gt;Kết luận
-&lt;/h2&gt;&lt;p&gt;Container orchestration đóng vai trò quan trọng trong việc quản lý ứng dụng container, giúp &lt;strong&gt;đơn giản hóa vận hành, tối ưu tài nguyên và tăng cường tính sẵn sàng&lt;/strong&gt;. Các công cụ như &lt;strong&gt;Kubernetes, Docker Swarm, ECS, Fargate&lt;/strong&gt; cung cấp nhiều giải pháp linh hoạt cho các doanh nghiệp hiện đại. Việc lựa chọn công cụ phù hợp sẽ giúp doanh nghiệp &lt;strong&gt;tận dụng tối đa sức mạnh của container hóa và điện toán đám mây&lt;/strong&gt;. 🚀&lt;/p&gt;
-&lt;p&gt;👉 &lt;strong&gt;Bước tiếp theo:&lt;/strong&gt; Tìm hiểu về &lt;em&gt;&lt;strong&gt;Application Monitoring&lt;/strong&gt;&lt;/em&gt; theo dõi, đo lường và phân tích hiệu suất, trạng thái và hành vi của ứng dụng để phát hiện sự cố, tối ưu hóa hiệu suất và đảm bảo trải nghiệm người dùng tốt. Các công cụ phổ biến như Prometheus, Grafana, Datadog, New Relic giúp thu thập dữ liệu từ ứng dụng, máy chủ và hạ tầng để cung cấp cảnh báo và báo cáo chi tiết.&lt;/p&gt;</description></item></channel></rss>
+&lt;/h2&gt;&lt;p&gt;Container orchestration đóng vai trò quan trọng trong việc quản lý ứng dụng container, giúp &lt;strong&gt;đơn giản hóa vận hành, tối ưu tài nguyên và tăng cường tính sẵn sàng&lt;/strong&gt;. Các công cụ như &lt;strong&gt;Kubernetes, Docker Swarm, ECS, Fargate&lt;/strong&gt; cung cấp nhiều giải pháp linh hoạt cho các doanh nghiệp hiện đại. Việc lựa chọn công cụ phù hợp sẽ giúp doanh nghiệp &lt;strong&gt;tận dụng tối đa sức mạnh của container hóa và điện toán đám mây&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Bước tiếp theo:&lt;/strong&gt; Tìm hiểu về &lt;em&gt;&lt;strong&gt;Application Monitoring&lt;/strong&gt;&lt;/em&gt; theo dõi, đo lường và phân tích hiệu suất, trạng thái và hành vi của ứng dụng để phát hiện sự cố, tối ưu hóa hiệu suất và đảm bảo trải nghiệm người dùng tốt. Các công cụ phổ biến như Prometheus, Grafana, Datadog, New Relic giúp thu thập dữ liệu từ ứng dụng, máy chủ và hạ tầng để cung cấp cảnh báo và báo cáo chi tiết.&lt;/p&gt;</description></item></channel></rss>

@@ -2,21 +2,21 @@
 &lt;/h2&gt;&lt;p&gt;GitOps là một phương pháp quản lý hạ tầng và triển khai ứng dụng bằng cách sử dụng Git làm nguồn sự thật duy nhất (single source of truth). Phương pháp này giúp tự động hóa quy trình triển khai, đảm bảo tính nhất quán và tăng cường khả năng theo dõi các thay đổi.&lt;/p&gt;
 &lt;p&gt;GitOps mở rộng thực tiễn của DevOps bằng cách áp dụng các nguyên tắc của kiểm soát phiên bản (version control) và tích hợp liên tục (CI/CD) vào quản lý hạ tầng. Thay vì thực hiện thủ công, mọi thay đổi được thực hiện qua pull request và tự động đồng bộ với hệ thống thực tế.&lt;/p&gt;
 &lt;h2 id="lợi-ích-của-gitops"&gt;Lợi ích của GitOps
-&lt;/h2&gt;&lt;p&gt;✅ &lt;strong&gt;Kiểm soát phiên bản&lt;/strong&gt;: Tất cả các thay đổi được theo dõi trong Git, dễ dàng kiểm tra và quay lại trạng thái cũ khi cần.&lt;/p&gt;
-&lt;p&gt;✅ &lt;strong&gt;Tự động hoá triển khai&lt;/strong&gt;: Sử dụng các công cụ như ArgoCD hoặc FluxCD để tự động đồng bộ hệ thống.&lt;/p&gt;
-&lt;p&gt;✅ &lt;strong&gt;Tăng cường bảo mật&lt;/strong&gt;: Mọi thay đổi cần thông qua Git, giúp kiểm soát truy cập và hạn chế rủi ro thao tác trực tiếp.&lt;/p&gt;
-&lt;p&gt;✅ &lt;strong&gt;Khả năng phục hồi cao&lt;/strong&gt;: Hệ thống có thể nhanh chóng phục hồi trạng thái ban đầu khi gặp sự cố bằng cách áp dụng lại cấu hình từ Git.&lt;/p&gt;
-&lt;p&gt;✅ &lt;strong&gt;Cải thiện hợp tác nhóm&lt;/strong&gt;: Các thay đổi đều được ghi nhận và xem xét qua pull request, giúp các thành viên làm việc hiệu quả hơn.&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;Kiểm soát phiên bản&lt;/strong&gt;: Tất cả các thay đổi được theo dõi trong Git, dễ dàng kiểm tra và quay lại trạng thái cũ khi cần.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tự động hoá triển khai&lt;/strong&gt;: Sử dụng các công cụ như ArgoCD hoặc FluxCD để tự động đồng bộ hệ thống.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tăng cường bảo mật&lt;/strong&gt;: Mọi thay đổi cần thông qua Git, giúp kiểm soát truy cập và hạn chế rủi ro thao tác trực tiếp.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Khả năng phục hồi cao&lt;/strong&gt;: Hệ thống có thể nhanh chóng phục hồi trạng thái ban đầu khi gặp sự cố bằng cách áp dụng lại cấu hình từ Git.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Cải thiện hợp tác nhóm&lt;/strong&gt;: Các thay đổi đều được ghi nhận và xem xét qua pull request, giúp các thành viên làm việc hiệu quả hơn.&lt;/p&gt;
 &lt;h2 id="các-công-cụ-gitops-phổ-biến"&gt;Các công cụ GitOps phổ biến
 &lt;/h2&gt;&lt;h3 id="argocd---triển-khai-liên-tục-mạnh-mẽ"&gt;ArgoCD - Triển khai liên tục mạnh mẽ
 &lt;/h3&gt;&lt;p&gt;ArgoCD là một công cụ triển khai liên tục (CD) dành cho Kubernetes, giúp tự động hóa quá trình triển khai bằng cách theo dõi trạng thái của ứng dụng trong Git và đồng bộ với môi trường thực tế.&lt;/p&gt;
-&lt;p&gt;🔹 &lt;strong&gt;Tính năng nổi bật&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tính năng nổi bật&lt;/strong&gt;:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Tự động đồng bộ trạng thái ứng dụng với Git.&lt;/li&gt;
 &lt;li&gt;Giao diện web trực quan để theo dõi trạng thái triển khai.&lt;/li&gt;
 &lt;li&gt;Hỗ trợ Helm, Kustomize, và các công cụ quản lý cấu hình khác.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;🔹Ví dụ triển khai ArgoCD&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ví dụ triển khai ArgoCD&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -59,13 +59,13 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;h3 id="fluxcd---quản-lý-triển-khai-tự-động"&gt;FluxCD - Quản lý triển khai tự động
 &lt;/h3&gt;&lt;p&gt;FluxCD là một công cụ GitOps giúp triển khai ứng dụng lên Kubernetes bằng cách theo dõi Git repository và tự động cập nhật hệ thống khi có thay đổi.&lt;/p&gt;
-&lt;p&gt;🔹 &lt;strong&gt;Tính năng nổi bật&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tính năng nổi bật&lt;/strong&gt;:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Theo dõi repository Git và triển khai ứng dụng tự động.&lt;/li&gt;
 &lt;li&gt;Hỗ trợ Helm, Kustomize, và nhiều hệ thống CI/CD khác.&lt;/li&gt;
 &lt;li&gt;Cung cấp khả năng cập nhật hình ảnh container tự động.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;🔹 &lt;strong&gt;Ví dụ triển khai FluxCD&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ví dụ triển khai FluxCD&lt;/strong&gt;:&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -104,49 +104,49 @@
 &lt;tbody&gt;
 &lt;tr&gt;
 &lt;td&gt;UI trực quan&lt;/td&gt;
-&lt;td&gt;✅ Có&lt;/td&gt;
-&lt;td&gt;❌ Không&lt;/td&gt;
+&lt;td&gt;Có&lt;/td&gt;
+&lt;td&gt;Không&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Hỗ trợ Helm&lt;/td&gt;
-&lt;td&gt;✅ Có&lt;/td&gt;
-&lt;td&gt;✅ Có&lt;/td&gt;
+&lt;td&gt;Có&lt;/td&gt;
+&lt;td&gt;Có&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Cập nhật hình ảnh container tự động&lt;/td&gt;
-&lt;td&gt;❌ Không&lt;/td&gt;
-&lt;td&gt;✅ Có&lt;/td&gt;
+&lt;td&gt;Không&lt;/td&gt;
+&lt;td&gt;Có&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Triển khai Canary/Rollback&lt;/td&gt;
-&lt;td&gt;✅ Có&lt;/td&gt;
-&lt;td&gt;✅ Có&lt;/td&gt;
+&lt;td&gt;Có&lt;/td&gt;
+&lt;td&gt;Có&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
 &lt;h2 id="kết-luận"&gt;Kết luận
 &lt;/h2&gt;&lt;p&gt;GitOps giúp đơn giản hóa quy trình triển khai ứng dụng bằng cách sử dụng Git làm trung tâm kiểm soát. Với các công cụ như ArgoCD và FluxCD, doanh nghiệp có thể dễ dàng tự động hóa triển khai, đảm bảo tính nhất quán và cải thiện khả năng phục hồi hệ thống.&lt;/p&gt;
-&lt;p&gt;🔗 &lt;strong&gt;Tài liệu tham khảo&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tài liệu tham khảo&lt;/strong&gt;:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;📖 &lt;a class="link" href="https://argo-cd.readthedocs.io/en/stable/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://argo-cd.readthedocs.io/en/stable/" target="_blank" rel="noopener"
 &gt;Tài liệu ArgoCD&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📖 &lt;a class="link" href="https://docs.fluxcd.io/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://docs.fluxcd.io/" target="_blank" rel="noopener"
 &gt;Tài liệu FluxCD&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📘 &lt;a class="link" href="https://www.weave.works/technologies/gitops/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.weave.works/technologies/gitops/" target="_blank" rel="noopener"
 &gt;Hướng dẫn GitOps&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Bạn đã thử áp dụng &lt;strong&gt;GitOps&lt;/strong&gt; vào dự án của mình chưa? Hãy chia sẻ trải nghiệm của bạn! 🚀&lt;/p&gt;
-&lt;p&gt;👉 &lt;strong&gt;Bước tiếp theo:&lt;/strong&gt; Tìm hiểu về &lt;em&gt;&lt;strong&gt;Service Mesh&lt;/strong&gt;&lt;/em&gt; một lớp hạ tầng phần mềm giúp quản lý giao tiếp giữa các dịch vụ trong hệ thống microservices. Nó cung cấp các tính năng như cân bằng tải, bảo mật, quan sát, kiểm soát lưu lượng và khắc phục lỗi, giúp dịch vụ giao tiếp với nhau một cách hiệu quả mà không cần thay đổi mã nguồn ứng dụng.&lt;/p&gt;</description></item><item><title>Dịch vụ lưu trữ mã nguồn</title><link>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-five/</link><pubDate>Sun, 23 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-five/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-five.jpg" alt="Featured image of post Dịch vụ lưu trữ mã nguồn" /&gt;&lt;h2 id="dịch-vụ-lưu-trữ-mã-nguồn-repo-hosting-services"&gt;Dịch vụ lưu trữ mã nguồn (Repo Hosting Services)
+&lt;p&gt;Bạn đã thử áp dụng &lt;strong&gt;GitOps&lt;/strong&gt; vào dự án của mình chưa? Hãy chia sẻ trải nghiệm của bạn!&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Bước tiếp theo:&lt;/strong&gt; Tìm hiểu về &lt;em&gt;&lt;strong&gt;Service Mesh&lt;/strong&gt;&lt;/em&gt; một lớp hạ tầng phần mềm giúp quản lý giao tiếp giữa các dịch vụ trong hệ thống microservices. Nó cung cấp các tính năng như cân bằng tải, bảo mật, quan sát, kiểm soát lưu lượng và khắc phục lỗi, giúp dịch vụ giao tiếp với nhau một cách hiệu quả mà không cần thay đổi mã nguồn ứng dụng.&lt;/p&gt;</description></item><item><title>Dịch vụ lưu trữ mã nguồn</title><link>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-five/</link><pubDate>Sun, 23 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-five/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-five.jpg" alt="Featured image of post Dịch vụ lưu trữ mã nguồn" /&gt;&lt;h2 id="dịch-vụ-lưu-trữ-mã-nguồn-repo-hosting-services"&gt;Dịch vụ lưu trữ mã nguồn (Repo Hosting Services)
 &lt;/h2&gt;&lt;p&gt;Khi làm việc nhóm, bạn cần một nơi lưu trữ mã nguồn từ xa để mọi người có thể truy cập, tạo nhánh riêng, cũng như tạo hoặc xem xét các pull request. Các dịch vụ này thường bao gồm theo dõi vấn đề (issue tracking), đánh giá mã (code review) và tích hợp liên tục (CI/CD). Một số lựa chọn phổ biến gồm GitHub, GitLab, Bitbucket và AWS CodeCommit.&lt;/p&gt;
-&lt;p&gt;📚 &lt;strong&gt;Tài nguyên miễn phí để tìm hiểu thêm:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tài nguyên miễn phí để tìm hiểu thêm:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🔗 &lt;a class="link" href="https://github.com" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://github.com" target="_blank" rel="noopener"
 &gt;GitHub&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🔗 &lt;a class="link" href="https://gitlab.com" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://gitlab.com" target="_blank" rel="noopener"
 &gt;GitLab&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🔗 &lt;a class="link" href="https://bitbucket.org" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://bitbucket.org" target="_blank" rel="noopener"
 &gt;BitBucket&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=FQGXIIqziQg" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=FQGXIIqziQg" target="_blank" rel="noopener"
 &gt;GitHub vs GitLab vs Bitbucket - Nên chọn cái nào?&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
@@ -154,21 +154,21 @@
 &lt;/h2&gt;&lt;p&gt;GitHub là một nền tảng quản lý mã nguồn dựa trên Git, cung cấp dịch vụ lưu trữ kho mã trên nền tảng đám mây. Nó hỗ trợ các tính năng như theo dõi lỗi, quản lý nhiệm vụ, và wiki dự án. GitHub cho phép đánh giá mã qua pull request, theo dõi vấn đề và hỗ trợ lập trình cộng tác với các tính năng như fork và star.&lt;/p&gt;
 &lt;p&gt;GitHub hỗ trợ cả kho mã công khai và riêng tư, giúp nó trở thành lựa chọn phổ biến cho cả dự án mã nguồn mở và phát triển cá nhân. Hệ sinh thái GitHub bao gồm:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🚀 &lt;strong&gt;GitHub Actions&lt;/strong&gt;: Tự động hóa quy trình làm việc.&lt;/li&gt;
-&lt;li&gt;📦 &lt;strong&gt;GitHub Packages&lt;/strong&gt;: Quản lý gói phần mềm.&lt;/li&gt;
-&lt;li&gt;🌐 &lt;strong&gt;GitHub Pages&lt;/strong&gt;: Lưu trữ trang web tĩnh miễn phí.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;GitHub Actions&lt;/strong&gt;: Tự động hóa quy trình làm việc.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;GitHub Packages&lt;/strong&gt;: Quản lý gói phần mềm.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;GitHub Pages&lt;/strong&gt;: Lưu trữ trang web tĩnh miễn phí.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;📚 &lt;strong&gt;Tài nguyên miễn phí để tìm hiểu thêm:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tài nguyên miễn phí để tìm hiểu thêm:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🗺 &lt;a class="link" href="https://roadmap.sh/github" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://roadmap.sh/github" target="_blank" rel="noopener"
 &gt;Lộ trình Git &amp;amp; GitHub&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🔗 &lt;a class="link" href="https://github.com" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://github.com" target="_blank" rel="noopener"
 &gt;Trang chủ GitHub&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📖 &lt;a class="link" href="https://ooloo.io/project/github-flow" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://ooloo.io/project/github-flow" target="_blank" rel="noopener"
 &gt;Cách sử dụng Git trong nhóm phát triển chuyên nghiệp&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=pBy1zgt0XPc" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=pBy1zgt0XPc" target="_blank" rel="noopener"
 &gt;GitHub là gì?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📰 &lt;a class="link" href="https://app.daily.dev/tags/github?ref=roadmapsh" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://app.daily.dev/tags/github?ref=roadmapsh" target="_blank" rel="noopener"
 &gt;Bài viết hay về GitHub&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
@@ -176,19 +176,19 @@
 &lt;/h2&gt;&lt;p&gt;GitLab là một công cụ DevOps toàn diện, cung cấp quản lý kho mã Git kèm theo wiki, theo dõi vấn đề và các tính năng CI/CD tích hợp sẵn. Đây là một nền tảng DevOps hoàn chỉnh, bao gồm tất cả các giai đoạn từ lập kế hoạch, phát triển, kiểm thử đến triển khai và giám sát.&lt;/p&gt;
 &lt;p&gt;GitLab hỗ trợ cả phiên bản đám mây và tự lưu trữ, phù hợp với các tổ chức có yêu cầu bảo mật cao. Một số tính năng nổi bật của GitLab gồm:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🔄 &lt;strong&gt;Tích hợp CI/CD&lt;/strong&gt;: Hỗ trợ kiểm thử và triển khai tự động.&lt;/li&gt;
-&lt;li&gt;📦 &lt;strong&gt;Container &amp;amp; Package Registry&lt;/strong&gt;: Quản lý và lưu trữ gói phần mềm.&lt;/li&gt;
-&lt;li&gt;🔎 &lt;strong&gt;Quét bảo mật mã nguồn&lt;/strong&gt;: Phát hiện lỗ hổng trong code.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Tích hợp CI/CD&lt;/strong&gt;: Hỗ trợ kiểm thử và triển khai tự động.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Container &amp;amp; Package Registry&lt;/strong&gt;: Quản lý và lưu trữ gói phần mềm.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Quét bảo mật mã nguồn&lt;/strong&gt;: Phát hiện lỗ hổng trong code.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;📚 &lt;strong&gt;Tài nguyên miễn phí để tìm hiểu thêm:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tài nguyên miễn phí để tìm hiểu thêm:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🔗 &lt;a class="link" href="https://gitlab.com" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://gitlab.com" target="_blank" rel="noopener"
 &gt;Trang chủ GitLab&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📖 &lt;a class="link" href="https://docs.gitlab.com" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://docs.gitlab.com" target="_blank" rel="noopener"
 &gt;Tài liệu chính thức của GitLab&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=bnF7f1zGpo4" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=bnF7f1zGpo4" target="_blank" rel="noopener"
 &gt;GitLab là gì và tại sao nên dùng?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📰 &lt;a class="link" href="https://app.daily.dev/tags/gitlab?ref=roadmapsh" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://app.daily.dev/tags/gitlab?ref=roadmapsh" target="_blank" rel="noopener"
 &gt;Bài viết hay về GitLab&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
@@ -196,29 +196,29 @@
 &lt;/h2&gt;&lt;p&gt;Bitbucket là một dịch vụ lưu trữ kho mã nguồn của Atlassian, hỗ trợ cả Git và Mercurial. Nó tích hợp chặt chẽ với các công cụ Atlassian khác như Jira và Trello, giúp quản lý dự án dễ dàng hơn. Bitbucket cung cấp cả phiên bản đám mây và tự lưu trữ.&lt;/p&gt;
 &lt;p&gt;Một số tính năng đáng chú ý của Bitbucket:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🔍 &lt;strong&gt;Code Review &amp;amp; Pull Requests&lt;/strong&gt;: Hỗ trợ đánh giá mã.&lt;/li&gt;
-&lt;li&gt;🔄 &lt;strong&gt;Bitbucket Pipelines&lt;/strong&gt;: CI/CD tích hợp sẵn.&lt;/li&gt;
-&lt;li&gt;📖 &lt;strong&gt;Wiki &amp;amp; Issue Tracking&lt;/strong&gt;: Quản lý tài liệu và theo dõi vấn đề.&lt;/li&gt;
-&lt;li&gt;🔐 &lt;strong&gt;Hỗ trợ repo riêng tư miễn phí&lt;/strong&gt;: Phù hợp với nhóm nhỏ.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Code Review &amp;amp; Pull Requests&lt;/strong&gt;: Hỗ trợ đánh giá mã.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Bitbucket Pipelines&lt;/strong&gt;: CI/CD tích hợp sẵn.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Wiki &amp;amp; Issue Tracking&lt;/strong&gt;: Quản lý tài liệu và theo dõi vấn đề.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Hỗ trợ repo riêng tư miễn phí&lt;/strong&gt;: Phù hợp với nhóm nhỏ.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;📚 &lt;strong&gt;Tài nguyên miễn phí để tìm hiểu thêm:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tài nguyên miễn phí để tìm hiểu thêm:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🔗 &lt;a class="link" href="https://bitbucket.org" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://bitbucket.org" target="_blank" rel="noopener"
 &gt;Trang chủ Bitbucket&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📖 &lt;a class="link" href="https://bitbucket.org/product/guides/getting-started/overview" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://bitbucket.org/product/guides/getting-started/overview" target="_blank" rel="noopener"
 &gt;Tổng quan về Bitbucket&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📚 &lt;a class="link" href="https://www.w3schools.com/git/git_intro.asp?remote=bitbucket" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.w3schools.com/git/git_intro.asp?remote=bitbucket" target="_blank" rel="noopener"
 &gt;Giới thiệu về Git và Bitbucket&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=M44nEyd_5To" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=M44nEyd_5To" target="_blank" rel="noopener"
 &gt;Hướng dẫn sử dụng Bitbucket Cloud&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📰 &lt;a class="link" href="https://app.daily.dev/tags/bitbucket?ref=roadmapsh" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://app.daily.dev/tags/bitbucket?ref=roadmapsh" target="_blank" rel="noopener"
 &gt;Bài viết hay về Bitbucket&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="kết-luận"&gt;Kết luận
 &lt;/h2&gt;&lt;p&gt;Việc lựa chọn dịch vụ lưu trữ kho mã nguồn phụ thuộc vào nhu cầu của nhóm phát triển. Nếu bạn cần một nền tảng phổ biến với hệ sinh thái rộng lớn, &lt;em&gt;&lt;strong&gt;GitHub&lt;/strong&gt;&lt;/em&gt; là một lựa chọn mạnh mẽ. Nếu muốn một giải pháp DevOps tích hợp đầy đủ, &lt;em&gt;&lt;strong&gt;GitLab&lt;/strong&gt;&lt;/em&gt; sẽ phù hợp hơn. Còn nếu bạn đã sử dụng hệ sinh thái Atlassian, &lt;em&gt;&lt;strong&gt;Bitbucket&lt;/strong&gt;&lt;/em&gt; sẽ là lựa chọn tốt nhất.&lt;/p&gt;
-&lt;p&gt;Hãy cân nhắc nhu cầu dự án và mức độ tích hợp mong muốn để đưa ra quyết định phù hợp! 🚀&lt;/p&gt;
-&lt;p&gt;👉 &lt;strong&gt;Bước tiếp theo:&lt;/strong&gt; Tìm hiểu về &lt;em&gt;&lt;strong&gt;Containers&lt;/strong&gt;&lt;/em&gt; giúp đóng gói ứng dụng cùng với tất cả các thư viện, cấu hình và dependencies để chạy nhất quán trên nhiều môi trường khác nhau.&lt;/p&gt;</description></item><item><title>Hệ thống quản lý phiên bản (Version Control Systems)</title><link>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-four/</link><pubDate>Sun, 23 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-four/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-four.jpg" alt="Featured image of post Hệ thống quản lý phiên bản (Version Control Systems) " /&gt;&lt;h2 id="hệ-thống-quản-lý-phiên-bản-version-control-systems"&gt;Hệ thống quản lý phiên bản (Version Control Systems)
+&lt;p&gt;Hãy cân nhắc nhu cầu dự án và mức độ tích hợp mong muốn để đưa ra quyết định phù hợp!&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Bước tiếp theo:&lt;/strong&gt; Tìm hiểu về &lt;em&gt;&lt;strong&gt;Containers&lt;/strong&gt;&lt;/em&gt; giúp đóng gói ứng dụng cùng với tất cả các thư viện, cấu hình và dependencies để chạy nhất quán trên nhiều môi trường khác nhau.&lt;/p&gt;</description></item><item><title>Hệ thống quản lý phiên bản (Version Control Systems)</title><link>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-four/</link><pubDate>Sun, 23 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/devops/devops-step-four/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-four.jpg" alt="Featured image of post Hệ thống quản lý phiên bản (Version Control Systems) " /&gt;&lt;h2 id="hệ-thống-quản-lý-phiên-bản-version-control-systems"&gt;Hệ thống quản lý phiên bản (Version Control Systems)
 &lt;/h2&gt;&lt;p&gt;Version control systems (VCS) là các công cụ giúp theo dõi sự thay đổi của mã nguồn và tệp theo thời gian. Chúng hỗ trợ làm việc nhóm, quản lý lịch sử thay đổi và duy trì nhiều phiên bản của mã nguồn. Có hai loại VCS chính:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;Hệ thống tập trung (Centralized VCS - CVCS)&lt;/strong&gt;: Sử dụng một kho lưu trữ trung tâm, ví dụ như &lt;strong&gt;Subversion (SVN)&lt;/strong&gt;, &lt;strong&gt;CVS&lt;/strong&gt;.&lt;/li&gt;
@@ -384,15 +384,15 @@
 &lt;h2 id="tài-nguyên-học-git-miễn-phí"&gt;Tài Nguyên Học Git Miễn Phí
 &lt;/h2&gt;&lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://git-scm.com/doc" target="_blank" rel="noopener"
-&gt;📖 Tài liệu chính thức về Git&lt;/a&gt;&lt;/li&gt;
+&gt;Tài liệu chính thức về Git&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://cs.fyi/guide/git-cheatsheet" target="_blank" rel="noopener"
-&gt;📄 Git Cheat Sheet&lt;/a&gt;&lt;/li&gt;
+&gt;Git Cheat Sheet&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=SWYqp7iY_Tc" target="_blank" rel="noopener"
-&gt;▶ Video hướng dẫn Git cho người mới bắt đầu&lt;/a&gt;&lt;/li&gt;
+&gt;Video hướng dẫn Git cho người mới bắt đầu&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://app.daily.dev/tags/git?ref=roadmapsh" target="_blank" rel="noopener"
-&gt;📝 Bài viết: Hệ thống quản lý phiên bản là gì?&lt;/a&gt;&lt;/li&gt;
+&gt;Bài viết: Hệ thống quản lý phiên bản là gì?&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="kết-luận"&gt;Kết Luận
 &lt;/h2&gt;&lt;p&gt;Sử dụng Git giúp quản lý mã nguồn dễ dàng hơn, hỗ trợ làm việc nhóm hiệu quả và bảo vệ dữ liệu quan trọng của dự án. Việc hiểu và thành thạo Git là kỹ năng cần thiết cho mọi lập trình viên.&lt;/p&gt;
-&lt;p&gt;👉 &lt;strong&gt;Bước tiếp theo:&lt;/strong&gt; Tìm hiểu về &lt;em&gt;&lt;strong&gt;GitHub &amp;amp; GitLab&lt;/strong&gt;&lt;/em&gt; để quản lý kho lưu trữ Git trên nền tảng đám mây.&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;&lt;strong&gt;Bước tiếp theo:&lt;/strong&gt; Tìm hiểu về &lt;em&gt;&lt;strong&gt;GitHub &amp;amp; GitLab&lt;/strong&gt;&lt;/em&gt; để quản lý kho lưu trữ Git trên nền tảng đám mây.&lt;/p&gt;</description></item></channel></rss>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Docker-Basics on Hoang Duong</title><link>https://tech.nguuyen.io.vn/tags/docker-basics/</link><description>Recent content in Docker-Basics on Hoang Duong</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sun, 22 Feb 2026 14:30:00 +0700</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/docker-basics/index.xml" rel="self" type="application/rss+xml"/><item><title>Docker Basics: Image vs Container</title><link>https://tech.nguuyen.io.vn/posts/docker/docker-basics-image-vs-container/</link><pubDate>Sun, 25 Jan 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/docker/docker-basics-image-vs-container/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/docker/docker-basics-image-vs-container.jpg" alt="Featured image of post Docker Basics: Image vs Container" /&gt;&lt;h2 id="docker-image-and-container---two-essential-concepts"&gt;Docker Image and Container - Two Essential Concepts
-&lt;/h2&gt;&lt;p&gt;When starting with Docker, the two most important concepts you need to understand are &lt;strong&gt;Image&lt;/strong&gt; and &lt;strong&gt;Container&lt;/strong&gt;. Beginners often confuse them, but in reality, they play different roles in the Docker ecosystem. Image is like a &lt;strong&gt;recipe repository&lt;/strong&gt; (cooking instructions), while Container is &lt;strong&gt;the actual execution&lt;/strong&gt; (the prepared dish). 🍳&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;When starting with Docker, the two most important concepts you need to understand are &lt;strong&gt;Image&lt;/strong&gt; and &lt;strong&gt;Container&lt;/strong&gt;. Beginners often confuse them, but in reality, they play different roles in the Docker ecosystem. Image is like a &lt;strong&gt;recipe repository&lt;/strong&gt; (cooking instructions), while Container is &lt;strong&gt;the actual execution&lt;/strong&gt; (the prepared dish).&lt;/p&gt;
 &lt;p&gt;In this article, I&amp;rsquo;ll explain the detailed differences between Image and Container, how they work together, and provide real examples for better understanding.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="i-what-is-a-docker-image"&gt;I. What is a Docker Image?
@@ -422,11 +422,11 @@
 &lt;h2 id="v-best-practices-with-image-and-container"&gt;V. Best Practices with Image and Container
 &lt;/h2&gt;&lt;h3 id="image-management"&gt;Image Management
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;✅ Use specific versions (e.g., &lt;code&gt;node:18.12-alpine&lt;/code&gt; instead of &lt;code&gt;node:latest&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;✅ Reduce size using minimal base images (alpine, distroless)&lt;/li&gt;
-&lt;li&gt;✅ Leverage layer cache by ordering commands properly&lt;/li&gt;
-&lt;li&gt;✅ Use &lt;code&gt;.dockerignore&lt;/code&gt; to exclude unnecessary files&lt;/li&gt;
-&lt;li&gt;✅ Regularly remove unused images with &lt;code&gt;docker image prune&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Use specific versions (e.g., &lt;code&gt;node:18.12-alpine&lt;/code&gt; instead of &lt;code&gt;node:latest&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Reduce size using minimal base images (alpine, distroless)&lt;/li&gt;
+&lt;li&gt;Leverage layer cache by ordering commands properly&lt;/li&gt;
+&lt;li&gt;Use &lt;code&gt;.dockerignore&lt;/code&gt; to exclude unnecessary files&lt;/li&gt;
+&lt;li&gt;Regularly remove unused images with &lt;code&gt;docker image prune&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -444,11 +444,11 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;h3 id="container-management"&gt;Container Management
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;✅ Name containers clearly (&lt;code&gt;--name app-container&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;✅ Use &lt;code&gt;-d&lt;/code&gt; (detached mode) to run containers in background&lt;/li&gt;
-&lt;li&gt;✅ Regularly check logs for debugging (&lt;code&gt;docker logs -f&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;✅ Use volumes if data persistence is needed&lt;/li&gt;
-&lt;li&gt;✅ Limit resources with &lt;code&gt;--cpus&lt;/code&gt;, &lt;code&gt;--memory&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Name containers clearly (&lt;code&gt;--name app-container&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Use &lt;code&gt;-d&lt;/code&gt; (detached mode) to run containers in background&lt;/li&gt;
+&lt;li&gt;Regularly check logs for debugging (&lt;code&gt;docker logs -f&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Use volumes if data persistence is needed&lt;/li&gt;
+&lt;li&gt;Limit resources with &lt;code&gt;--cpus&lt;/code&gt;, &lt;code&gt;--memory&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -598,8 +598,8 @@
 &lt;li&gt;Use &lt;code&gt;docker run&lt;/code&gt; to create container from image&lt;/li&gt;
 &lt;li&gt;Use &lt;code&gt;docker commit&lt;/code&gt; to update container as a new image&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Now you understand the differences between Image and Container. Next step: learn how to use Dockerfile to build images and Docker Compose to manage multiple containers. 🚀&lt;/p&gt;
-&lt;p&gt;If you found this article helpful, remember to ⭐ star the repo or 📱 share with friends! 😊&lt;/p&gt;
+&lt;p&gt;Now you understand the differences between Image and Container. Next step: learn how to use Dockerfile to build images and Docker Compose to manage multiple containers.&lt;/p&gt;
+&lt;p&gt;If you found this article helpful, remember to star the repo or share with friends!&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="references"&gt;References
 &lt;/h2&gt;&lt;ul&gt;

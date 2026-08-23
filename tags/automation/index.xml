@@ -4491,19 +4491,19 @@
 &lt;/h2&gt;&lt;p&gt;Installing Docker manually works fine for a single server, but when you need to set up &lt;strong&gt;multiple machines&lt;/strong&gt; or want a &lt;strong&gt;repeatable, error-free process&lt;/strong&gt;, a bash script is the way to go.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Benefits of scripted installation:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;⚡ &lt;strong&gt;Speed&lt;/strong&gt;: Install Docker in one command instead of running multiple steps&lt;/li&gt;
-&lt;li&gt;🔄 &lt;strong&gt;Consistency&lt;/strong&gt;: Every server gets the exact same setup&lt;/li&gt;
-&lt;li&gt;🚀 &lt;strong&gt;Automation&lt;/strong&gt;: Perfect for provisioning new servers in CI/CD pipelines&lt;/li&gt;
-&lt;li&gt;📋 &lt;strong&gt;Documentation&lt;/strong&gt;: The script itself serves as documentation of your setup process&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Speed&lt;/strong&gt;: Install Docker in one command instead of running multiple steps&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Consistency&lt;/strong&gt;: Every server gets the exact same setup&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Automation&lt;/strong&gt;: Perfect for provisioning new servers in CI/CD pipelines&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Documentation&lt;/strong&gt;: The script itself serves as documentation of your setup process&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="prerequisites"&gt;Prerequisites
 &lt;/h2&gt;&lt;p&gt;Before running the script, make sure you have:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🖥 &lt;strong&gt;Ubuntu 20.04, 22.04, or 24.04&lt;/strong&gt; server&lt;/li&gt;
-&lt;li&gt;🔐 &lt;strong&gt;Sudo privileges&lt;/strong&gt; to execute administrative commands&lt;/li&gt;
-&lt;li&gt;🌐 &lt;strong&gt;Internet connection&lt;/strong&gt; to download packages&lt;/li&gt;
-&lt;li&gt;⏱ &lt;strong&gt;Time&lt;/strong&gt;: The script takes approximately 2-5 minutes to complete&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Ubuntu 20.04, 22.04, or 24.04&lt;/strong&gt; server&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Sudo privileges&lt;/strong&gt; to execute administrative commands&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Internet connection&lt;/strong&gt; to download packages&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Time&lt;/strong&gt;: The script takes approximately 2-5 minutes to complete&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="the-installation-script"&gt;The Installation Script
@@ -4670,7 +4670,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Verify installation&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;GREEN&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;========================================&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;GREEN&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; Installation Complete! 🎉 &lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;GREEN&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt; Installation Complete! &lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; -e &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;GREEN&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;========================================&lt;/span&gt;&lt;span class="si"&gt;${&lt;/span&gt;&lt;span class="nv"&gt;NC&lt;/span&gt;&lt;span class="si"&gt;}&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&amp;#34;&lt;/span&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker --version
@@ -4704,7 +4704,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;curl -fsSL https://your-server.com/install-docker.sh &lt;span class="p"&gt;|&lt;/span&gt; sudo bash
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;⚠ Security Note:&lt;/strong&gt; Always review scripts before piping them to &lt;code&gt;bash&lt;/code&gt;. Only use this method with scripts you trust or host yourself.&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Security Note:&lt;/strong&gt; Always review scripts before piping them to &lt;code&gt;bash&lt;/code&gt;. Only use this method with scripts you trust or host yourself.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="what-the-script-does"&gt;What the Script Does
 &lt;/h2&gt;&lt;p&gt;Here&amp;rsquo;s a breakdown of each step:&lt;/p&gt;
@@ -4779,7 +4779,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker run hello-world
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;If you see the &amp;ldquo;Hello from Docker!&amp;rdquo; message, the installation was successful! 🎉&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;If you see the &amp;ldquo;Hello from Docker!&amp;rdquo; message, the installation was successful!&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Check Docker service status:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -4876,15 +4876,15 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="conclusion"&gt;Conclusion
-&lt;/h2&gt;&lt;p&gt;Using a bash script to install Docker saves time and eliminates manual errors. Whether you&amp;rsquo;re setting up a single development machine or provisioning a fleet of production servers, this script provides a reliable and repeatable process. 🚀&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;Using a bash script to install Docker saves time and eliminates manual errors. Whether you&amp;rsquo;re setting up a single development machine or provisioning a fleet of production servers, this script provides a reliable and repeatable process.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Key takeaways:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;📜 &lt;strong&gt;One command&lt;/strong&gt; to install Docker completely&lt;/li&gt;
-&lt;li&gt;🔄 &lt;strong&gt;Idempotent&lt;/strong&gt; — safe to run multiple times&lt;/li&gt;
-&lt;li&gt;🛠 &lt;strong&gt;Customizable&lt;/strong&gt; — extend the script for your specific needs&lt;/li&gt;
-&lt;li&gt;🚀 &lt;strong&gt;Production-ready&lt;/strong&gt; — includes Docker Compose plugin and Buildx&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;One command&lt;/strong&gt; to install Docker completely&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Idempotent&lt;/strong&gt; — safe to run multiple times&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Customizable&lt;/strong&gt; — extend the script for your specific needs&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Production-ready&lt;/strong&gt; — includes Docker Compose plugin and Buildx&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;📖 References:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;References:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://docs.docker.com/engine/install/ubuntu/" target="_blank" rel="noopener"
 &gt;Official Docker Installation Guide&lt;/a&gt;&lt;/li&gt;
@@ -4893,4 +4893,4 @@
 &lt;li&gt;&lt;a class="link" href="https://docs.docker.com/compose/install/linux/" target="_blank" rel="noopener"
 &gt;Docker Compose Plugin&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Happy automating! 🚀😊&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;Happy automating!&lt;/p&gt;</description></item></channel></rss>

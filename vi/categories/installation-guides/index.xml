@@ -2,20 +2,20 @@
 &lt;/h2&gt;&lt;p&gt;Docker là một nền tảng phổ biến trong DevOps để triển khai ứng dụng bằng &lt;strong&gt;container&lt;/strong&gt;. Container cho phép bạn đóng gói ứng dụng cùng với tất cả các dependencies và cấu hình cần thiết, giúp ứng dụng chạy nhất quán trên mọi môi trường từ development đến production.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Lợi ích của Docker:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;⚡ &lt;strong&gt;Tính nhất quán&lt;/strong&gt;: Ứng dụng chạy giống nhau trên mọi môi trường&lt;/li&gt;
-&lt;li&gt;🚀 &lt;strong&gt;Tốc độ&lt;/strong&gt;: Khởi động container nhanh hơn so với virtual machine&lt;/li&gt;
-&lt;li&gt;📦 &lt;strong&gt;Đóng gói&lt;/strong&gt;: Dễ dàng chia sẻ và triển khai ứng dụng&lt;/li&gt;
-&lt;li&gt;🔄 &lt;strong&gt;Scalability&lt;/strong&gt;: Dễ dàng mở rộng và quản lý nhiều container&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Tính nhất quán&lt;/strong&gt;: Ứng dụng chạy giống nhau trên mọi môi trường&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Tốc độ&lt;/strong&gt;: Khởi động container nhanh hơn so với virtual machine&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Đóng gói&lt;/strong&gt;: Dễ dàng chia sẻ và triển khai ứng dụng&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Scalability&lt;/strong&gt;: Dễ dàng mở rộng và quản lý nhiều container&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Bài viết này hướng dẫn bạn cách cài đặt Docker trên Ubuntu 20.04 và 22.04 một cách đơn giản và hiệu quả, sử dụng repository chính thức của Docker để đảm bảo bạn luôn có phiên bản mới nhất và ổn định.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="yêu-cầu-trước-khi-cài-đặt"&gt;Yêu cầu trước khi cài đặt
 &lt;/h2&gt;&lt;p&gt;Trước khi bắt đầu, hãy đảm bảo bạn có:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🖥 &lt;strong&gt;Máy chủ Ubuntu 20.04 hoặc 22.04&lt;/strong&gt; đã được cài đặt&lt;/li&gt;
-&lt;li&gt;🔐 &lt;strong&gt;Quyền sudo&lt;/strong&gt; để thực thi các lệnh quản trị&lt;/li&gt;
-&lt;li&gt;🌐 &lt;strong&gt;Kết nối internet&lt;/strong&gt; để tải các gói cài đặt&lt;/li&gt;
-&lt;li&gt;⏱ &lt;strong&gt;Thời gian&lt;/strong&gt;: Quá trình cài đặt mất khoảng 5-10 phút&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Máy chủ Ubuntu 20.04 hoặc 22.04&lt;/strong&gt; đã được cài đặt&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Quyền sudo&lt;/strong&gt; để thực thi các lệnh quản trị&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Kết nối internet&lt;/strong&gt; để tải các gói cài đặt&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Thời gian&lt;/strong&gt;: Quá trình cài đặt mất khoảng 5-10 phút&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="cập-nhật-hệ-thống"&gt;Cập nhật hệ thống
@@ -28,7 +28,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt update &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo apt upgrade -y
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Lưu ý:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Lưu ý:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Lệnh &lt;code&gt;apt update&lt;/code&gt; cập nhật danh sách các gói có sẵn từ repository&lt;/li&gt;
 &lt;li&gt;Lệnh &lt;code&gt;apt upgrade -y&lt;/code&gt; tự động cài đặt các bản cập nhật mà không cần xác nhận&lt;/li&gt;
@@ -74,7 +74,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu &lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;lsb_release -cs&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt; stable&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; sudo tee /etc/apt/sources.list.d/docker.list &amp;gt; /dev/null
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Giải thích:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Giải thích:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;arch=amd64&lt;/code&gt;: Chỉ định kiến trúc 64-bit&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;signed-by&lt;/code&gt;: Chỉ định GPG key để xác thực&lt;/li&gt;
@@ -93,13 +93,13 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt install -y docker-ce docker-ce-cli containerd.io
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;📦 Các gói được cài đặt:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Các gói được cài đặt:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;docker-ce&lt;/code&gt;: Docker Community Edition - phiên bản mã nguồn mở của Docker&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;docker-ce-cli&lt;/code&gt;: Docker Command Line Interface - công cụ dòng lệnh để tương tác với Docker&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;containerd.io&lt;/code&gt;: Container runtime - công cụ quản lý vòng đời container ở mức thấp&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;⏱ Thời gian cài đặt:&lt;/strong&gt; Quá trình này thường mất 2-5 phút tùy thuộc vào tốc độ internet của bạn.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Thời gian cài đặt:&lt;/strong&gt; Quá trình này thường mất 2-5 phút tùy thuộc vào tốc độ internet của bạn.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="kiểm-tra-docker"&gt;Kiểm tra Docker
 &lt;/h2&gt;&lt;p&gt;Sau khi cài đặt, hãy kiểm tra xem Docker đã được khởi động và hoạt động chưa:&lt;/p&gt;
@@ -123,7 +123,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; docker
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Giải thích các lệnh:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Giải thích các lệnh:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;systemctl start docker&lt;/code&gt;: Khởi động dịch vụ Docker ngay lập tức&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;systemctl enable docker&lt;/code&gt;: Cấu hình Docker tự động khởi động khi hệ thống khởi động lại&lt;/li&gt;
@@ -139,8 +139,8 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo docker run hello-world
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Kết quả mong đợi:&lt;/strong&gt; Nếu thấy thông báo &amp;ldquo;Hello from Docker!&amp;rdquo; cùng với các thông tin về Docker, nghĩa là bạn đã cài đặt thành công! 🎉&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;🔍 Container &lt;code&gt;hello-world&lt;/code&gt; làm gì?&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Kết quả mong đợi:&lt;/strong&gt; Nếu thấy thông báo &amp;ldquo;Hello from Docker!&amp;rdquo; cùng với các thông tin về Docker, nghĩa là bạn đã cài đặt thành công!&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Container &lt;code&gt;hello-world&lt;/code&gt; làm gì?&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Container này tải xuống image &lt;code&gt;hello-world&lt;/code&gt; từ Docker Hub (nếu chưa có)&lt;/li&gt;
 &lt;li&gt;Chạy container và hiển thị thông báo chào mừng&lt;/li&gt;
@@ -159,12 +159,12 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;newgrp docker
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Giải thích:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Giải thích:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;usermod -aG docker $USER&lt;/code&gt;: Thêm user hiện tại vào nhóm &lt;code&gt;docker&lt;/code&gt; (nhóm này có quyền truy cập Docker daemon)&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;newgrp docker&lt;/code&gt;: Áp dụng thay đổi nhóm ngay lập tức mà không cần đăng xuất&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;⚠ Lưu ý quan trọng:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Lưu ý quan trọng:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Sau khi thực hiện lệnh này, bạn có thể cần đăng xuất và đăng nhập lại để thay đổi có hiệu lực&lt;/li&gt;
 &lt;li&gt;Hoặc bạn có thể mở terminal mới để áp dụng thay đổi&lt;/li&gt;
@@ -180,7 +180,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker run hello-world
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Nếu lệnh chạy thành công mà không cần &lt;code&gt;sudo&lt;/code&gt;, bạn đã cấu hình đúng! ✅&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Nếu lệnh chạy thành công mà không cần &lt;code&gt;sudo&lt;/code&gt;, bạn đã cấu hình đúng!&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="gỡ-cài-đặt-docker-nếu-cần"&gt;Gỡ cài đặt Docker (nếu cần)
 &lt;/h2&gt;&lt;p&gt;Nếu bạn muốn gỡ cài đặt Docker hoàn toàn khỏi hệ thống, thực hiện các bước sau:&lt;/p&gt;
@@ -203,7 +203,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo rm -rf /var/lib/docker
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;⚠ Cảnh báo:&lt;/strong&gt; Lệnh này sẽ xóa &lt;strong&gt;TẤT CẢ&lt;/strong&gt; dữ liệu Docker bao gồm:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Cảnh báo:&lt;/strong&gt; Lệnh này sẽ xóa &lt;strong&gt;TẤT CẢ&lt;/strong&gt; dữ liệu Docker bao gồm:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Tất cả images đã tải về&lt;/li&gt;
 &lt;li&gt;Tất cả containers (đang chạy và đã dừng)&lt;/li&gt;
@@ -332,15 +332,15 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="lời-kết"&gt;Lời kết
-&lt;/h2&gt;&lt;p&gt;Vậy là chúng ta đã hoàn tất cài đặt Docker trên Ubuntu! 🎉 Giờ đây, bạn có thể bắt đầu:&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;Vậy là chúng ta đã hoàn tất cài đặt Docker trên Ubuntu! Giờ đây, bạn có thể bắt đầu:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🐳 &lt;strong&gt;Tạo và chạy containers&lt;/strong&gt; cho các ứng dụng của mình&lt;/li&gt;
-&lt;li&gt;📦 &lt;strong&gt;Sử dụng Docker images&lt;/strong&gt; có sẵn từ Docker Hub&lt;/li&gt;
-&lt;li&gt;🚀 &lt;strong&gt;Triển khai ứng dụng&lt;/strong&gt; một cách nhất quán và dễ dàng&lt;/li&gt;
-&lt;li&gt;🔄 &lt;strong&gt;Quản lý môi trường development&lt;/strong&gt; và production hiệu quả hơn&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Tạo và chạy containers&lt;/strong&gt; cho các ứng dụng của mình&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Sử dụng Docker images&lt;/strong&gt; có sẵn từ Docker Hub&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Triển khai ứng dụng&lt;/strong&gt; một cách nhất quán và dễ dàng&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Quản lý môi trường development&lt;/strong&gt; và production hiệu quả hơn&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Docker là một công cụ mạnh mẽ trong thế giới DevOps. Hãy tiếp tục khám phá các tính năng của Docker như Docker Compose, Docker Swarm, và tích hợp với các công cụ CI/CD để tối ưu hóa quy trình phát triển của bạn!&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;📖 Tài liệu tham khảo:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tài liệu tham khảo:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://docs.docker.com/" target="_blank" rel="noopener"
 &gt;Tài liệu chính thức của Docker&lt;/a&gt;&lt;/li&gt;
@@ -349,20 +349,20 @@
 &lt;li&gt;&lt;a class="link" href="https://docs.docker.com/develop/dev-best-practices/" target="_blank" rel="noopener"
 &gt;Best practices cho Docker&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Chúc bạn thành công với Docker! 🚀😊&lt;/p&gt;</description></item><item><title>Hướng dẫn cài đặt Nginx trên Ubuntu 24.04</title><link>https://tech.nguuyen.io.vn/vi/posts/installation-guides/how-to-install-nginx/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/installation-guides/how-to-install-nginx/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/website/how-to-install-nginx.jpg" alt="Featured image of post Hướng dẫn cài đặt Nginx trên Ubuntu 24.04 " /&gt;&lt;h2 id="giới-thiệu"&gt;Giới thiệu
+&lt;p&gt;Chúc bạn thành công với Docker!&lt;/p&gt;</description></item><item><title>Hướng dẫn cài đặt Nginx trên Ubuntu 24.04</title><link>https://tech.nguuyen.io.vn/vi/posts/installation-guides/how-to-install-nginx/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/installation-guides/how-to-install-nginx/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/website/how-to-install-nginx.jpg" alt="Featured image of post Hướng dẫn cài đặt Nginx trên Ubuntu 24.04 " /&gt;&lt;h2 id="giới-thiệu"&gt;Giới thiệu
 &lt;/h2&gt;&lt;p&gt;Nginx là một ứng dụng web server mã nguồn mở giúp triển khai các ứng dụng web tĩnh và động trên máy chủ. Nginx có thể hoạt động như một web server, load balancer, reverse proxy hoặc HTTP cache, hỗ trợ tích hợp với các ứng dụng hiện có để xây dựng một hệ thống hoàn chỉnh hoặc phân phối ứng dụng web qua địa chỉ IP hoặc tên miền.&lt;/p&gt;
 &lt;p&gt;Bài viết này hướng dẫn cách cài đặt Nginx trên Ubuntu 24.04 và thiết lập ứng dụng web mẫu để chạy trên máy chủ của bạn.&lt;/p&gt;
 &lt;h2 id="yêu-cầu-trước-khi-bắt-đầu"&gt;Yêu cầu trước khi bắt đầu
 &lt;/h2&gt;&lt;p&gt;Trước khi tiến hành, hãy đảm bảo bạn đã thực hiện các bước sau:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🚀 Triển khai một máy chủ Ubuntu 24.04.&lt;/li&gt;
-&lt;li&gt;🌍 Tạo một bản ghi A (A record) cho tên miền hoặc subdomain trỏ đến địa chỉ IP của máy chủ. Ví dụ: &lt;code&gt;app.example.com&lt;/code&gt;.&lt;/li&gt;
-&lt;li&gt;🔐 Truy cập máy chủ qua SSH và tạo một người dùng không phải root có quyền sudo.&lt;/li&gt;
-&lt;li&gt;🔄 Cập nhật hệ thống.&lt;/li&gt;
+&lt;li&gt;Triển khai một máy chủ Ubuntu 24.04.&lt;/li&gt;
+&lt;li&gt;Tạo một bản ghi A (A record) cho tên miền hoặc subdomain trỏ đến địa chỉ IP của máy chủ. Ví dụ: &lt;code&gt;app.example.com&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;Truy cập máy chủ qua SSH và tạo một người dùng không phải root có quyền sudo.&lt;/li&gt;
+&lt;li&gt;Cập nhật hệ thống.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id="cài-đặt-nginx-trên-ubuntu-2404"&gt;Cài đặt NGINX trên Ubuntu 24.04
 &lt;/h2&gt;&lt;p&gt;Gói NGINX mới nhất có sẵn trong kho APT mặc định trên Ubuntu 24.04. Thực hiện các bước sau để cập nhật hệ thống và cài đặt NGINX.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;🔄 Cập nhật danh sách gói hệ thống&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Cập nhật danh sách gói hệ thống&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -371,7 +371,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt update
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;📦 Cài đặt NGINX&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Cài đặt NGINX&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -380,7 +380,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt install nginx -y
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🔍 Kiểm tra phiên bản NGINX đã cài đặt&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Kiểm tra phiên bản NGINX đã cài đặt&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -401,7 +401,7 @@
 &lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="quản-lý-dịch-vụ-nginx"&gt;Quản lý dịch vụ NGINX
 &lt;/h2&gt;&lt;p&gt;NGINX sử dụng dịch vụ &lt;code&gt;nginx&lt;/code&gt; trong &lt;code&gt;systemd&lt;/code&gt; để quản lý thời gian chạy và các tiến trình của web server trên máy chủ. Thực hiện các bước sau để kích hoạt dịch vụ NGINX và quản lý các tiến trình web server.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;🚀 Kích hoạt dịch vụ NGINX khởi động cùng hệ thống&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Kích hoạt dịch vụ NGINX khởi động cùng hệ thống&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -421,7 +421,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Executing: /usr/lib/systemd/systemd-sysv-install enable nginx
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;▶ Khởi động dịch vụ NGINX&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Khởi động dịch vụ NGINX&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -430,7 +430,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl start nginx
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;⏹ Dừng dịch vụ NGINX&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Dừng dịch vụ NGINX&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -439,7 +439,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl stop nginx
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🔄 Khởi động lại dịch vụ NGINX&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Khởi động lại dịch vụ NGINX&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -448,7 +448,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl restart nginx
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🔍 Kiểm tra trạng thái dịch vụ NGINX&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Kiểm tra trạng thái dịch vụ NGINX&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -496,7 +496,7 @@
 &lt;hr&gt;
 &lt;h2 id="tạo-nginx-virtual-host"&gt;Tạo nginx virtual host
 &lt;/h2&gt;&lt;p&gt;Nginx virtual host bao gồm các cấu hình đặc biệt giúp máy chủ web phân phối các tệp ứng dụng web từ một thư mục cụ thể bằng một tên miền cụ thể trên máy chủ của bạn. các bước sau đây sẽ hướng dẫn tạo một cấu hình virtual host mẫu để phân phối tệp ứng dụng web một cách an toàn trên máy chủ.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;📂 Tạo tệp cấu hình virtual host mới&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tạo tệp cấu hình virtual host mới&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Trong thư mục &lt;code&gt;/etc/nginx/sites-available&lt;/code&gt;, tạo một tệp cấu hình mới, ví dụ: &lt;code&gt;app.example.com.conf&lt;/code&gt;.&lt;/li&gt;
 &lt;/ul&gt;
@@ -546,7 +546,7 @@
 &lt;/div&gt;&lt;ul&gt;
 &lt;li&gt;Lưu và đóng tệp.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;✅ Kiểm tra cấu hình Nginx&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Kiểm tra cấu hình Nginx&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Kiểm tra xem cấu hình Nginx có lỗi không:&lt;/li&gt;
 &lt;/ul&gt;
@@ -571,7 +571,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;nginx: configuration file /etc/nginx/nginx.conf test is successful
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🔗 Kích hoạt virtual host&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Kích hoạt virtual host&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Liên kết tệp cấu hình vào thư mục &lt;code&gt;/etc/nginx/sites-enabled&lt;/code&gt; để kích hoạt virtual host:&lt;/li&gt;
 &lt;/ul&gt;
@@ -583,7 +583,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo ln -s /etc/nginx/sites-available/app.example.com.conf /etc/nginx/sites-enabled/
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;📁 Tạo thư mục web root&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Tạo thư mục web root&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -592,7 +592,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo mkdir -p /var/www/app.example.com
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;📝 Tạo tệp html mẫu&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Tạo tệp html mẫu&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Tạo tệp &lt;code&gt;index.html&lt;/code&gt; trong thư mục web root:&lt;/li&gt;
 &lt;/ul&gt;
@@ -628,7 +628,7 @@
 &lt;/div&gt;&lt;ul&gt;
 &lt;li&gt;Lưu và đóng tệp.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;🔄 Khởi động lại nginx&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Khởi động lại nginx&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -637,7 +637,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo systemctl restart nginx
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;🌍 Kiểm tra virtual host&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Kiểm tra virtual host&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Sử dụng lệnh &lt;code&gt;curl&lt;/code&gt; để kiểm tra virtual host:&lt;/li&gt;
 &lt;/ul&gt;
@@ -663,7 +663,7 @@
 &lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="bảo-mật-máy-chủ-web-nginx"&gt;Bảo mật máy chủ web Nginx
 &lt;/h2&gt;&lt;p&gt;SSL certificates giúp mã hóa giao tiếp giữa trình duyệt của người dùng và máy chủ Nginx thông qua HTTPS. Mặc định, Nginx lắng nghe kết nối đến trên cổng HTTP 80 không an toàn. Thực hiện các bước sau để tạo chứng chỉ SSL đáng tin cậy từ Let&amp;rsquo;s Encrypt và bảo mật máy chủ Nginx để chấp nhận các yêu cầu kết nối HTTPS được mã hóa.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Cài đặt Certbot – Let&amp;rsquo;s Encrypt Client 🔧&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Cài đặt Certbot – Let&amp;rsquo;s Encrypt Client&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Cài đặt gói Certbot sử dụng Snap:&lt;/li&gt;
 &lt;/ul&gt;
@@ -686,7 +686,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo certbot --version
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📌 &lt;strong&gt;Đầu ra mẫu:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Đầu ra mẫu:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -709,11 +709,11 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;Quá trình này sẽ:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;✅ Tạo chứng chỉ SSL hợp lệ&lt;/li&gt;
-&lt;li&gt;✅ Tự động cấu hình Nginx để sử dụng SSL&lt;/li&gt;
-&lt;li&gt;✅ Kích hoạt HTTPS trên máy chủ web của bạn&lt;/li&gt;
+&lt;li&gt;Tạo chứng chỉ SSL hợp lệ&lt;/li&gt;
+&lt;li&gt;Tự động cấu hình Nginx để sử dụng SSL&lt;/li&gt;
+&lt;li&gt;Kích hoạt HTTPS trên máy chủ web của bạn&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;Kiểm tra tự động gia hạn chứng chỉ 🔄&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Kiểm tra tự động gia hạn chứng chỉ&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Các chứng chỉ SSL từ Let&amp;rsquo;s Encrypt có thời hạn 90 ngày. Để đảm bảo không bị hết hạn, bạn có thể kiểm tra tiến trình tự động gia hạn:&lt;/li&gt;
 &lt;/ul&gt;
@@ -738,11 +738,11 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;https://app.example.com
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Nếu thấy biểu tượng ổ khóa 🔒, tức là SSL đã được cài đặt thành công! 🚀&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Nếu thấy biểu tượng ổ khóa, tức là SSL đã được cài đặt thành công!&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="thiết-lập-quy-tắc-tường-lửa-ufw"&gt;Thiết lập quy tắc tường lửa UFW
 &lt;/h2&gt;&lt;p&gt;Uncomplicated Firewall (UFW) được cài đặt và kích hoạt mặc định trên Ubuntu 24.04. Thực hiện các bước sau để cấu hình tường lửa, cho phép máy chủ Nginx lắng nghe kết nối HTTP và HTTPS.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;Cho phép kết nối HTTP (Cổng 80)🔌&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Cho phép kết nối HTTP (Cổng 80)&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Chạy lệnh sau để mở kết nối HTTP:&lt;/li&gt;
 &lt;/ul&gt;
@@ -754,7 +754,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo ufw allow 80/tcp
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Cho phép kết nối HTTPS (Cổng 443) 🔐&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Cho phép kết nối HTTPS (Cổng 443)&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Chạy lệnh sau để mở kết nối HTTPS:&lt;/li&gt;
 &lt;/ul&gt;
@@ -766,7 +766,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo ufw allow 443/tcp
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Kiểm tra trạng thái tường lửa 🔢&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Kiểm tra trạng thái tường lửa&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Chạy lệnh sau để xác nhận quy tắc kết nối:&lt;/li&gt;
 &lt;/ul&gt;
@@ -778,7 +778,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-sh" data-lang="sh"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;$ sudo ufw status
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;👉 &lt;strong&gt;Đầu ra mẫu:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Đầu ra mẫu:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -805,8 +805,8 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;443/tcp (v6) ALLOW Anywhere (v6)
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;🛡 Sau khi thiết lập xong, máy chủ sẽ chỉ cho phép kết nối an toàn qua HTTP và HTTPS&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Sau khi thiết lập xong, máy chủ sẽ chỉ cho phép kết nối an toàn qua HTTP và HTTPS&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="lời-kết"&gt;Lời kết
 &lt;/h2&gt;&lt;p&gt;Chúc bạn cài đặt thành công Nginx trên máy chủ Ubuntu 24.04 và cấu hình web server để phục vụ các ứng dụng web. Nginx hỗ trợ nhiều cấu hình virtual host giúp bạn triển khai các ứng dụng web một cách an toàn. Ngoài ra, bạn có thể tích hợp Nginx với các ứng dụng khác như MySQL và PHP để xây dựng các ứng dụng web động. Để biết thêm thông tin chi tiết và các tùy chọn cấu hình khác, vui lòng truy cập &lt;a class="link" href="https://docs.nginx.com/" target="_blank" rel="noopener"
-&gt;tài liệu chính thức&lt;/a&gt; chính thức của Nginx. 🚀😊&lt;/p&gt;</description></item></channel></rss>
+&gt;tài liệu chính thức&lt;/a&gt; chính thức của Nginx.&lt;/p&gt;</description></item></channel></rss>

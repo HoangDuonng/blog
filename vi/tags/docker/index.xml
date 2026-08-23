@@ -305,7 +305,7 @@
 &lt;li&gt;Cài đặt đầy đủ: Docker Engine, CLI, containerd, Buildx, và Compose V2&lt;/li&gt;
 &lt;li&gt;Tự động khởi động và enable Docker service&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Bạn có thể lưu script này vào hệ thống quản lý cấu hình (Ansible, Terraform) hoặc đơn giản clone từ repository để sử dụng trên nhiều server. 🚀&lt;/p&gt;
+&lt;p&gt;Bạn có thể lưu script này vào hệ thống quản lý cấu hình (Ansible, Terraform) hoặc đơn giản clone từ repository để sử dụng trên nhiều server.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="tài-liệu-tham-khảo"&gt;Tài liệu tham khảo
 &lt;/h2&gt;&lt;ul&gt;
@@ -316,7 +316,7 @@
 &lt;li&gt;&lt;a class="link" href="https://docs.docker.com/compose/releases/migrate/" target="_blank" rel="noopener"
 &gt;Docker Compose - Migrate to Compose V2&lt;/a&gt; — Hướng dẫn chuyển từ Compose V1 sang V2&lt;/li&gt;
 &lt;/ul&gt;</description></item><item><title>Docker Build Cache &amp; Layering</title><link>https://tech.nguuyen.io.vn/vi/posts/docker/docker-build-cache-layering/</link><pubDate>Sun, 22 Mar 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/docker/docker-build-cache-layering/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/docker/docker-build-cache-layering.jpg" alt="Featured image of post Docker Build Cache &amp; Layering" /&gt;&lt;h2 id="docker-build-cache--layering"&gt;Docker Build Cache &amp;amp; Layering
-&lt;/h2&gt;&lt;p&gt;Bạn đã bao giờ tự hỏi tại sao lần &lt;strong&gt;build đầu tiên&lt;/strong&gt; mất 5-10 phút, nhưng lần &lt;strong&gt;build thứ hai&lt;/strong&gt; chỉ mất vài giây? Đó là nhờ &lt;strong&gt;Build Cache&lt;/strong&gt;. Nhưng đôi khi, chỉ thay đổi 1 dòng code mà Docker lại rebuild toàn bộ — đó là vì bạn chưa hiểu cách &lt;strong&gt;Layering&lt;/strong&gt; hoạt động. 🧱&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;Bạn đã bao giờ tự hỏi tại sao lần &lt;strong&gt;build đầu tiên&lt;/strong&gt; mất 5-10 phút, nhưng lần &lt;strong&gt;build thứ hai&lt;/strong&gt; chỉ mất vài giây? Đó là nhờ &lt;strong&gt;Build Cache&lt;/strong&gt;. Nhưng đôi khi, chỉ thay đổi 1 dòng code mà Docker lại rebuild toàn bộ — đó là vì bạn chưa hiểu cách &lt;strong&gt;Layering&lt;/strong&gt; hoạt động.&lt;/p&gt;
 &lt;p&gt;Trong bài viết này, tôi sẽ giải thích chi tiết cơ chế Layer và Build Cache, cách Docker quyết định khi nào dùng cache và khi nào rebuild, cùng các kỹ thuật tối ưu để build nhanh hơn.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="layer-trong-docker-là-gì"&gt;Layer trong Docker là gì?
@@ -402,9 +402,9 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;5
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Lệnh 1 → Có cache? ✅ Dùng lại → Tiếp tục
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Lệnh 2 → Có cache? ✅ Dùng lại → Tiếp tục
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Lệnh 3 → Có cache? ❌ Cache miss → Rebuild từ đây trở đi
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Lệnh 1 → Có cache? Dùng lại → Tiếp tục
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Lệnh 2 → Có cache? Dùng lại → Tiếp tục
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Lệnh 3 → Có cache? Cache miss → Rebuild từ đây trở đi
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Lệnh 4 → Bắt buộc rebuild (vì lệnh 3 đã thay đổi)
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Lệnh 5 → Bắt buộc rebuild
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
@@ -422,27 +422,27 @@
 &lt;tbody&gt;
 &lt;tr&gt;
 &lt;td&gt;Thay đổi lệnh trong Dockerfile&lt;/td&gt;
-&lt;td&gt;✅ Có&lt;/td&gt;
+&lt;td&gt;Có&lt;/td&gt;
 &lt;td&gt;Docker so sánh chuỗi lệnh, khác → rebuild&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;File trong &lt;code&gt;COPY&lt;/code&gt;/&lt;code&gt;ADD&lt;/code&gt; thay đổi&lt;/td&gt;
-&lt;td&gt;✅ Có&lt;/td&gt;
+&lt;td&gt;Có&lt;/td&gt;
 &lt;td&gt;Docker tính checksum của file, khác → rebuild&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Chỉ thay đổi &lt;code&gt;mtime&lt;/code&gt; của file&lt;/td&gt;
-&lt;td&gt;❌ Không&lt;/td&gt;
+&lt;td&gt;Không&lt;/td&gt;
 &lt;td&gt;Docker không xét thời gian sửa đổi, chỉ xét nội dung&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Lệnh &lt;code&gt;RUN&lt;/code&gt; giống hệt lần trước&lt;/td&gt;
-&lt;td&gt;❌ Không&lt;/td&gt;
+&lt;td&gt;Không&lt;/td&gt;
 &lt;td&gt;Cùng chuỗi lệnh → dùng cache (kể cả kết quả đã cũ)&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;Layer trước đó bị invalidate&lt;/td&gt;
-&lt;td&gt;✅ Có&lt;/td&gt;
+&lt;td&gt;Có&lt;/td&gt;
 &lt;td&gt;Tất cả layer phía sau đều phải rebuild&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
@@ -457,11 +457,11 @@
 &lt;/span&gt;&lt;span class="lnt"&gt;5
 &lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
 &lt;td class="lntd"&gt;
-&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-dockerfile" data-lang="dockerfile"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;FROM&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;node:18-alpine&lt;/span&gt; &lt;span class="c1"&gt;# ✅ Cache hit (không đổi)&lt;/span&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;WORKDIR&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;/app&lt;/span&gt; &lt;span class="c1"&gt;# ✅ Cache hit (không đổi)&lt;/span&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;COPY&lt;/span&gt; . . &lt;span class="c1"&gt;# ❌ Cache miss (bạn sửa 1 file .js)&lt;/span&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm install &lt;span class="c1"&gt;# ❌ Phải rebuild (vì COPY ở trên miss)&lt;/span&gt;&lt;span class="err"&gt;
-&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm run build &lt;span class="c1"&gt;# ❌ Phải rebuild (vì layer trước miss)&lt;/span&gt;&lt;span class="err"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-dockerfile" data-lang="dockerfile"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;FROM&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;node:18-alpine&lt;/span&gt; &lt;span class="c1"&gt;# Cache hit (không đổi)&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;WORKDIR&lt;/span&gt;&lt;span class="w"&gt; &lt;/span&gt;&lt;span class="s"&gt;/app&lt;/span&gt; &lt;span class="c1"&gt;# Cache hit (không đổi)&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;COPY&lt;/span&gt; . . &lt;span class="c1"&gt;# Cache miss (bạn sửa 1 file .js)&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm install &lt;span class="c1"&gt;# Phải rebuild (vì COPY ở trên miss)&lt;/span&gt;&lt;span class="err"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm run build &lt;span class="c1"&gt;# Phải rebuild (vì layer trước miss)&lt;/span&gt;&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;Chỉ sửa 1 file &lt;code&gt;.js&lt;/code&gt; nhỏ, nhưng &lt;code&gt;npm install&lt;/code&gt; phải chạy lại dù &lt;code&gt;package.json&lt;/code&gt; không đổi. Đây là vấn đề phổ biến nhất khi viết Dockerfile chưa tối ưu.&lt;/p&gt;
@@ -469,7 +469,7 @@
 &lt;h2 id="kỹ-thuật-tối-ưu-build-cache"&gt;Kỹ thuật tối ưu Build Cache
 &lt;/h2&gt;&lt;h3 id="sắp-xếp-lệnh-theo-tần-suất-thay-đổi"&gt;Sắp xếp lệnh theo tần suất thay đổi
 &lt;/h3&gt;&lt;p&gt;&lt;strong&gt;Nguyên tắc:&lt;/strong&gt; Lệnh ít thay đổi → đặt trước. Lệnh hay thay đổi → đặt sau.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;❌ Chưa tối ưu:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Chưa tối ưu:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -486,7 +486,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="k"&gt;RUN&lt;/span&gt; npm run build&lt;span class="err"&gt;
 &lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;✅ Đã tối ưu:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Đã tối ưu:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -645,13 +645,13 @@
 &lt;td&gt;builder&lt;/td&gt;
 &lt;td&gt;Build ứng dụng&lt;/td&gt;
 &lt;td&gt;~500 MB&lt;/td&gt;
-&lt;td&gt;❌ Không&lt;/td&gt;
+&lt;td&gt;Không&lt;/td&gt;
 &lt;/tr&gt;
 &lt;tr&gt;
 &lt;td&gt;production&lt;/td&gt;
 &lt;td&gt;Chạy ứng dụng&lt;/td&gt;
 &lt;td&gt;~30 MB&lt;/td&gt;
-&lt;td&gt;✅ Có&lt;/td&gt;
+&lt;td&gt;Có&lt;/td&gt;
 &lt;/tr&gt;
 &lt;/tbody&gt;
 &lt;/table&gt;
@@ -678,10 +678,10 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;&lt;strong&gt;Vấn đề:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;❌ Base image lớn (&lt;code&gt;node:18&lt;/code&gt; ~ 900 MB)&lt;/li&gt;
-&lt;li&gt;❌ &lt;code&gt;COPY . .&lt;/code&gt; trước &lt;code&gt;npm install&lt;/code&gt; → mọi thay đổi code đều rebuild dependencies&lt;/li&gt;
-&lt;li&gt;❌ Không có &lt;code&gt;.dockerignore&lt;/code&gt; → copy cả &lt;code&gt;node_modules&lt;/code&gt;, &lt;code&gt;.git&lt;/code&gt;&lt;/li&gt;
-&lt;li&gt;❌ Không dùng multi-stage → image cuối chứa devDependencies&lt;/li&gt;
+&lt;li&gt;Base image lớn (&lt;code&gt;node:18&lt;/code&gt; ~ 900 MB)&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;COPY . .&lt;/code&gt; trước &lt;code&gt;npm install&lt;/code&gt; → mọi thay đổi code đều rebuild dependencies&lt;/li&gt;
+&lt;li&gt;Không có &lt;code&gt;.dockerignore&lt;/code&gt; → copy cả &lt;code&gt;node_modules&lt;/code&gt;, &lt;code&gt;.git&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Không dùng multi-stage → image cuối chứa devDependencies&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id="dockerfile-đã-tối-ưu"&gt;Dockerfile đã tối ưu
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
@@ -746,11 +746,11 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;&lt;strong&gt;Cải thiện:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;✅ Base image nhỏ (&lt;code&gt;node:18-alpine&lt;/code&gt; ~ 170 MB)&lt;/li&gt;
-&lt;li&gt;✅ Tách &lt;code&gt;COPY package.json&lt;/code&gt; riêng → cache dependencies hiệu quả&lt;/li&gt;
-&lt;li&gt;✅ Cache mount cho npm → tải lại nhanh khi rebuild&lt;/li&gt;
-&lt;li&gt;✅ Multi-stage → image cuối chỉ chứa production dependencies&lt;/li&gt;
-&lt;li&gt;✅ Sử dụng &lt;code&gt;npm ci&lt;/code&gt; thay &lt;code&gt;npm install&lt;/code&gt; → đảm bảo reproducible builds&lt;/li&gt;
+&lt;li&gt;Base image nhỏ (&lt;code&gt;node:18-alpine&lt;/code&gt; ~ 170 MB)&lt;/li&gt;
+&lt;li&gt;Tách &lt;code&gt;COPY package.json&lt;/code&gt; riêng → cache dependencies hiệu quả&lt;/li&gt;
+&lt;li&gt;Cache mount cho npm → tải lại nhanh khi rebuild&lt;/li&gt;
+&lt;li&gt;Multi-stage → image cuối chỉ chứa production dependencies&lt;/li&gt;
+&lt;li&gt;Sử dụng &lt;code&gt;npm ci&lt;/code&gt; thay &lt;code&gt;npm install&lt;/code&gt; → đảm bảo reproducible builds&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id="so-sánh-kết-quả"&gt;So sánh kết quả
 &lt;/h3&gt;&lt;table&gt;
@@ -877,8 +877,8 @@
 &lt;li&gt;&lt;strong&gt;Cache invalidation&lt;/strong&gt; = khi một layer thay đổi, tất cả layer phía sau đều phải rebuild&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Tối ưu&lt;/strong&gt; = sắp xếp lệnh hợp lý + &lt;code&gt;.dockerignore&lt;/code&gt; + cache mounts + multi-stage build&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Chỉ cần hiểu và áp dụng 4 kỹ thuật trên, bạn có thể giảm thời gian build Docker từ &lt;strong&gt;5 phút xuống dưới 30 giây&lt;/strong&gt; cho phần lớn trường hợp. 🚀&lt;/p&gt;
-&lt;p&gt;Nếu bạn thấy bài viết này hữu ích, hãy nhớ ⭐ star repo hoặc 📱 chia sẻ với bạn bè nhé! 😊&lt;/p&gt;
+&lt;p&gt;Chỉ cần hiểu và áp dụng 4 kỹ thuật trên, bạn có thể giảm thời gian build Docker từ &lt;strong&gt;5 phút xuống dưới 30 giây&lt;/strong&gt; cho phần lớn trường hợp.&lt;/p&gt;
+&lt;p&gt;Nếu bạn thấy bài viết này hữu ích, hãy nhớ star repo hoặc chia sẻ với bạn bè nhé!&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="tài-liệu-tham-khảo"&gt;Tài liệu tham khảo
 &lt;/h2&gt;&lt;ul&gt;
@@ -1547,7 +1547,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ↓
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Push image lên GHCR (nếu không phải PR)
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ↓
-&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Image sẵn sàng để deploy 🚀
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Image sẵn sàng để deploy
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
@@ -1638,12 +1638,12 @@
 &lt;h2 id="lời-kết"&gt;Lời kết
 &lt;/h2&gt;&lt;p&gt;GitHub Actions + Docker là combo mạnh mẽ để &lt;strong&gt;tự động hóa pipeline&lt;/strong&gt; từ code đến container image. Với các workflow trong bài viết này, bạn có thể:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;✅ Tự động build Docker image mỗi khi push code&lt;/li&gt;
-&lt;li&gt;✅ Push image lên Docker Hub hoặc GHCR&lt;/li&gt;
-&lt;li&gt;✅ Tự động tạo tags theo Git metadata (branch, tag, SHA)&lt;/li&gt;
-&lt;li&gt;✅ Tối ưu tốc độ build với cache&lt;/li&gt;
+&lt;li&gt;Tự động build Docker image mỗi khi push code&lt;/li&gt;
+&lt;li&gt;Push image lên Docker Hub hoặc GHCR&lt;/li&gt;
+&lt;li&gt;Tự động tạo tags theo Git metadata (branch, tag, SHA)&lt;/li&gt;
+&lt;li&gt;Tối ưu tốc độ build với cache&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Nếu bạn thấy bài viết này hữu ích, hãy nhớ ⭐ star repo hoặc 📱 chia sẻ với bạn bè nhé! 😊&lt;/p&gt;
+&lt;p&gt;Nếu bạn thấy bài viết này hữu ích, hãy nhớ star repo hoặc chia sẻ với bạn bè nhé!&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="tài-liệu-tham-khảo"&gt;Tài liệu tham khảo
 &lt;/h2&gt;&lt;ul&gt;
@@ -2337,8 +2337,8 @@
 &lt;li&gt;&lt;strong&gt;Deploy&lt;/strong&gt; bằng &lt;code&gt;docker compose up --build -d&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Update&lt;/strong&gt; bằng &lt;code&gt;docker compose build app &amp;amp;&amp;amp; docker compose up --no-deps -d app&lt;/code&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;Đây là kiến trúc cơ bản nhất để đưa một ứng dụng Node.js lên production. Từ đây bạn có thể mở rộng thêm SSL (Let&amp;rsquo;s Encrypt), database, monitoring tuỳ nhu cầu. 🚀&lt;/p&gt;
-&lt;p&gt;Nếu bạn thấy bài viết này hữu ích, hãy nhớ ⭐ star repo hoặc 📱 chia sẻ với bạn bè nhé! 😊&lt;/p&gt;
+&lt;p&gt;Đây là kiến trúc cơ bản nhất để đưa một ứng dụng Node.js lên production. Từ đây bạn có thể mở rộng thêm SSL (Let&amp;rsquo;s Encrypt), database, monitoring tuỳ nhu cầu.&lt;/p&gt;
+&lt;p&gt;Nếu bạn thấy bài viết này hữu ích, hãy nhớ star repo hoặc chia sẻ với bạn bè nhé!&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="tài-liệu-tham-khảo"&gt;Tài liệu tham khảo
 &lt;/h2&gt;&lt;ul&gt;
@@ -2967,9 +2967,9 @@
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="lời-kết"&gt;Lời kết
-&lt;/h2&gt;&lt;p&gt;Docker Compose v2 là công cụ mạnh mẽ giúp bạn quản lý multi-container applications một cách dễ dàng. Với các best practices trên, bạn có thể xây dựng và triển khai ứng dụng một cách chuyên nghiệp và hiệu quả! 🚀&lt;/p&gt;
-&lt;p&gt;Hãy thử nghiệm với các ví dụ trên và dần dần áp dụng vào dự án thực tế của bạn. 😊&lt;/p&gt;</description></item><item><title>Docker cơ bản: Image vs Container</title><link>https://tech.nguuyen.io.vn/vi/posts/docker/docker-basics-image-vs-container/</link><pubDate>Sun, 25 Jan 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/docker/docker-basics-image-vs-container/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/docker/docker-basics-image-vs-container.jpg" alt="Featured image of post Docker cơ bản: Image vs Container" /&gt;&lt;h2 id="docker-image-và-container---hai-khái-niệm-thiết-yếu"&gt;Docker Image và Container - Hai khái niệm thiết yếu
-&lt;/h2&gt;&lt;p&gt;Khi bắt đầu với Docker, hai khái niệm quan trọng nhất bạn cần hiểu là &lt;strong&gt;Image&lt;/strong&gt; và &lt;strong&gt;Container&lt;/strong&gt;. Nhiều người mới thường nhầm lẫn giữa chúng, nhưng thực chất chúng đóng vai trò khác nhau trong hệ sinh thái Docker. Image giống như &lt;strong&gt;kho chứa recipe&lt;/strong&gt; (làm công thức), còn Container là &lt;strong&gt;thực tế thực thi&lt;/strong&gt; (món ăn được chuẩn bị). 🍳&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;Docker Compose v2 là công cụ mạnh mẽ giúp bạn quản lý multi-container applications một cách dễ dàng. Với các best practices trên, bạn có thể xây dựng và triển khai ứng dụng một cách chuyên nghiệp và hiệu quả!&lt;/p&gt;
+&lt;p&gt;Hãy thử nghiệm với các ví dụ trên và dần dần áp dụng vào dự án thực tế của bạn.&lt;/p&gt;</description></item><item><title>Docker cơ bản: Image vs Container</title><link>https://tech.nguuyen.io.vn/vi/posts/docker/docker-basics-image-vs-container/</link><pubDate>Sun, 25 Jan 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/docker/docker-basics-image-vs-container/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/docker/docker-basics-image-vs-container.jpg" alt="Featured image of post Docker cơ bản: Image vs Container" /&gt;&lt;h2 id="docker-image-và-container---hai-khái-niệm-thiết-yếu"&gt;Docker Image và Container - Hai khái niệm thiết yếu
+&lt;/h2&gt;&lt;p&gt;Khi bắt đầu với Docker, hai khái niệm quan trọng nhất bạn cần hiểu là &lt;strong&gt;Image&lt;/strong&gt; và &lt;strong&gt;Container&lt;/strong&gt;. Nhiều người mới thường nhầm lẫn giữa chúng, nhưng thực chất chúng đóng vai trò khác nhau trong hệ sinh thái Docker. Image giống như &lt;strong&gt;kho chứa recipe&lt;/strong&gt; (làm công thức), còn Container là &lt;strong&gt;thực tế thực thi&lt;/strong&gt; (món ăn được chuẩn bị).&lt;/p&gt;
 &lt;p&gt;Trong bài viết này, tôi sẽ giải thích chi tiết sự khác biệt giữa Image và Container, cách chúng hoạt động cùng nhau, và cung cấp ví dụ thực tế để bạn dễ hiểu hơn.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="i-docker-image-là-gì"&gt;I. Docker Image là gì?
@@ -3392,11 +3392,11 @@
 &lt;h2 id="v-best-practices-với-image-và-container"&gt;V. Best practices với Image và Container
 &lt;/h2&gt;&lt;h3 id="quản-lý-image"&gt;Quản lý Image
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;✅ Sử dụng cụ thể hơn (ex: &lt;code&gt;node:18.12-alpine&lt;/code&gt; thay vì &lt;code&gt;node:latest&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;✅ Giảm kích thước bằng base image nhỏ (alpine, distroless)&lt;/li&gt;
-&lt;li&gt;✅ Tận dụng cache layer bằng cách xếp lệnh theo thứ tự&lt;/li&gt;
-&lt;li&gt;✅ Sử dụng &lt;code&gt;.dockerignore&lt;/code&gt; để loại bỏ file không cần thiết&lt;/li&gt;
-&lt;li&gt;✅ Xóa image unused thường xuyên với &lt;code&gt;docker image prune&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Sử dụng cụ thể hơn (ex: &lt;code&gt;node:18.12-alpine&lt;/code&gt; thay vì &lt;code&gt;node:latest&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Giảm kích thước bằng base image nhỏ (alpine, distroless)&lt;/li&gt;
+&lt;li&gt;Tận dụng cache layer bằng cách xếp lệnh theo thứ tự&lt;/li&gt;
+&lt;li&gt;Sử dụng &lt;code&gt;.dockerignore&lt;/code&gt; để loại bỏ file không cần thiết&lt;/li&gt;
+&lt;li&gt;Xóa image unused thường xuyên với &lt;code&gt;docker image prune&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -3414,11 +3414,11 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;h3 id="quản-lý-container"&gt;Quản lý Container
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;✅ Đặt tên container rõ ràng (&lt;code&gt;--name app-container&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;✅ Sử dụng &lt;code&gt;-d&lt;/code&gt; (detached mode) để chạy container background&lt;/li&gt;
-&lt;li&gt;✅ Thường xuyên quay lại logs khi debug (&lt;code&gt;docker logs -f&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;✅ Sử dụng volumes nếu cần persistence dữ liệu&lt;/li&gt;
-&lt;li&gt;✅ Giới hạn resource với &lt;code&gt;--cpus&lt;/code&gt;, &lt;code&gt;--memory&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Đặt tên container rõ ràng (&lt;code&gt;--name app-container&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Sử dụng &lt;code&gt;-d&lt;/code&gt; (detached mode) để chạy container background&lt;/li&gt;
+&lt;li&gt;Thường xuyên quay lại logs khi debug (&lt;code&gt;docker logs -f&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Sử dụng volumes nếu cần persistence dữ liệu&lt;/li&gt;
+&lt;li&gt;Giới hạn resource với &lt;code&gt;--cpus&lt;/code&gt;, &lt;code&gt;--memory&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -3568,8 +3568,8 @@
 &lt;li&gt;Dùng &lt;code&gt;docker run&lt;/code&gt; để tạo container từ image&lt;/li&gt;
 &lt;li&gt;Dùng &lt;code&gt;docker commit&lt;/code&gt; để update container thành image mới&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Bây giờ bạn đã hiểu rõ sự khác biệt giữa Image và Container. Bước tiếp theo: học cách sử dụng Dockerfile để build image, và Docker Compose để quản lý nhiều container. 🚀&lt;/p&gt;
-&lt;p&gt;Nếu bạn thấy bài viết này hữu ích, hãy nhớ ⭐ star repo hoặc 📱 chia sẻ với bạn bè nhé! 😊&lt;/p&gt;
+&lt;p&gt;Bây giờ bạn đã hiểu rõ sự khác biệt giữa Image và Container. Bước tiếp theo: học cách sử dụng Dockerfile để build image, và Docker Compose để quản lý nhiều container.&lt;/p&gt;
+&lt;p&gt;Nếu bạn thấy bài viết này hữu ích, hãy nhớ star repo hoặc chia sẻ với bạn bè nhé!&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="tài-liệu-tham-khảo"&gt;Tài liệu tham khảo
 &lt;/h2&gt;&lt;ul&gt;
@@ -3581,20 +3581,20 @@
 &lt;/h2&gt;&lt;p&gt;Docker là một nền tảng phổ biến trong DevOps để triển khai ứng dụng bằng &lt;strong&gt;container&lt;/strong&gt;. Container cho phép bạn đóng gói ứng dụng cùng với tất cả các dependencies và cấu hình cần thiết, giúp ứng dụng chạy nhất quán trên mọi môi trường từ development đến production.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Lợi ích của Docker:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;⚡ &lt;strong&gt;Tính nhất quán&lt;/strong&gt;: Ứng dụng chạy giống nhau trên mọi môi trường&lt;/li&gt;
-&lt;li&gt;🚀 &lt;strong&gt;Tốc độ&lt;/strong&gt;: Khởi động container nhanh hơn so với virtual machine&lt;/li&gt;
-&lt;li&gt;📦 &lt;strong&gt;Đóng gói&lt;/strong&gt;: Dễ dàng chia sẻ và triển khai ứng dụng&lt;/li&gt;
-&lt;li&gt;🔄 &lt;strong&gt;Scalability&lt;/strong&gt;: Dễ dàng mở rộng và quản lý nhiều container&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Tính nhất quán&lt;/strong&gt;: Ứng dụng chạy giống nhau trên mọi môi trường&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Tốc độ&lt;/strong&gt;: Khởi động container nhanh hơn so với virtual machine&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Đóng gói&lt;/strong&gt;: Dễ dàng chia sẻ và triển khai ứng dụng&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Scalability&lt;/strong&gt;: Dễ dàng mở rộng và quản lý nhiều container&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Bài viết này hướng dẫn bạn cách cài đặt Docker trên Ubuntu 20.04 và 22.04 một cách đơn giản và hiệu quả, sử dụng repository chính thức của Docker để đảm bảo bạn luôn có phiên bản mới nhất và ổn định.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="yêu-cầu-trước-khi-cài-đặt"&gt;Yêu cầu trước khi cài đặt
 &lt;/h2&gt;&lt;p&gt;Trước khi bắt đầu, hãy đảm bảo bạn có:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🖥 &lt;strong&gt;Máy chủ Ubuntu 20.04 hoặc 22.04&lt;/strong&gt; đã được cài đặt&lt;/li&gt;
-&lt;li&gt;🔐 &lt;strong&gt;Quyền sudo&lt;/strong&gt; để thực thi các lệnh quản trị&lt;/li&gt;
-&lt;li&gt;🌐 &lt;strong&gt;Kết nối internet&lt;/strong&gt; để tải các gói cài đặt&lt;/li&gt;
-&lt;li&gt;⏱ &lt;strong&gt;Thời gian&lt;/strong&gt;: Quá trình cài đặt mất khoảng 5-10 phút&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Máy chủ Ubuntu 20.04 hoặc 22.04&lt;/strong&gt; đã được cài đặt&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Quyền sudo&lt;/strong&gt; để thực thi các lệnh quản trị&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Kết nối internet&lt;/strong&gt; để tải các gói cài đặt&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Thời gian&lt;/strong&gt;: Quá trình cài đặt mất khoảng 5-10 phút&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="cập-nhật-hệ-thống"&gt;Cập nhật hệ thống
@@ -3607,7 +3607,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt update &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo apt upgrade -y
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Lưu ý:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Lưu ý:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Lệnh &lt;code&gt;apt update&lt;/code&gt; cập nhật danh sách các gói có sẵn từ repository&lt;/li&gt;
 &lt;li&gt;Lệnh &lt;code&gt;apt upgrade -y&lt;/code&gt; tự động cài đặt các bản cập nhật mà không cần xác nhận&lt;/li&gt;
@@ -3653,7 +3653,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu &lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;lsb_release -cs&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt; stable&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; sudo tee /etc/apt/sources.list.d/docker.list &amp;gt; /dev/null
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Giải thích:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Giải thích:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;arch=amd64&lt;/code&gt;: Chỉ định kiến trúc 64-bit&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;signed-by&lt;/code&gt;: Chỉ định GPG key để xác thực&lt;/li&gt;
@@ -3672,13 +3672,13 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt install -y docker-ce docker-ce-cli containerd.io
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;📦 Các gói được cài đặt:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Các gói được cài đặt:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;docker-ce&lt;/code&gt;: Docker Community Edition - phiên bản mã nguồn mở của Docker&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;docker-ce-cli&lt;/code&gt;: Docker Command Line Interface - công cụ dòng lệnh để tương tác với Docker&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;containerd.io&lt;/code&gt;: Container runtime - công cụ quản lý vòng đời container ở mức thấp&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;⏱ Thời gian cài đặt:&lt;/strong&gt; Quá trình này thường mất 2-5 phút tùy thuộc vào tốc độ internet của bạn.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Thời gian cài đặt:&lt;/strong&gt; Quá trình này thường mất 2-5 phút tùy thuộc vào tốc độ internet của bạn.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="kiểm-tra-docker"&gt;Kiểm tra Docker
 &lt;/h2&gt;&lt;p&gt;Sau khi cài đặt, hãy kiểm tra xem Docker đã được khởi động và hoạt động chưa:&lt;/p&gt;
@@ -3702,7 +3702,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; docker
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Giải thích các lệnh:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Giải thích các lệnh:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;systemctl start docker&lt;/code&gt;: Khởi động dịch vụ Docker ngay lập tức&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;systemctl enable docker&lt;/code&gt;: Cấu hình Docker tự động khởi động khi hệ thống khởi động lại&lt;/li&gt;
@@ -3718,8 +3718,8 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo docker run hello-world
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Kết quả mong đợi:&lt;/strong&gt; Nếu thấy thông báo &amp;ldquo;Hello from Docker!&amp;rdquo; cùng với các thông tin về Docker, nghĩa là bạn đã cài đặt thành công! 🎉&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;🔍 Container &lt;code&gt;hello-world&lt;/code&gt; làm gì?&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Kết quả mong đợi:&lt;/strong&gt; Nếu thấy thông báo &amp;ldquo;Hello from Docker!&amp;rdquo; cùng với các thông tin về Docker, nghĩa là bạn đã cài đặt thành công!&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Container &lt;code&gt;hello-world&lt;/code&gt; làm gì?&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Container này tải xuống image &lt;code&gt;hello-world&lt;/code&gt; từ Docker Hub (nếu chưa có)&lt;/li&gt;
 &lt;li&gt;Chạy container và hiển thị thông báo chào mừng&lt;/li&gt;
@@ -3738,12 +3738,12 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;newgrp docker
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Giải thích:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Giải thích:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;usermod -aG docker $USER&lt;/code&gt;: Thêm user hiện tại vào nhóm &lt;code&gt;docker&lt;/code&gt; (nhóm này có quyền truy cập Docker daemon)&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;newgrp docker&lt;/code&gt;: Áp dụng thay đổi nhóm ngay lập tức mà không cần đăng xuất&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;⚠ Lưu ý quan trọng:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Lưu ý quan trọng:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Sau khi thực hiện lệnh này, bạn có thể cần đăng xuất và đăng nhập lại để thay đổi có hiệu lực&lt;/li&gt;
 &lt;li&gt;Hoặc bạn có thể mở terminal mới để áp dụng thay đổi&lt;/li&gt;
@@ -3759,7 +3759,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker run hello-world
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;Nếu lệnh chạy thành công mà không cần &lt;code&gt;sudo&lt;/code&gt;, bạn đã cấu hình đúng! ✅&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;Nếu lệnh chạy thành công mà không cần &lt;code&gt;sudo&lt;/code&gt;, bạn đã cấu hình đúng!&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="gỡ-cài-đặt-docker-nếu-cần"&gt;Gỡ cài đặt Docker (nếu cần)
 &lt;/h2&gt;&lt;p&gt;Nếu bạn muốn gỡ cài đặt Docker hoàn toàn khỏi hệ thống, thực hiện các bước sau:&lt;/p&gt;
@@ -3782,7 +3782,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo rm -rf /var/lib/docker
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;⚠ Cảnh báo:&lt;/strong&gt; Lệnh này sẽ xóa &lt;strong&gt;TẤT CẢ&lt;/strong&gt; dữ liệu Docker bao gồm:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Cảnh báo:&lt;/strong&gt; Lệnh này sẽ xóa &lt;strong&gt;TẤT CẢ&lt;/strong&gt; dữ liệu Docker bao gồm:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Tất cả images đã tải về&lt;/li&gt;
 &lt;li&gt;Tất cả containers (đang chạy và đã dừng)&lt;/li&gt;
@@ -3911,15 +3911,15 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="lời-kết"&gt;Lời kết
-&lt;/h2&gt;&lt;p&gt;Vậy là chúng ta đã hoàn tất cài đặt Docker trên Ubuntu! 🎉 Giờ đây, bạn có thể bắt đầu:&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;Vậy là chúng ta đã hoàn tất cài đặt Docker trên Ubuntu! Giờ đây, bạn có thể bắt đầu:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🐳 &lt;strong&gt;Tạo và chạy containers&lt;/strong&gt; cho các ứng dụng của mình&lt;/li&gt;
-&lt;li&gt;📦 &lt;strong&gt;Sử dụng Docker images&lt;/strong&gt; có sẵn từ Docker Hub&lt;/li&gt;
-&lt;li&gt;🚀 &lt;strong&gt;Triển khai ứng dụng&lt;/strong&gt; một cách nhất quán và dễ dàng&lt;/li&gt;
-&lt;li&gt;🔄 &lt;strong&gt;Quản lý môi trường development&lt;/strong&gt; và production hiệu quả hơn&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Tạo và chạy containers&lt;/strong&gt; cho các ứng dụng của mình&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Sử dụng Docker images&lt;/strong&gt; có sẵn từ Docker Hub&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Triển khai ứng dụng&lt;/strong&gt; một cách nhất quán và dễ dàng&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Quản lý môi trường development&lt;/strong&gt; và production hiệu quả hơn&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Docker là một công cụ mạnh mẽ trong thế giới DevOps. Hãy tiếp tục khám phá các tính năng của Docker như Docker Compose, Docker Swarm, và tích hợp với các công cụ CI/CD để tối ưu hóa quy trình phát triển của bạn!&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;📖 Tài liệu tham khảo:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tài liệu tham khảo:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://docs.docker.com/" target="_blank" rel="noopener"
 &gt;Tài liệu chính thức của Docker&lt;/a&gt;&lt;/li&gt;
@@ -3928,7 +3928,7 @@
 &lt;li&gt;&lt;a class="link" href="https://docs.docker.com/develop/dev-best-practices/" target="_blank" rel="noopener"
 &gt;Best practices cho Docker&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Chúc bạn thành công với Docker! 🚀😊&lt;/p&gt;</description></item><item><title>Tối ưu Docker cho Java</title><link>https://tech.nguuyen.io.vn/vi/posts/docker-optimization/docker-opt-java/</link><pubDate>Sat, 29 Nov 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/docker-optimization/docker-opt-java/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/docker-optimization/docker-optimization-java.jpg" alt="Featured image of post Tối ưu Docker cho Java" /&gt;&lt;h2 id="dockerfile-contest-2025--java-tối-ưu-extreme"&gt;Dockerfile Contest 2025 – Java tối ưu extreme
+&lt;p&gt;Chúc bạn thành công với Docker!&lt;/p&gt;</description></item><item><title>Tối ưu Docker cho Java</title><link>https://tech.nguuyen.io.vn/vi/posts/docker-optimization/docker-opt-java/</link><pubDate>Sat, 29 Nov 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/docker-optimization/docker-opt-java/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/docker-optimization/docker-optimization-java.jpg" alt="Featured image of post Tối ưu Docker cho Java" /&gt;&lt;h2 id="dockerfile-contest-2025--java-tối-ưu-extreme"&gt;Dockerfile Contest 2025 – Java tối ưu extreme
 &lt;/h2&gt;&lt;p&gt;Dockerfile Contest 2025 thúc đẩy cộng đồng DevOps Việt Nam đánh giá lại cách viết Dockerfile để đạt &lt;strong&gt;bảo mật, tối ưu, tường minh&lt;/strong&gt;. Bài viết này tổng hợp riêng cho hạng mục &lt;strong&gt;Java Spring Boot&lt;/strong&gt;, nơi các tác giả tập trung tối ưu JRE, giảm kích thước image và chuẩn hóa quy trình build.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="i-hạng-mục-java-spring-boot-service"&gt;I. Hạng mục JAVA (Spring Boot Service)
@@ -8968,19 +8968,19 @@
 &lt;/h2&gt;&lt;p&gt;Containers là một phương pháp ảo hóa ở cấp độ hệ điều hành, cho phép chạy nhiều ứng dụng cô lập trên cùng một kernel. Không giống như máy ảo (VM) yêu cầu hệ điều hành riêng biệt cho mỗi môi trường, container chỉ sử dụng nhân hệ điều hành của máy chủ, giúp giảm chi phí tài nguyên và tăng hiệu suất.&lt;/p&gt;
 &lt;h3 id="đặc-điểm-chính-của-containers"&gt;Đặc điểm chính của Containers
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;🏋 &lt;strong&gt;Nhẹ&lt;/strong&gt;: Chia sẻ kernel với hệ điều hành máy chủ, giảm bớt tài nguyên tiêu thụ.&lt;/li&gt;
-&lt;li&gt;🚀 &lt;strong&gt;Di động&lt;/strong&gt;: Chạy nhất quán trên nhiều nền tảng từ máy cá nhân đến cloud.&lt;/li&gt;
-&lt;li&gt;🔒 &lt;strong&gt;Cô lập&lt;/strong&gt;: Ứng dụng và thư viện được đóng gói riêng biệt.&lt;/li&gt;
-&lt;li&gt;📈 &lt;strong&gt;Hiệu suất cao&lt;/strong&gt;: Không cần khởi động hệ điều hành riêng biệt như máy ảo.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Nhẹ&lt;/strong&gt;: Chia sẻ kernel với hệ điều hành máy chủ, giảm bớt tài nguyên tiêu thụ.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Di động&lt;/strong&gt;: Chạy nhất quán trên nhiều nền tảng từ máy cá nhân đến cloud.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Cô lập&lt;/strong&gt;: Ứng dụng và thư viện được đóng gói riêng biệt.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Hiệu suất cao&lt;/strong&gt;: Không cần khởi động hệ điều hành riêng biệt như máy ảo.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id="docker---nền-tảng-container-phổ-biến-nhất"&gt;Docker - Nền tảng container phổ biến nhất
 &lt;/h2&gt;&lt;p&gt;&lt;a class="link" href="https://www.docker.com/" target="_blank" rel="noopener"
 &gt;Docker&lt;/a&gt; là một nền tảng mã nguồn mở giúp tự động hóa việc triển khai ứng dụng bằng cách sử dụng công nghệ container. Docker giúp đóng gói ứng dụng với toàn bộ thư viện và cấu hình cần thiết để chạy trên nhiều môi trường khác nhau.&lt;/p&gt;
 &lt;h3 id="tính-năng-nổi-bật-của-docker"&gt;Tính năng nổi bật của Docker
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;📦 &lt;strong&gt;Docker Engine&lt;/strong&gt;: Công cụ để tạo và chạy container.&lt;/li&gt;
-&lt;li&gt;🔄 &lt;strong&gt;Docker Compose&lt;/strong&gt;: Quản lý nhiều container trong một ứng dụng.&lt;/li&gt;
-&lt;li&gt;🏗 &lt;strong&gt;Docker Hub&lt;/strong&gt;: Kho lưu trữ và chia sẻ hình ảnh container.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Docker Engine&lt;/strong&gt;: Công cụ để tạo và chạy container.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Docker Compose&lt;/strong&gt;: Quản lý nhiều container trong một ứng dụng.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Docker Hub&lt;/strong&gt;: Kho lưu trữ và chia sẻ hình ảnh container.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id="ví-dụ-sử-dụng-docker"&gt;Ví dụ sử dụng Docker:
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
@@ -8992,20 +8992,20 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;Lệnh trên sẽ chạy một container Nginx trên cổng 80.&lt;/p&gt;
-&lt;p&gt;📚 &lt;strong&gt;Tài nguyên hữu ích:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Tài nguyên hữu ích:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;📖 &lt;a class="link" href="https://docs.docker.com/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://docs.docker.com/" target="_blank" rel="noopener"
 &gt;Tài liệu Docker&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=RqTEHSBrYFw" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=RqTEHSBrYFw" target="_blank" rel="noopener"
 &gt;Docker trong 5 phút&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id="lxc---linux-containers"&gt;LXC - Linux Containers
 &lt;/h2&gt;&lt;p&gt;LXC (Linux Containers) là một phương pháp ảo hóa cấp hệ điều hành cho phép chạy nhiều hệ thống Linux cô lập trên cùng một kernel.&lt;/p&gt;
 &lt;h3 id="đặc-điểm-của-lxc"&gt;Đặc điểm của LXC:
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;🏗 Tạo môi trường gần giống máy ảo nhưng hiệu suất cao hơn.&lt;/li&gt;
-&lt;li&gt;⚡ Khởi động nhanh hơn so với VM truyền thống.&lt;/li&gt;
-&lt;li&gt;🔍 Sử dụng các công nghệ của Linux như cgroups và namespaces.&lt;/li&gt;
+&lt;li&gt;Tạo môi trường gần giống máy ảo nhưng hiệu suất cao hơn.&lt;/li&gt;
+&lt;li&gt;Khởi động nhanh hơn so với VM truyền thống.&lt;/li&gt;
+&lt;li&gt;Sử dụng các công nghệ của Linux như cgroups và namespaces.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h3 id="ví-dụ-tạo-một-container-lxc"&gt;Ví dụ tạo một container LXC:
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
@@ -9018,13 +9018,13 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;lxc-start -n my-container -d
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;📚 &lt;strong&gt;Tài nguyên hữu ích:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Tài nguyên hữu ích:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;📖 &lt;a class="link" href="https://linuxcontainers.org/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://linuxcontainers.org/" target="_blank" rel="noopener"
 &gt;Trang chủ LXC&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=CWmkSj_B-wo" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=CWmkSj_B-wo" target="_blank" rel="noopener"
 &gt;Hướng dẫn sử dụng LXC&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;h2 id="kết-luận"&gt;Kết luận
-&lt;/h2&gt;&lt;p&gt;Containers giúp triển khai ứng dụng nhanh chóng, hiệu quả và tiết kiệm tài nguyên. &lt;strong&gt;Docker&lt;/strong&gt; là lựa chọn phổ biến cho phát triển ứng dụng, trong khi &lt;strong&gt;LXC&lt;/strong&gt; phù hợp hơn cho mô phỏng hệ điều hành đầy đủ. Hãy chọn công cụ phù hợp với nhu cầu của bạn! 🚀&lt;/p&gt;
-&lt;p&gt;👉 &lt;strong&gt;Bước tiếp theo:&lt;/strong&gt; Tìm hiểu về &lt;em&gt;&lt;strong&gt;Application Gateway&lt;/strong&gt;&lt;/em&gt; một dịch vụ quản lý traffic tầng ứng dụng giúp tối ưu hóa, bảo mật và kiểm soát luồng truy cập giữa client và backend. Nó có thể đóng vai trò như một reverse proxy, bảo vệ hệ thống và đảm bảo request được xử lý đúng cách.&lt;/p&gt;</description></item></channel></rss>
+&lt;/h2&gt;&lt;p&gt;Containers giúp triển khai ứng dụng nhanh chóng, hiệu quả và tiết kiệm tài nguyên. &lt;strong&gt;Docker&lt;/strong&gt; là lựa chọn phổ biến cho phát triển ứng dụng, trong khi &lt;strong&gt;LXC&lt;/strong&gt; phù hợp hơn cho mô phỏng hệ điều hành đầy đủ. Hãy chọn công cụ phù hợp với nhu cầu của bạn!&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Bước tiếp theo:&lt;/strong&gt; Tìm hiểu về &lt;em&gt;&lt;strong&gt;Application Gateway&lt;/strong&gt;&lt;/em&gt; một dịch vụ quản lý traffic tầng ứng dụng giúp tối ưu hóa, bảo mật và kiểm soát luồng truy cập giữa client và backend. Nó có thể đóng vai trò như một reverse proxy, bảo vệ hệ thống và đảm bảo request được xử lý đúng cách.&lt;/p&gt;</description></item></channel></rss>

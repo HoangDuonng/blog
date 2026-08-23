@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Container on Hoang Duong</title><link>https://tech.nguuyen.io.vn/tags/container/</link><description>Recent content in Container on Hoang Duong</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sun, 22 Feb 2026 14:30:00 +0700</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/container/index.xml" rel="self" type="application/rss+xml"/><item><title>Docker Basics: Image vs Container</title><link>https://tech.nguuyen.io.vn/posts/docker/docker-basics-image-vs-container/</link><pubDate>Sun, 25 Jan 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/docker/docker-basics-image-vs-container/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/docker/docker-basics-image-vs-container.jpg" alt="Featured image of post Docker Basics: Image vs Container" /&gt;&lt;h2 id="docker-image-and-container---two-essential-concepts"&gt;Docker Image and Container - Two Essential Concepts
-&lt;/h2&gt;&lt;p&gt;When starting with Docker, the two most important concepts you need to understand are &lt;strong&gt;Image&lt;/strong&gt; and &lt;strong&gt;Container&lt;/strong&gt;. Beginners often confuse them, but in reality, they play different roles in the Docker ecosystem. Image is like a &lt;strong&gt;recipe repository&lt;/strong&gt; (cooking instructions), while Container is &lt;strong&gt;the actual execution&lt;/strong&gt; (the prepared dish). 🍳&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;When starting with Docker, the two most important concepts you need to understand are &lt;strong&gt;Image&lt;/strong&gt; and &lt;strong&gt;Container&lt;/strong&gt;. Beginners often confuse them, but in reality, they play different roles in the Docker ecosystem. Image is like a &lt;strong&gt;recipe repository&lt;/strong&gt; (cooking instructions), while Container is &lt;strong&gt;the actual execution&lt;/strong&gt; (the prepared dish).&lt;/p&gt;
 &lt;p&gt;In this article, I&amp;rsquo;ll explain the detailed differences between Image and Container, how they work together, and provide real examples for better understanding.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="i-what-is-a-docker-image"&gt;I. What is a Docker Image?
@@ -422,11 +422,11 @@
 &lt;h2 id="v-best-practices-with-image-and-container"&gt;V. Best Practices with Image and Container
 &lt;/h2&gt;&lt;h3 id="image-management"&gt;Image Management
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;✅ Use specific versions (e.g., &lt;code&gt;node:18.12-alpine&lt;/code&gt; instead of &lt;code&gt;node:latest&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;✅ Reduce size using minimal base images (alpine, distroless)&lt;/li&gt;
-&lt;li&gt;✅ Leverage layer cache by ordering commands properly&lt;/li&gt;
-&lt;li&gt;✅ Use &lt;code&gt;.dockerignore&lt;/code&gt; to exclude unnecessary files&lt;/li&gt;
-&lt;li&gt;✅ Regularly remove unused images with &lt;code&gt;docker image prune&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Use specific versions (e.g., &lt;code&gt;node:18.12-alpine&lt;/code&gt; instead of &lt;code&gt;node:latest&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Reduce size using minimal base images (alpine, distroless)&lt;/li&gt;
+&lt;li&gt;Leverage layer cache by ordering commands properly&lt;/li&gt;
+&lt;li&gt;Use &lt;code&gt;.dockerignore&lt;/code&gt; to exclude unnecessary files&lt;/li&gt;
+&lt;li&gt;Regularly remove unused images with &lt;code&gt;docker image prune&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -444,11 +444,11 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;h3 id="container-management"&gt;Container Management
 &lt;/h3&gt;&lt;ul&gt;
-&lt;li&gt;✅ Name containers clearly (&lt;code&gt;--name app-container&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;✅ Use &lt;code&gt;-d&lt;/code&gt; (detached mode) to run containers in background&lt;/li&gt;
-&lt;li&gt;✅ Regularly check logs for debugging (&lt;code&gt;docker logs -f&lt;/code&gt;)&lt;/li&gt;
-&lt;li&gt;✅ Use volumes if data persistence is needed&lt;/li&gt;
-&lt;li&gt;✅ Limit resources with &lt;code&gt;--cpus&lt;/code&gt;, &lt;code&gt;--memory&lt;/code&gt;&lt;/li&gt;
+&lt;li&gt;Name containers clearly (&lt;code&gt;--name app-container&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Use &lt;code&gt;-d&lt;/code&gt; (detached mode) to run containers in background&lt;/li&gt;
+&lt;li&gt;Regularly check logs for debugging (&lt;code&gt;docker logs -f&lt;/code&gt;)&lt;/li&gt;
+&lt;li&gt;Use volumes if data persistence is needed&lt;/li&gt;
+&lt;li&gt;Limit resources with &lt;code&gt;--cpus&lt;/code&gt;, &lt;code&gt;--memory&lt;/code&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
@@ -598,8 +598,8 @@
 &lt;li&gt;Use &lt;code&gt;docker run&lt;/code&gt; to create container from image&lt;/li&gt;
 &lt;li&gt;Use &lt;code&gt;docker commit&lt;/code&gt; to update container as a new image&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Now you understand the differences between Image and Container. Next step: learn how to use Dockerfile to build images and Docker Compose to manage multiple containers. 🚀&lt;/p&gt;
-&lt;p&gt;If you found this article helpful, remember to ⭐ star the repo or 📱 share with friends! 😊&lt;/p&gt;
+&lt;p&gt;Now you understand the differences between Image and Container. Next step: learn how to use Dockerfile to build images and Docker Compose to manage multiple containers.&lt;/p&gt;
+&lt;p&gt;If you found this article helpful, remember to star the repo or share with friends!&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="references"&gt;References
 &lt;/h2&gt;&lt;ul&gt;
@@ -611,20 +611,20 @@
 &lt;/h2&gt;&lt;p&gt;Docker is a popular platform in DevOps for deploying applications using &lt;strong&gt;containers&lt;/strong&gt;. Containers allow you to package applications together with all their dependencies and necessary configurations, ensuring consistent execution across all environments from development to production.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Benefits of Docker:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;⚡ &lt;strong&gt;Consistency&lt;/strong&gt;: Applications run identically across all environments&lt;/li&gt;
-&lt;li&gt;🚀 &lt;strong&gt;Speed&lt;/strong&gt;: Containers start faster than virtual machines&lt;/li&gt;
-&lt;li&gt;📦 &lt;strong&gt;Packaging&lt;/strong&gt;: Easy to share and deploy applications&lt;/li&gt;
-&lt;li&gt;🔄 &lt;strong&gt;Scalability&lt;/strong&gt;: Easy to scale and manage multiple containers&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Consistency&lt;/strong&gt;: Applications run identically across all environments&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Speed&lt;/strong&gt;: Containers start faster than virtual machines&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Packaging&lt;/strong&gt;: Easy to share and deploy applications&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Scalability&lt;/strong&gt;: Easy to scale and manage multiple containers&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;This guide walks you through installing Docker on Ubuntu 20.04 and 22.04 in a straightforward and efficient manner, using Docker&amp;rsquo;s official repository to ensure you always have the latest stable version.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="prerequisites"&gt;Prerequisites
 &lt;/h2&gt;&lt;p&gt;Before you begin, make sure you have:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🖥 &lt;strong&gt;Ubuntu 20.04 or 22.04 server&lt;/strong&gt; installed&lt;/li&gt;
-&lt;li&gt;🔐 &lt;strong&gt;Sudo privileges&lt;/strong&gt; to execute administrative commands&lt;/li&gt;
-&lt;li&gt;🌐 &lt;strong&gt;Internet connection&lt;/strong&gt; to download packages&lt;/li&gt;
-&lt;li&gt;⏱ &lt;strong&gt;Time&lt;/strong&gt;: Installation takes approximately 5-10 minutes&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Ubuntu 20.04 or 22.04 server&lt;/strong&gt; installed&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Sudo privileges&lt;/strong&gt; to execute administrative commands&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Internet connection&lt;/strong&gt; to download packages&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Time&lt;/strong&gt;: Installation takes approximately 5-10 minutes&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="update-the-system"&gt;Update the System
@@ -637,7 +637,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt update &lt;span class="o"&gt;&amp;amp;&amp;amp;&lt;/span&gt; sudo apt upgrade -y
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Notes:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Notes:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;The &lt;code&gt;apt update&lt;/code&gt; command updates the list of available packages from repositories&lt;/li&gt;
 &lt;li&gt;The &lt;code&gt;apt upgrade -y&lt;/code&gt; command automatically installs updates without prompting&lt;/li&gt;
@@ -683,7 +683,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;echo&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu &lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;lsb_release -cs&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt; stable&amp;#34;&lt;/span&gt; &lt;span class="p"&gt;|&lt;/span&gt; sudo tee /etc/apt/sources.list.d/docker.list &amp;gt; /dev/null
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Explanation:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Explanation:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;arch=amd64&lt;/code&gt;: Specifies 64-bit architecture&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;signed-by&lt;/code&gt;: Specifies the GPG key for authentication&lt;/li&gt;
@@ -702,13 +702,13 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo apt install -y docker-ce docker-ce-cli containerd.io
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;📦 Packages Being Installed:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Packages Being Installed:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;docker-ce&lt;/code&gt;: Docker Community Edition - the open-source version of Docker&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;docker-ce-cli&lt;/code&gt;: Docker Command Line Interface - command-line tool to interact with Docker&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;containerd.io&lt;/code&gt;: Container runtime - low-level tool for managing container lifecycle&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;⏱ Installation Time:&lt;/strong&gt; This process typically takes 2-5 minutes depending on your internet speed.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Installation Time:&lt;/strong&gt; This process typically takes 2-5 minutes depending on your internet speed.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="verify-docker"&gt;Verify Docker
 &lt;/h2&gt;&lt;p&gt;After installation, verify that Docker is running properly:&lt;/p&gt;
@@ -732,7 +732,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl &lt;span class="nb"&gt;enable&lt;/span&gt; docker
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Command Explanations:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Command Explanations:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;systemctl start docker&lt;/code&gt;: Starts the Docker service immediately&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;systemctl enable docker&lt;/code&gt;: Configures Docker to auto-start on system boot&lt;/li&gt;
@@ -748,8 +748,8 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo docker run hello-world
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Expected Result:&lt;/strong&gt; If you see the &amp;ldquo;Hello from Docker!&amp;rdquo; message along with Docker information, congratulations, installation successful! 🎉&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;🔍 What does the &lt;code&gt;hello-world&lt;/code&gt; container do?&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Expected Result:&lt;/strong&gt; If you see the &amp;ldquo;Hello from Docker!&amp;rdquo; message along with Docker information, congratulations, installation successful!&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;What does the &lt;code&gt;hello-world&lt;/code&gt; container do?&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Downloads the &lt;code&gt;hello-world&lt;/code&gt; image from Docker Hub (if not already present)&lt;/li&gt;
 &lt;li&gt;Runs the container and displays a welcome message&lt;/li&gt;
@@ -768,12 +768,12 @@
 &lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;newgrp docker
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;💡 Explanation:&lt;/strong&gt;&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Explanation:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;code&gt;usermod -aG docker $USER&lt;/code&gt;: Adds the current user to the &lt;code&gt;docker&lt;/code&gt; group (which has Docker daemon access privileges)&lt;/li&gt;
 &lt;li&gt;&lt;code&gt;newgrp docker&lt;/code&gt;: Applies group changes immediately without needing to log out&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;⚠ Important Notes:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Important Notes:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;After executing this command, you may need to log out and log back in for changes to take effect&lt;/li&gt;
 &lt;li&gt;Alternatively, you can open a new terminal window to apply changes&lt;/li&gt;
@@ -789,7 +789,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;docker run hello-world
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;If the command succeeds without &lt;code&gt;sudo&lt;/code&gt;, you&amp;rsquo;ve configured it correctly! ✅&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;If the command succeeds without &lt;code&gt;sudo&lt;/code&gt;, you&amp;rsquo;ve configured it correctly!&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="uninstall-docker-if-needed"&gt;Uninstall Docker (if needed)
 &lt;/h2&gt;&lt;p&gt;If you want to completely remove Docker from your system, follow these steps:&lt;/p&gt;
@@ -812,7 +812,7 @@
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo rm -rf /var/lib/docker
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
-&lt;/div&gt;&lt;p&gt;&lt;strong&gt;⚠ Warning:&lt;/strong&gt; This command will delete &lt;strong&gt;ALL&lt;/strong&gt; Docker data including:&lt;/p&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;Warning:&lt;/strong&gt; This command will delete &lt;strong&gt;ALL&lt;/strong&gt; Docker data including:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;All downloaded images&lt;/li&gt;
 &lt;li&gt;All containers (running and stopped)&lt;/li&gt;
@@ -941,15 +941,15 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="conclusion"&gt;Conclusion
-&lt;/h2&gt;&lt;p&gt;Congratulations on completing Docker installation on Ubuntu! 🎉 Now you can:&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;Congratulations on completing Docker installation on Ubuntu! Now you can:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🐳 &lt;strong&gt;Create and run containers&lt;/strong&gt; for your applications&lt;/li&gt;
-&lt;li&gt;📦 &lt;strong&gt;Use Docker images&lt;/strong&gt; available from Docker Hub&lt;/li&gt;
-&lt;li&gt;🚀 &lt;strong&gt;Deploy applications&lt;/strong&gt; consistently and easily&lt;/li&gt;
-&lt;li&gt;🔄 &lt;strong&gt;Manage development and production environments&lt;/strong&gt; more efficiently&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Create and run containers&lt;/strong&gt; for your applications&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Use Docker images&lt;/strong&gt; available from Docker Hub&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Deploy applications&lt;/strong&gt; consistently and easily&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Manage development and production environments&lt;/strong&gt; more efficiently&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;Docker is a powerful tool in the DevOps world. Continue exploring Docker features like Docker Compose, Docker Swarm, and CI/CD integration to optimize your development workflow!&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;📖 References:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;References:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://docs.docker.com/" target="_blank" rel="noopener"
 &gt;Official Docker Documentation&lt;/a&gt;&lt;/li&gt;
@@ -958,36 +958,36 @@
 &lt;li&gt;&lt;a class="link" href="https://docs.docker.com/develop/dev-best-practices/" target="_blank" rel="noopener"
 &gt;Docker Best Practices&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Good luck with Docker! 🚀😊&lt;/p&gt;</description></item><item><title>Container Orchestration</title><link>https://tech.nguuyen.io.vn/posts/devops/devops-step-seventeen/</link><pubDate>Mon, 24 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/devops/devops-step-seventeen/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-seventeen.jpg" alt="Featured image of post Container Orchestration" /&gt;&lt;h2 id="what-is-container-orchestration"&gt;What is Container Orchestration?
+&lt;p&gt;Good luck with Docker!&lt;/p&gt;</description></item><item><title>Container Orchestration</title><link>https://tech.nguuyen.io.vn/posts/devops/devops-step-seventeen/</link><pubDate>Mon, 24 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/devops/devops-step-seventeen/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-seventeen.jpg" alt="Featured image of post Container Orchestration" /&gt;&lt;h2 id="what-is-container-orchestration"&gt;What is Container Orchestration?
 &lt;/h2&gt;&lt;p&gt;Container orchestration is the process of managing and automating the container lifecycle, including deployment, scaling, and networking across multiple servers. It is critical for running complex applications in production environments.&lt;/p&gt;
 &lt;p&gt;By using tools like &lt;strong&gt;Kubernetes, Docker Swarm,&lt;/strong&gt; and &lt;strong&gt;Apache Mesos&lt;/strong&gt;, organizations can ensure &lt;strong&gt;high availability, scalability, and reliability&lt;/strong&gt; for their applications. Container orchestration automates operational tasks and provides a strong foundation for &lt;strong&gt;microservices, cloud-native development,&lt;/strong&gt; and &lt;strong&gt;DevOps&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;📚 &lt;strong&gt;Free resources:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Free resources:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;📦 &lt;a class="link" href="https://www.redhat.com/en/topics/containers/what-is-container-orchestration" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.redhat.com/en/topics/containers/what-is-container-orchestration" target="_blank" rel="noopener"
 &gt;What is Container Orchestration?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🚀 &lt;a class="link" href="https://kubernetes.io/docs/tutorials/kubernetes-basics/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://kubernetes.io/docs/tutorials/kubernetes-basics/" target="_blank" rel="noopener"
 &gt;What is Kubernetes?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🐳 &lt;a class="link" href="https://docs.docker.com/engine/swarm/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://docs.docker.com/engine/swarm/" target="_blank" rel="noopener"
 &gt;Docker Swarm&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=PH-2FfFD2PU" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=PH-2FfFD2PU" target="_blank" rel="noopener"
 &gt;Kubernetes introduction&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="kubernetes"&gt;Kubernetes
 &lt;/h2&gt;&lt;p&gt;Kubernetes is the most popular open-source platform for container management. It allows container deployment across multiple servers, defining availability, deployment logic, and scaling through YAML.&lt;/p&gt;
 &lt;p&gt;Kubernetes originated from &lt;strong&gt;Borg&lt;/strong&gt;, Google&amp;rsquo;s internal platform, and has become a &lt;strong&gt;critical skill for DevOps engineers&lt;/strong&gt;. Many organizations now have &lt;strong&gt;Platform Engineering teams&lt;/strong&gt; dedicated to supporting Kubernetes for product teams.&lt;/p&gt;
-&lt;p&gt;📚 &lt;strong&gt;Free resources:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Free resources:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🗺 &lt;a class="link" href="https://roadmap.sh/kubernetes" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://roadmap.sh/kubernetes" target="_blank" rel="noopener"
 &gt;In-depth Kubernetes roadmap&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🌐 &lt;a class="link" href="https://kubernetes.io/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://kubernetes.io/" target="_blank" rel="noopener"
 &gt;Official Kubernetes website&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📖 &lt;a class="link" href="https://thenewstack.io/primer-how-kubernetes-came-to-be-what-it-is-and-why-you-should-care/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://thenewstack.io/primer-how-kubernetes-came-to-be-what-it-is-and-why-you-should-care/" target="_blank" rel="noopener"
 &gt;Kubernetes overview&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=2T86xAtR6Fo" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=2T86xAtR6Fo" target="_blank" rel="noopener"
 &gt;Complete Kubernetes course - beginner to advanced&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;📌 Example:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Example:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -1036,35 +1036,35 @@
 &lt;/h3&gt;&lt;p&gt;Amazon Elastic Kubernetes Service (EKS) is a Kubernetes service provided by AWS. It automatically manages the Kubernetes control plane and integrates with other AWS services.&lt;/p&gt;
 &lt;h3 id="aks---azure-kubernetes-service"&gt;AKS - Azure Kubernetes Service
 &lt;/h3&gt;&lt;p&gt;Azure Kubernetes Service (AKS) is Microsoft Azure’s Kubernetes service. AKS supports monitoring, security, autoscaling, and integration with Azure DevOps.&lt;/p&gt;
-&lt;p&gt;📚 &lt;strong&gt;Free resources:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Free resources:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;☁ &lt;a class="link" href="https://cloud.google.com/kubernetes-engine" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://cloud.google.com/kubernetes-engine" target="_blank" rel="noopener"
 &gt;Google Kubernetes Engine (GKE)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🟧 &lt;a class="link" href="https://aws.amazon.com/eks/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://aws.amazon.com/eks/" target="_blank" rel="noopener"
 &gt;Amazon Elastic Kubernetes Service (EKS)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🔵 &lt;a class="link" href="https://azure.microsoft.com/en-us/products/kubernetes-service/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://azure.microsoft.com/en-us/products/kubernetes-service/" target="_blank" rel="noopener"
 &gt;Azure Kubernetes Service (AKS)&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=CukYk43agA4" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=CukYk43agA4" target="_blank" rel="noopener"
 &gt;AWS EKS tutorial&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=Rl5M1CzgEH4" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=Rl5M1CzgEH4" target="_blank" rel="noopener"
 &gt;What is Google Kubernetes Engine?&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="ecs--fargate"&gt;ECS / Fargate
 &lt;/h2&gt;&lt;p&gt;&lt;strong&gt;ECS&lt;/strong&gt; is a container management service that runs on AWS EC2, giving you control over the server infrastructure.&lt;/p&gt;
 &lt;p&gt;&lt;strong&gt;Fargate&lt;/strong&gt; is a &lt;strong&gt;serverless&lt;/strong&gt; container service that runs containers without managing servers or clusters.&lt;/p&gt;
-&lt;p&gt;📚 &lt;strong&gt;Free resources:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Free resources:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;📄 &lt;a class="link" href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://docs.aws.amazon.com/AmazonECS/latest/developerguide/AWS_Fargate.html" target="_blank" rel="noopener"
 &gt;AWS Fargate documentation&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📄 &lt;a class="link" href="https://docs.aws.amazon.com/ecs/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://docs.aws.amazon.com/ecs/" target="_blank" rel="noopener"
 &gt;AWS ECS documentation&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=yi22xrvPnPk" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=yi22xrvPnPk" target="_blank" rel="noopener"
 &gt;AWS Fargate overview&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=esISkPlnxL0" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=esISkPlnxL0" target="_blank" rel="noopener"
 &gt;AWS ECS tutorial&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;📌 Example:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Example:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
@@ -1096,18 +1096,18 @@
 &lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="docker-swarm"&gt;Docker Swarm
 &lt;/h2&gt;&lt;p&gt;Docker Swarm is a cluster of Docker nodes (physical or virtual machines). The cluster is managed by a &lt;strong&gt;swarm manager&lt;/strong&gt;, and the participating machines are &lt;strong&gt;nodes&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;📚 &lt;strong&gt;Free resources:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Free resources:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;📄 &lt;a class="link" href="https://docs.docker.com/engine/swarm/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://docs.docker.com/engine/swarm/" target="_blank" rel="noopener"
 &gt;Docker Swarm documentation&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🔧 &lt;a class="link" href="https://thenewstack.io/tutorial-manage-docker-swarm-with-portainer/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://thenewstack.io/tutorial-manage-docker-swarm-with-portainer/" target="_blank" rel="noopener"
 &gt;Manage Docker Swarm with Portainer&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📦 &lt;a class="link" href="https://thenewstack.io/tutorial-create-a-docker-swarm-with-persistent-storage-using-glusterfs/" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://thenewstack.io/tutorial-create-a-docker-swarm-with-persistent-storage-using-glusterfs/" target="_blank" rel="noopener"
 &gt;Docker Swarm with GlusterFS storage&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=Xaea-XnJTJU" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=Xaea-XnJTJU" target="_blank" rel="noopener"
 &gt;Docker Swarm introduction | step-by-step&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;📌 Example:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Example:&lt;/strong&gt;&lt;/p&gt;
 &lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
 &lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
@@ -1126,5 +1126,5 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="conclusion"&gt;Conclusion
-&lt;/h2&gt;&lt;p&gt;Container orchestration plays a vital role in managing containerized applications, helping &lt;strong&gt;simplify operations, optimize resources, and improve availability&lt;/strong&gt;. Tools such as &lt;strong&gt;Kubernetes, Docker Swarm, ECS, and Fargate&lt;/strong&gt; offer flexible solutions for modern enterprises. Choosing the right tool enables organizations to &lt;strong&gt;maximize the power of containerization and cloud computing&lt;/strong&gt;. 🚀&lt;/p&gt;
-&lt;p&gt;👉 &lt;strong&gt;Next step:&lt;/strong&gt; Learn about &lt;em&gt;&lt;strong&gt;Application Monitoring&lt;/strong&gt;&lt;/em&gt; - tracking, measuring, and analyzing application performance, status, and behavior to detect incidents, optimize performance, and ensure a great user experience. Popular tools include Prometheus, Grafana, Datadog, and New Relic for collecting data from applications, servers, and infrastructure to provide alerts and detailed reports.&lt;/p&gt;</description></item></channel></rss>
+&lt;/h2&gt;&lt;p&gt;Container orchestration plays a vital role in managing containerized applications, helping &lt;strong&gt;simplify operations, optimize resources, and improve availability&lt;/strong&gt;. Tools such as &lt;strong&gt;Kubernetes, Docker Swarm, ECS, and Fargate&lt;/strong&gt; offer flexible solutions for modern enterprises. Choosing the right tool enables organizations to &lt;strong&gt;maximize the power of containerization and cloud computing&lt;/strong&gt;.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Next step:&lt;/strong&gt; Learn about &lt;em&gt;&lt;strong&gt;Application Monitoring&lt;/strong&gt;&lt;/em&gt; - tracking, measuring, and analyzing application performance, status, and behavior to detect incidents, optimize performance, and ensure a great user experience. Popular tools include Prometheus, Grafana, Datadog, and New Relic for collecting data from applications, servers, and infrastructure to provide alerts and detailed reports.&lt;/p&gt;</description></item></channel></rss>

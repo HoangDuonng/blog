@@ -305,7 +305,7 @@
 &lt;li&gt;Cài đặt đầy đủ: Docker Engine, CLI, containerd, Buildx, và Compose V2&lt;/li&gt;
 &lt;li&gt;Tự động khởi động và enable Docker service&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;Bạn có thể lưu script này vào hệ thống quản lý cấu hình (Ansible, Terraform) hoặc đơn giản clone từ repository để sử dụng trên nhiều server. 🚀&lt;/p&gt;
+&lt;p&gt;Bạn có thể lưu script này vào hệ thống quản lý cấu hình (Ansible, Terraform) hoặc đơn giản clone từ repository để sử dụng trên nhiều server.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="tài-liệu-tham-khảo"&gt;Tài liệu tham khảo
 &lt;/h2&gt;&lt;ul&gt;
@@ -997,8 +997,8 @@
 &lt;li&gt;&lt;strong&gt;Deploy&lt;/strong&gt; bằng &lt;code&gt;docker compose up --build -d&lt;/code&gt;&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Update&lt;/strong&gt; bằng &lt;code&gt;docker compose build app &amp;amp;&amp;amp; docker compose up --no-deps -d app&lt;/code&gt;&lt;/li&gt;
 &lt;/ol&gt;
-&lt;p&gt;Đây là kiến trúc cơ bản nhất để đưa một ứng dụng Node.js lên production. Từ đây bạn có thể mở rộng thêm SSL (Let&amp;rsquo;s Encrypt), database, monitoring tuỳ nhu cầu. 🚀&lt;/p&gt;
-&lt;p&gt;Nếu bạn thấy bài viết này hữu ích, hãy nhớ ⭐ star repo hoặc 📱 chia sẻ với bạn bè nhé! 😊&lt;/p&gt;
+&lt;p&gt;Đây là kiến trúc cơ bản nhất để đưa một ứng dụng Node.js lên production. Từ đây bạn có thể mở rộng thêm SSL (Let&amp;rsquo;s Encrypt), database, monitoring tuỳ nhu cầu.&lt;/p&gt;
+&lt;p&gt;Nếu bạn thấy bài viết này hữu ích, hãy nhớ star repo hoặc chia sẻ với bạn bè nhé!&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="tài-liệu-tham-khảo"&gt;Tài liệu tham khảo
 &lt;/h2&gt;&lt;ul&gt;
@@ -1627,5 +1627,5 @@
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="lời-kết"&gt;Lời kết
-&lt;/h2&gt;&lt;p&gt;Docker Compose v2 là công cụ mạnh mẽ giúp bạn quản lý multi-container applications một cách dễ dàng. Với các best practices trên, bạn có thể xây dựng và triển khai ứng dụng một cách chuyên nghiệp và hiệu quả! 🚀&lt;/p&gt;
-&lt;p&gt;Hãy thử nghiệm với các ví dụ trên và dần dần áp dụng vào dự án thực tế của bạn. 😊&lt;/p&gt;</description></item></channel></rss>
+&lt;/h2&gt;&lt;p&gt;Docker Compose v2 là công cụ mạnh mẽ giúp bạn quản lý multi-container applications một cách dễ dàng. Với các best practices trên, bạn có thể xây dựng và triển khai ứng dụng một cách chuyên nghiệp và hiệu quả!&lt;/p&gt;
+&lt;p&gt;Hãy thử nghiệm với các ví dụ trên và dần dần áp dụng vào dự án thực tế của bạn.&lt;/p&gt;</description></item></channel></rss>

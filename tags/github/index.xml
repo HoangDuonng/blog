@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Github on Hoang Duong</title><link>https://tech.nguuyen.io.vn/tags/github/</link><description>Recent content in Github on Hoang Duong</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Thu, 05 Feb 2026 10:29:10 +0700</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/github/index.xml" rel="self" type="application/rss+xml"/><item><title>Source Code Hosting Services</title><link>https://tech.nguuyen.io.vn/posts/devops/devops-step-five/</link><pubDate>Sun, 23 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/devops/devops-step-five/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-five.jpg" alt="Featured image of post Source Code Hosting Services" /&gt;&lt;h2 id="source-code-hosting-services-repo-hosting-services"&gt;Source Code Hosting Services (Repo Hosting Services)
 &lt;/h2&gt;&lt;p&gt;When working in teams, you need a remote place to store source code so everyone can access it, create their own branches, and create or review pull requests. These services typically include issue tracking, code review, and continuous integration (CI/CD). Popular options include GitHub, GitLab, Bitbucket, and AWS CodeCommit.&lt;/p&gt;
-&lt;p&gt;📚 &lt;strong&gt;Free resources to learn more:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Free resources to learn more:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🔗 &lt;a class="link" href="https://github.com" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://github.com" target="_blank" rel="noopener"
 &gt;GitHub&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🔗 &lt;a class="link" href="https://gitlab.com" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://gitlab.com" target="_blank" rel="noopener"
 &gt;GitLab&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🔗 &lt;a class="link" href="https://bitbucket.org" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://bitbucket.org" target="_blank" rel="noopener"
 &gt;BitBucket&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=FQGXIIqziQg" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=FQGXIIqziQg" target="_blank" rel="noopener"
 &gt;GitHub vs GitLab vs Bitbucket - Which one to choose?&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
@@ -16,21 +16,21 @@
 &lt;/h2&gt;&lt;p&gt;GitHub is a Git-based source code management platform that provides cloud-based code repository hosting services. It supports features like bug tracking, task management, and project wikis. GitHub enables code review through pull requests, issue tracking, and supports collaborative programming with features like fork and star.&lt;/p&gt;
 &lt;p&gt;GitHub supports both public and private repositories, making it a popular choice for both open-source projects and personal development. The GitHub ecosystem includes:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🚀 &lt;strong&gt;GitHub Actions&lt;/strong&gt;: Workflow automation.&lt;/li&gt;
-&lt;li&gt;📦 &lt;strong&gt;GitHub Packages&lt;/strong&gt;: Software package management.&lt;/li&gt;
-&lt;li&gt;🌐 &lt;strong&gt;GitHub Pages&lt;/strong&gt;: Free static website hosting.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;GitHub Actions&lt;/strong&gt;: Workflow automation.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;GitHub Packages&lt;/strong&gt;: Software package management.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;GitHub Pages&lt;/strong&gt;: Free static website hosting.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;📚 &lt;strong&gt;Free resources to learn more:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Free resources to learn more:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🗺 &lt;a class="link" href="https://roadmap.sh/github" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://roadmap.sh/github" target="_blank" rel="noopener"
 &gt;Git &amp;amp; GitHub Roadmap&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🔗 &lt;a class="link" href="https://github.com" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://github.com" target="_blank" rel="noopener"
 &gt;GitHub Homepage&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📖 &lt;a class="link" href="https://ooloo.io/project/github-flow" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://ooloo.io/project/github-flow" target="_blank" rel="noopener"
 &gt;How to use Git in professional development teams&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=pBy1zgt0XPc" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=pBy1zgt0XPc" target="_blank" rel="noopener"
 &gt;What is GitHub?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📰 &lt;a class="link" href="https://app.daily.dev/tags/github?ref=roadmapsh" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://app.daily.dev/tags/github?ref=roadmapsh" target="_blank" rel="noopener"
 &gt;Great articles about GitHub&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
@@ -38,19 +38,19 @@
 &lt;/h2&gt;&lt;p&gt;GitLab is a comprehensive DevOps tool that provides Git repository management along with wikis, issue tracking, and built-in CI/CD features. It&amp;rsquo;s a complete DevOps platform covering all stages from planning, development, testing to deployment and monitoring.&lt;/p&gt;
 &lt;p&gt;GitLab supports both cloud and self-hosted versions, suitable for organizations with high security requirements. Some notable GitLab features include:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🔄 &lt;strong&gt;Built-in CI/CD&lt;/strong&gt;: Supports automated testing and deployment.&lt;/li&gt;
-&lt;li&gt;📦 &lt;strong&gt;Container &amp;amp; Package Registry&lt;/strong&gt;: Package management and storage.&lt;/li&gt;
-&lt;li&gt;🔎 &lt;strong&gt;Source code security scanning&lt;/strong&gt;: Detects vulnerabilities in code.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Built-in CI/CD&lt;/strong&gt;: Supports automated testing and deployment.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Container &amp;amp; Package Registry&lt;/strong&gt;: Package management and storage.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Source code security scanning&lt;/strong&gt;: Detects vulnerabilities in code.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;📚 &lt;strong&gt;Free resources to learn more:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Free resources to learn more:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🔗 &lt;a class="link" href="https://gitlab.com" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://gitlab.com" target="_blank" rel="noopener"
 &gt;GitLab Homepage&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📖 &lt;a class="link" href="https://docs.gitlab.com" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://docs.gitlab.com" target="_blank" rel="noopener"
 &gt;Official GitLab Documentation&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=bnF7f1zGpo4" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=bnF7f1zGpo4" target="_blank" rel="noopener"
 &gt;What is GitLab and why use it?&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📰 &lt;a class="link" href="https://app.daily.dev/tags/gitlab?ref=roadmapsh" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://app.daily.dev/tags/gitlab?ref=roadmapsh" target="_blank" rel="noopener"
 &gt;Great articles about GitLab&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
@@ -58,29 +58,29 @@
 &lt;/h2&gt;&lt;p&gt;Bitbucket is Atlassian&amp;rsquo;s source code repository hosting service that supports both Git and Mercurial. It integrates tightly with other Atlassian tools like Jira and Trello, making project management easier. Bitbucket offers both cloud and self-hosted versions.&lt;/p&gt;
 &lt;p&gt;Some notable Bitbucket features:&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🔍 &lt;strong&gt;Code Review &amp;amp; Pull Requests&lt;/strong&gt;: Supports code review.&lt;/li&gt;
-&lt;li&gt;🔄 &lt;strong&gt;Bitbucket Pipelines&lt;/strong&gt;: Built-in CI/CD.&lt;/li&gt;
-&lt;li&gt;📖 &lt;strong&gt;Wiki &amp;amp; Issue Tracking&lt;/strong&gt;: Documentation management and issue tracking.&lt;/li&gt;
-&lt;li&gt;🔐 &lt;strong&gt;Free private repository support&lt;/strong&gt;: Suitable for small teams.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Code Review &amp;amp; Pull Requests&lt;/strong&gt;: Supports code review.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Bitbucket Pipelines&lt;/strong&gt;: Built-in CI/CD.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Wiki &amp;amp; Issue Tracking&lt;/strong&gt;: Documentation management and issue tracking.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Free private repository support&lt;/strong&gt;: Suitable for small teams.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;📚 &lt;strong&gt;Free resources to learn more:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Free resources to learn more:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
-&lt;li&gt;🔗 &lt;a class="link" href="https://bitbucket.org" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://bitbucket.org" target="_blank" rel="noopener"
 &gt;Bitbucket Homepage&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📖 &lt;a class="link" href="https://bitbucket.org/product/guides/getting-started/overview" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://bitbucket.org/product/guides/getting-started/overview" target="_blank" rel="noopener"
 &gt;Bitbucket Overview&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📚 &lt;a class="link" href="https://www.w3schools.com/git/git_intro.asp?remote=bitbucket" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.w3schools.com/git/git_intro.asp?remote=bitbucket" target="_blank" rel="noopener"
 &gt;Introduction to Git and Bitbucket&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;🎥 &lt;a class="link" href="https://www.youtube.com/watch?v=M44nEyd_5To" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=M44nEyd_5To" target="_blank" rel="noopener"
 &gt;Bitbucket Cloud Tutorial&lt;/a&gt;&lt;/li&gt;
-&lt;li&gt;📰 &lt;a class="link" href="https://app.daily.dev/tags/bitbucket?ref=roadmapsh" target="_blank" rel="noopener"
+&lt;li&gt;&lt;a class="link" href="https://app.daily.dev/tags/bitbucket?ref=roadmapsh" target="_blank" rel="noopener"
 &gt;Great articles about Bitbucket&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="conclusion"&gt;Conclusion
 &lt;/h2&gt;&lt;p&gt;Choosing a source code repository hosting service depends on your development team&amp;rsquo;s needs. If you need a popular platform with a vast ecosystem, &lt;em&gt;&lt;strong&gt;GitHub&lt;/strong&gt;&lt;/em&gt; is a strong choice. If you want a fully integrated DevOps solution, &lt;em&gt;&lt;strong&gt;GitLab&lt;/strong&gt;&lt;/em&gt; would be more suitable. If you&amp;rsquo;re already using the Atlassian ecosystem, &lt;em&gt;&lt;strong&gt;Bitbucket&lt;/strong&gt;&lt;/em&gt; would be the best choice.&lt;/p&gt;
-&lt;p&gt;Consider your project needs and desired level of integration to make the right decision! 🚀&lt;/p&gt;
-&lt;p&gt;👉 &lt;strong&gt;Next step:&lt;/strong&gt; Learn about &lt;em&gt;&lt;strong&gt;Containers&lt;/strong&gt;&lt;/em&gt; that help package applications along with all libraries, configurations, and dependencies to run consistently across different environments.&lt;/p&gt;</description></item><item><title>Version Control Systems</title><link>https://tech.nguuyen.io.vn/posts/devops/devops-step-four/</link><pubDate>Sun, 23 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/devops/devops-step-four/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-four.jpg" alt="Featured image of post Version Control Systems " /&gt;&lt;h2 id="version-control-systems"&gt;Version Control Systems
+&lt;p&gt;Consider your project needs and desired level of integration to make the right decision!&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Next step:&lt;/strong&gt; Learn about &lt;em&gt;&lt;strong&gt;Containers&lt;/strong&gt;&lt;/em&gt; that help package applications along with all libraries, configurations, and dependencies to run consistently across different environments.&lt;/p&gt;</description></item><item><title>Version Control Systems</title><link>https://tech.nguuyen.io.vn/posts/devops/devops-step-four/</link><pubDate>Sun, 23 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/devops/devops-step-four/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/devops/devops-step-four.jpg" alt="Featured image of post Version Control Systems " /&gt;&lt;h2 id="version-control-systems"&gt;Version Control Systems
 &lt;/h2&gt;&lt;p&gt;Version control systems (VCS) are tools that help track changes to source code and files over time. They support team collaboration, manage change history, and maintain multiple versions of source code. There are two main types of VCS:&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;Centralized VCS (CVCS)&lt;/strong&gt;: Uses a central repository, examples include &lt;strong&gt;Subversion (SVN)&lt;/strong&gt;, &lt;strong&gt;CVS&lt;/strong&gt;.&lt;/li&gt;
@@ -246,15 +246,15 @@
 &lt;h2 id="free-git-learning-resources"&gt;Free Git Learning Resources
 &lt;/h2&gt;&lt;ul&gt;
 &lt;li&gt;&lt;a class="link" href="https://git-scm.com/doc" target="_blank" rel="noopener"
-&gt;📖 Official Git Documentation&lt;/a&gt;&lt;/li&gt;
+&gt;Official Git Documentation&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://cs.fyi/guide/git-cheatsheet" target="_blank" rel="noopener"
-&gt;📄 Git Cheat Sheet&lt;/a&gt;&lt;/li&gt;
+&gt;Git Cheat Sheet&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://www.youtube.com/watch?v=SWYqp7iY_Tc" target="_blank" rel="noopener"
-&gt;▶ Git Tutorial Video for Beginners&lt;/a&gt;&lt;/li&gt;
+&gt;Git Tutorial Video for Beginners&lt;/a&gt;&lt;/li&gt;
 &lt;li&gt;&lt;a class="link" href="https://app.daily.dev/tags/git?ref=roadmapsh" target="_blank" rel="noopener"
-&gt;📝 Article: What is Version Control System?&lt;/a&gt;&lt;/li&gt;
+&gt;Article: What is Version Control System?&lt;/a&gt;&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="conclusion"&gt;Conclusion
 &lt;/h2&gt;&lt;p&gt;Using Git makes source code management easier, supports effective team collaboration, and protects important project data. Understanding and mastering Git is an essential skill for every programmer.&lt;/p&gt;
-&lt;p&gt;👉 &lt;strong&gt;Next step:&lt;/strong&gt; Learn about &lt;em&gt;&lt;strong&gt;GitHub &amp;amp; GitLab&lt;/strong&gt;&lt;/em&gt; to manage Git repositories on cloud platforms.&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;&lt;strong&gt;Next step:&lt;/strong&gt; Learn about &lt;em&gt;&lt;strong&gt;GitHub &amp;amp; GitLab&lt;/strong&gt;&lt;/em&gt; to manage Git repositories on cloud platforms.&lt;/p&gt;</description></item></channel></rss>

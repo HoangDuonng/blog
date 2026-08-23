@@ -103,19 +103,19 @@ title="YouTube Video"
 &lt;/iframe&gt;
 &lt;/div&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;/p&gt;&lt;span class="cite"&gt;&lt;span&gt;― &lt;/span&gt;&lt;span&gt;Source, &lt;/span&gt;&lt;a href="https://www.youtube.com/@F8VNOfficial"&gt;&lt;cite&gt;F8 Official ✔&lt;/cite&gt;&lt;/a&gt;&lt;/span&gt;&lt;/blockquote&gt;&lt;/p&gt;
+&lt;p&gt;&lt;/p&gt;&lt;span class="cite"&gt;&lt;span&gt;― &lt;/span&gt;&lt;span&gt;Source, &lt;/span&gt;&lt;a href="https://www.youtube.com/@F8VNOfficial"&gt;&lt;cite&gt;F8 Official&lt;/cite&gt;&lt;/a&gt;&lt;/span&gt;&lt;/blockquote&gt;&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="conclusion"&gt;Conclusion
-&lt;/h2&gt;&lt;p&gt;Pointing a domain to hosting is essential for your website to work online. Whether you use nameservers, A records, or an intermediate nameserver, double-check your settings and allow time for DNS propagation. If you encounter issues, review the configuration and try again 🔄. Good luck, and feel free to leave a comment if you need help! 💬😊&lt;/p&gt;</description></item><item><title>Deploy a Website to Hosting the Simplest Way (HTML/CSS or React/Vue.js)</title><link>https://tech.nguuyen.io.vn/posts/website/how-to-deploy-a-website/</link><pubDate>Wed, 26 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/website/how-to-deploy-a-website/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/website/upload-website-on-hosting.jpg" alt="Featured image of post Deploy a Website to Hosting the Simplest Way (HTML/CSS or React/Vue.js)" /&gt;&lt;h2 id="how-to-upload-a-website-to-hosting-via-file-manager-and-cpanel-from-a-to-z"&gt;How to upload a website to hosting via File Manager and cPanel from A to Z
+&lt;/h2&gt;&lt;p&gt;Pointing a domain to hosting is essential for your website to work online. Whether you use nameservers, A records, or an intermediate nameserver, double-check your settings and allow time for DNS propagation. If you encounter issues, review the configuration and try again. Good luck, and feel free to leave a comment if you need help!&lt;/p&gt;</description></item><item><title>Deploy a Website to Hosting the Simplest Way (HTML/CSS or React/Vue.js)</title><link>https://tech.nguuyen.io.vn/posts/website/how-to-deploy-a-website/</link><pubDate>Wed, 26 Feb 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/website/how-to-deploy-a-website/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/website/upload-website-on-hosting.jpg" alt="Featured image of post Deploy a Website to Hosting the Simplest Way (HTML/CSS or React/Vue.js)" /&gt;&lt;h2 id="how-to-upload-a-website-to-hosting-via-file-manager-and-cpanel-from-a-to-z"&gt;How to upload a website to hosting via File Manager and cPanel from A to Z
 &lt;/h2&gt;&lt;hr&gt;
 &lt;p&gt;Uploading a website to hosting is an essential step to bring your site online. It is not just about transferring files but also ensuring everything runs smoothly and securely. This guide walks you through the steps, from preparing files and databases to using the right upload tools.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="key-points-to-remember"&gt;Key points to remember
 &lt;/h2&gt;&lt;p&gt;Before you start uploading, keep these essentials in mind:&lt;/p&gt;
-&lt;p&gt;✅ &lt;strong&gt;What to prepare before uploading&lt;/strong&gt;: Website files, database, control panel access, and an FTP client like FileZilla.&lt;/p&gt;
-&lt;p&gt;✅ &lt;strong&gt;Ways to upload&lt;/strong&gt;: Choose a reliable host, then use File Manager, FTP, WordPress plugins, SSH, or provider support.&lt;/p&gt;
-&lt;p&gt;✅ &lt;strong&gt;Why upload to hosting&lt;/strong&gt;: Makes your site public, improves security, boosts speed, and simplifies management.&lt;/p&gt;
-&lt;p&gt;✅ &lt;strong&gt;Four steps to upload a website&lt;/strong&gt;:&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;What to prepare before uploading&lt;/strong&gt;: Website files, database, control panel access, and an FTP client like FileZilla.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Ways to upload&lt;/strong&gt;: Choose a reliable host, then use File Manager, FTP, WordPress plugins, SSH, or provider support.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Why upload to hosting&lt;/strong&gt;: Makes your site public, improves security, boosts speed, and simplifies management.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Four steps to upload a website&lt;/strong&gt;:&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;Upload website files to &lt;code&gt;public_html&lt;/code&gt; via File Manager or FTP.&lt;/li&gt;
 &lt;li&gt;Verify files are in the correct location.&lt;/li&gt;
@@ -128,10 +128,10 @@ title="YouTube Video"
 &lt;li&gt;&lt;strong&gt;Website files&lt;/strong&gt;: These can be the contents of your old &lt;code&gt;public_html&lt;/code&gt; folder, source code, or the latest backup.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;blockquote&gt;
-&lt;p&gt;&lt;strong&gt;📌 Note for React/Vue.js deployments&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Note for React/Vue.js deployments&lt;/strong&gt;&lt;/p&gt;
 &lt;p&gt;When building a &lt;strong&gt;React&lt;/strong&gt; or &lt;strong&gt;Vue.js&lt;/strong&gt; app, you do not upload the full source code,
 only the &lt;strong&gt;static build output&lt;/strong&gt;.&lt;/p&gt;
-&lt;p&gt;&lt;strong&gt;🔹 Build and zip steps:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Build and zip steps:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Run the build command:
 &lt;ul&gt;
@@ -160,7 +160,7 @@ only the &lt;strong&gt;static build output&lt;/strong&gt;.&lt;/p&gt;
 &lt;li&gt;The output folder is usually &lt;code&gt;build/&lt;/code&gt; (&lt;strong&gt;React&lt;/strong&gt;) or &lt;code&gt;dist/&lt;/code&gt; (&lt;strong&gt;Vue.js&lt;/strong&gt;).&lt;/li&gt;
 &lt;li&gt;Zip the &lt;code&gt;build&lt;/code&gt; or &lt;code&gt;dist&lt;/code&gt; folder before uploading.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;&lt;strong&gt;📤 Uploading to the server:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Uploading to the server:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;With &lt;strong&gt;cPanel&lt;/strong&gt;, extract directly in &lt;code&gt;public_html&lt;/code&gt;.&lt;/li&gt;
 &lt;li&gt;With &lt;strong&gt;SSH/SFTP&lt;/strong&gt;, upload and unzip using:
@@ -311,7 +311,7 @@ alt="Ask hosting support"
 &gt;&lt;/p&gt;
 &lt;p align="center"&gt;&lt;em&gt;Figure 6: Ask hosting support&lt;/em&gt;&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;📌 &lt;strong&gt;Notes after uploading&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Notes after uploading&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;&lt;strong&gt;Move all data from subfolders into &lt;code&gt;public_html&lt;/code&gt;&lt;/strong&gt; so the site loads correctly.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Check file structure and database connections&lt;/strong&gt; to avoid runtime errors.&lt;/li&gt;
@@ -512,7 +512,7 @@ alt="Import database"
 &lt;h3 id="update-configuration-for-database-connection"&gt;Update configuration for database connection
 &lt;/h3&gt;&lt;p&gt;After upload, open your &lt;strong&gt;PHP configuration file&lt;/strong&gt; and fill in host, database name, username, and password. The file name and location depend on your software. For &lt;strong&gt;WordPress&lt;/strong&gt;, the file is &lt;code&gt;wp-config.php&lt;/code&gt; in &lt;code&gt;public_html&lt;/code&gt;.&lt;/p&gt;
 &lt;blockquote&gt;
-&lt;p&gt;⚠ &lt;strong&gt;Notes:&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Notes:&lt;/strong&gt;&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;Large databases should be split into smaller files to speed up uploads.&lt;/li&gt;
 &lt;li&gt;If your database contains special characters, convert them to &lt;strong&gt;ASCII&lt;/strong&gt; before upload.&lt;/li&gt;
@@ -532,9 +532,9 @@ alt="Import database"
 &lt;li&gt;&lt;strong&gt;Wait for DNS propagation:&lt;/strong&gt; New DNS changes can take &lt;strong&gt;24 hours&lt;/strong&gt;.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Check immediately using:&lt;/strong&gt;
 &lt;ul&gt;
-&lt;li&gt;🖥 &lt;strong&gt;Hosts file:&lt;/strong&gt; Edit the hosts file to simulate DNS changes.&lt;/li&gt;
-&lt;li&gt;🌐 &lt;strong&gt;Online tools:&lt;/strong&gt; Use online DNS checkers.&lt;/li&gt;
-&lt;li&gt;🔌 &lt;strong&gt;Browser plugins:&lt;/strong&gt; Use plugins for virtual hosts.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Hosts file:&lt;/strong&gt; Edit the hosts file to simulate DNS changes.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Online tools:&lt;/strong&gt; Use online DNS checkers.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Browser plugins:&lt;/strong&gt; Use plugins for virtual hosts.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;/li&gt;
 &lt;/ul&gt;
@@ -561,9 +561,9 @@ alt="Import database"
 &lt;/h3&gt;&lt;ul&gt;
 &lt;li&gt;Performance can vary throughout the day.&lt;/li&gt;
 &lt;/ul&gt;
-&lt;p&gt;👉 &lt;strong&gt;If issues appear and you are unsure how to fix them, contact your hosting provider.&lt;/strong&gt; 🚀&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;If issues appear and you are unsure how to fix them, contact your hosting provider.&lt;/strong&gt;&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="conclusion"&gt;Conclusion
 &lt;/h2&gt;&lt;p&gt;Uploading a website to hosting is a key step for stable online operation. By preparing correctly and following the steps above, you ensure your website is ready to serve users effectively.&lt;/p&gt;
-&lt;p&gt;💡 If you have questions or need help, leave a comment below. I will respond soon.&lt;/p&gt;
-&lt;p&gt;Thanks for reading! 🚀&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;If you have questions or need help, leave a comment below. I will respond soon.&lt;/p&gt;
+&lt;p&gt;Thanks for reading!&lt;/p&gt;</description></item></channel></rss>
