@@ -4846,7 +4846,7 @@ Sử dụng &lt;strong&gt;Prometheus + Grafana&lt;/strong&gt; để giám sát h
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;Sau khi chạy, bạn có thể truy cập Nexus tại &lt;code&gt;http://localhost:8081&lt;/code&gt;.&lt;/p&gt;
-&lt;h3 id="3-cloudsmith"&gt;3. Cloudsmith
+&lt;h3 id="cloudsmith"&gt;Cloudsmith
 &lt;/h3&gt;&lt;p&gt;Cloudsmith là một nền tảng quản lý artifacts dựa trên đám mây, hỗ trợ nhiều định dạng gói tin như Docker, Helm, npm, pip.&lt;/p&gt;
 &lt;h4 id="cách-tải-và-đẩy-package-lên-cloudsmith"&gt;Cách tải và đẩy package lên Cloudsmith:
 &lt;/h4&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;

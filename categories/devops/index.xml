@@ -4669,7 +4669,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;p&gt;After it starts, you can access Nexus at &lt;code&gt;http://localhost:8081&lt;/code&gt;.&lt;/p&gt;
-&lt;h3 id="3-cloudsmith"&gt;3. Cloudsmith
+&lt;h3 id="cloudsmith"&gt;Cloudsmith
 &lt;/h3&gt;&lt;p&gt;Cloudsmith is a cloud-based artifact management platform that supports many package formats such as Docker, Helm, npm, and pip.&lt;/p&gt;
 &lt;h4 id="upload-packages-to-cloudsmith"&gt;Upload packages to Cloudsmith:
 &lt;/h4&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
