@@ -1,0 +1,420 @@
+<!doctype html><html lang=vi dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="Hướng dẫn kỹ thuật debug Bash script cho DevOps: bash -x, bash -n, set -euo pipefail, tùy biến PS4, bắt lỗi với trap ERR và phân tích tĩnh với ShellCheck."><title>Debug script trong Bash: Tìm và sửa lỗi hiệu quả cho DevOps</title><link rel=canonical href=https://tech.nguuyen.io.vn/vi/posts/bash/bash-step-nine/><link rel=stylesheet href=/scss/style.min.d65180b8eb2049a52207ff41f36ee5dc8cdf8c7728053af03d1d0545c4a8c316.css><meta property='og:title' content="Debug script trong Bash: Tìm và sửa lỗi hiệu quả cho DevOps"><meta property='og:description' content="Hướng dẫn kỹ thuật debug Bash script cho DevOps: bash -x, bash -n, set -euo pipefail, tùy biến PS4, bắt lỗi với trap ERR và phân tích tĩnh với ShellCheck."><meta property='og:url' content='https://tech.nguuyen.io.vn/vi/posts/bash/bash-step-nine/'><meta property='og:site_name' content='Hoàng Dương'><meta property='og:type' content='article'><meta property='article:section' content='Posts'><meta property='article:tag' content='bash'><meta property='article:tag' content='shell-script'><meta property='article:tag' content='devops'><meta property='article:tag' content='debugging'><meta property='article:tag' content='linux'><meta property='article:tag' content='shellcheck'><meta property='article:tag' content='troubleshooting'><meta property='article:published_time' content='2026-07-02T00:00:00+00:00'><meta property='article:modified_time' content='2026-07-02T00:00:00+00:00'><meta property='og:image' content='https://tech.nguuyen.io.vn/images/bash/bash-step-nine.jpg'><meta name=twitter:title content="Debug script trong Bash: Tìm và sửa lỗi hiệu quả cho DevOps"><meta name=twitter:description content="Hướng dẫn kỹ thuật debug Bash script cho DevOps: bash -x, bash -n, set -euo pipefail, tùy biến PS4, bắt lỗi với trap ERR và phân tích tĩnh với ShellCheck."><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://tech.nguuyen.io.vn/images/bash/bash-step-nine.jpg'><link rel=icon type=image/x-icon href=/favicon.ico><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel=stylesheet></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><header class="hd-header is-article-header"><div class=hd-header-inner><div class=hd-brand><a href=/vi/ class=hd-logo-link><span class=hd-logo-text>Hoang Duong</span></a></div><div class=hd-header-divider aria-hidden=true></div><div class=hd-header-rail><a href=/vi/ class="header-rail-crumb header-rail-home">BÀI VIẾT
+</a><span class=header-rail-sep>//</span>
+<a href=/vi/categories/devops/ class="header-rail-crumb header-rail-cat">[DEVOPS]
+</a><span class=header-rail-title>Debug script trong Bash: Tìm và sửa lỗi hiệu quả cho DevOps</span></div><div class=hd-header-spacer></div><nav class=hd-nav-links><button id=hd-menu-toggle class=hd-menu-trigger-fixed aria-label="Toggle Menu" title=Menu type=button>
+<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" class="chevron-icon"><polyline points="6 9 12 15 18 9"/></svg></button></nav></div></header><div id=hd-menu-dropdown class=hd-menu-popover aria-hidden=true><div class=hd-popover-inner><div class=hd-popover-nav><span class=popover-section-label>ĐIỀU HƯỚNG</span>
+<a href=/vi/ class=popover-item>Trang chủ</a>
+<a href=/vi/about/ class=popover-item>Về tôi</a>
+<a href=/vi/archives/ class=popover-item>Lưu trữ</a>
+<a href=/vi/links/ class=popover-item>Liên kết</a>
+<a href=/vi/categories/ class=popover-item>Chuyên mục</a></div><div class=hd-popover-footer><a href=/posts/bash/bash-step-nine/ class="popover-btn lang-btn" title=English><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>EN</span>
+</a><button class="popover-btn theme-btn dark-mode-toggle" data-toggle-theme title="Chế độ tối" type=button>
+<svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+</button>
+<button type=button class="popover-btn search-btn search-trigger-btn" data-open-search aria-label="Tìm kiếm (Cmd+K)" title="Tìm kiếm (Cmd+K)">
+<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<span class=search-kbd-badge>⌘K</span></button></div></div></div><div id=hd-menu-backdrop class=hd-menu-backdrop aria-hidden=true></div><div class=hd-site-wrapper><main class=hd-main><div class=hd-article-layout><div class=hd-hero-banner-wrap><div class=hd-hero-banner><img src=/images/bash/bash-step-nine.jpg alt="Debug script trong Bash: Tìm và sửa lỗi hiệu quả cho DevOps" class=hd-hero-banner-img></div></div><div class=hd-article-container><div class=hd-article-grid><div class=hd-article-main><article class=hd-article-body><header class=hd-article-header><div class=hd-article-meta-top><time class=meta-date datetime=2026-07-02T00:00:00Z>JULY 02, 2026
+</time><span class=meta-dot>&#183;</span>
+<span class=meta-reading-time>11 PHÚT ĐỌC</span>
+<span class=meta-dot>&#183;</span>
+<span class=meta-author>HOÀNG DƯƠNG</span>
+<span class=meta-dot>&#183;</span>
+<a href=/posts/bash/bash-step-nine/ class=meta-lang-switch><svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:3px"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>EN</span></a></div><h1 class=hd-article-title>Debug script trong Bash: Tìm và sửa lỗi hiệu quả cho DevOps</h1><p class=hd-article-description>Hướng dẫn kỹ thuật debug Bash script cho DevOps: bash -x, bash -n, set -euo pipefail, tùy biến PS4, bắt lỗi với trap ERR và phân tích tĩnh với ShellCheck.</p><div class=hd-article-categories><a href=/vi/categories/devops/ class=hd-cat-pill>DEVOPS
+</a><a href=/vi/categories/bash/ class=hd-cat-pill>BASH</a></div></header><section class="article-content hd-prose"><h2 id=debug-script-trong-bash-cho-devops>Debug script trong Bash cho DevOps</h2><p>Ở <a class=link href=/posts/bash/bash-step-eight/>bài trước</a> chúng ta đã làm quen với việc lên lịch chạy script tự động bằng <code>cron</code>. Khi một script được đưa lên server để chạy nền hoặc tích hợp vào pipeline CI/CD, việc script phát sinh lỗi mà không để lại dấu vết rõ ràng là một trong những nguyên nhân phổ biến nhất gây gián đoạn hệ thống.</p><p>Khác với các ngôn ngữ biên dịch hoặc có runtime phong phú (như Go, Python), Bash script theo mặc định có xu hướng <strong>tiếp tục chạy ngay cả khi một câu lệnh bị lỗi</strong>. Một biến bị gõ sai tên, một đường dẫn không tồn tại hay một pipe trả về mã lỗi âm thầm đều có thể biến một script dọn dẹp đơn giản thành thảm họa xóa nhầm dữ liệu.</p><p>Bài viết này tổng hợp toàn bộ các kỹ thuật debug từ cơ bản đến nâng cao trong Bash: từ kiểm tra cú pháp khô (dry-run), theo dõi dấu vết thực thi (execution tracing), tùy biến định dạng trace với <code>PS4</code>, kích hoạt chế độ nghiêm ngặt (Strict Mode), bắt lỗi với <code>trap ERR</code>, cho đến kiểm tra tự động bằng <code>ShellCheck</code>.</p><hr><h2 id=kiểm-tra-cú-pháp-nhanh-với-cờ-bash--n>Kiểm tra cú pháp nhanh với cờ bash -n</h2><p>Trước khi chạy thử một script có thể làm thay đổi hệ thống (như ghi đè file hay gọi API xóa tài nguyên), bạn luôn nên kiểm tra cú pháp trước bằng cờ <code>-n</code> (noexec).</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>bash -n deploy.sh
+</span></span></code></pre></td></tr></table></div></div><p>Cờ <code>-n</code> chỉ đọc và parse toàn bộ file để kiểm tra cấu trúc cú pháp (như thiếu từ khóa <code>fi</code>, quên đóng ngoặc <code>}</code>, cú pháp <code>case...esac</code> sai) mà <strong>hoàn toàn không thực thi bất kỳ câu lệnh nào</strong>.</p><p>Ví dụ với đoạn script có lỗi quên đóng ngoặc:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[</span> <span class=s2>&#34;</span><span class=nv>$ENV</span><span class=s2>&#34;</span> <span class=o>=</span> <span class=s2>&#34;production&#34;</span> <span class=o>]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Deploying to production...&#34;</span>
+</span></span><span class=line><span class=cl><span class=c1># Quên fi</span>
+</span></span></code></pre></td></tr></table></div></div><p>Khi chạy kiểm tra cú pháp:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>$ bash -n deploy.sh
+</span></span><span class=line><span class=cl>deploy.sh: line 6: syntax error: unexpected end of file
+</span></span></code></pre></td></tr></table></div></div><p>Trong quy trình CI/CD, bạn có thể thêm một bước kiểm tra toàn bộ file <code>.sh</code> trong repository bằng lệnh:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>find . -type f -name <span class=s2>&#34;*.sh&#34;</span> -exec bash -n <span class=o>{}</span> +
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=tracing-thực-thi-từng-bước-với-bash--x-và-set--x>Tracing thực thi từng bước với bash -x và set -x</h2><p>Kỹ thuật debug phổ biến nhất trong Bash là <strong>Execution Tracing</strong> với cờ <code>-x</code> (xtrace). Khi bật cờ này, Bash sẽ in ra từng lệnh sau khi đã hoàn thành việc mở rộng biến (parameter expansion), thay thế lệnh (command substitution) và tách từ (word splitting), ngay trước khi lệnh đó được thực thi.</p><h3 id=cách-1-chạy-toàn-bộ-script-ở-chế-độ-trace>Cách 1: Chạy toàn bộ script ở chế độ trace</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>bash -x script.sh <span class=o>[</span>arguments<span class=o>]</span>
+</span></span></code></pre></td></tr></table></div></div><p>Hoặc thêm cờ <code>-x</code> trực tiếp vào dòng Shebang đầu file:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash -x
+</span></span></span></code></pre></td></tr></table></div></div><h3 id=cách-2-bật-tắt-trace-có-chọn-lọc-trong-script>Cách 2: Bật tắt trace có chọn lọc trong script</h3><p>Nếu script dài hàng trăm dòng và bạn chỉ muốn theo dõi một đoạn logic cụ thể, hãy dùng cặp lệnh <code>set -x</code> (bật trace) và <code>set +x</code> (tắt trace):</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Bắt đầu khởi tạo môi trường...&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Đoạn logic phức tạp cần theo dõi chi tiết</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -x
+</span></span><span class=line><span class=cl><span class=nv>target_dir</span><span class=o>=</span><span class=s2>&#34;/opt/app/releases/</span><span class=k>$(</span>date +%Y%m%d<span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>mkdir -p <span class=s2>&#34;</span><span class=nv>$target_dir</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>cp -r ./dist/* <span class=s2>&#34;</span><span class=nv>$target_dir</span><span class=s2>/&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> +x
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Hoàn thành sao chép file.&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>Khi thực thi, chỉ phần nằm giữa <code>set -x</code> và <code>set +x</code> mới in chi tiết từng dòng lệnh với tiền tố dấu <code>+</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>Bắt đầu khởi tạo môi trường...
+</span></span><span class=line><span class=cl>++ date +%Y%m%d
+</span></span><span class=line><span class=cl>+ target_dir=/opt/app/releases/20260702
+</span></span><span class=line><span class=cl>+ mkdir -p /opt/app/releases/20260702
+</span></span><span class=line><span class=cl>+ cp -r ./dist/app.bin ./dist/config.json /opt/app/releases/20260702/
+</span></span><span class=line><span class=cl>+ set +x
+</span></span><span class=line><span class=cl>Hoàn thành sao chép file.
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=nâng-cấp-đầu-ra-debug-chuyên-nghiệp-với-biến-ps4>Nâng cấp đầu ra debug chuyên nghiệp với biến PS4</h2><p>Theo mặc định, khi bật <code>-x</code>, Bash chỉ in dấu <code>+</code> trước mỗi dòng lệnh. Khi script gọi nhiều function hoặc <code>source</code> nhiều file khác nhau, rất khó để biết lệnh đó nằm ở file nào, hàm nào và dòng bao nhiêu.</p><p>Biến môi trường <code>PS4</code> (Prompt String 4) cho phép bạn tùy biến định dạng tiền tố in ra khi debug. Các biến hữu ích gồm:</p><div class=table-wrapper><table><thead><tr><th style=text-align:left>Ký hiệu / Biến</th><th style=text-align:left>Ý nghĩa</th></tr></thead><tbody><tr><td style=text-align:left><code>$0</code> hoặc <code>${BASH_SOURCE[0]}</code></td><td style=text-align:left>Tên file script hiện tại</td></tr><tr><td style=text-align:left><code>$LINENO</code></td><td style=text-align:left>Số dòng đang thực thi</td></tr><tr><td style=text-align:left><code>${FUNCNAME[0]}</code></td><td style=text-align:left>Tên function đang chạy</td></tr><tr><td style=text-align:left><code>+</code></td><td style=text-align:left>Dấu cộng tăng theo độ sâu subshell</td></tr></tbody></table></div><p>Bạn có thể cấu hình <code>PS4</code> ngay đầu script hoặc truyền trực tiếp từ dòng lệnh:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nb>export</span> <span class=nv>PS4</span><span class=o>=</span><span class=s1>&#39;+ [${BASH_SOURCE[0]##*/}:${LINENO}] ${FUNCNAME[0]:+${FUNCNAME[0]}(): }&#39;</span>
+</span></span></code></pre></td></tr></table></div></div><p>Ví dụ kiểm chứng:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>PS4</span><span class=o>=</span><span class=s1>&#39;+ [${BASH_SOURCE[0]##*/}:${LINENO}] ${FUNCNAME[0]:+${FUNCNAME[0]}(): }&#39;</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -x
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>build_package<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>version</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Đang đóng gói phiên bản </span><span class=nv>$version</span><span class=s2>...&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>main<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>app_version</span><span class=o>=</span><span class=s2>&#34;v2.4.0&#34;</span>
+</span></span><span class=line><span class=cl>    build_package <span class=s2>&#34;</span><span class=nv>$app_version</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>main
+</span></span></code></pre></td></tr></table></div></div><p>Kết quả in ra cực kỳ rõ ràng, kèm chính xác tên hàm và số dòng:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>+ [build.sh:15] main(): local app_version=v2.4.0
+</span></span><span class=line><span class=cl>+ [build.sh:16] main(): build_package v2.4.0
+</span></span><span class=line><span class=cl>+ [build.sh:8] build_package(): local version=v2.4.0
+</span></span><span class=line><span class=cl>+ [build.sh:9] build_package(): echo &#39;Đang đóng gói phiên bản v2.4.0...&#39;
+</span></span><span class=line><span class=cl>Đang đóng gói phiên bản v2.4.0...
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=chế-độ-nghiêm-ngặt-trong-bash-strict-mode>Chế độ nghiêm ngặt trong Bash (Strict Mode)</h2><p>Trong môi trường DevOps, hầu hết các lỗi nghiêm trọng xuất phát từ việc script âm thầm bỏ qua lỗi và tiếp tục chạy. Hãy đưa dòng cấu hình Strict Mode tiêu chuẩn vào đầu mọi script:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl><span class=nv>IFS</span><span class=o>=</span><span class=s1>$&#39;\n\t&#39;</span>
+</span></span></code></pre></td></tr></table></div></div><p>Ý nghĩa chi tiết của từng tùy chọn:</p><ul><li><strong><code>set -e</code> (errexit):</strong> Dừng script ngay lập tức nếu bất kỳ câu lệnh đơn lẻ nào trả về exit code khác 0.</li><li><strong><code>set -u</code> (nounset):</strong> Báo lỗi và dừng script ngay nếu truy cập vào một biến chưa được định nghĩa (ngăn chặn các lỗi tai hại như <code>rm -rf "$UNSET_VAR/*"</code> biến thành <code>rm -rf "/*"</code>).</li><li><strong><code>set -o pipefail</code>:</strong> Theo mặc định, pipeline <code>cmd1 | cmd2 | cmd3</code> chỉ trả về exit code của <code>cmd3</code>. Tùy chọn này đảm bảo nếu <code>cmd1</code> hoặc <code>cmd2</code> bị lỗi, toàn bộ pipeline sẽ trả về mã lỗi của lệnh thất bại đầu tiên.</li><li><strong><code>IFS=$'\n\t'</code>:</strong> Đặt ký tự phân tách trường nội bộ chỉ gồm dấu xuống dòng và tab, tránh lỗi chia tách từ ngoài ý muốn khi biến chứa khoảng trắng.</li></ul><h3 id=cạm-bẫy-khi-dùng-set--e-và-cách-xử-lý>Cạm bẫy khi dùng set -e và cách xử lý</h3><p>Khi dùng <code>set -e</code>, nếu một lệnh kiểm tra dự kiến có thể trả về exit code khác 0 (ví dụ <code>grep</code> không tìm thấy dòng nào trả về <code>1</code>), script sẽ bị dừng ngoài ý muốn. Cách xử lý đúng:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Cách 1: Thêm || true nếu lệnh không bắt buộc thành công</span>
+</span></span><span class=line><span class=cl>grep <span class=s2>&#34;ERROR&#34;</span> /var/log/app.log <span class=o>||</span> <span class=nb>true</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Cách 2: Bọc trong điều kiện if (set -e không ngắt trong if test)</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> grep -q <span class=s2>&#34;ERROR&#34;</span> /var/log/app.log<span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Phát hiện lỗi trong log.&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>else</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Log an toàn.&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=bắt-lỗi-và-in-stack-trace-với-trap-err>Bắt lỗi và in Stack Trace với trap ERR</h2><p>Để script tự động ghi nhận ngữ cảnh khi gặp sự cố, bạn có thể kết hợp <code>trap</code> với tín hiệu <code>ERR</code>. Khi bất kỳ lệnh nào bị lỗi, hàm xử lý lỗi sẽ được gọi tự động và in ra dấu vết stack trace gồm file, tên hàm và số dòng.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Hàm in stack trace khi có lỗi phát sinh</span>
+</span></span><span class=line><span class=cl>handle_error<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>exit_code</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>line_no</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$2</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>command</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$3</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;==========================================&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;PHÁT HIỆN LỖI TRONG SCRIPT!&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Lệnh thất bại : </span><span class=nv>$command</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Số dòng       : </span><span class=nv>$line_no</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Mã lỗi        : </span><span class=nv>$exit_code</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Dấu vết gọi hàm (Call Stack):&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>frame</span><span class=o>=</span><span class=m>0</span>
+</span></span><span class=line><span class=cl>    <span class=k>while</span> <span class=nb>caller</span> <span class=nv>$frame</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>        <span class=o>((</span>frame++<span class=o>))</span>
+</span></span><span class=line><span class=cl>    <span class=k>done</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;==========================================&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Đăng ký trap cho tín hiệu ERR</span>
+</span></span><span class=line><span class=cl><span class=nb>trap</span> <span class=s1>&#39;handle_error $? $LINENO &#34;$BASH_COMMAND&#34;&#39;</span> ERR
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>step_one<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Thực hiện bước 1...&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>step_two<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Thực hiện bước 2: gọi lệnh lỗi...&#34;</span>
+</span></span><span class=line><span class=cl>    ls /duong-dan-khong-ton-tai-tren-he-thong
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>main<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    step_one
+</span></span><span class=line><span class=cl>    step_two
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Hoàn thành.&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>main
+</span></span></code></pre></td></tr></table></div></div><p>Khi chạy script trên, ngay khi lệnh <code>ls</code> thất bại, hệ thống sẽ in ra bảng thông báo lỗi cùng stack trace chuẩn xác:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>Thực hiện bước 1...
+</span></span><span class=line><span class=cl>Thực hiện bước 2: gọi lệnh lỗi...
+</span></span><span class=line><span class=cl>ls: cannot access &#39;/duong-dan-khong-ton-tai-tren-he-thong&#39;: No such file or directory
+</span></span><span class=line><span class=cl>==========================================
+</span></span><span class=line><span class=cl>PHÁT HIỆN LỖI TRONG SCRIPT!
+</span></span><span class=line><span class=cl>Lệnh thất bại : ls /duong-dan-khong-ton-tai-tren-he-thong
+</span></span><span class=line><span class=cl>Số dòng       : 31
+</span></span><span class=line><span class=cl>Mã lỗi        : 2
+</span></span><span class=line><span class=cl>Dấu vết gọi hàm (Call Stack):
+</span></span><span class=line><span class=cl>31 step_two script.sh
+</span></span><span class=line><span class=cl>36 main script.sh
+</span></span><span class=line><span class=cl>40 main script.sh
+</span></span><span class=line><span class=cl>==========================================
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=phân-tích-tĩnh-tự-động-với-shellcheck>Phân tích tĩnh tự động với ShellCheck</h2><p><code>ShellCheck</code> là công cụ phân tích tĩnh (linter) mã nguồn Bash mạnh mẽ và phổ biến nhất hiện nay. ShellCheck có thể phát hiện hàng trăm lỗi tiềm ẩn: quên bọc ngoặc kép biến, sai cú pháp điều kiện, dùng sai lệnh nội tại, lỗi tính tương thích POSIX, v.v.</p><h3 id=cài-đặt-shellcheck>Cài đặt ShellCheck</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Trên Ubuntu / Debian</span>
+</span></span><span class=line><span class=cl>sudo apt-get update <span class=o>&amp;&amp;</span> sudo apt-get install -y shellcheck
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Trên macOS qua Homebrew</span>
+</span></span><span class=line><span class=cl>brew install shellcheck
+</span></span></code></pre></td></tr></table></div></div><h3 id=chạy-kiểm-tra-script>Chạy kiểm tra script</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>shellcheck deploy.sh
+</span></span></code></pre></td></tr></table></div></div><p>Ví dụ một đoạn script chứa lỗi biến không được bọc ngoặc kép:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nv>filename</span><span class=o>=</span><span class=nv>$1</span>
+</span></span><span class=line><span class=cl>rm -rf /tmp/data/<span class=nv>$filename</span>
+</span></span></code></pre></td></tr></table></div></div><p>ShellCheck sẽ lập tức chỉ ra cảnh báo nguy cơ:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>In script.sh line 3:
+</span></span><span class=line><span class=cl>rm -rf /tmp/data/$filename
+</span></span><span class=line><span class=cl>                 ^-- SC2086 (info): Double quote to prevent globbing and word splitting.
+</span></span></code></pre></td></tr></table></div></div><p>Tích hợp ShellCheck vào Git Pre-commit Hook hoặc pipeline CI giúp toàn bộ script trong team luôn đạt chuẩn chất lượng trước khi được merge vào branch chính.</p><hr><h2 id=ví-dụ-thực-hành-script-triển-khai-ứng-dụng-an-toàn>Ví dụ thực hành: Script triển khai ứng dụng an toàn</h2><p>Dưới đây là một script DevOps hoàn chỉnh kết hợp đầy đủ: kiểm tra cú pháp, Strict Mode, tùy biến <code>PS4</code>, bắt lỗi <code>trap ERR</code> và kiểm tra tham số đầu vào.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl><span class=c1># Script: deploy-service.sh</span>
+</span></span><span class=line><span class=cl><span class=c1># Mục đích: Triển khai bản phát hành mới với cơ chế debug và bẫy lỗi an toàn</span>
+</span></span><span class=line><span class=cl><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl><span class=nv>IFS</span><span class=o>=</span><span class=s1>$&#39;\n\t&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Cấu hình định dạng tiền tố khi debug (bật khi truyền biến DEBUG=1)</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[[</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>DEBUG</span><span class=k>:-</span><span class=nv>0</span><span class=si>}</span><span class=s2>&#34;</span> <span class=o>==</span> <span class=s2>&#34;1&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>export</span> <span class=nv>PS4</span><span class=o>=</span><span class=s1>&#39;+ [${BASH_SOURCE[0]##*/}:${LINENO}] ${FUNCNAME[0]:+${FUNCNAME[0]}(): }&#39;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>set</span> -x
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Bẫy lỗi và dọn dẹp tài nguyên</span>
+</span></span><span class=line><span class=cl>cleanup<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>exit_code</span><span class=o>=</span><span class=nv>$?</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> <span class=nv>$exit_code</span> -ne <span class=m>0</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;[ERROR] Quá trình triển khai gặp lỗi với mã thoát: </span><span class=nv>$exit_code</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=nb>trap</span> cleanup EXIT
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>handle_error<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>exit_code</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>line_no</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$2</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>cmd</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$3</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;[CRITICAL] Lệnh &#39;</span><span class=nv>$cmd</span><span class=s2>&#39; tại dòng </span><span class=nv>$line_no</span><span class=s2> thất bại (exit code: </span><span class=nv>$exit_code</span><span class=s2>)&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=nb>trap</span> <span class=s1>&#39;handle_error $? $LINENO &#34;$BASH_COMMAND&#34;&#39;</span> ERR
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Kiểm tra tham số đầu vào</span>
+</span></span><span class=line><span class=cl><span class=nv>APP_NAME</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>RELEASE_VERSION</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[[</span> -z <span class=s2>&#34;</span><span class=nv>$APP_NAME</span><span class=s2>&#34;</span> <span class=o>||</span> -z <span class=s2>&#34;</span><span class=nv>$RELEASE_VERSION</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Sử dụng: </span><span class=nv>$0</span><span class=s2> &lt;app_name&gt; &lt;release_version&gt;&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>DEPLOY_DIR</span><span class=o>=</span><span class=s2>&#34;/opt/apps/</span><span class=nv>$APP_NAME</span><span class=s2>/releases/</span><span class=nv>$RELEASE_VERSION</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;==&gt; Bắt đầu triển khai </span><span class=nv>$APP_NAME</span><span class=s2> bản </span><span class=nv>$RELEASE_VERSION</span><span class=s2>...&#34;</span>
+</span></span><span class=line><span class=cl>mkdir -p <span class=s2>&#34;</span><span class=nv>$DEPLOY_DIR</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;==&gt; Đang tải gói cài đặt...&#34;</span>
+</span></span><span class=line><span class=cl><span class=c1># Giả lập thao tác tạo file cấu hình</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;version=</span><span class=nv>$RELEASE_VERSION</span><span class=s2>&#34;</span> &gt; <span class=s2>&#34;</span><span class=nv>$DEPLOY_DIR</span><span class=s2>/version.env&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;deployed_at=</span><span class=k>$(</span>date -u +<span class=s2>&#34;%Y-%m-%dT%H:%M:%SZ&#34;</span><span class=k>)</span><span class=s2>&#34;</span> &gt;&gt; <span class=s2>&#34;</span><span class=nv>$DEPLOY_DIR</span><span class=s2>/version.env&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;==&gt; Cập nhật symlink &#39;current&#39;...&#34;</span>
+</span></span><span class=line><span class=cl>ln -sfn <span class=s2>&#34;</span><span class=nv>$DEPLOY_DIR</span><span class=s2>&#34;</span> <span class=s2>&#34;/opt/apps/</span><span class=nv>$APP_NAME</span><span class=s2>/current&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;==&gt; Triển khai </span><span class=nv>$APP_NAME</span><span class=s2> thành công!&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>Chạy script với cờ debug:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nv>DEBUG</span><span class=o>=</span><span class=m>1</span> ./deploy-service.sh web-api v1.0.0
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=ghi-chú-triển-khai>Ghi chú triển khai</h2><ul><li><strong>Bảo vệ Secret khi bật debug:</strong> Cờ <code>set -x</code> sẽ in toàn bộ giá trị của biến ra màn hình/log. Nếu script của bạn có xử lý password, token hoặc API key, hãy nhớ dùng <code>set +x</code> để tắt trace trước khi đọc secret và chỉ bật lại <code>set -x</code> sau khi hoàn tất.</li><li><strong>Tách riêng luồng Log Debug:</strong> Trong production hoặc CI/CD, bạn có thể chuyển hướng đầu ra của xtrace (luồng file descriptor 2 / stderr) vào một file log riêng biệt để dễ kiểm tra lại: <code>BASH_XTRACEFD=3 bash -x script.sh 3> /var/log/script-trace.log</code>.</li><li><strong>Luôn kiểm tra ShellCheck trong CI:</strong> Thêm một step chạy <code>shellcheck</code> trong GitHub Actions hoặc GitLab CI để ngăn chặn các lỗi sơ đẳng trước khi mã nguồn đến tay người dùng.</li><li><strong>Không lạm dụng <code>set -e</code> mà thiếu <code>trap</code>:</strong> <code>set -e</code> giúp dừng script khi lỗi, nhưng nếu không có hàm cleanup đi kèm, script có thể để lại các file lock, thư mục tạm hoặc tài nguyên treo trên hệ thống.</li></ul><hr><h2 id=lời-kết>Lời kết</h2><p>Debug là một kỹ năng không thể thiếu để biến các script Bash từ những đoạn mã tự phát thành các công cụ tự động hóa chuẩn mực, đáng tin cậy trong môi trường DevOps. Bằng cách kết hợp <code>bash -n</code>, <code>set -x</code>, tùy biến <code>PS4</code>, kích hoạt Strict Mode và kiểm tra với <code>ShellCheck</code>, bạn có thể kiểm soát và xử lý triệt để mọi lỗi phát sinh.</p><p>Ở bài tiếp theo, chúng ta sẽ đi sâu vào <a class=link href=/posts/bash/bash-step-ten/>Bài 10 — Error Handling trong Bash</a>: tìm hiểu chi tiết các chiến lược bắt lỗi, cơ chế thử lại (retry pattern) và dọn dẹp tài nguyên tự động.</p></section><div class=hd-article-tags-wrap><span class=tags-label>THẺ:</span><div class=hd-article-tags><a href=/vi/tags/bash/ class=hd-tag-pill>#bash
+</a><a href=/vi/tags/shell-script/ class=hd-tag-pill>#shell-script
+</a><a href=/vi/tags/devops/ class=hd-tag-pill>#devops
+</a><a href=/vi/tags/debugging/ class=hd-tag-pill>#debugging
+</a><a href=/vi/tags/linux/ class=hd-tag-pill>#linux
+</a><a href=/vi/tags/shellcheck/ class=hd-tag-pill>#shellcheck
+</a><a href=/vi/tags/troubleshooting/ class=hd-tag-pill>#troubleshooting</a></div></div><div class=hd-article-footer-box><div class=footer-box-item><span class=box-label>TÁC GIẢ</span>
+<span class=box-value>Hoàng Dương</span></div><div class=footer-box-item><span class=box-label>BẢN QUYỀN</span>
+<span class=box-value>CC BY-NC-SA 4.0</span></div></div><nav class=hd-post-nav><a href=/vi/posts/bash/bash-step-eight/ class="post-nav-card nav-prev"><span class=nav-direction>&larr; BÀI TRƯỚC</span>
+<span class=nav-post-title>Cron Job với Bash: tự động hóa theo lịch cho DevOps</span></a></nav><section class=hd-comments-section><div class=comments-section-header><span class=mono-label>THẢO LUẬN & BÌNH LUẬN</span></div><div class=utterances-container><script>(function(){var t=document.documentElement.dataset.scheme||"light",n=t==="dark"?"github-dark":"github-light",e=document.createElement("script");e.src="https://utteranc.es/client.js",e.setAttribute("repo","hoangduonng/blog_comments"),e.setAttribute("issue-term","pathname"),e.setAttribute("label","comments"),e.setAttribute("theme",n),e.setAttribute("crossorigin","anonymous"),e.async=!0,document.currentScript.parentElement.appendChild(e)})()</script></div><style>.utterances-container{width:100%;margin-top:8px;position:relative}.utterances{max-width:100%!important;margin:0!important}[data-scheme=light] .utterances iframe,html:not([data-scheme=dark]) .utterances iframe{mix-blend-mode:multiply;transition:mix-blend-mode .2s ease}[data-scheme=dark] .utterances iframe{mix-blend-mode:lighten;transition:mix-blend-mode .2s ease}</style><script>let utterancesLoaded=!1;function setUtterancesTheme(e){let t=document.querySelector(".utterances iframe");if(t&&t.contentWindow){let n=e==="dark"?"github-dark":"github-light";t.contentWindow.postMessage({type:"set-theme",theme:n},"https://utteranc.es")}}addEventListener("message",e=>{if(e.origin!=="https://utteranc.es")return;utterancesLoaded=!0,setUtterancesTheme(document.documentElement.dataset.scheme||"light")}),window.addEventListener("onColorSchemeChange",e=>{if(!utterancesLoaded)return;setUtterancesTheme(e.detail)})</script></section></article></div><aside class=hd-article-sidebar><div class=hd-sticky-sidebar-inner><div class=hd-toc-card><div class=toc-header><span class=toc-title-label>MỤC LỤC</span></div><div class=toc-content id=toc-content><nav id=TableOfContents><ol><li><a href=#debug-script-trong-bash-cho-devops>Debug script trong Bash cho DevOps</a></li><li><a href=#kiểm-tra-cú-pháp-nhanh-với-cờ-bash--n>Kiểm tra cú pháp nhanh với cờ bash -n</a></li><li><a href=#tracing-thực-thi-từng-bước-với-bash--x-và-set--x>Tracing thực thi từng bước với bash -x và set -x</a><ol><li><a href=#cách-1-chạy-toàn-bộ-script-ở-chế-độ-trace>Cách 1: Chạy toàn bộ script ở chế độ trace</a></li><li><a href=#cách-2-bật-tắt-trace-có-chọn-lọc-trong-script>Cách 2: Bật tắt trace có chọn lọc trong script</a></li></ol></li><li><a href=#nâng-cấp-đầu-ra-debug-chuyên-nghiệp-với-biến-ps4>Nâng cấp đầu ra debug chuyên nghiệp với biến PS4</a></li><li><a href=#chế-độ-nghiêm-ngặt-trong-bash-strict-mode>Chế độ nghiêm ngặt trong Bash (Strict Mode)</a><ol><li><a href=#cạm-bẫy-khi-dùng-set--e-và-cách-xử-lý>Cạm bẫy khi dùng set -e và cách xử lý</a></li></ol></li><li><a href=#bắt-lỗi-và-in-stack-trace-với-trap-err>Bắt lỗi và in Stack Trace với trap ERR</a></li><li><a href=#phân-tích-tĩnh-tự-động-với-shellcheck>Phân tích tĩnh tự động với ShellCheck</a><ol><li><a href=#cài-đặt-shellcheck>Cài đặt ShellCheck</a></li><li><a href=#chạy-kiểm-tra-script>Chạy kiểm tra script</a></li></ol></li><li><a href=#ví-dụ-thực-hành-script-triển-khai-ứng-dụng-an-toàn>Ví dụ thực hành: Script triển khai ứng dụng an toàn</a></li><li><a href=#ghi-chú-triển-khai>Ghi chú triển khai</a></li><li><a href=#lời-kết>Lời kết</a></li></ol></nav></div><div class=toc-scroll-indicator id=toc-indicator style=display:none></div></div></div></aside></div></div><div class=hd-edge-callout-rail><aside class=hd-floating-callout aria-label="Bài viết liên quan"><a href=/vi/posts/bash/bash-step-eight/ class=floating-callout-art><img src=/images/bash/bash-step-eight.jpg alt="Cron Job với Bash: tự động hóa theo lịch cho DevOps" class=floating-callout-img></a><div class=floating-callout-badge>BÀI VIẾT <span class=callout-of>liên quan</span></div><div class=floating-callout-body><h4 class=floating-callout-title><a href=/vi/posts/bash/bash-step-eight/>Cron Job với Bash: tự động hóa theo lịch cho DevOps</a></h4><p class=floating-callout-excerpt>Cron job trong Bash cho DevOps Ở bài trước chúng ta đã quản lý biến, .env, tham …</p><a href=/vi/posts/bash/bash-step-eight/ class=floating-callout-btn>ĐỌC TIẾP &rarr;</a></div></aside></div></div><script>document.addEventListener("DOMContentLoaded",function(){var e=document.getElementById("toc-content"),t=document.getElementById("toc-indicator");if(e&&t){function n(){var s,o,n=e.scrollHeight-e.clientHeight;if(n<=2){t.style.display="none";return}t.style.display="block",s=e.scrollTop/n,o=e.clientHeight-32,t.style.top=e.offsetTop+s*o+"px"}e.addEventListener("scroll",n,{passive:!0}),n(),window.addEventListener("resize",n,{passive:!0}),window.addEventListener("load",n,{passive:!0})}})</script><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><div id=hd-search-overlay class=hd-search-overlay aria-hidden=true data-index-url=/vi/search/index.json data-lang=vi data-no-results="Không tìm thấy kết quả phù hợp" data-no-results-sub="Hãy thử với từ khóa khác hoặc kiểm tra lại chính tả" data-initial-hint="Nhập từ khoá để tìm kiếm bài viết..." data-results-count="kết quả"><div class=hd-search-backdrop id=hd-search-backdrop tabindex=-1></div><div class=hd-search-dialog role=dialog aria-modal=true aria-label="Tìm kiếm bài viết"><div class=hd-search-header><div class=hd-search-input-wrapper><svg class="hd-search-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<input id=hd-search-input class=hd-search-input type=text placeholder="Tìm kiếm bài viết, chuyên mục, chủ đề..." autocomplete=off autocorrect=off autocapitalize=off spellcheck=false aria-autocomplete=list aria-controls=hd-search-results>
+<button id=hd-search-clear class=hd-search-clear type=button aria-label="Xóa từ khóa" style=display:none>
+<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div><button id=hd-search-close class=hd-search-close-btn type=button aria-label="Đóng tìm kiếm">
+<kbd class=hd-search-kbd>ESC</kbd></button></div><div class=hd-search-body><div id=hd-search-loading class="hd-search-state hd-search-loading" style=display:none><div class=hd-search-spinner aria-hidden=true></div><span>Đang tải dữ liệu tìm kiếm...</span></div><div id=hd-search-initial class="hd-search-state hd-search-initial"><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p class=state-title>Tìm kiếm nhanh</p><p class=state-desc>Nhập từ khoá hoặc chủ đề để tìm kiếm trong tất cả bài viết đã xuất bản.</p></div><div id=hd-search-empty class="hd-search-state hd-search-empty" style=display:none><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="8" x2="14" y2="14"/><line x1="14" y1="8" x2="8" y2="14"/></svg><p class=state-title id=hd-search-empty-title>Không tìm thấy kết quả phù hợp</p><p class=state-desc id=hd-search-empty-desc>Hãy thử với từ khóa khác hoặc kiểm tra lại chính tả</p></div><div id=hd-search-results class=hd-search-results role=listbox style=display:none></div></div><div class=hd-search-footer><div class=hd-search-shortcuts><span class=shortcut-item><kbd>↑</kbd><kbd>↓</kbd>
+<span class=shortcut-label>Điều hướng</span>
+</span><span class=shortcut-item><kbd>↵</kbd>
+<span class=shortcut-label>Mở bài viết</span>
+</span><span class=shortcut-item><kbd>ESC</kbd>
+<span class=shortcut-label>Đóng</span></span></div><div id=hd-search-count class=hd-search-count style=display:none></div></div></div></div><footer class=hd-site-footer><div class=hd-footer-container><div class=hd-footer-grid><div class=footer-brand-col><a href=/vi/ class=footer-logo><span class=footer-logo-title>Hoang Duong</span></a><div class=footer-status><span class=status-dot></span>
+<span class=status-text>Hệ thống hoạt động ổn định</span></div><ul class=footer-meta-links><li><a href=/vi/about/>Giới thiệu Blog</a></li><li><a href=/vi/archives/>Lưu trữ bài viết</a></li></ul></div><div class=footer-links-grid><div class=footer-col><h3 class=footer-col-title>Chuyên mục</h3><ul class=footer-col-list><li><a href=/vi/categories/bash/>Bash Series</a></li><li><a href=/vi/categories/devops/>DevOps</a></li><li><a href=/vi/categories/docker/>Docker</a></li><li><a href=/vi/categories/installation-guides/>Hướng dẫn cài đặt</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Tài nguyên</h3><ul class=footer-col-list><li><a href=/vi/about/>Về tôi</a></li><li><a href=/vi/archives/>Tất cả bài viết</a></li><li><a href=#search data-open-search>Tìm kiếm</a></li><li><a href=/vi/links/>Liên kết hữu ích</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Series Nổi Bật</h3><ul class=footer-col-list><li><a href=/vi/posts/bash/bash-step-eight/>Cron Jobs & Bash</a></li><li><a href=/vi/categories/devops/>DevOps Automation</a></li><li><a href=/vi/categories/docker/>Docker Essentials</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Kết nối</h3><ul class=footer-col-list><li><a href=https://github.com/hoangduonng target=_blank rel=noopener>GitHub ↗</a></li><li><a href=https://www.instagram.com/ngu_uuen/ target=_blank rel=noopener>Instagram ↗</a></li><li><a href=https://www.linkedin.com/in/hoangduonng/ target=_blank rel=noopener>LinkedIn ↗</a></li><li><a href=/vi/index.xml>RSS Feed ↗</a></li></ul></div></div></div><div class=hd-footer-bottom-bar><span class=footer-copyright>&copy; 2026 Hoang Duong. All rights reserved.</span></div></div></footer><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.ee266d8948a6a32b88423f5d374fca9833845f738717cf8061ae442a91efe347.js defer></script></body></html>
