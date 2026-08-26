@@ -1,0 +1,552 @@
+<!doctype html><html lang=vi dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="Hướng dẫn toàn diện về xử lý ngoại lệ trong Bash: quy ước Exit Code, bẫy lỗi với trap EXIT/ERR, cạm bẫy của set -e, cơ chế Retry tự động và dọn dẹp tài nguyên an toàn."><title>Error Handling trong Bash: Bắt lỗi, thử lại và phục hồi sự cố cho DevOps</title><link rel=canonical href=https://tech.nguuyen.io.vn/vi/posts/bash/bash-step-ten/><link rel=stylesheet href=/scss/style.min.d65180b8eb2049a52207ff41f36ee5dc8cdf8c7728053af03d1d0545c4a8c316.css><meta property='og:title' content="Error Handling trong Bash: Bắt lỗi, thử lại và phục hồi sự cố cho DevOps"><meta property='og:description' content="Hướng dẫn toàn diện về xử lý ngoại lệ trong Bash: quy ước Exit Code, bẫy lỗi với trap EXIT/ERR, cạm bẫy của set -e, cơ chế Retry tự động và dọn dẹp tài nguyên an toàn."><meta property='og:url' content='https://tech.nguuyen.io.vn/vi/posts/bash/bash-step-ten/'><meta property='og:site_name' content='Hoàng Dương'><meta property='og:type' content='article'><meta property='article:section' content='Posts'><meta property='article:tag' content='bash'><meta property='article:tag' content='shell-script'><meta property='article:tag' content='devops'><meta property='article:tag' content='error-handling'><meta property='article:tag' content='linux'><meta property='article:tag' content='automation'><meta property='article:tag' content='reliability'><meta property='article:published_time' content='2026-07-05T00:00:00+00:00'><meta property='article:modified_time' content='2026-07-05T00:00:00+00:00'><meta property='og:image' content='https://tech.nguuyen.io.vn/images/bash/bash-step-ten.jpg'><meta name=twitter:title content="Error Handling trong Bash: Bắt lỗi, thử lại và phục hồi sự cố cho DevOps"><meta name=twitter:description content="Hướng dẫn toàn diện về xử lý ngoại lệ trong Bash: quy ước Exit Code, bẫy lỗi với trap EXIT/ERR, cạm bẫy của set -e, cơ chế Retry tự động và dọn dẹp tài nguyên an toàn."><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://tech.nguuyen.io.vn/images/bash/bash-step-ten.jpg'><link rel=icon type=image/x-icon href=/favicon.ico><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel=stylesheet></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><header class="hd-header is-article-header"><div class=hd-header-inner><div class=hd-brand><a href=/vi/ class=hd-logo-link><span class=hd-logo-text>Hoang Duong</span></a></div><div class=hd-header-divider aria-hidden=true></div><div class=hd-header-rail><a href=/vi/ class="header-rail-crumb header-rail-home">BÀI VIẾT
+</a><span class=header-rail-sep>//</span>
+<a href=/vi/categories/devops/ class="header-rail-crumb header-rail-cat">[DEVOPS]
+</a><span class=header-rail-title>Error Handling trong Bash: Bắt lỗi, thử lại và phục hồi sự cố cho DevOps</span></div><div class=hd-header-spacer></div><nav class=hd-nav-links><button id=hd-menu-toggle class=hd-menu-trigger-fixed aria-label="Toggle Menu" title=Menu type=button>
+<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" class="chevron-icon"><polyline points="6 9 12 15 18 9"/></svg></button></nav></div></header><div id=hd-menu-dropdown class=hd-menu-popover aria-hidden=true><div class=hd-popover-inner><div class=hd-popover-nav><span class=popover-section-label>ĐIỀU HƯỚNG</span>
+<a href=/vi/ class=popover-item>Trang chủ</a>
+<a href=/vi/about/ class=popover-item>Về tôi</a>
+<a href=/vi/archives/ class=popover-item>Lưu trữ</a>
+<a href=/vi/links/ class=popover-item>Liên kết</a>
+<a href=/vi/categories/ class=popover-item>Chuyên mục</a></div><div class=hd-popover-footer><a href=/posts/bash/bash-step-ten/ class="popover-btn lang-btn" title=English><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>EN</span>
+</a><button class="popover-btn theme-btn dark-mode-toggle" data-toggle-theme title="Chế độ tối" type=button>
+<svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+</button>
+<button type=button class="popover-btn search-btn search-trigger-btn" data-open-search aria-label="Tìm kiếm (Cmd+K)" title="Tìm kiếm (Cmd+K)">
+<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<span class=search-kbd-badge>⌘K</span></button></div></div></div><div id=hd-menu-backdrop class=hd-menu-backdrop aria-hidden=true></div><div class=hd-site-wrapper><main class=hd-main><div class=hd-article-layout><div class=hd-hero-banner-wrap><div class=hd-hero-banner><img src=/images/bash/bash-step-ten.jpg alt="Error Handling trong Bash: Bắt lỗi, thử lại và phục hồi sự cố cho DevOps" class=hd-hero-banner-img></div></div><div class=hd-article-container><div class=hd-article-grid><div class=hd-article-main><article class=hd-article-body><header class=hd-article-header><div class=hd-article-meta-top><time class=meta-date datetime=2026-07-05T00:00:00Z>JULY 05, 2026
+</time><span class=meta-dot>&#183;</span>
+<span class=meta-reading-time>15 PHÚT ĐỌC</span>
+<span class=meta-dot>&#183;</span>
+<span class=meta-author>HOÀNG DƯƠNG</span>
+<span class=meta-dot>&#183;</span>
+<a href=/posts/bash/bash-step-ten/ class=meta-lang-switch><svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:3px"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>EN</span></a></div><h1 class=hd-article-title>Error Handling trong Bash: Bắt lỗi, thử lại và phục hồi sự cố cho DevOps</h1><p class=hd-article-description>Hướng dẫn toàn diện về xử lý ngoại lệ trong Bash: quy ước Exit Code, bẫy lỗi với trap EXIT/ERR, cạm bẫy của set -e, cơ chế Retry tự động và dọn dẹp tài nguyên an toàn.</p><div class=hd-article-categories><a href=/vi/categories/devops/ class=hd-cat-pill>DEVOPS
+</a><a href=/vi/categories/bash/ class=hd-cat-pill>BASH</a></div></header><section class="article-content hd-prose"><h2 id=error-handling-trong-bash-cho-devops>Error Handling trong Bash cho DevOps</h2><p>Trong <a class=link href=/posts/bash/bash-step-nine/>bài viết trước</a>, chúng ta đã tìm hiểu các công cụ và phương pháp debug để truy tìm nguyên nhân khi script gặp lỗi. Tuy nhiên, trong môi trường sản xuất (Production) hoặc các pipeline tự động hóa CI/CD, việc chỉ debug khi có sự cố xảy ra là chưa đủ. Một kịch bản DevOps chuyên nghiệp cần phải có khả năng <strong>chủ động kiểm soát lỗi</strong> (Error Handling) ngay trong lúc vận hành.</p><p>Mạng chập chờn, ổ cứng hết dung lượng lưu trữ, dịch vụ phụ thuộc chưa kịp khởi động hay phân quyền file không hợp lệ là những rủi ro luôn hiện hữu. Nếu không có cơ chế xử lý lỗi phù hợp, một script có thể:</p><ul><li>Tiếp tục chạy trong trạng thái sai lệch, dẫn đến hỏng dữ liệu dây chuyền.</li><li>Đột ngột dừng lại mà không giải phóng các file khóa (lockfile) hay thư mục tạm, làm tắc nghẽn các lần chạy kế tiếp.</li><li>Thất bại ngay lập tức trước các sự cố tạm thời (transient errors) mà lẽ ra có thể tự phục hồi sau vài giây thử lại.</li></ul><p>Bài viết này sẽ hướng dẫn chi tiết cách xây dựng chiến lược xử lý ngoại lệ vững chắc cho Bash script: từ việc làm chủ Exit Code, phân tích các cạm bẫy của <code>set -e</code>, quản lý dọn dẹp tài nguyên với <code>trap</code>, cho đến cài đặt Retry Pattern và phân cấp log chuẩn mực.</p><hr><h2 id=hiểu-rõ-exit-code-và-quy-ước-mã-lỗi>Hiểu rõ Exit Code và quy ước mã lỗi</h2><p>Mọi câu lệnh hoặc chương trình khi kết thúc thực thi trên hệ điều hành Linux/Unix đều trả về một giá trị số nguyên từ <code>0</code> đến <code>255</code>, gọi là <strong>Exit Status</strong> hay <strong>Exit Code</strong>. Giá trị này được lưu trong biến đặc biệt <code>$?</code>.</p><ul><li><strong><code>0</code></strong>: Biểu thị câu lệnh thực thi <strong>thành công</strong> hoàn toàn.</li><li><strong><code>1 - 255</code></strong>: Biểu thị câu lệnh gặp <strong>lỗi</strong> hoặc có điều kiện kết thúc bất thường.</li></ul><h3 id=các-mã-thoát-tiêu-chuẩn-trên-linux>Các mã thoát tiêu chuẩn trên Linux</h3><p>Hệ thống Linux và Bash có các quy ước mã lỗi mặc định mà mọi kỹ sư DevOps cần nắm rõ:</p><div class=table-wrapper><table><thead><tr><th style=text-align:left>Mã thoát (Exit Code)</th><th style=text-align:left>Ý nghĩa chuẩn</th><th style=text-align:left>Ví dụ nguyên nhân</th></tr></thead><tbody><tr><td style=text-align:left><code>0</code></td><td style=text-align:left>Thành công</td><td style=text-align:left>Lệnh hoàn thành không có lỗi</td></tr><tr><td style=text-align:left><code>1</code></td><td style=text-align:left>Lỗi chung (General error)</td><td style=text-align:left>Thao tác không hợp lệ, ví dụ chia cho 0</td></tr><tr><td style=text-align:left><code>2</code></td><td style=text-align:left>Dùng sai cú pháp shell built-in</td><td style=text-align:left>Thiếu tham số bắt buộc trong lệnh nội tại</td></tr><tr><td style=text-align:left><code>126</code></td><td style=text-align:left>Lệnh tìm thấy nhưng không có quyền thực thi</td><td style=text-align:left>File script chưa được cấp quyền <code>chmod +x</code></td></tr><tr><td style=text-align:left><code>127</code></td><td style=text-align:left>Lệnh không tìm thấy (Command not found)</td><td style=text-align:left>Gõ sai tên binary hoặc thiếu đường dẫn trong <code>$PATH</code></td></tr><tr><td style=text-align:left><code>128</code></td><td style=text-align:left>Tham số thoát không hợp lệ cho lệnh <code>exit</code></td><td style=text-align:left>Gọi <code>exit 3.14</code> (chỉ chấp nhận số nguyên)</td></tr><tr><td style=text-align:left><code>128 + N</code></td><td style=text-align:left>Tiến trình bị dừng bởi tín hiệu số <code>N</code></td><td style=text-align:left><code>130</code> (128+2) khi bị <code>Ctrl+C</code> (SIGINT), <code>137</code> (128+9) khi bị <code>SIGKILL</code></td></tr><tr><td style=text-align:left><code>255</code></td><td style=text-align:left>Mã thoát vượt giới hạn cho phép</td><td style=text-align:left>Trả về ngoài dải 0–255</td></tr></tbody></table></div><h3 id=định-nghĩa-mã-lỗi-tùy-biến-trong-dự-án>Định nghĩa mã lỗi tùy biến trong dự án</h3><p>Để script trả về mã lỗi rõ ràng cho pipeline CI/CD hoặc hệ thống giám sát phân biệt nguyên nhân thất bại, bạn nên định nghĩa các hằng số exit code rõ ràng ở đầu script (khuyến nghị dùng dải từ <code>10</code> đến <code>99</code> để tránh xung đột với mã hệ thống):</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Định nghĩa mã lỗi chuẩn của script</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>EXIT_SUCCESS</span><span class=o>=</span><span class=m>0</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>EXIT_INVALID_ARGS</span><span class=o>=</span><span class=m>10</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>EXIT_CONFIG_MISSING</span><span class=o>=</span><span class=m>11</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>EXIT_NETWORK_TIMEOUT</span><span class=o>=</span><span class=m>12</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>EXIT_DISK_FULL</span><span class=o>=</span><span class=m>13</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>EXIT_DEPENDENCY_ERROR</span><span class=o>=</span><span class=m>14</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>validate_config<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>config_file</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> ! -f <span class=s2>&#34;</span><span class=nv>$config_file</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;[ERROR] File cấu hình </span><span class=nv>$config_file</span><span class=s2> không tồn tại.&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>        <span class=nb>exit</span> <span class=s2>&#34;</span><span class=nv>$EXIT_CONFIG_MISSING</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=kiểm-soát-luồng-thực-thi-với-short-circuit-và-set--e>Kiểm soát luồng thực thi với short-circuit và set -e</h2><h3 id=sử-dụng-toán-tử-điều-kiện-rút-gọn-short-circuit-evaluation>Sử dụng toán tử điều kiện rút gọn (Short-circuit Evaluation)</h3><p>Toán tử <code>&&</code> (AND) và <code>||</code> (OR) cho phép kiểm tra và xử lý lỗi nhanh chóng trên một dòng mà không cần viết cả khối <code>if...fi</code> dài dòng:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Chạy lệnh tiếp theo nếu lệnh trước THÀNH CÔNG</span>
+</span></span><span class=line><span class=cl>mkdir -p /opt/backup <span class=o>&amp;&amp;</span> <span class=nb>echo</span> <span class=s2>&#34;Tạo thư mục backup thành công.&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Thực hiện hành động cứu vãn hoặc thoát nếu lệnh trước THẤT BẠI</span>
+</span></span><span class=line><span class=cl><span class=nb>cd</span> /opt/app/releases <span class=o>||</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;[FATAL] Không thể chuyển vào thư mục release.&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Kiểm tra sự tồn tại của file cấu hình</span>
+</span></span><span class=line><span class=cl><span class=o>[[</span> -f <span class=s2>&#34;.env&#34;</span> <span class=o>]]</span> <span class=o>||</span> cp <span class=s2>&#34;.env.example&#34;</span> <span class=s2>&#34;.env&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=cơ-chế-fail-fast-với-set--e>Cơ chế fail-fast với set -e</h3><p>Mặc định, Bash sẽ tiếp tục chạy các lệnh tiếp theo ngay cả khi lệnh phía trước bị lỗi nghiêm trọng. Kích hoạt <code>set -e</code> (hoặc <code>set -o errexit</code>) yêu cầu shell dừng thực thi script ngay khi một câu lệnh đơn lẻ trả về exit code khác 0.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -e
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Đang chuẩn bị dữ liệu...&#34;</span>
+</span></span><span class=line><span class=cl>tar -czf backup.tar.gz /data/db-dump/
+</span></span><span class=line><span class=cl><span class=c1># Nếu lệnh tar trên bị lỗi (ví dụ không đủ quyền), script sẽ ngắt ngay tại đây,</span>
+</span></span><span class=line><span class=cl><span class=c1># ngăn không cho các thao tác xóa bên dưới được thực thi!</span>
+</span></span><span class=line><span class=cl>rm -rf /data/db-dump/*
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Hoàn thành.&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=cạm-bẫy-tiềm-ẩn-của-set--e-trong-thực-tế>Cạm bẫy tiềm ẩn của set -e trong thực tế</h2><p>Mặc dù <code>set -e</code> rất hữu ích, đây cũng là một trong những tính năng gây hiểu lầm và khó lường nhất trong Bash nếu không hiểu rõ quy tắc kích hoạt của nó.</p><h3 id=cạm-bẫy-1-biểu-thức-toán-học-trả-về-0>Cạm bẫy 1: Biểu thức toán học trả về 0</h3><p>Trong biểu thức toán học <code>(( ... ))</code>, giá trị tính toán bằng <code>0</code> được shell coi là mã thoát <code>1</code> (thất bại logic theo quy ước C-style):</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -e
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>count</span><span class=o>=</span><span class=m>0</span>
+</span></span><span class=line><span class=cl><span class=c1># Lệnh dưới đây tăng count từ 0 lên 1, nhưng giá trị biểu thức cũ là 0,</span>
+</span></span><span class=line><span class=cl><span class=c1># khiến $(( count++ )) trả về exit code 1 -&gt; SCRIPT BỊ DỪNG NGAY LẬP TỨC!</span>
+</span></span><span class=line><span class=cl><span class=o>((</span> count++ <span class=o>))</span> 
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Dòng này sẽ KHÔNG bao giờ được in ra!&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p><strong>Cách khắc phục:</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Cách 1: Tăng giá trị với tiền tố</span>
+</span></span><span class=line><span class=cl><span class=o>((</span> ++count <span class=o>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Cách 2: Phép gán tường minh</span>
+</span></span><span class=line><span class=cl><span class=nv>count</span><span class=o>=</span><span class=k>$((</span> count <span class=o>+</span> <span class=m>1</span> <span class=k>))</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=cạm-bẫy-2-lệnh-kiểm-tra-trả-về-false-có-chủ-đích>Cạm bẫy 2: Lệnh kiểm tra trả về false có chủ đích</h3><p>Các lệnh như <code>grep</code>, <code>diff</code>, hay <code>test</code> thường trả về exit code <code>1</code> khi không tìm thấy kết quả hoặc có sự khác biệt. Dưới <code>set -e</code>, script sẽ dừng đột ngột:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -e
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Tìm kiếm chuỗi trong file log</span>
+</span></span><span class=line><span class=cl><span class=c1># Nếu không có chữ WARNING, grep trả về 1 -&gt; Script bị dừng!</span>
+</span></span><span class=line><span class=cl>grep <span class=s2>&#34;WARNING&#34;</span> /var/log/app.log
+</span></span></code></pre></td></tr></table></div></div><p><strong>Cách khắc phục:</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Cách 1: Thêm || true để bỏ qua mã lỗi nếu không quan trọng</span>
+</span></span><span class=line><span class=cl>grep <span class=s2>&#34;WARNING&#34;</span> /var/log/app.log <span class=o>||</span> <span class=nb>true</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Cách 2: Sử dụng trong khối điều kiện if (set -e bị vô hiệu hóa trong biểu thức test của if/while)</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> grep -q <span class=s2>&#34;WARNING&#34;</span> /var/log/app.log<span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Tìm thấy cảnh báo trong log.&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>else</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Không có cảnh báo nào.&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=cạm-bẫy-3-pipeline-chỉ-kiểm-tra-lệnh-cuối-cùng>Cạm bẫy 3: Pipeline chỉ kiểm tra lệnh cuối cùng</h3><p>Khi chạy <code>cmd1 | cmd2 | cmd3</code>, theo mặc định <code>set -e</code> chỉ kiểm tra mã thoát của <code>cmd3</code>. Nếu <code>cmd1</code> sinh lỗi nhưng <code>cmd3</code> chạy xong thành công, script vẫn tiếp tục:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Giả sử mysqldump bị lỗi xác thực nhưng gzip vẫn nén dữ liệu rỗng thành công!</span>
+</span></span><span class=line><span class=cl>mysqldump -u root -p invalid_db <span class=p>|</span> gzip &gt; dump.sql.gz
+</span></span></code></pre></td></tr></table></div></div><p><strong>Cách khắc phục:</strong> Luôn kết hợp <code>set -eo pipefail</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=bẫy-lỗi-và-dọn-dẹp-tài-nguyên-với-trap>Bẫy lỗi và dọn dẹp tài nguyên với trap</h2><p>Một trong những nguyên tắc quan trọng nhất của quản trị hệ thống là: <strong>Dù script thành công, thất bại hay bị người dùng ngắt giữa chừng (<code>Ctrl+C</code>), toàn bộ tài nguyên tạm thời đều phải được dọn dẹp sạch sẽ.</strong></p><p>Lệnh <code>trap</code> trong Bash cho phép bạn bắt các tín hiệu hệ thống (signals) hoặc sự kiện shell để thực thi mã xử lý tương ứng.</p><h3 id=các-tín-hiệu-và-sự-kiện-phổ-biến>Các tín hiệu và sự kiện phổ biến</h3><div class=table-wrapper><table><thead><tr><th style=text-align:left>Tín hiệu / Sự kiện</th><th style=text-align:left>Thời điểm kích hoạt</th></tr></thead><tbody><tr><td style=text-align:left><code>EXIT</code> (hoặc <code>0</code>)</td><td style=text-align:left>Khi script kết thúc (bất kể thành công hay thất bại qua <code>exit</code>)</td></tr><tr><td style=text-align:left><code>ERR</code></td><td style=text-align:left>Khi một lệnh trả về exit code khác 0 (dưới cơ chế tương tự <code>set -e</code>)</td></tr><tr><td style=text-align:left><code>SIGINT</code> (Tín hiệu 2)</td><td style=text-align:left>Khi người dùng bấm tổ hợp phím <code>Ctrl+C</code></td></tr><tr><td style=text-align:left><code>SIGTERM</code> (Tín hiệu 15)</td><td style=text-align:left>Khi tiến trình nhận yêu cầu dừng từ hệ thống (<code>kill</code> hoặc Docker stop)</td></tr></tbody></table></div><h3 id=mô-hình-cleanup-function-chuẩn-mực>Mô hình Cleanup Function chuẩn mực</h3><p>Dưới đây là cấu trúc mẫu để thiết lập hàm dọn dẹp an toàn:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Khởi tạo thư mục tạm an toàn</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>WORK_DIR</span><span class=o>=</span><span class=k>$(</span>mktemp -d -t deploy-workspace-XXXXXX<span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>LOCK_FILE</span><span class=o>=</span><span class=s2>&#34;/tmp/my-service-deploy.lock&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>cleanup<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>exit_code</span><span class=o>=</span><span class=nv>$?</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;[CLEANUP] Bắt đầu giải phóng tài nguyên...&#34;</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1># Xóa thư mục tạm</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> -d <span class=s2>&#34;</span><span class=nv>$WORK_DIR</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        rm -rf <span class=s2>&#34;</span><span class=nv>$WORK_DIR</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;[CLEANUP] Đã xóa thư mục tạm: </span><span class=nv>$WORK_DIR</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1># Giải phóng file lock</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> -f <span class=s2>&#34;</span><span class=nv>$LOCK_FILE</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        rm -f <span class=s2>&#34;</span><span class=nv>$LOCK_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;[CLEANUP] Đã giải phóng lock file.&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> <span class=nv>$exit_code</span> -ne <span class=m>0</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;[CLEANUP] Script kết thúc với trạng thái lỗi: </span><span class=nv>$exit_code</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=k>else</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;[CLEANUP] Dọn dẹp hoàn tất an toàn.&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=nb>exit</span> <span class=s2>&#34;</span><span class=nv>$exit_code</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Đăng ký hàm cleanup cho cả kết thúc bình thường và các tín hiệu dừng</span>
+</span></span><span class=line><span class=cl><span class=nb>trap</span> cleanup EXIT SIGINT SIGTERM
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=xây-dựng-cơ-chế-retry-pattern-tự-động>Xây dựng cơ chế Retry Pattern tự động</h2><p>Trong môi trường hạ tầng phân tán (Cloud, Kubernetes, Microservices), các lỗi tạm thời (transient errors) do nghẽn mạng hoặc dịch vụ đang khởi động xảy ra rất thường xuyên. Thay vì để script thất bại ngay lập tức, cơ chế Retry Pattern với thời gian chờ (delay / backoff) giúp tăng độ tin cậy đáng kể.</p><p>Dưới đây là một hàm <code>retry</code> đa năng, hỗ trợ truyền lệnh tùy ý cùng số lần thử và khoảng cách chờ:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl><span class=c1># Hàm: retry</span>
+</span></span><span class=line><span class=cl><span class=c1># Tham số:</span>
+</span></span><span class=line><span class=cl><span class=c1>#   $1: Số lần thử tối đa (max_attempts)</span>
+</span></span><span class=line><span class=cl><span class=c1>#   $2: Thời gian chờ giữa các lần tính bằng giây (delay_seconds)</span>
+</span></span><span class=line><span class=cl><span class=c1>#   $3+: Lệnh cần thực thi</span>
+</span></span><span class=line><span class=cl><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl>retry<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>max_attempts</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>delay</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$2</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>shift</span> <span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>command</span><span class=o>=(</span><span class=s2>&#34;</span><span class=nv>$@</span><span class=s2>&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>attempt</span><span class=o>=</span><span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>until</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>command</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>        <span class=nb>local</span> <span class=nv>exit_code</span><span class=o>=</span><span class=nv>$?</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=o>((</span> attempt &gt;<span class=o>=</span> max_attempts <span class=o>))</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>            <span class=nb>echo</span> <span class=s2>&#34;[ERROR] Lệnh &#39;</span><span class=si>${</span><span class=nv>command</span><span class=p>[*]</span><span class=si>}</span><span class=s2>&#39; thất bại sau </span><span class=nv>$attempt</span><span class=s2> lần thử (Exit code: </span><span class=nv>$exit_code</span><span class=s2>).&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=s2>&#34;</span><span class=nv>$exit_code</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>fi</span>
+</span></span><span class=line><span class=cl>        
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;[WARN] Lệnh &#39;</span><span class=si>${</span><span class=nv>command</span><span class=p>[*]</span><span class=si>}</span><span class=s2>&#39; thất bại (lần </span><span class=nv>$attempt</span><span class=s2>/</span><span class=nv>$max_attempts</span><span class=s2>). Thử lại sau </span><span class=si>${</span><span class=nv>delay</span><span class=si>}</span><span class=s2>s...&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>        sleep <span class=s2>&#34;</span><span class=nv>$delay</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=o>((</span> attempt++ <span class=o>))</span>
+</span></span><span class=line><span class=cl>    <span class=k>done</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=m>0</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=ví-dụ-áp-dụng-retry-trong-devops>Ví dụ áp dụng Retry trong DevOps</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Kiểm tra dịch vụ Database sẵn sàng (tối đa 5 lần, mỗi lần cách nhau 3 giây)</span>
+</span></span><span class=line><span class=cl>retry <span class=m>5</span> <span class=m>3</span> curl -fsS <span class=s2>&#34;http://localhost:5432/healthz&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Tải file artifact từ remote storage với retry</span>
+</span></span><span class=line><span class=cl>retry <span class=m>3</span> <span class=m>5</span> aws s3 cp <span class=s2>&#34;s3://my-bucket/artifacts/app.tar.gz&#34;</span> <span class=s2>&#34;./app.tar.gz&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=chiến-lược-fail-fast-và-phân-cấp-ghi-log-chuẩn-mực>Chiến lược Fail-Fast và phân cấp ghi log chuẩn mực</h2><p>Xử lý lỗi hiệu quả đòi hỏi sự cân bằng giữa hai hướng tiếp cận:</p><ol><li><strong>Fail-Fast (Thất bại sớm):</strong> Khi gặp các lỗi nghiêm trọng không thể phục hồi (như sai thông tin xác thực, thiếu tham số cấu hình, ổ cứng đầy), script phải dừng ngay lập tức kèm thông báo lỗi rõ ràng.</li><li><strong>Graceful Fallback (Dự phòng mềm dẻo):</strong> Khi tài nguyên chính không khả dụng nhưng có phương án thay thế (như chuyển sang server phụ hoặc dùng dữ liệu cache cũ), script ghi nhận cảnh báo và chuyển hướng luồng xử lý.</li></ol><h3 id=module-ghi-log-chuẩn-có-phân-cấp-logging-framework>Module ghi log chuẩn có phân cấp (Logging Framework)</h3><p>Ghi log với timestamp chuẩn ISO 8601, cấp độ nghiêm trọng (Log Level) và định tuyến chuẩn (stdout cho INFO, stderr cho WARN/ERROR):</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>log_info<span class=o>()</span>  <span class=o>{</span> <span class=nb>echo</span> <span class=s2>&#34;[</span><span class=k>$(</span>date -u +<span class=s1>&#39;%Y-%m-%dT%H:%M:%SZ&#39;</span><span class=k>)</span><span class=s2>] [INFO]  </span><span class=nv>$*</span><span class=s2>&#34;</span> <span class=p>;</span> <span class=o>}</span>
+</span></span><span class=line><span class=cl>log_warn<span class=o>()</span>  <span class=o>{</span> <span class=nb>echo</span> <span class=s2>&#34;[</span><span class=k>$(</span>date -u +<span class=s1>&#39;%Y-%m-%dT%H:%M:%SZ&#39;</span><span class=k>)</span><span class=s2>] [WARN]  </span><span class=nv>$*</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span> <span class=p>;</span> <span class=o>}</span>
+</span></span><span class=line><span class=cl>log_error<span class=o>()</span> <span class=o>{</span> <span class=nb>echo</span> <span class=s2>&#34;[</span><span class=k>$(</span>date -u +<span class=s1>&#39;%Y-%m-%dT%H:%M:%SZ&#39;</span><span class=k>)</span><span class=s2>] [ERROR] </span><span class=nv>$*</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span> <span class=p>;</span> <span class=o>}</span>
+</span></span><span class=line><span class=cl>log_fatal<span class=o>()</span> <span class=o>{</span> <span class=nb>echo</span> <span class=s2>&#34;[</span><span class=k>$(</span>date -u +<span class=s1>&#39;%Y-%m-%dT%H:%M:%SZ&#39;</span><span class=k>)</span><span class=s2>] [FATAL] </span><span class=nv>$*</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span> <span class=p>;</span> <span class=nb>exit</span> <span class=m>1</span> <span class=p>;</span> <span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=ví-dụ-thực-hành-script-backup-và-đồng-bộ-dữ-liệu-an-toàn>Ví dụ thực hành: Script Backup và đồng bộ dữ liệu an toàn</h2><p>Dưới đây là một kịch bản DevOps hoàn chỉnh ứng dụng toàn bộ các kiến thức trên: sử dụng Strict Mode, khóa tiến trình chống chạy trùng lặp, bẫy tín hiệu dọn dẹp <code>trap</code>, cơ chế <code>retry</code> khi tải dữ liệu lên remote server và định nghĩa exit code bài bản.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl><span class=c1># Script: backup-and-sync.sh</span>
+</span></span><span class=line><span class=cl><span class=c1># Mô tả : Sao lưu dữ liệu và đồng bộ lên server từ xa an toàn, chống gián đoạn</span>
+</span></span><span class=line><span class=cl><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl><span class=nv>IFS</span><span class=o>=</span><span class=s1>$&#39;\n\t&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># --- Định nghĩa mã lỗi ---</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>EXIT_OK</span><span class=o>=</span><span class=m>0</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>EXIT_LOCK_FAILED</span><span class=o>=</span><span class=m>20</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>EXIT_BACKUP_FAILED</span><span class=o>=</span><span class=m>21</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>EXIT_SYNC_FAILED</span><span class=o>=</span><span class=m>22</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># --- Cấu hình đường dẫn ---</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>SOURCE_DIR</span><span class=o>=</span><span class=s2>&#34;/opt/production/data&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>LOCK_FILE</span><span class=o>=</span><span class=s2>&#34;/tmp/backup-sync.lock&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>WORK_DIR</span><span class=o>=</span><span class=k>$(</span>mktemp -d -t backup-stage-XXXXXX<span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>TIMESTAMP</span><span class=o>=</span><span class=k>$(</span>date +%Y%m%d_%H%M%S<span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>ARCHIVE_NAME</span><span class=o>=</span><span class=s2>&#34;backup-</span><span class=si>${</span><span class=nv>TIMESTAMP</span><span class=si>}</span><span class=s2>.tar.gz&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># --- Hàm ghi log ---</span>
+</span></span><span class=line><span class=cl>log_info<span class=o>()</span>  <span class=o>{</span> <span class=nb>echo</span> <span class=s2>&#34;[</span><span class=k>$(</span>date +<span class=s1>&#39;%Y-%m-%d %H:%M:%S&#39;</span><span class=k>)</span><span class=s2>] [INFO]  </span><span class=nv>$*</span><span class=s2>&#34;</span><span class=p>;</span> <span class=o>}</span>
+</span></span><span class=line><span class=cl>log_warn<span class=o>()</span>  <span class=o>{</span> <span class=nb>echo</span> <span class=s2>&#34;[</span><span class=k>$(</span>date +<span class=s1>&#39;%Y-%m-%d %H:%M:%S&#39;</span><span class=k>)</span><span class=s2>] [WARN]  </span><span class=nv>$*</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span>2<span class=p>;</span> <span class=o>}</span>
+</span></span><span class=line><span class=cl>log_error<span class=o>()</span> <span class=o>{</span> <span class=nb>echo</span> <span class=s2>&#34;[</span><span class=k>$(</span>date +<span class=s1>&#39;%Y-%m-%d %H:%M:%S&#39;</span><span class=k>)</span><span class=s2>] [ERROR] </span><span class=nv>$*</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span>2<span class=p>;</span> <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># --- Cơ chế dọn dẹp an toàn ---</span>
+</span></span><span class=line><span class=cl>cleanup<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>status</span><span class=o>=</span><span class=nv>$?</span>
+</span></span><span class=line><span class=cl>    log_info <span class=s2>&#34;Tiến hành dọn dẹp môi trường tạm...&#34;</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> -d <span class=s2>&#34;</span><span class=nv>$WORK_DIR</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        rm -rf <span class=s2>&#34;</span><span class=nv>$WORK_DIR</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        log_info <span class=s2>&#34;Đã xóa thư mục tạm </span><span class=nv>$WORK_DIR</span><span class=s2>.&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> -f <span class=s2>&#34;</span><span class=nv>$LOCK_FILE</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        rm -f <span class=s2>&#34;</span><span class=nv>$LOCK_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        log_info <span class=s2>&#34;Đã mở khóa tiến trình (</span><span class=nv>$LOCK_FILE</span><span class=s2>).&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> <span class=nv>$status</span> -ne <span class=m>0</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        log_error <span class=s2>&#34;Kịch bản sao lưu kết thúc bất thường với mã: </span><span class=nv>$status</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=nb>trap</span> cleanup EXIT SIGINT SIGTERM
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># --- Hàm thử lại (Retry Pattern) ---</span>
+</span></span><span class=line><span class=cl>retry_command<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>max_tries</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>wait_sec</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$2</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>shift</span> <span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>cmd</span><span class=o>=(</span><span class=s2>&#34;</span><span class=nv>$@</span><span class=s2>&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>count</span><span class=o>=</span><span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>until</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>cmd</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>        <span class=nb>local</span> <span class=nv>code</span><span class=o>=</span><span class=nv>$?</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=o>((</span> count &gt;<span class=o>=</span> max_tries <span class=o>))</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>            log_error <span class=s2>&#34;Lệnh &#39;</span><span class=si>${</span><span class=nv>cmd</span><span class=p>[*]</span><span class=si>}</span><span class=s2>&#39; thất bại sau </span><span class=nv>$count</span><span class=s2> lần thử.&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=s2>&#34;</span><span class=nv>$code</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>fi</span>
+</span></span><span class=line><span class=cl>        log_warn <span class=s2>&#34;Thao tác chưa thành công (lần </span><span class=nv>$count</span><span class=s2>/</span><span class=nv>$max_tries</span><span class=s2>). Đang thử lại sau </span><span class=si>${</span><span class=nv>wait_sec</span><span class=si>}</span><span class=s2>s...&#34;</span>
+</span></span><span class=line><span class=cl>        sleep <span class=s2>&#34;</span><span class=nv>$wait_sec</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=o>((</span> count++ <span class=o>))</span>
+</span></span><span class=line><span class=cl>    <span class=k>done</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=m>0</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># --- Luồng thực thi chính ---</span>
+</span></span><span class=line><span class=cl>main<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    log_info <span class=s2>&#34;Bắt đầu quy trình sao lưu dữ liệu...&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 1. Kiểm tra khóa tiến trình (Tránh chạy đồng thời)</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> -f <span class=s2>&#34;</span><span class=nv>$LOCK_FILE</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>local</span> running_pid
+</span></span><span class=line><span class=cl>        <span class=nv>running_pid</span><span class=o>=</span><span class=k>$(</span>cat <span class=s2>&#34;</span><span class=nv>$LOCK_FILE</span><span class=s2>&#34;</span> 2&gt;/dev/null <span class=o>||</span> <span class=nb>echo</span> <span class=s2>&#34;&#34;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=o>[[</span> -n <span class=s2>&#34;</span><span class=nv>$running_pid</span><span class=s2>&#34;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=nb>kill</span> -0 <span class=s2>&#34;</span><span class=nv>$running_pid</span><span class=s2>&#34;</span> 2&gt;/dev/null<span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>            log_error <span class=s2>&#34;Một tiến trình sao lưu khác (PID: </span><span class=nv>$running_pid</span><span class=s2>) đang chạy. Hủy tác vụ!&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=nb>exit</span> <span class=s2>&#34;</span><span class=nv>$EXIT_LOCK_FAILED</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=nv>$$</span> &gt; <span class=s2>&#34;</span><span class=nv>$LOCK_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 2. Kiểm tra thư mục nguồn</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> ! -d <span class=s2>&#34;</span><span class=nv>$SOURCE_DIR</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        log_error <span class=s2>&#34;Thư mục nguồn </span><span class=nv>$SOURCE_DIR</span><span class=s2> không tồn tại!&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>exit</span> <span class=s2>&#34;</span><span class=nv>$EXIT_BACKUP_FAILED</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 3. Nén dữ liệu vào thư mục tạm</span>
+</span></span><span class=line><span class=cl>    log_info <span class=s2>&#34;Đang nén dữ liệu từ </span><span class=nv>$SOURCE_DIR</span><span class=s2>...&#34;</span>
+</span></span><span class=line><span class=cl>    tar -czf <span class=s2>&#34;</span><span class=nv>$WORK_DIR</span><span class=s2>/</span><span class=nv>$ARCHIVE_NAME</span><span class=s2>&#34;</span> -C <span class=s2>&#34;</span><span class=nv>$SOURCE_DIR</span><span class=s2>&#34;</span> . <span class=o>||</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        log_error <span class=s2>&#34;Quá trình nén file thất bại!&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>exit</span> <span class=s2>&#34;</span><span class=nv>$EXIT_BACKUP_FAILED</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>    log_info <span class=s2>&#34;Đã tạo bản nén thành công: </span><span class=nv>$ARCHIVE_NAME</span><span class=s2> (</span><span class=k>$(</span>du -h <span class=s2>&#34;</span><span class=nv>$WORK_DIR</span><span class=s2>/</span><span class=nv>$ARCHIVE_NAME</span><span class=s2>&#34;</span> <span class=p>|</span> cut -f1<span class=k>)</span><span class=s2>)&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 4. Giả lập đồng bộ lên Backup Server từ xa với cơ chế Retry</span>
+</span></span><span class=line><span class=cl>    log_info <span class=s2>&#34;Bắt đầu đồng bộ bản lưu trữ sang máy chủ backup...&#34;</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1># Giả lập thao tác sync bằng lệnh sao chép nội bộ (có retry)</span>
+</span></span><span class=line><span class=cl>    mkdir -p <span class=s2>&#34;/opt/remote-storage/backups&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> ! retry_command <span class=m>3</span> <span class=m>2</span> cp <span class=s2>&#34;</span><span class=nv>$WORK_DIR</span><span class=s2>/</span><span class=nv>$ARCHIVE_NAME</span><span class=s2>&#34;</span> <span class=s2>&#34;/opt/remote-storage/backups/&#34;</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        log_error <span class=s2>&#34;Không thể đồng bộ file lên máy chủ lưu trữ sau nhiều lần thử!&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>exit</span> <span class=s2>&#34;</span><span class=nv>$EXIT_SYNC_FAILED</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    log_info <span class=s2>&#34;Đồng bộ thành công bản sao lưu vào kho lưu trữ từ xa.&#34;</span>
+</span></span><span class=line><span class=cl>    log_info <span class=s2>&#34;Toàn bộ quy trình hoàn tất mỹ mãn!&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>main <span class=s2>&#34;</span><span class=nv>$@</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=ghi-chú-triển-khai>Ghi chú triển khai</h2><ul><li><strong>Không bọc lệnh <code>trap</code> bằng các tác vụ dễ phát sinh lỗi:</strong> Bản thân hàm trong <code>trap</code> cần viết cực kỳ đơn giản, an toàn và có kiểm tra sự tồn tại của file trước khi gọi <code>rm</code> để tránh gây ra lỗi lặp đệ quy.</li><li><strong>Tránh nhầm lẫn giữa <code>$?</code> và subshell:</strong> Khi gán <code>result=$(command)</code>, giá trị <code>$?</code> ngay sau đó phản ánh mã thoát của lệnh gán trong subshell. Hãy lưu mã lỗi vào một biến cục bộ <code>local status=$?</code> ngay dòng đầu tiên trước khi thực hiện bất kỳ lệnh <code>echo</code> hay kiểm tra nào khác.</li><li><strong>Xử lý tín hiệu trong Docker Container:</strong> Khi chạy script làm <code>ENTRYPOINT</code> trong Docker, hãy đảm bảo script chạy ở PID 1 (hoặc sử dụng công cụ như <code>tini</code> / <code>dumb-init</code>) để các tín hiệu <code>SIGTERM</code> từ <code>docker stop</code> được chuyển đúng đến lệnh <code>trap</code> trong Bash.</li><li><strong>Phân định rõ Stderr và Stdout:</strong> Luôn chuyển hướng thông báo lỗi sang <code>>&amp;2</code> (stderr). Điều này giúp các pipeline CI/CD hoặc các lệnh khác trong chuỗi pipe không bị parse nhầm nội dung log lỗi vào luồng dữ liệu nghiệp vụ.</li></ul><hr><h2 id=lời-kết>Lời kết</h2><p>Xử lý lỗi chủ động là ranh giới phân định giữa một script nghiệp dư dễ gãy vụn và một công cụ tự động hóa chuẩn mực sẵn sàng cho môi trường Production. Việc kết hợp chặt chẽ giữa <code>set -euo pipefail</code>, bẫy tín hiệu <code>trap</code> dọn dẹp tài nguyên và cơ chế tự động thử lại <code>retry</code> sẽ giúp hạ tầng DevOps của bạn vận hành trơn tru và có khả năng tự phục hồi mạnh mẽ.</p><p>Ở bài tiếp theo, chúng ta sẽ bước vào giai đoạn tự động hóa nâng cao với <a class=link href=/posts/bash/bash-step-eleven/>Bài 11 — Tích hợp Bash Script vào quy trình CI/CD</a>: thiết kế pipeline build, test và deploy tự động an toàn trên GitHub Actions và GitLab CI.</p></section><div class=hd-article-tags-wrap><span class=tags-label>THẺ:</span><div class=hd-article-tags><a href=/vi/tags/bash/ class=hd-tag-pill>#bash
+</a><a href=/vi/tags/shell-script/ class=hd-tag-pill>#shell-script
+</a><a href=/vi/tags/devops/ class=hd-tag-pill>#devops
+</a><a href=/vi/tags/error-handling/ class=hd-tag-pill>#error-handling
+</a><a href=/vi/tags/linux/ class=hd-tag-pill>#linux
+</a><a href=/vi/tags/automation/ class=hd-tag-pill>#automation
+</a><a href=/vi/tags/reliability/ class=hd-tag-pill>#reliability</a></div></div><div class=hd-article-footer-box><div class=footer-box-item><span class=box-label>TÁC GIẢ</span>
+<span class=box-value>Hoàng Dương</span></div><div class=footer-box-item><span class=box-label>BẢN QUYỀN</span>
+<span class=box-value>CC BY-NC-SA 4.0</span></div></div><nav class=hd-post-nav><a href=/vi/posts/bash/bash-step-nine/ class="post-nav-card nav-prev"><span class=nav-direction>&larr; BÀI TRƯỚC</span>
+<span class=nav-post-title>Debug script trong Bash: Tìm và sửa lỗi hiệu quả cho DevOps</span></a></nav><section class=hd-comments-section><div class=comments-section-header><span class=mono-label>THẢO LUẬN & BÌNH LUẬN</span></div><div class=utterances-container><script>(function(){var t=document.documentElement.dataset.scheme||"light",n=t==="dark"?"github-dark":"github-light",e=document.createElement("script");e.src="https://utteranc.es/client.js",e.setAttribute("repo","hoangduonng/blog_comments"),e.setAttribute("issue-term","pathname"),e.setAttribute("label","comments"),e.setAttribute("theme",n),e.setAttribute("crossorigin","anonymous"),e.async=!0,document.currentScript.parentElement.appendChild(e)})()</script></div><style>.utterances-container{width:100%;margin-top:8px;position:relative}.utterances{max-width:100%!important;margin:0!important}[data-scheme=light] .utterances iframe,html:not([data-scheme=dark]) .utterances iframe{mix-blend-mode:multiply;transition:mix-blend-mode .2s ease}[data-scheme=dark] .utterances iframe{mix-blend-mode:lighten;transition:mix-blend-mode .2s ease}</style><script>let utterancesLoaded=!1;function setUtterancesTheme(e){let t=document.querySelector(".utterances iframe");if(t&&t.contentWindow){let n=e==="dark"?"github-dark":"github-light";t.contentWindow.postMessage({type:"set-theme",theme:n},"https://utteranc.es")}}addEventListener("message",e=>{if(e.origin!=="https://utteranc.es")return;utterancesLoaded=!0,setUtterancesTheme(document.documentElement.dataset.scheme||"light")}),window.addEventListener("onColorSchemeChange",e=>{if(!utterancesLoaded)return;setUtterancesTheme(e.detail)})</script></section></article></div><aside class=hd-article-sidebar><div class=hd-sticky-sidebar-inner><div class=hd-toc-card><div class=toc-header><span class=toc-title-label>MỤC LỤC</span></div><div class=toc-content id=toc-content><nav id=TableOfContents><ol><li><a href=#error-handling-trong-bash-cho-devops>Error Handling trong Bash cho DevOps</a></li><li><a href=#hiểu-rõ-exit-code-và-quy-ước-mã-lỗi>Hiểu rõ Exit Code và quy ước mã lỗi</a><ol><li><a href=#các-mã-thoát-tiêu-chuẩn-trên-linux>Các mã thoát tiêu chuẩn trên Linux</a></li><li><a href=#định-nghĩa-mã-lỗi-tùy-biến-trong-dự-án>Định nghĩa mã lỗi tùy biến trong dự án</a></li></ol></li><li><a href=#kiểm-soát-luồng-thực-thi-với-short-circuit-và-set--e>Kiểm soát luồng thực thi với short-circuit và set -e</a><ol><li><a href=#sử-dụng-toán-tử-điều-kiện-rút-gọn-short-circuit-evaluation>Sử dụng toán tử điều kiện rút gọn (Short-circuit Evaluation)</a></li><li><a href=#cơ-chế-fail-fast-với-set--e>Cơ chế fail-fast với set -e</a></li></ol></li><li><a href=#cạm-bẫy-tiềm-ẩn-của-set--e-trong-thực-tế>Cạm bẫy tiềm ẩn của set -e trong thực tế</a><ol><li><a href=#cạm-bẫy-1-biểu-thức-toán-học-trả-về-0>Cạm bẫy 1: Biểu thức toán học trả về 0</a></li><li><a href=#cạm-bẫy-2-lệnh-kiểm-tra-trả-về-false-có-chủ-đích>Cạm bẫy 2: Lệnh kiểm tra trả về false có chủ đích</a></li><li><a href=#cạm-bẫy-3-pipeline-chỉ-kiểm-tra-lệnh-cuối-cùng>Cạm bẫy 3: Pipeline chỉ kiểm tra lệnh cuối cùng</a></li></ol></li><li><a href=#bẫy-lỗi-và-dọn-dẹp-tài-nguyên-với-trap>Bẫy lỗi và dọn dẹp tài nguyên với trap</a><ol><li><a href=#các-tín-hiệu-và-sự-kiện-phổ-biến>Các tín hiệu và sự kiện phổ biến</a></li><li><a href=#mô-hình-cleanup-function-chuẩn-mực>Mô hình Cleanup Function chuẩn mực</a></li></ol></li><li><a href=#xây-dựng-cơ-chế-retry-pattern-tự-động>Xây dựng cơ chế Retry Pattern tự động</a><ol><li><a href=#ví-dụ-áp-dụng-retry-trong-devops>Ví dụ áp dụng Retry trong DevOps</a></li></ol></li><li><a href=#chiến-lược-fail-fast-và-phân-cấp-ghi-log-chuẩn-mực>Chiến lược Fail-Fast và phân cấp ghi log chuẩn mực</a><ol><li><a href=#module-ghi-log-chuẩn-có-phân-cấp-logging-framework>Module ghi log chuẩn có phân cấp (Logging Framework)</a></li></ol></li><li><a href=#ví-dụ-thực-hành-script-backup-và-đồng-bộ-dữ-liệu-an-toàn>Ví dụ thực hành: Script Backup và đồng bộ dữ liệu an toàn</a></li><li><a href=#ghi-chú-triển-khai>Ghi chú triển khai</a></li><li><a href=#lời-kết>Lời kết</a></li></ol></nav></div><div class=toc-scroll-indicator id=toc-indicator style=display:none></div></div></div></aside></div></div><div class=hd-edge-callout-rail><aside class=hd-floating-callout aria-label="Bài viết liên quan"><a href=/vi/posts/bash/bash-step-eight/ class=floating-callout-art><img src=/images/bash/bash-step-eight.jpg alt="Cron Job với Bash: tự động hóa theo lịch cho DevOps" class=floating-callout-img></a><div class=floating-callout-badge>BÀI VIẾT <span class=callout-of>liên quan</span></div><div class=floating-callout-body><h4 class=floating-callout-title><a href=/vi/posts/bash/bash-step-eight/>Cron Job với Bash: tự động hóa theo lịch cho DevOps</a></h4><p class=floating-callout-excerpt>Cron job trong Bash cho DevOps Ở bài trước chúng ta đã quản lý biến, .env, tham …</p><a href=/vi/posts/bash/bash-step-eight/ class=floating-callout-btn>ĐỌC TIẾP &rarr;</a></div></aside></div></div><script>document.addEventListener("DOMContentLoaded",function(){var e=document.getElementById("toc-content"),t=document.getElementById("toc-indicator");if(e&&t){function n(){var s,o,n=e.scrollHeight-e.clientHeight;if(n<=2){t.style.display="none";return}t.style.display="block",s=e.scrollTop/n,o=e.clientHeight-32,t.style.top=e.offsetTop+s*o+"px"}e.addEventListener("scroll",n,{passive:!0}),n(),window.addEventListener("resize",n,{passive:!0}),window.addEventListener("load",n,{passive:!0})}})</script><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><div id=hd-search-overlay class=hd-search-overlay aria-hidden=true data-index-url=/vi/search/index.json data-lang=vi data-no-results="Không tìm thấy kết quả phù hợp" data-no-results-sub="Hãy thử với từ khóa khác hoặc kiểm tra lại chính tả" data-initial-hint="Nhập từ khoá để tìm kiếm bài viết..." data-results-count="kết quả"><div class=hd-search-backdrop id=hd-search-backdrop tabindex=-1></div><div class=hd-search-dialog role=dialog aria-modal=true aria-label="Tìm kiếm bài viết"><div class=hd-search-header><div class=hd-search-input-wrapper><svg class="hd-search-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<input id=hd-search-input class=hd-search-input type=text placeholder="Tìm kiếm bài viết, chuyên mục, chủ đề..." autocomplete=off autocorrect=off autocapitalize=off spellcheck=false aria-autocomplete=list aria-controls=hd-search-results>
+<button id=hd-search-clear class=hd-search-clear type=button aria-label="Xóa từ khóa" style=display:none>
+<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div><button id=hd-search-close class=hd-search-close-btn type=button aria-label="Đóng tìm kiếm">
+<kbd class=hd-search-kbd>ESC</kbd></button></div><div class=hd-search-body><div id=hd-search-loading class="hd-search-state hd-search-loading" style=display:none><div class=hd-search-spinner aria-hidden=true></div><span>Đang tải dữ liệu tìm kiếm...</span></div><div id=hd-search-initial class="hd-search-state hd-search-initial"><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p class=state-title>Tìm kiếm nhanh</p><p class=state-desc>Nhập từ khoá hoặc chủ đề để tìm kiếm trong tất cả bài viết đã xuất bản.</p></div><div id=hd-search-empty class="hd-search-state hd-search-empty" style=display:none><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="8" x2="14" y2="14"/><line x1="14" y1="8" x2="8" y2="14"/></svg><p class=state-title id=hd-search-empty-title>Không tìm thấy kết quả phù hợp</p><p class=state-desc id=hd-search-empty-desc>Hãy thử với từ khóa khác hoặc kiểm tra lại chính tả</p></div><div id=hd-search-results class=hd-search-results role=listbox style=display:none></div></div><div class=hd-search-footer><div class=hd-search-shortcuts><span class=shortcut-item><kbd>↑</kbd><kbd>↓</kbd>
+<span class=shortcut-label>Điều hướng</span>
+</span><span class=shortcut-item><kbd>↵</kbd>
+<span class=shortcut-label>Mở bài viết</span>
+</span><span class=shortcut-item><kbd>ESC</kbd>
+<span class=shortcut-label>Đóng</span></span></div><div id=hd-search-count class=hd-search-count style=display:none></div></div></div></div><footer class=hd-site-footer><div class=hd-footer-container><div class=hd-footer-grid><div class=footer-brand-col><a href=/vi/ class=footer-logo><span class=footer-logo-title>Hoang Duong</span></a><div class=footer-status><span class=status-dot></span>
+<span class=status-text>Hệ thống hoạt động ổn định</span></div><ul class=footer-meta-links><li><a href=/vi/about/>Giới thiệu Blog</a></li><li><a href=/vi/archives/>Lưu trữ bài viết</a></li></ul></div><div class=footer-links-grid><div class=footer-col><h3 class=footer-col-title>Chuyên mục</h3><ul class=footer-col-list><li><a href=/vi/categories/bash/>Bash Series</a></li><li><a href=/vi/categories/devops/>DevOps</a></li><li><a href=/vi/categories/docker/>Docker</a></li><li><a href=/vi/categories/installation-guides/>Hướng dẫn cài đặt</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Tài nguyên</h3><ul class=footer-col-list><li><a href=/vi/about/>Về tôi</a></li><li><a href=/vi/archives/>Tất cả bài viết</a></li><li><a href=#search data-open-search>Tìm kiếm</a></li><li><a href=/vi/links/>Liên kết hữu ích</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Series Nổi Bật</h3><ul class=footer-col-list><li><a href=/vi/posts/bash/bash-step-eight/>Cron Jobs & Bash</a></li><li><a href=/vi/categories/devops/>DevOps Automation</a></li><li><a href=/vi/categories/docker/>Docker Essentials</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Kết nối</h3><ul class=footer-col-list><li><a href=https://github.com/hoangduonng target=_blank rel=noopener>GitHub ↗</a></li><li><a href=https://www.instagram.com/ngu_uuen/ target=_blank rel=noopener>Instagram ↗</a></li><li><a href=https://www.linkedin.com/in/hoangduonng/ target=_blank rel=noopener>LinkedIn ↗</a></li><li><a href=/vi/index.xml>RSS Feed ↗</a></li></ul></div></div></div><div class=hd-footer-bottom-bar><span class=footer-copyright>&copy; 2026 Hoang Duong. All rights reserved.</span></div></div></footer><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.ee266d8948a6a32b88423f5d374fca9833845f738717cf8061ae442a91efe347.js defer></script></body></html>

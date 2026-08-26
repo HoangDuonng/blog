@@ -1,0 +1,546 @@
+<!doctype html><html lang=en dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="Complete guide to Bash error handling for DevOps: exit codes, safe cleanup with trap EXIT/ERR, set -e pitfalls, automated retry patterns, and resilient scripting."><title>Error Handling in Bash: Exception Traps, Retry Patterns, and Failure Recovery for DevOps</title><link rel=canonical href=https://tech.nguuyen.io.vn/posts/bash/bash-step-ten/><link rel=stylesheet href=/scss/style.min.d65180b8eb2049a52207ff41f36ee5dc8cdf8c7728053af03d1d0545c4a8c316.css><meta property='og:title' content="Error Handling in Bash: Exception Traps, Retry Patterns, and Failure Recovery for DevOps"><meta property='og:description' content="Complete guide to Bash error handling for DevOps: exit codes, safe cleanup with trap EXIT/ERR, set -e pitfalls, automated retry patterns, and resilient scripting."><meta property='og:url' content='https://tech.nguuyen.io.vn/posts/bash/bash-step-ten/'><meta property='og:site_name' content='Hoang Duong'><meta property='og:type' content='article'><meta property='article:section' content='Posts'><meta property='article:tag' content='bash'><meta property='article:tag' content='shell-script'><meta property='article:tag' content='devops'><meta property='article:tag' content='error-handling'><meta property='article:tag' content='linux'><meta property='article:tag' content='automation'><meta property='article:tag' content='reliability'><meta property='article:published_time' content='2026-07-05T00:00:00+00:00'><meta property='article:modified_time' content='2026-07-05T00:00:00+00:00'><meta property='og:image' content='https://tech.nguuyen.io.vn/images/bash/bash-step-ten.jpg'><meta name=twitter:title content="Error Handling in Bash: Exception Traps, Retry Patterns, and Failure Recovery for DevOps"><meta name=twitter:description content="Complete guide to Bash error handling for DevOps: exit codes, safe cleanup with trap EXIT/ERR, set -e pitfalls, automated retry patterns, and resilient scripting."><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://tech.nguuyen.io.vn/images/bash/bash-step-ten.jpg'><link rel=icon type=image/x-icon href=/favicon.ico><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel=stylesheet></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><header class="hd-header is-article-header"><div class=hd-header-inner><div class=hd-brand><a href=/ class=hd-logo-link><span class=hd-logo-text>Hoang Duong</span></a></div><div class=hd-header-divider aria-hidden=true></div><div class=hd-header-rail><a href=/ class="header-rail-crumb header-rail-home">BLOG
+</a><span class=header-rail-sep>//</span>
+<a href=/categories/devops/ class="header-rail-crumb header-rail-cat">[DEVOPS]
+</a><span class=header-rail-title>Error Handling in Bash: Exception Traps, Retry Patterns, and Failure Recovery for DevOps</span></div><div class=hd-header-spacer></div><nav class=hd-nav-links><button id=hd-menu-toggle class=hd-menu-trigger-fixed aria-label="Toggle Menu" title=Menu type=button>
+<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" class="chevron-icon"><polyline points="6 9 12 15 18 9"/></svg></button></nav></div></header><div id=hd-menu-dropdown class=hd-menu-popover aria-hidden=true><div class=hd-popover-inner><div class=hd-popover-nav><span class=popover-section-label>NAVIGATION</span>
+<a href=/ class=popover-item>Home</a>
+<a href=/about/ class=popover-item>About</a>
+<a href=/archives/ class=popover-item>Archives</a>
+<a href=/links/ class=popover-item>Links</a>
+<a href=/categories/ class=popover-item>Categories</a></div><div class=hd-popover-footer><a href=/vi/posts/bash/bash-step-ten/ class="popover-btn lang-btn" title="Tiếng Việt"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>VI</span>
+</a><button class="popover-btn theme-btn dark-mode-toggle" data-toggle-theme title="Dark Mode" type=button>
+<svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+</button>
+<button type=button class="popover-btn search-btn search-trigger-btn" data-open-search aria-label="Search (Cmd+K)" title="Search (Cmd+K)">
+<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<span class=search-kbd-badge>⌘K</span></button></div></div></div><div id=hd-menu-backdrop class=hd-menu-backdrop aria-hidden=true></div><div class=hd-site-wrapper><main class=hd-main><div class=hd-article-layout><div class=hd-hero-banner-wrap><div class=hd-hero-banner><img src=/images/bash/bash-step-ten.jpg alt="Error Handling in Bash: Exception Traps, Retry Patterns, and Failure Recovery for DevOps" class=hd-hero-banner-img></div></div><div class=hd-article-container><div class=hd-article-grid><div class=hd-article-main><article class=hd-article-body><header class=hd-article-header><div class=hd-article-meta-top><time class=meta-date datetime=2026-07-05T00:00:00Z>JULY 05, 2026
+</time><span class=meta-dot>&#183;</span>
+<span class=meta-reading-time>11 MIN READ</span>
+<span class=meta-dot>&#183;</span>
+<span class=meta-author>HOÀNG DƯƠNG</span>
+<span class=meta-dot>&#183;</span>
+<a href=/vi/posts/bash/bash-step-ten/ class=meta-lang-switch><svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:3px"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>VI</span></a></div><h1 class=hd-article-title>Error Handling in Bash: Exception Traps, Retry Patterns, and Failure Recovery for DevOps</h1><p class=hd-article-description>Complete guide to Bash error handling for DevOps: exit codes, safe cleanup with trap EXIT/ERR, set -e pitfalls, automated retry patterns, and resilient scripting.</p><div class=hd-article-categories><a href=/categories/devops/ class=hd-cat-pill>DEVOPS
+</a><a href=/categories/bash/ class=hd-cat-pill>BASH</a></div></header><section class="article-content hd-prose"><h2 id=error-handling-in-bash-for-devops>Error Handling in Bash for DevOps</h2><p>In the <a class=link href=/en/posts/bash/bash-step-nine/>previous post</a>, we explored essential debugging techniques to diagnose failures after they happen. However, in production environments and automated CI/CD pipelines, reactive debugging is not enough. Production-grade DevOps scripts must <strong>proactively handle errors</strong> as they occur at runtime.</p><p>Intermittent network hiccups, exhausted disk capacity, slow-starting dependent services, and permission misconfigurations are inevitable realities. Without robust error handling, automation scripts risk:</p><ul><li>Silently continuing execution in an invalid state, causing cascading data corruption.</li><li>Abruptly crashing without releasing locks or cleaning up temporary scratch directories, blocking subsequent runs.</li><li>Failing immediately on transient glitches that could have succeeded after a short retry.</li></ul><p>This guide provides a comprehensive framework for exception handling in Bash: from mastering Exit Codes and avoiding <code>set -e</code> traps, to deterministic resource cleanup with <code>trap</code>, building reusable Retry Patterns, and standardizing log severity levels.</p><hr><h2 id=understanding-exit-codes-and-status-conventions>Understanding Exit Codes and Status Conventions</h2><p>Every command or program executed in a Linux/Unix environment returns an integer between <code>0</code> and <code>255</code> upon completion, known as its <strong>Exit Status</strong> or <strong>Exit Code</strong>. This value is captured in the special shell parameter <code>$?</code>.</p><ul><li><strong><code>0</code></strong>: Indicates that the command completed <strong>successfully</strong>.</li><li><strong><code>1 - 255</code></strong>: Indicates that an <strong>error</strong> or anomalous condition occurred.</li></ul><h3 id=standard-linux-exit-codes>Standard Linux Exit Codes</h3><p>Linux and POSIX shell environments adhere to standardized status conventions that every DevOps engineer should know:</p><div class=table-wrapper><table><thead><tr><th style=text-align:left>Exit Code</th><th style=text-align:left>Standard Meaning</th><th style=text-align:left>Common Cause</th></tr></thead><tbody><tr><td style=text-align:left><code>0</code></td><td style=text-align:left>Success</td><td style=text-align:left>Command completed without errors</td></tr><tr><td style=text-align:left><code>1</code></td><td style=text-align:left>General error</td><td style=text-align:left>Catch-all for general failures (e.g., division by zero)</td></tr><tr><td style=text-align:left><code>2</code></td><td style=text-align:left>Misuse of shell built-in</td><td style=text-align:left>Missing mandatory arguments for internal commands</td></tr><tr><td style=text-align:left><code>126</code></td><td style=text-align:left>Command invoked cannot execute</td><td style=text-align:left>Missing execute permissions (<code>chmod +x</code>)</td></tr><tr><td style=text-align:left><code>127</code></td><td style=text-align:left>Command not found</td><td style=text-align:left>Binary name typo or missing directory in <code>$PATH</code></td></tr><tr><td style=text-align:left><code>128</code></td><td style=text-align:left>Invalid argument to exit</td><td style=text-align:left>Calling <code>exit 3.14</code> (only integer values permitted)</td></tr><tr><td style=text-align:left><code>128 + N</code></td><td style=text-align:left>Process terminated by signal <code>N</code></td><td style=text-align:left><code>130</code> (128+2) for <code>Ctrl+C</code> (SIGINT), <code>137</code> (128+9) for <code>SIGKILL</code></td></tr><tr><td style=text-align:left><code>255</code></td><td style=text-align:left>Exit status out of range</td><td style=text-align:left>Status value exceeded 0–255 range</td></tr></tbody></table></div><h3 id=defining-custom-exit-codes>Defining Custom Exit Codes</h3><p>To enable downstream CI/CD pipelines and monitoring agents to distinguish between distinct failure domains, define explicit exit constants at the top of your scripts (values between <code>10</code> and <code>99</code> are recommended to avoid conflicting with system codes):</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Script error constants</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>EXIT_SUCCESS</span><span class=o>=</span><span class=m>0</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>EXIT_INVALID_ARGS</span><span class=o>=</span><span class=m>10</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>EXIT_CONFIG_MISSING</span><span class=o>=</span><span class=m>11</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>EXIT_NETWORK_TIMEOUT</span><span class=o>=</span><span class=m>12</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>EXIT_DISK_FULL</span><span class=o>=</span><span class=m>13</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>EXIT_DEPENDENCY_ERROR</span><span class=o>=</span><span class=m>14</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>validate_config<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>config_file</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> ! -f <span class=s2>&#34;</span><span class=nv>$config_file</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;[ERROR] Configuration file </span><span class=nv>$config_file</span><span class=s2> does not exist.&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>        <span class=nb>exit</span> <span class=s2>&#34;</span><span class=nv>$EXIT_CONFIG_MISSING</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=execution-flow-control-with-short-circuiting-and-set--e>Execution Flow Control with Short-Circuiting and set -e</h2><h3 id=inline-error-handling-with-short-circuit-operators>Inline Error Handling with Short-Circuit Operators</h3><p>The boolean operators <code>&&</code> (AND) and <code>||</code> (OR) provide concise one-line conditionals without requiring bulky <code>if...fi</code> structures:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Execute subsequent command only if previous command SUCCEEDS</span>
+</span></span><span class=line><span class=cl>mkdir -p /opt/backup <span class=o>&amp;&amp;</span> <span class=nb>echo</span> <span class=s2>&#34;Backup directory created.&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Execute fallback or exit immediately if command FAILS</span>
+</span></span><span class=line><span class=cl><span class=nb>cd</span> /opt/app/releases <span class=o>||</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;[FATAL] Cannot enter release directory.&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Verify file presence or copy default template</span>
+</span></span><span class=line><span class=cl><span class=o>[[</span> -f <span class=s2>&#34;.env&#34;</span> <span class=o>]]</span> <span class=o>||</span> cp <span class=s2>&#34;.env.example&#34;</span> <span class=s2>&#34;.env&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=fast-fail-execution-with-set--e>Fast-Fail Execution with set -e</h3><p>By default, Bash continues running subsequent lines even when earlier commands fail. Enabling <code>set -e</code> (or <code>set -o errexit</code>) instructs the shell to terminate immediately if any pipeline returns a non-zero exit code.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -e
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Preparing archive...&#34;</span>
+</span></span><span class=line><span class=cl>tar -czf backup.tar.gz /data/db-dump/
+</span></span><span class=line><span class=cl><span class=c1># If the tar command fails (e.g., permission denied), execution halts immediately,</span>
+</span></span><span class=line><span class=cl><span class=c1># preventing accidental deletion of unbacked data below!</span>
+</span></span><span class=line><span class=cl>rm -rf /data/db-dump/*
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Done.&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=hidden-pitfalls-of-set--e-in-practice>Hidden Pitfalls of set -e in Practice</h2><p>While <code>set -e</code> is indispensable for fail-fast safety, it possesses subtle nuances that can surprise even experienced engineers.</p><h3 id=pitfall-1-arithmetic-evaluation-returning-zero>Pitfall 1: Arithmetic Evaluation Returning Zero</h3><p>In Bash arithmetic evaluations <code>(( ... ))</code>, a calculated result of <code>0</code> evaluates to an exit code of <code>1</code> (following C-style boolean conventions where zero represents false):</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -e
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>count</span><span class=o>=</span><span class=m>0</span>
+</span></span><span class=line><span class=cl><span class=c1># Post-increment returns original value (0), giving exit status 1 -&gt; SCRIPT TERMINATES!</span>
+</span></span><span class=line><span class=cl><span class=o>((</span> count++ <span class=o>))</span> 
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;This message will NEVER be displayed!&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p><strong>Workaround:</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Approach 1: Pre-increment evaluation</span>
+</span></span><span class=line><span class=cl><span class=o>((</span> ++count <span class=o>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Approach 2: Explicit variable assignment</span>
+</span></span><span class=line><span class=cl><span class=nv>count</span><span class=o>=</span><span class=k>$((</span> count <span class=o>+</span> <span class=m>1</span> <span class=k>))</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=pitfall-2-test-commands-returning-false-by-design>Pitfall 2: Test Commands Returning False by Design</h3><p>Utilities like <code>grep</code>, <code>diff</code>, or <code>test</code> intentionally return <code>1</code> when no match or differences are found. Under <code>set -e</code>, this causes sudden termination:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -e
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># If no WARNING entries exist, grep returns 1 -&gt; Script crashes!</span>
+</span></span><span class=line><span class=cl>grep <span class=s2>&#34;WARNING&#34;</span> /var/log/app.log
+</span></span></code></pre></td></tr></table></div></div><p><strong>Workaround:</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Approach 1: Append || true when failure is non-fatal</span>
+</span></span><span class=line><span class=cl>grep <span class=s2>&#34;WARNING&#34;</span> /var/log/app.log <span class=o>||</span> <span class=nb>true</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Approach 2: Evaluate inside an if condition (set -e is suspended in test expressions)</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> grep -q <span class=s2>&#34;WARNING&#34;</span> /var/log/app.log<span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Warnings detected in log.&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>else</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;No warnings found.&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=pitfall-3-pipelines-masking-intermediate-errors>Pitfall 3: Pipelines Masking Intermediate Errors</h3><p>In a command chain <code>cmd1 | cmd2 | cmd3</code>, Bash by default only inspects the exit code of <code>cmd3</code>. If <code>cmd1</code> crashes while <code>cmd3</code> succeeds, the script continues unnoticed:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># If mysqldump fails due to auth errors, gzip still compresses empty input and returns 0!</span>
+</span></span><span class=line><span class=cl>mysqldump -u root -p invalid_db <span class=p>|</span> gzip &gt; dump.sql.gz
+</span></span></code></pre></td></tr></table></div></div><p><strong>Workaround:</strong> Always combine with <code>set -o pipefail</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=trapping-errors-and-safe-resource-cleanup-with-trap>Trapping Errors and Safe Resource Cleanup with trap</h2><p>A foundational rule of infrastructure reliability is: <strong>Whether a script completes successfully, encounters a fatal error, or is manually interrupted with <code>Ctrl+C</code>, all ephemeral resources must be cleanly released.</strong></p><p>The <code>trap</code> command allows you to intercept OS signals and shell lifecycle events to execute cleanup logic.</p><h3 id=essential-signals-and-events>Essential Signals and Events</h3><div class=table-wrapper><table><thead><tr><th style=text-align:left>Signal / Event</th><th style=text-align:left>Trigger Condition</th></tr></thead><tbody><tr><td style=text-align:left><code>EXIT</code> (or <code>0</code>)</td><td style=text-align:left>Fired whenever the script terminates (normal exit or via <code>exit</code>)</td></tr><tr><td style=text-align:left><code>ERR</code></td><td style=text-align:left>Fired when any simple command returns a non-zero exit code</td></tr><tr><td style=text-align:left><code>SIGINT</code> (Signal 2)</td><td style=text-align:left>Fired when the user sends an interrupt (<code>Ctrl+C</code>)</td></tr><tr><td style=text-align:left><code>SIGTERM</code> (Signal 15)</td><td style=text-align:left>Fired when receiving a termination signal from <code>kill</code> or Docker engine</td></tr></tbody></table></div><h3 id=standard-cleanup-pattern>Standard Cleanup Pattern</h3><p>Below is a production-grade template for deterministic resource cleanup:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Allocate scratch storage and process lock</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>WORK_DIR</span><span class=o>=</span><span class=k>$(</span>mktemp -d -t deploy-workspace-XXXXXX<span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>LOCK_FILE</span><span class=o>=</span><span class=s2>&#34;/tmp/my-service-deploy.lock&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>cleanup<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>exit_code</span><span class=o>=</span><span class=nv>$?</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;[CLEANUP] Releasing temporary resources...&#34;</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1># Remove temporary scratch workspace</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> -d <span class=s2>&#34;</span><span class=nv>$WORK_DIR</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        rm -rf <span class=s2>&#34;</span><span class=nv>$WORK_DIR</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;[CLEANUP] Removed temporary directory: </span><span class=nv>$WORK_DIR</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=c1># Release process lock</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> -f <span class=s2>&#34;</span><span class=nv>$LOCK_FILE</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        rm -f <span class=s2>&#34;</span><span class=nv>$LOCK_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;[CLEANUP] Removed process lock.&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> <span class=nv>$exit_code</span> -ne <span class=m>0</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;[CLEANUP] Script terminated with error status: </span><span class=nv>$exit_code</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=k>else</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;[CLEANUP] Cleanup completed successfully.&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=nb>exit</span> <span class=s2>&#34;</span><span class=nv>$exit_code</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Register cleanup handler across normal exit and interrupt signals</span>
+</span></span><span class=line><span class=cl><span class=nb>trap</span> cleanup EXIT SIGINT SIGTERM
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=building-an-automated-retry-pattern>Building an Automated Retry Pattern</h2><p>In distributed cloud architectures, transient network failures, temporary rate limits, or services warming up are routine occurrences. Rather than failing immediately, a resilient script employs a configurable Retry Pattern with backoff delays.</p><p>Here is a universal <code>retry</code> helper capable of executing arbitrary commands with bounded attempts:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl><span class=c1># Function: retry</span>
+</span></span><span class=line><span class=cl><span class=c1># Arguments:</span>
+</span></span><span class=line><span class=cl><span class=c1>#   $1: Maximum attempt count (max_attempts)</span>
+</span></span><span class=line><span class=cl><span class=c1>#   $2: Interval between attempts in seconds (delay_seconds)</span>
+</span></span><span class=line><span class=cl><span class=c1>#   $3+: Command to execute with arguments</span>
+</span></span><span class=line><span class=cl><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl>retry<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>max_attempts</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>delay</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$2</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>shift</span> <span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>command</span><span class=o>=(</span><span class=s2>&#34;</span><span class=nv>$@</span><span class=s2>&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>attempt</span><span class=o>=</span><span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>until</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>command</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>        <span class=nb>local</span> <span class=nv>exit_code</span><span class=o>=</span><span class=nv>$?</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=o>((</span> attempt &gt;<span class=o>=</span> max_attempts <span class=o>))</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>            <span class=nb>echo</span> <span class=s2>&#34;[ERROR] Command &#39;</span><span class=si>${</span><span class=nv>command</span><span class=p>[*]</span><span class=si>}</span><span class=s2>&#39; failed after </span><span class=nv>$attempt</span><span class=s2> attempts (Exit code: </span><span class=nv>$exit_code</span><span class=s2>).&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=s2>&#34;</span><span class=nv>$exit_code</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>fi</span>
+</span></span><span class=line><span class=cl>        
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;[WARN] Command &#39;</span><span class=si>${</span><span class=nv>command</span><span class=p>[*]</span><span class=si>}</span><span class=s2>&#39; failed (attempt </span><span class=nv>$attempt</span><span class=s2>/</span><span class=nv>$max_attempts</span><span class=s2>). Retrying in </span><span class=si>${</span><span class=nv>delay</span><span class=si>}</span><span class=s2>s...&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>        sleep <span class=s2>&#34;</span><span class=nv>$delay</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=o>((</span> attempt++ <span class=o>))</span>
+</span></span><span class=line><span class=cl>    <span class=k>done</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=m>0</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=practical-devops-use-cases-for-retry>Practical DevOps Use Cases for Retry</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Wait for database health endpoint to respond (up to 5 attempts, 3s delay)</span>
+</span></span><span class=line><span class=cl>retry <span class=m>5</span> <span class=m>3</span> curl -fsS <span class=s2>&#34;http://localhost:5432/healthz&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Download remote deployment artifact with retry</span>
+</span></span><span class=line><span class=cl>retry <span class=m>3</span> <span class=m>5</span> aws s3 cp <span class=s2>&#34;s3://my-bucket/artifacts/app.tar.gz&#34;</span> <span class=s2>&#34;./app.tar.gz&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=fail-fast-strategy-and-structured-logging>Fail-Fast Strategy and Structured Logging</h2><p>Balancing resilience requires knowing when to fail fast versus when to recover gracefully:</p><ol><li><strong>Fail-Fast:</strong> For deterministic, irrecoverable errors (e.g., missing secrets, unreadable configs, full filesystem), abort immediately with descriptive error messages.</li><li><strong>Graceful Fallback:</strong> When a secondary data source or cache is available, log a warning and proceed along the fallback execution path.</li></ol><h3 id=standardized-severity-logging-framework>Standardized Severity Logging Framework</h3><p>Standardize your script output with ISO 8601 timestamps and appropriate file descriptor routing (stdout for informational logs, stderr for warnings/errors):</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>log_info<span class=o>()</span>  <span class=o>{</span> <span class=nb>echo</span> <span class=s2>&#34;[</span><span class=k>$(</span>date -u +<span class=s1>&#39;%Y-%m-%dT%H:%M:%SZ&#39;</span><span class=k>)</span><span class=s2>] [INFO]  </span><span class=nv>$*</span><span class=s2>&#34;</span> <span class=p>;</span> <span class=o>}</span>
+</span></span><span class=line><span class=cl>log_warn<span class=o>()</span>  <span class=o>{</span> <span class=nb>echo</span> <span class=s2>&#34;[</span><span class=k>$(</span>date -u +<span class=s1>&#39;%Y-%m-%dT%H:%M:%SZ&#39;</span><span class=k>)</span><span class=s2>] [WARN]  </span><span class=nv>$*</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span> <span class=p>;</span> <span class=o>}</span>
+</span></span><span class=line><span class=cl>log_error<span class=o>()</span> <span class=o>{</span> <span class=nb>echo</span> <span class=s2>&#34;[</span><span class=k>$(</span>date -u +<span class=s1>&#39;%Y-%m-%dT%H:%M:%SZ&#39;</span><span class=k>)</span><span class=s2>] [ERROR] </span><span class=nv>$*</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span> <span class=p>;</span> <span class=o>}</span>
+</span></span><span class=line><span class=cl>log_fatal<span class=o>()</span> <span class=o>{</span> <span class=nb>echo</span> <span class=s2>&#34;[</span><span class=k>$(</span>date -u +<span class=s1>&#39;%Y-%m-%dT%H:%M:%SZ&#39;</span><span class=k>)</span><span class=s2>] [FATAL] </span><span class=nv>$*</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span> <span class=p>;</span> <span class=nb>exit</span> <span class=m>1</span> <span class=p>;</span> <span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=practical-example-resilient-database-backup-and-sync-script>Practical Example: Resilient Database Backup and Sync Script</h2><p>The following complete DevOps script ties together Strict Mode, concurrency locking, signal trapping, automated retry synchronization, and custom exit status codes:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl><span class=c1># Script: backup-and-sync.sh</span>
+</span></span><span class=line><span class=cl><span class=c1># Purpose: Resilient data backup and remote synchronization with auto-recovery</span>
+</span></span><span class=line><span class=cl><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl><span class=nv>IFS</span><span class=o>=</span><span class=s1>$&#39;\n\t&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># --- Exit Code Constants ---</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>EXIT_OK</span><span class=o>=</span><span class=m>0</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>EXIT_LOCK_FAILED</span><span class=o>=</span><span class=m>20</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>EXIT_BACKUP_FAILED</span><span class=o>=</span><span class=m>21</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>EXIT_SYNC_FAILED</span><span class=o>=</span><span class=m>22</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># --- Path Configurations ---</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>SOURCE_DIR</span><span class=o>=</span><span class=s2>&#34;/opt/production/data&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>LOCK_FILE</span><span class=o>=</span><span class=s2>&#34;/tmp/backup-sync.lock&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>WORK_DIR</span><span class=o>=</span><span class=k>$(</span>mktemp -d -t backup-stage-XXXXXX<span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>TIMESTAMP</span><span class=o>=</span><span class=k>$(</span>date +%Y%m%d_%H%M%S<span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>ARCHIVE_NAME</span><span class=o>=</span><span class=s2>&#34;backup-</span><span class=si>${</span><span class=nv>TIMESTAMP</span><span class=si>}</span><span class=s2>.tar.gz&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># --- Structured Logging ---</span>
+</span></span><span class=line><span class=cl>log_info<span class=o>()</span>  <span class=o>{</span> <span class=nb>echo</span> <span class=s2>&#34;[</span><span class=k>$(</span>date +<span class=s1>&#39;%Y-%m-%d %H:%M:%S&#39;</span><span class=k>)</span><span class=s2>] [INFO]  </span><span class=nv>$*</span><span class=s2>&#34;</span><span class=p>;</span> <span class=o>}</span>
+</span></span><span class=line><span class=cl>log_warn<span class=o>()</span>  <span class=o>{</span> <span class=nb>echo</span> <span class=s2>&#34;[</span><span class=k>$(</span>date +<span class=s1>&#39;%Y-%m-%d %H:%M:%S&#39;</span><span class=k>)</span><span class=s2>] [WARN]  </span><span class=nv>$*</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span>2<span class=p>;</span> <span class=o>}</span>
+</span></span><span class=line><span class=cl>log_error<span class=o>()</span> <span class=o>{</span> <span class=nb>echo</span> <span class=s2>&#34;[</span><span class=k>$(</span>date +<span class=s1>&#39;%Y-%m-%d %H:%M:%S&#39;</span><span class=k>)</span><span class=s2>] [ERROR] </span><span class=nv>$*</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span>2<span class=p>;</span> <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># --- Deterministic Cleanup ---</span>
+</span></span><span class=line><span class=cl>cleanup<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>status</span><span class=o>=</span><span class=nv>$?</span>
+</span></span><span class=line><span class=cl>    log_info <span class=s2>&#34;Initiating cleanup routines...&#34;</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> -d <span class=s2>&#34;</span><span class=nv>$WORK_DIR</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        rm -rf <span class=s2>&#34;</span><span class=nv>$WORK_DIR</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        log_info <span class=s2>&#34;Cleaned up temporary workspace: </span><span class=nv>$WORK_DIR</span><span class=s2>.&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> -f <span class=s2>&#34;</span><span class=nv>$LOCK_FILE</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        rm -f <span class=s2>&#34;</span><span class=nv>$LOCK_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        log_info <span class=s2>&#34;Released process lock (</span><span class=nv>$LOCK_FILE</span><span class=s2>).&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> <span class=nv>$status</span> -ne <span class=m>0</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        log_error <span class=s2>&#34;Backup workflow terminated with error code: </span><span class=nv>$status</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl><span class=nb>trap</span> cleanup EXIT SIGINT SIGTERM
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># --- Retry Helper ---</span>
+</span></span><span class=line><span class=cl>retry_command<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>max_tries</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>wait_sec</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$2</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>shift</span> <span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>cmd</span><span class=o>=(</span><span class=s2>&#34;</span><span class=nv>$@</span><span class=s2>&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>count</span><span class=o>=</span><span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>until</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>cmd</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>        <span class=nb>local</span> <span class=nv>code</span><span class=o>=</span><span class=nv>$?</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=o>((</span> count &gt;<span class=o>=</span> max_tries <span class=o>))</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>            log_error <span class=s2>&#34;Command &#39;</span><span class=si>${</span><span class=nv>cmd</span><span class=p>[*]</span><span class=si>}</span><span class=s2>&#39; failed after </span><span class=nv>$count</span><span class=s2> attempts.&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=s2>&#34;</span><span class=nv>$code</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>fi</span>
+</span></span><span class=line><span class=cl>        log_warn <span class=s2>&#34;Operation failed (attempt </span><span class=nv>$count</span><span class=s2>/</span><span class=nv>$max_tries</span><span class=s2>). Retrying in </span><span class=si>${</span><span class=nv>wait_sec</span><span class=si>}</span><span class=s2>s...&#34;</span>
+</span></span><span class=line><span class=cl>        sleep <span class=s2>&#34;</span><span class=nv>$wait_sec</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=o>((</span> count++ <span class=o>))</span>
+</span></span><span class=line><span class=cl>    <span class=k>done</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=m>0</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># --- Main Execution Flow ---</span>
+</span></span><span class=line><span class=cl>main<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    log_info <span class=s2>&#34;Starting database backup process...&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 1. Concurrency check (Prevent overlapping runs)</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> -f <span class=s2>&#34;</span><span class=nv>$LOCK_FILE</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>local</span> running_pid
+</span></span><span class=line><span class=cl>        <span class=nv>running_pid</span><span class=o>=</span><span class=k>$(</span>cat <span class=s2>&#34;</span><span class=nv>$LOCK_FILE</span><span class=s2>&#34;</span> 2&gt;/dev/null <span class=o>||</span> <span class=nb>echo</span> <span class=s2>&#34;&#34;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=o>[[</span> -n <span class=s2>&#34;</span><span class=nv>$running_pid</span><span class=s2>&#34;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=nb>kill</span> -0 <span class=s2>&#34;</span><span class=nv>$running_pid</span><span class=s2>&#34;</span> 2&gt;/dev/null<span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>            log_error <span class=s2>&#34;Another backup process (PID: </span><span class=nv>$running_pid</span><span class=s2>) is actively running. Aborting!&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=nb>exit</span> <span class=s2>&#34;</span><span class=nv>$EXIT_LOCK_FAILED</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=nv>$$</span> &gt; <span class=s2>&#34;</span><span class=nv>$LOCK_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 2. Source path validation</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> ! -d <span class=s2>&#34;</span><span class=nv>$SOURCE_DIR</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        log_error <span class=s2>&#34;Source directory </span><span class=nv>$SOURCE_DIR</span><span class=s2> does not exist!&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>exit</span> <span class=s2>&#34;</span><span class=nv>$EXIT_BACKUP_FAILED</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 3. Create compressed archive in scratch directory</span>
+</span></span><span class=line><span class=cl>    log_info <span class=s2>&#34;Archiving data from </span><span class=nv>$SOURCE_DIR</span><span class=s2>...&#34;</span>
+</span></span><span class=line><span class=cl>    tar -czf <span class=s2>&#34;</span><span class=nv>$WORK_DIR</span><span class=s2>/</span><span class=nv>$ARCHIVE_NAME</span><span class=s2>&#34;</span> -C <span class=s2>&#34;</span><span class=nv>$SOURCE_DIR</span><span class=s2>&#34;</span> . <span class=o>||</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>        log_error <span class=s2>&#34;Archive creation failed!&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>exit</span> <span class=s2>&#34;</span><span class=nv>$EXIT_BACKUP_FAILED</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span>
+</span></span><span class=line><span class=cl>    log_info <span class=s2>&#34;Created archive: </span><span class=nv>$ARCHIVE_NAME</span><span class=s2> (</span><span class=k>$(</span>du -h <span class=s2>&#34;</span><span class=nv>$WORK_DIR</span><span class=s2>/</span><span class=nv>$ARCHIVE_NAME</span><span class=s2>&#34;</span> <span class=p>|</span> cut -f1<span class=k>)</span><span class=s2>)&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># 4. Sync to remote backup destination with automatic retry</span>
+</span></span><span class=line><span class=cl>    log_info <span class=s2>&#34;Synchronizing archive to remote backup storage...&#34;</span>
+</span></span><span class=line><span class=cl>    
+</span></span><span class=line><span class=cl>    mkdir -p <span class=s2>&#34;/opt/remote-storage/backups&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> ! retry_command <span class=m>3</span> <span class=m>2</span> cp <span class=s2>&#34;</span><span class=nv>$WORK_DIR</span><span class=s2>/</span><span class=nv>$ARCHIVE_NAME</span><span class=s2>&#34;</span> <span class=s2>&#34;/opt/remote-storage/backups/&#34;</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        log_error <span class=s2>&#34;Failed to synchronize backup archive after multiple attempts!&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>exit</span> <span class=s2>&#34;</span><span class=nv>$EXIT_SYNC_FAILED</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    log_info <span class=s2>&#34;Archive successfully synchronized to remote storage.&#34;</span>
+</span></span><span class=line><span class=cl>    log_info <span class=s2>&#34;Backup workflow completed successfully!&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>main <span class=s2>&#34;</span><span class=nv>$@</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=deployment-notes--best-practices>Deployment Notes & Best Practices</h2><ul><li><strong>Keep Cleanup Handlers Simple:</strong> Logic within <code>trap</code> handlers must be lightweight and defensive. Always check for directory existence before calling <code>rm -rf</code> to prevent recursive errors within the handler itself.</li><li><strong>Capture <code>$?</code> Immediately:</strong> When saving exit status (<code>local status=$?</code>), capture it as the very first operation inside error handlers. Any intermediate command (even <code>echo</code>) will overwrite <code>$?</code> with its own status.</li><li><strong>Docker Signal Handling:</strong> When running scripts as container <code>ENTRYPOINT</code>, ensure the process runs as PID 1 (or wrap execution with <code>tini</code> / <code>dumb-init</code>) so <code>SIGTERM</code> signals from <code>docker stop</code> reach your shell <code>trap</code> cleanly.</li><li><strong>Differentiate Stdout and Stderr:</strong> Always direct operational diagnostics and failure logs to <code>>&amp;2</code> (stderr). This ensures downstream data pipelines or subshell captures (<code>output=$(script.sh)</code>) receive only pure payload data on stdout.</li></ul><hr><h2 id=conclusion>Conclusion</h2><p>Proactive exception handling is what distinguishes fragile scripts from production-ready automation software. By combining <code>set -euo pipefail</code>, deterministic <code>trap</code> resource cleanup, standardized error codes, and robust retry patterns, you can build reliable automation that withstands operational turbulence.</p><p>In the next article, we will examine <a class=link href=/en/posts/bash/bash-step-eleven/>Post 11 — Integrating Bash Scripts into CI/CD Pipelines</a>: structuring secure, non-interactive workflows in GitHub Actions and GitLab CI.</p></section><div class=hd-article-tags-wrap><span class=tags-label>TAGS:</span><div class=hd-article-tags><a href=/tags/bash/ class=hd-tag-pill>#bash
+</a><a href=/tags/shell-script/ class=hd-tag-pill>#shell-script
+</a><a href=/tags/devops/ class=hd-tag-pill>#devops
+</a><a href=/tags/error-handling/ class=hd-tag-pill>#error-handling
+</a><a href=/tags/linux/ class=hd-tag-pill>#linux
+</a><a href=/tags/automation/ class=hd-tag-pill>#automation
+</a><a href=/tags/reliability/ class=hd-tag-pill>#reliability</a></div></div><div class=hd-article-footer-box><div class=footer-box-item><span class=box-label>AUTHOR</span>
+<span class=box-value>Hoàng Dương</span></div><div class=footer-box-item><span class=box-label>LICENSE</span>
+<span class=box-value>CC BY-NC-SA 4.0</span></div></div><nav class=hd-post-nav><a href=/posts/bash/bash-step-nine/ class="post-nav-card nav-prev"><span class=nav-direction>&larr; PREVIOUS POST</span>
+<span class=nav-post-title>Debugging Bash Scripts: Practical Troubleshooting and Error Detection for DevOps</span></a></nav><section class=hd-comments-section><div class=comments-section-header><span class=mono-label>RESPONSES & DISCUSSION</span></div><div class=utterances-container><script>(function(){var t=document.documentElement.dataset.scheme||"light",n=t==="dark"?"github-dark":"github-light",e=document.createElement("script");e.src="https://utteranc.es/client.js",e.setAttribute("repo","hoangduonng/blog_comments"),e.setAttribute("issue-term","pathname"),e.setAttribute("label","comments"),e.setAttribute("theme",n),e.setAttribute("crossorigin","anonymous"),e.async=!0,document.currentScript.parentElement.appendChild(e)})()</script></div><style>.utterances-container{width:100%;margin-top:8px;position:relative}.utterances{max-width:100%!important;margin:0!important}[data-scheme=light] .utterances iframe,html:not([data-scheme=dark]) .utterances iframe{mix-blend-mode:multiply;transition:mix-blend-mode .2s ease}[data-scheme=dark] .utterances iframe{mix-blend-mode:lighten;transition:mix-blend-mode .2s ease}</style><script>let utterancesLoaded=!1;function setUtterancesTheme(e){let t=document.querySelector(".utterances iframe");if(t&&t.contentWindow){let n=e==="dark"?"github-dark":"github-light";t.contentWindow.postMessage({type:"set-theme",theme:n},"https://utteranc.es")}}addEventListener("message",e=>{if(e.origin!=="https://utteranc.es")return;utterancesLoaded=!0,setUtterancesTheme(document.documentElement.dataset.scheme||"light")}),window.addEventListener("onColorSchemeChange",e=>{if(!utterancesLoaded)return;setUtterancesTheme(e.detail)})</script></section></article></div><aside class=hd-article-sidebar><div class=hd-sticky-sidebar-inner><div class=hd-toc-card><div class=toc-header><span class=toc-title-label>ON THIS PAGE</span></div><div class=toc-content id=toc-content><nav id=TableOfContents><ol><li><a href=#error-handling-in-bash-for-devops>Error Handling in Bash for DevOps</a></li><li><a href=#understanding-exit-codes-and-status-conventions>Understanding Exit Codes and Status Conventions</a><ol><li><a href=#standard-linux-exit-codes>Standard Linux Exit Codes</a></li><li><a href=#defining-custom-exit-codes>Defining Custom Exit Codes</a></li></ol></li><li><a href=#execution-flow-control-with-short-circuiting-and-set--e>Execution Flow Control with Short-Circuiting and set -e</a><ol><li><a href=#inline-error-handling-with-short-circuit-operators>Inline Error Handling with Short-Circuit Operators</a></li><li><a href=#fast-fail-execution-with-set--e>Fast-Fail Execution with set -e</a></li></ol></li><li><a href=#hidden-pitfalls-of-set--e-in-practice>Hidden Pitfalls of set -e in Practice</a><ol><li><a href=#pitfall-1-arithmetic-evaluation-returning-zero>Pitfall 1: Arithmetic Evaluation Returning Zero</a></li><li><a href=#pitfall-2-test-commands-returning-false-by-design>Pitfall 2: Test Commands Returning False by Design</a></li><li><a href=#pitfall-3-pipelines-masking-intermediate-errors>Pitfall 3: Pipelines Masking Intermediate Errors</a></li></ol></li><li><a href=#trapping-errors-and-safe-resource-cleanup-with-trap>Trapping Errors and Safe Resource Cleanup with trap</a><ol><li><a href=#essential-signals-and-events>Essential Signals and Events</a></li><li><a href=#standard-cleanup-pattern>Standard Cleanup Pattern</a></li></ol></li><li><a href=#building-an-automated-retry-pattern>Building an Automated Retry Pattern</a><ol><li><a href=#practical-devops-use-cases-for-retry>Practical DevOps Use Cases for Retry</a></li></ol></li><li><a href=#fail-fast-strategy-and-structured-logging>Fail-Fast Strategy and Structured Logging</a><ol><li><a href=#standardized-severity-logging-framework>Standardized Severity Logging Framework</a></li></ol></li><li><a href=#practical-example-resilient-database-backup-and-sync-script>Practical Example: Resilient Database Backup and Sync Script</a></li><li><a href=#deployment-notes--best-practices>Deployment Notes & Best Practices</a></li><li><a href=#conclusion>Conclusion</a></li></ol></nav></div><div class=toc-scroll-indicator id=toc-indicator style=display:none></div></div></div></aside></div></div><div class=hd-edge-callout-rail><aside class=hd-floating-callout aria-label="Also of interest"><a href=/posts/bash/bash-step-eight/ class=floating-callout-art><img src=/images/bash/bash-step-eight.jpg alt="Cron Jobs with Bash: Scheduled Automation for DevOps" class=floating-callout-img></a><div class=floating-callout-badge>ALSO <span class=callout-of>of</span> INTEREST</div><div class=floating-callout-body><h4 class=floating-callout-title><a href=/posts/bash/bash-step-eight/>Cron Jobs with Bash: Scheduled Automation for DevOps</a></h4><p class=floating-callout-excerpt>Cron jobs in Bash for DevOps In the previous article we managed variables, .env …</p><a href=/posts/bash/bash-step-eight/ class=floating-callout-btn>READ &rarr;</a></div></aside></div></div><script>document.addEventListener("DOMContentLoaded",function(){var e=document.getElementById("toc-content"),t=document.getElementById("toc-indicator");if(e&&t){function n(){var s,o,n=e.scrollHeight-e.clientHeight;if(n<=2){t.style.display="none";return}t.style.display="block",s=e.scrollTop/n,o=e.clientHeight-32,t.style.top=e.offsetTop+s*o+"px"}e.addEventListener("scroll",n,{passive:!0}),n(),window.addEventListener("resize",n,{passive:!0}),window.addEventListener("load",n,{passive:!0})}})</script><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><div id=hd-search-overlay class=hd-search-overlay aria-hidden=true data-index-url=/search/index.json data-lang=en data-no-results="No matching articles found" data-no-results-sub="Try searching with different keywords" data-initial-hint="Type a keyword to search articles..." data-results-count=results><div class=hd-search-backdrop id=hd-search-backdrop tabindex=-1></div><div class=hd-search-dialog role=dialog aria-modal=true aria-label="Search Articles"><div class=hd-search-header><div class=hd-search-input-wrapper><svg class="hd-search-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<input id=hd-search-input class=hd-search-input type=text placeholder="Search articles, categories, topics..." autocomplete=off autocorrect=off autocapitalize=off spellcheck=false aria-autocomplete=list aria-controls=hd-search-results>
+<button id=hd-search-clear class=hd-search-clear type=button aria-label="Clear input" style=display:none>
+<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div><button id=hd-search-close class=hd-search-close-btn type=button aria-label="Close search">
+<kbd class=hd-search-kbd>ESC</kbd></button></div><div class=hd-search-body><div id=hd-search-loading class="hd-search-state hd-search-loading" style=display:none><div class=hd-search-spinner aria-hidden=true></div><span>Loading search index...</span></div><div id=hd-search-initial class="hd-search-state hd-search-initial"><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p class=state-title>Quick Search</p><p class=state-desc>Type a keyword or topic to search across all published articles.</p></div><div id=hd-search-empty class="hd-search-state hd-search-empty" style=display:none><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="8" x2="14" y2="14"/><line x1="14" y1="8" x2="8" y2="14"/></svg><p class=state-title id=hd-search-empty-title>No matching articles found</p><p class=state-desc id=hd-search-empty-desc>Try searching with different keywords</p></div><div id=hd-search-results class=hd-search-results role=listbox style=display:none></div></div><div class=hd-search-footer><div class=hd-search-shortcuts><span class=shortcut-item><kbd>↑</kbd><kbd>↓</kbd>
+<span class=shortcut-label>Navigate</span>
+</span><span class=shortcut-item><kbd>↵</kbd>
+<span class=shortcut-label>Open</span>
+</span><span class=shortcut-item><kbd>ESC</kbd>
+<span class=shortcut-label>Close</span></span></div><div id=hd-search-count class=hd-search-count style=display:none></div></div></div></div><footer class=hd-site-footer><div class=hd-footer-container><div class=hd-footer-grid><div class=footer-brand-col><a href=/ class=footer-logo><span class=footer-logo-title>Hoang Duong</span></a><div class=footer-status><span class=status-dot></span>
+<span class=status-text>All Systems Operational</span></div><ul class=footer-meta-links><li><a href=/about/>About Blog</a></li><li><a href=/archives/>Archives</a></li></ul></div><div class=footer-links-grid><div class=footer-col><h3 class=footer-col-title>Categories</h3><ul class=footer-col-list><li><a href=/categories/bash/>Bash Series</a></li><li><a href=/categories/devops/>DevOps</a></li><li><a href=/categories/docker/>Docker</a></li><li><a href=/categories/installation-guides/>Installation Guides</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Resources</h3><ul class=footer-col-list><li><a href=/about/>About Me</a></li><li><a href=/archives/>All Articles</a></li><li><a href=#search data-open-search>Search</a></li><li><a href=/links/>Useful Links</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Featured Series</h3><ul class=footer-col-list><li><a href=/posts/bash/bash-step-eight/>Cron Jobs & Bash</a></li><li><a href=/categories/devops/>DevOps Automation</a></li><li><a href=/categories/docker/>Docker Essentials</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Connect</h3><ul class=footer-col-list><li><a href=https://github.com/hoangduonng target=_blank rel=noopener>GitHub ↗</a></li><li><a href=https://www.instagram.com/ngu_uuen/ target=_blank rel=noopener>Instagram ↗</a></li><li><a href=https://www.linkedin.com/in/hoangduonng/ target=_blank rel=noopener>LinkedIn ↗</a></li><li><a href=/index.xml>RSS Feed ↗</a></li></ul></div></div></div><div class=hd-footer-bottom-bar><span class=footer-copyright>&copy; 2026 Hoang Duong. All rights reserved.</span></div></div></footer><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.ee266d8948a6a32b88423f5d374fca9833845f738717cf8061ae442a91efe347.js defer></script></body></html>
