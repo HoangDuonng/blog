@@ -260,12 +260,37 @@
 &lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="tách-biệt-mã-nguồn-inline-yaml-vs-file-script-độc-lập"&gt;Tách biệt mã nguồn: Inline YAML vs File Script độc lập
 &lt;/h2&gt;&lt;p&gt;Khi xây dựng pipeline, bạn có hai lựa chọn để đặt code Bash:&lt;/p&gt;
-&lt;p&gt;| Tiêu chí | Inline YAML (&lt;code&gt;run: |&lt;/code&gt;) | File Script riêng (&lt;code&gt;.github/scripts/deploy.sh&lt;/code&gt;) |
-| :&amp;mdash; | :&amp;mdash; | :&amp;mdash; |
-| &lt;strong&gt;Độ dài phù hợp&lt;/strong&gt; | 1 - 5 dòng lệnh đơn giản | Kịch bản phức tạp &amp;gt; 10 dòng |
-| &lt;strong&gt;Kiểm tra cú pháp &amp;amp; Linting&lt;/strong&gt; | Khó lint, dễ dính lỗi indentation YAML | Dễ kiểm tra bằng &lt;code&gt;shellcheck&lt;/code&gt; và &lt;code&gt;bash -n&lt;/code&gt; |
-| &lt;strong&gt;Khả năng tái sử dụng&lt;/strong&gt; | Bị khóa chặt trong file cấu hình CI | Chạy được cả trên local terminal và CI |
-| &lt;strong&gt;Bảo trì &amp;amp; Test&lt;/strong&gt; | Sửa pipeline phải commit push lên CI | Viết unit test được với framework như Bats |&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style="text-align: left"&gt;Tiêu chí&lt;/th&gt;
+&lt;th style="text-align: left"&gt;Inline YAML (&lt;code&gt;run&lt;/code&gt;)&lt;/th&gt;
+&lt;th style="text-align: left"&gt;File Script riêng (&lt;code&gt;.github/scripts/deploy.sh&lt;/code&gt;)&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;strong&gt;Độ dài phù hợp&lt;/strong&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;1 - 5 dòng lệnh đơn giản&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Kịch bản phức tạp &amp;gt; 10 dòng&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;strong&gt;Kiểm tra cú pháp &amp;amp; Linting&lt;/strong&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Khó lint, dễ dính lỗi indentation YAML&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Dễ kiểm tra bằng &lt;code&gt;shellcheck&lt;/code&gt; và &lt;code&gt;bash -n&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;strong&gt;Khả năng tái sử dụng&lt;/strong&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Bị khóa chặt trong file cấu hình CI&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Chạy được cả trên local terminal và CI&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;strong&gt;Bảo trì &amp;amp; Test&lt;/strong&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Sửa pipeline phải commit push lên CI&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Viết unit test được với framework như Bats&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
 &lt;h3 id="cấu-trúc-khuyến-nghị-cho-dự-án"&gt;Cấu trúc khuyến nghị cho dự án
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;

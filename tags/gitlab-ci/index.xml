@@ -260,12 +260,37 @@
 &lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="structuring-logic-inline-yaml-vs-dedicated-script-files"&gt;Structuring Logic: Inline YAML vs Dedicated Script Files
 &lt;/h2&gt;&lt;p&gt;When architecting CI/CD workflows, choose the appropriate home for your Bash code:&lt;/p&gt;
-&lt;p&gt;| Evaluation Criteria | Inline YAML (&lt;code&gt;run: |&lt;/code&gt;) | Dedicated Script (&lt;code&gt;.github/scripts/deploy.sh&lt;/code&gt;) |
-| :&amp;mdash; | :&amp;mdash; | :&amp;mdash; |
-| &lt;strong&gt;Complexity Range&lt;/strong&gt; | 1–5 lines of basic commands | Complex workflows (&amp;gt; 10 lines) |
-| &lt;strong&gt;Linting &amp;amp; Validation&lt;/strong&gt; | Difficult to lint; prone to YAML indentation flaws | Fully support &lt;code&gt;shellcheck&lt;/code&gt; and &lt;code&gt;bash -n&lt;/code&gt; |
-| &lt;strong&gt;Reusability&lt;/strong&gt; | Locked inside CI workflow YAML | Executable locally and across multiple runners |
-| &lt;strong&gt;Testability&lt;/strong&gt; | Requires committing and pushing to CI | Can be unit-tested locally with Bats |&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th style="text-align: left"&gt;Evaluation Criteria&lt;/th&gt;
+&lt;th style="text-align: left"&gt;Inline YAML (&lt;code&gt;run&lt;/code&gt;)&lt;/th&gt;
+&lt;th style="text-align: left"&gt;Dedicated Script (&lt;code&gt;.github/scripts/deploy.sh&lt;/code&gt;)&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;strong&gt;Complexity Range&lt;/strong&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;1–5 lines of basic commands&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Complex workflows (&amp;gt; 10 lines)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;strong&gt;Linting &amp;amp; Validation&lt;/strong&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Difficult to lint; prone to YAML indentation flaws&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Fully support &lt;code&gt;shellcheck&lt;/code&gt; and &lt;code&gt;bash -n&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;strong&gt;Reusability&lt;/strong&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Locked inside CI workflow YAML&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Executable locally and across multiple runners&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td style="text-align: left"&gt;&lt;strong&gt;Testability&lt;/strong&gt;&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Requires committing and pushing to CI&lt;/td&gt;
+&lt;td style="text-align: left"&gt;Can be unit-tested locally with Bats&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
 &lt;h3 id="recommended-project-layout"&gt;Recommended Project Layout
 &lt;/h3&gt;&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
 &lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
