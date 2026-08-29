@@ -1,0 +1,503 @@
+<!doctype html><html lang=en dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="Comprehensive guide to monitoring CPU, RAM, and disk usage, managing processes, and controlling system services using Bash with ps, top, kill, systemctl, journalctl, df, free, lsof, and ss."><title>System Management with Bash: Monitoring Resources and Controlling Processes in DevOps</title>
+<link rel=canonical href=https://tech.nguuyen.io.vn/posts/bash/bash-step-twelve/><link rel=stylesheet href=/scss/style.min.9ca857cbc7cfaec08156eb36b947742d1bc56963af1c366181da56b4a8f1705b.css><meta property='og:title' content="System Management with Bash: Monitoring Resources and Controlling Processes in DevOps"><meta property='og:description' content="Comprehensive guide to monitoring CPU, RAM, and disk usage, managing processes, and controlling system services using Bash with ps, top, kill, systemctl, journalctl, df, free, lsof, and ss."><meta property='og:url' content='https://tech.nguuyen.io.vn/posts/bash/bash-step-twelve/'><meta property='og:site_name' content='Hoang Duong'><meta property='og:type' content='article'><meta property='article:section' content='Posts'><meta property='article:tag' content='bash'><meta property='article:tag' content='shell-script'><meta property='article:tag' content='devops'><meta property='article:tag' content='system-monitoring'><meta property='article:tag' content='process-management'><meta property='article:tag' content='linux-admin'><meta property='article:published_time' content='2026-08-29T00:00:00+00:00'><meta property='article:modified_time' content='2026-08-29T00:00:00+07:00'><meta property='og:image' content='https://tech.nguuyen.io.vn/images/bash/bash-step-twelve.jpg'><meta name=twitter:title content="System Management with Bash: Monitoring Resources and Controlling Processes in DevOps"><meta name=twitter:description content="Comprehensive guide to monitoring CPU, RAM, and disk usage, managing processes, and controlling system services using Bash with ps, top, kill, systemctl, journalctl, df, free, lsof, and ss."><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://tech.nguuyen.io.vn/images/bash/bash-step-twelve.jpg'><link rel=icon type=image/x-icon href=/favicon.ico><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel=stylesheet></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><header class="hd-header is-article-header"><div class=hd-header-inner><div class=hd-brand><a href=/ class=hd-logo-link><span class=hd-logo-text>Hoang Duong</span></a></div><div class=hd-header-divider aria-hidden=true></div><div class=hd-header-rail><a href=/ class="header-rail-crumb header-rail-home">BLOG
+</a><span class=header-rail-sep>//</span>
+<a href=/categories/devops/ class="header-rail-crumb header-rail-cat">[DEVOPS]
+</a><span class=header-rail-title>System Management with Bash: Monitoring Resources and Controlling Processes in DevOps</span></div><div class=hd-header-spacer></div><nav class=hd-nav-links><button id=hd-menu-toggle class=hd-menu-trigger-fixed aria-label="Toggle Menu" title=Menu type=button><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentcolor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" class="chevron-icon"><polyline points="6 9 12 15 18 9"/></svg></button></nav></div></header><div id=hd-menu-dropdown class=hd-menu-popover aria-hidden=true><div class=hd-popover-inner><div class=hd-popover-nav><span class=popover-section-label>NAVIGATION</span>
+<a href=/ class=popover-item>Home</a>
+<a href=/about/ class=popover-item>About</a>
+<a href=/archives/ class=popover-item>Archives</a>
+<a href=/links/ class=popover-item>Links</a>
+<a href=/categories/ class=popover-item>Categories</a></div><div class=hd-popover-footer><a href=/vi/posts/bash/bash-step-twelve/ class="popover-btn lang-btn" title="Tiếng Việt"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentcolor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>VI</span>
+</a><button class="popover-btn theme-btn dark-mode-toggle" data-toggle-theme title="Dark Mode" type=button>
+<svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+</button>
+<button type=button class="popover-btn search-btn search-trigger-btn" data-open-search aria-label="Search (Cmd+K)" title="Search (Cmd+K)">
+<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentcolor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<span class=search-kbd-badge>⌘K</span></button></div></div></div><div id=hd-menu-backdrop class=hd-menu-backdrop aria-hidden=true></div><div class=hd-site-wrapper><main class=hd-main><div class=hd-article-layout><div class=hd-hero-banner-wrap><div class=hd-hero-banner><img src=/images/bash/bash-step-twelve.jpg alt="System Management with Bash: Monitoring Resources and Controlling Processes in DevOps" class=hd-hero-banner-img></div></div><div class=hd-article-container><div class=hd-article-grid><div class=hd-article-main><article class=hd-article-body><header class=hd-article-header><div class=hd-article-meta-top><time class=meta-date datetime=2026-08-29T00:00:00Z>AUGUST 29, 2026
+</time><span class=meta-dot>&#183;</span>
+<span class=meta-reading-time>10 MIN READ</span>
+<span class=meta-dot>&#183;</span>
+<span class=meta-author>HOÀNG DƯƠNG</span>
+<span class=meta-dot>&#183;</span>
+<a href=/vi/posts/bash/bash-step-twelve/ class=meta-lang-switch><svg viewBox="0 0 24 24" width="13" height="13" stroke="currentcolor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:3px"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>VI</span></a></div><h1 class=hd-article-title>System Management with Bash: Monitoring Resources and Controlling Processes in DevOps</h1><p class=hd-article-description>Comprehensive guide to monitoring CPU, RAM, and disk usage, managing processes, and controlling system services using Bash with ps, top, kill, systemctl, journalctl, df, free, lsof, and ss.</p><div class=hd-article-categories><a href=/categories/devops/ class=hd-cat-pill>DEVOPS
+</a><a href=/categories/bash/ class=hd-cat-pill>BASH</a></div></header><section class="article-content hd-prose"><h2 id=system-management-with-bash-in-devops>System Management with Bash in DevOps</h2><p>In the <a class=link href=/posts/bash/bash-step-eleven/>previous post</a>, we explored integrating Bash into CI/CD pipelines—from enforcing Strict Mode to protecting secrets and preventing Command Injection. Now, we return to the server itself—where Bash demonstrates its most immediate power: <strong>system management and resource monitoring</strong>.</p><p>When operating DevOps infrastructure, you cannot always sit in front of a screen watching servers. Sometimes a process consumes RAM abnormally, a disk fills up and disrupts log rotation, or a critical service crashes in the middle of the night. In these moments, a well-crafted Bash script can <strong>detect issues before you even receive an emergency call</strong>, and even automatically intervene to restore service.</p><p>This article covers the core commands for monitoring system resources (CPU, RAM, Disk, Network), managing processes and services, and includes a practical DevOps script with cron integration for continuous server monitoring.</p><hr><h2 id=system-resource-monitoring>System Resource Monitoring</h2><h3 id=cpu-and-system-load>CPU and System Load</h3><p>The <code>top</code> command is the first tool you reach for when inspecting CPU activity:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Run top once and exit (suitable for scripts)</span>
+</span></span><span class=line><span class=cl>top -bn1 <span class=p>|</span> head -5
+</span></span></code></pre></td></tr></table></div></div><p>To extract the actual CPU usage percentage, use <code>grep</code> and <code>awk</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># CPU usage (calculated from idle)</span>
+</span></span><span class=line><span class=cl><span class=nv>cpu_idle</span><span class=o>=</span><span class=k>$(</span>top -bn1 <span class=p>|</span> grep <span class=s2>&#34;Cpu(s)&#34;</span> <span class=p>|</span> awk <span class=s1>&#39;{print $8}&#39;</span> <span class=p>|</span> tr -d <span class=s1>&#39;,&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=nv>cpu_usage</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;100 - </span><span class=nv>$cpu_idle</span><span class=s2>&#34;</span> <span class=p>|</span> bc<span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;CPU usage: </span><span class=si>${</span><span class=nv>cpu_usage</span><span class=si>}</span><span class=s2>%&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>Alternatively, use <code>mpstat</code> (from the <code>sysstat</code> package) for more precise measurement:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Average CPU usage over 1 second</span>
+</span></span><span class=line><span class=cl>mpstat <span class=m>1</span> <span class=m>1</span> <span class=p>|</span> tail -1 <span class=p>|</span> awk <span class=s1>&#39;{print &#34;CPU usage: &#34; 100 - $NF &#34;%&#34;}&#39;</span>
+</span></span></code></pre></td></tr></table></div></div><p><code>uptime</code> provides a quick snapshot of system load average over the last 1, 5, and 15 minutes:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>uptime <span class=p>|</span> awk -F<span class=s1>&#39;load average:&#39;</span> <span class=s1>&#39;{print &#34;Load average:&#34; $2}&#39;</span>
+</span></span></code></pre></td></tr></table></div></div><p><strong>Note on load average:</strong> If the load average exceeds the number of CPU cores, the system is overloaded. For example, a 4-core server with an average load of 5.2 indicates processes are waiting to be executed.</p><h3 id=ram-and-swap>RAM and Swap</h3><p>The <code>free</code> command displays memory status at a glance:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>free -h
+</span></span></code></pre></td></tr></table></div></div><p>To calculate the percentage of RAM in use:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># RAM usage percentage</span>
+</span></span><span class=line><span class=cl>free <span class=p>|</span> awk <span class=s1>&#39;/Mem:/ {printf &#34;RAM: %.1f%% used\n&#34;, $3/$2*100}&#39;</span>
+</span></span></code></pre></td></tr></table></div></div><p>Check whether swap is being consumed—a warning sign when the system is running low on RAM:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Check swap usage</span>
+</span></span><span class=line><span class=cl><span class=nv>swap_used</span><span class=o>=</span><span class=k>$(</span>free <span class=p>|</span> awk <span class=s1>&#39;/Swap:/ {print $3}&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[[</span> <span class=s2>&#34;</span><span class=nv>$swap_used</span><span class=s2>&#34;</span> -gt <span class=m>0</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Warning: Using </span><span class=si>${</span><span class=nv>swap_used</span><span class=si>}</span><span class=s2>KB of swap&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=disk-and-inode>Disk and Inode</h3><p><code>df</code> displays disk space utilization:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Partition usage by percentage</span>
+</span></span><span class=line><span class=cl>df -h --output<span class=o>=</span>target,pcent <span class=p>|</span> tail -n +2
+</span></span></code></pre></td></tr></table></div></div><p>Detect partitions exceeding the 80% threshold:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=k>while</span> <span class=nb>read</span> -r mount usage<span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    <span class=nv>pct</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$usage</span><span class=s2>&#34;</span> <span class=p>|</span> tr -d <span class=s1>&#39;%&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> <span class=s2>&#34;</span><span class=nv>$pct</span><span class=s2>&#34;</span> -ge <span class=m>80</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;Warning: </span><span class=nv>$mount</span><span class=s2> is using </span><span class=nv>$usage</span><span class=s2> disk space&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=k>done</span> &lt; &lt;<span class=o>(</span>df -h --output<span class=o>=</span>target,pcent <span class=p>|</span> tail -n +2<span class=o>)</span>
+</span></span></code></pre></td></tr></table></div></div><p><code>du</code> helps identify which directories consume the most space:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Top 10 largest directories from /</span>
+</span></span><span class=line><span class=cl>du -h --max-depth<span class=o>=</span><span class=m>1</span> / 2&gt;/dev/null <span class=p>|</span> sort -rh <span class=p>|</span> head -10
+</span></span></code></pre></td></tr></table></div></div><p>Check inodes—you may have free disk space but exhausted inodes:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>df -i --output<span class=o>=</span>target,ipcent <span class=p>|</span> tail -n +2
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=process-management>Process Management</h2><h3 id=listing-and-finding-processes>Listing and Finding Processes</h3><p><code>ps</code> is the most fundamental command for viewing running processes:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># List all processes sorted by CPU</span>
+</span></span><span class=line><span class=cl>ps aux --sort<span class=o>=</span>-%cpu <span class=p>|</span> head -15
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Find a process by name</span>
+</span></span><span class=line><span class=cl>ps aux <span class=p>|</span> grep -E <span class=s1>&#39;[n]ginx&#39;</span> <span class=p>|</span> awk <span class=s1>&#39;{print $2, $4&#34;%CPU&#34;, $11}&#39;</span>
+</span></span></code></pre></td></tr></table></div></div><p><strong>Tip:</strong> Use <code>[n]ginx</code> instead of <code>nginx</code> so <code>grep</code> does not match its own command line.</p><p>To retrieve the PID of a specific process:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Get PID of the Nginx master process</span>
+</span></span><span class=line><span class=cl>pidof nginx
+</span></span><span class=line><span class=cl><span class=c1># Or</span>
+</span></span><span class=line><span class=cl>pgrep -f <span class=s2>&#34;nginx: master&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=controlling-processes>Controlling Processes</h3><p><code>kill</code> sends signals to processes. Understanding these signals enables precise intervention:</p><div class=table-wrapper><table><thead><tr><th style=text-align:left>Signal</th><th style=text-align:left>Number</th><th style=text-align:left>Meaning</th><th style=text-align:left>When to Use</th></tr></thead><tbody><tr><td style=text-align:left><strong>SIGTERM</strong></td><td style=text-align:left>15</td><td style=text-align:left>Graceful termination request</td><td style=text-align:left>Try first; allows process to clean up resources</td></tr><tr><td style=text-align:left><strong>SIGKILL</strong></td><td style=text-align:left>9</td><td style=text-align:left>Immediate termination</td><td style=text-align:left>Use only when SIGTERM fails</td></tr><tr><td style=text-align:left><strong>SIGHUP</strong></td><td style=text-align:left>1</td><td style=text-align:left>Reload configuration</td><td style=text-align:left>Restart Nginx, Apache without stopping the process</td></tr><tr><td style=text-align:left><strong>SIGSTOP</strong></td><td style=text-align:left>19</td><td style=text-align:left>Pause</td><td style=text-align:left>Pause a process for investigation</td></tr></tbody></table></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Attempt graceful termination first</span>
+</span></span><span class=line><span class=cl><span class=nb>kill</span> <span class=s2>&#34;</span><span class=nv>$PID</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Force kill after 5 seconds if still alive</span>
+</span></span><span class=line><span class=cl>sleep <span class=m>5</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=nb>kill</span> -0 <span class=s2>&#34;</span><span class=nv>$PID</span><span class=s2>&#34;</span> 2&gt;/dev/null<span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>kill</span> -9 <span class=s2>&#34;</span><span class=nv>$PID</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span></code></pre></td></tr></table></div></div><p><code>pkill</code> stops multiple processes matching a name pattern:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Stop all old python processes (excluding current script)</span>
+</span></span><span class=line><span class=cl>pkill -f <span class=s2>&#34;python.*old_script&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=real-time-process-monitoring>Real-Time Process Monitoring</h3><p><code>top</code> or <code>htop</code> (if installed) provides real-time observation:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Run top with 3 updates, 1 second apart</span>
+</span></span><span class=line><span class=cl>top -bn3 -d1 <span class=p>|</span> head -30
+</span></span></code></pre></td></tr></table></div></div><p>If your server is CLI-only and you want a more user-friendly interface than <code>top</code>, <code>htop</code> is the popular choice:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Install htop on Debian/Ubuntu</span>
+</span></span><span class=line><span class=cl>apt-get install -y htop
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=service-management-with-systemctl>Service Management with systemctl</h2><p>On modern Linux systems (systemd), <code>systemctl</code> is the primary command for controlling services:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Check service status</span>
+</span></span><span class=line><span class=cl>systemctl status nginx
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Start / stop / restart</span>
+</span></span><span class=line><span class=cl>systemctl start nginx
+</span></span><span class=line><span class=cl>systemctl stop nginx
+</span></span><span class=line><span class=cl>systemctl restart nginx
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Enable / disable auto-start on boot</span>
+</span></span><span class=line><span class=cl>systemctl <span class=nb>enable</span> nginx
+</span></span><span class=line><span class=cl>systemctl disable nginx
+</span></span></code></pre></td></tr></table></div></div><p>List all running services:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>systemctl list-units --type<span class=o>=</span>service --state<span class=o>=</span>running
+</span></span></code></pre></td></tr></table></div></div><p>Find failed services:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>systemctl list-units --state<span class=o>=</span>failed
+</span></span></code></pre></td></tr></table></div></div><p>View service logs with <code>journalctl</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Last 50 lines of Nginx logs</span>
+</span></span><span class=line><span class=cl>journalctl -u nginx -n <span class=m>50</span> --no-pager
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Real-time log streaming (similar to tail -f)</span>
+</span></span><span class=line><span class=cl>journalctl -u nginx -f
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Logs from 1 hour ago</span>
+</span></span><span class=line><span class=cl>journalctl -u nginx --since <span class=s2>&#34;1 hour ago&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=checking-ports-and-network-connections>Checking Ports and Network Connections</h2><p><code>ss</code> (Socket Statistics) is the modern replacement for <code>netstat</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># List all listening ports</span>
+</span></span><span class=line><span class=cl>ss -tlnp
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Check a specific port (e.g., 80)</span>
+</span></span><span class=line><span class=cl>ss -tlnp <span class=p>|</span> grep <span class=s1>&#39;:80&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Connection summary by state</span>
+</span></span><span class=line><span class=cl>ss -s
+</span></span></code></pre></td></tr></table></div></div><p><code>lsof</code> helps find which process is using a file or port:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Find the process holding port 443</span>
+</span></span><span class=line><span class=cl>lsof -i :443
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Find which process has a specific file open</span>
+</span></span><span class=line><span class=cl>lsof /var/log/syslog
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=practical-example-system-monitoring-and-auto-remediation-script>Practical Example: System Monitoring and Auto-Remediation Script</h2><p>Below is a complete script combining the commands above, designed to run periodically via cron, detect issues, and automatically intervene when necessary:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span><span class=lnt>117
+</span><span class=lnt>118
+</span><span class=lnt>119
+</span><span class=lnt>120
+</span><span class=lnt>121
+</span><span class=lnt>122
+</span><span class=lnt>123
+</span><span class=lnt>124
+</span><span class=lnt>125
+</span><span class=lnt>126
+</span><span class=lnt>127
+</span><span class=lnt>128
+</span><span class=lnt>129
+</span><span class=lnt>130
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=cp></span><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl><span class=c1># Script : system-monitor.sh</span>
+</span></span><span class=line><span class=cl><span class=c1># Purpose: Monitor system resources, alert, and auto-remediate</span>
+</span></span><span class=line><span class=cl><span class=c1># Schedule via cron: */5 * * * * /opt/scripts/system-monitor.sh</span>
+</span></span><span class=line><span class=cl><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl><span class=nv>IFS</span><span class=o>=</span><span class=s1>$&#39;\n\t&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>LOG_FILE</span><span class=o>=</span><span class=s2>&#34;/var/log/system-monitor.log&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>MAX_LOG_SIZE</span><span class=o>=</span><span class=m>10485760</span>  <span class=c1># 10MB</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>CPU_THRESHOLD</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>CPU_THRESHOLD</span><span class=k>:-</span><span class=nv>90</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>RAM_THRESHOLD</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>RAM_THRESHOLD</span><span class=k>:-</span><span class=nv>85</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>DISK_THRESHOLD</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>DISK_THRESHOLD</span><span class=k>:-</span><span class=nv>80</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>log<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>level</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span><span class=p>;</span> <span class=nb>shift</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;[</span><span class=k>$(</span>date <span class=s1>&#39;+%Y-%m-%d %H:%M:%S&#39;</span><span class=k>)</span><span class=s2>] [</span><span class=nv>$level</span><span class=s2>] </span><span class=nv>$*</span><span class=s2>&#34;</span> <span class=p>|</span> tee -a <span class=s2>&#34;</span><span class=nv>$LOG_FILE</span><span class=s2>&#34;</span> 2&gt;/dev/null
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Rotate log if too large</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> -f <span class=s2>&#34;</span><span class=nv>$LOG_FILE</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>local</span> size
+</span></span><span class=line><span class=cl>        <span class=nv>size</span><span class=o>=</span><span class=k>$(</span>stat -f%z <span class=s2>&#34;</span><span class=nv>$LOG_FILE</span><span class=s2>&#34;</span> 2&gt;/dev/null <span class=o>||</span> stat -c%s <span class=s2>&#34;</span><span class=nv>$LOG_FILE</span><span class=s2>&#34;</span> 2&gt;/dev/null <span class=o>||</span> <span class=nb>echo</span> 0<span class=k>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=o>[[</span> <span class=s2>&#34;</span><span class=nv>$size</span><span class=s2>&#34;</span> -gt <span class=s2>&#34;</span><span class=nv>$MAX_LOG_SIZE</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>            mv <span class=s2>&#34;</span><span class=nv>$LOG_FILE</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>LOG_FILE</span><span class=si>}</span><span class=s2>.1&#34;</span>
+</span></span><span class=line><span class=cl>            touch <span class=s2>&#34;</span><span class=nv>$LOG_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Check CPU — kill the top CPU consumer if threshold exceeded</span>
+</span></span><span class=line><span class=cl>check_cpu<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> cpu_idle cpu_usage top_pid
+</span></span><span class=line><span class=cl>    <span class=nv>cpu_idle</span><span class=o>=</span><span class=k>$(</span>top -bn1 <span class=p>|</span> grep <span class=s2>&#34;Cpu(s)&#34;</span> <span class=p>|</span> awk <span class=s1>&#39;{print $8}&#39;</span> <span class=p>|</span> tr -d <span class=s1>&#39;,&#39;</span> <span class=o>||</span> <span class=nb>echo</span> <span class=s2>&#34;0&#34;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>    <span class=nv>cpu_usage</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;100 - </span><span class=nv>$cpu_idle</span><span class=s2>&#34;</span> <span class=p>|</span> bc 2&gt;/dev/null <span class=o>||</span> <span class=nb>echo</span> <span class=s2>&#34;0&#34;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> <span class=s2>&#34;</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$cpu_usage</span><span class=s2> &gt; </span><span class=nv>$CPU_THRESHOLD</span><span class=s2>&#34;</span> <span class=p>|</span> bc 2&gt;/dev/null <span class=o>||</span> <span class=nb>echo</span> 0<span class=k>)</span><span class=s2>&#34;</span> -eq <span class=m>1</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        log <span class=s2>&#34;WARN&#34;</span> <span class=s2>&#34;CPU usage: </span><span class=si>${</span><span class=nv>cpu_usage</span><span class=si>}</span><span class=s2>% (threshold: </span><span class=si>${</span><span class=nv>CPU_THRESHOLD</span><span class=si>}</span><span class=s2>%)&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1># Get the highest CPU consuming PID</span>
+</span></span><span class=line><span class=cl>        <span class=nv>top_pid</span><span class=o>=</span><span class=k>$(</span>ps -eo pid,%cpu --sort<span class=o>=</span>-%cpu <span class=p>|</span> awk <span class=s1>&#39;NR==2 {print $1}&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=o>[[</span> -n <span class=s2>&#34;</span><span class=nv>$top_pid</span><span class=s2>&#34;</span> <span class=o>&amp;&amp;</span> <span class=s2>&#34;</span><span class=nv>$top_pid</span><span class=s2>&#34;</span> !<span class=o>=</span> <span class=s2>&#34;PID&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>            <span class=nb>local</span> top_cmd
+</span></span><span class=line><span class=cl>            <span class=nv>top_cmd</span><span class=o>=</span><span class=k>$(</span>ps -p <span class=s2>&#34;</span><span class=nv>$top_pid</span><span class=s2>&#34;</span> -o <span class=nv>comm</span><span class=o>=</span> 2&gt;/dev/null <span class=o>||</span> <span class=nb>echo</span> <span class=s2>&#34;unknown&#34;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>            log <span class=s2>&#34;WARN&#34;</span> <span class=s2>&#34;Killing PID </span><span class=nv>$top_cmd</span><span class=s2> (</span><span class=nv>$top_pid</span><span class=s2>) — high CPU&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=c1># Try SIGTERM first, wait 5s then SIGKILL</span>
+</span></span><span class=line><span class=cl>            <span class=nb>kill</span> <span class=s2>&#34;</span><span class=nv>$top_pid</span><span class=s2>&#34;</span> 2&gt;/dev/null <span class=o>||</span> <span class=nb>true</span>
+</span></span><span class=line><span class=cl>            sleep <span class=m>5</span>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> <span class=nb>kill</span> -0 <span class=s2>&#34;</span><span class=nv>$top_pid</span><span class=s2>&#34;</span> 2&gt;/dev/null<span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>                <span class=nb>kill</span> -9 <span class=s2>&#34;</span><span class=nv>$top_pid</span><span class=s2>&#34;</span> 2&gt;/dev/null <span class=o>||</span> <span class=nb>true</span>
+</span></span><span class=line><span class=cl>                log <span class=s2>&#34;WARN&#34;</span> <span class=s2>&#34;Force killed PID </span><span class=nv>$top_pid</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=k>fi</span>
+</span></span><span class=line><span class=cl>        <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    <span class=k>else</span>
+</span></span><span class=line><span class=cl>        log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;CPU: </span><span class=si>${</span><span class=nv>cpu_usage</span><span class=si>}</span><span class=s2>% — OK&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Check RAM</span>
+</span></span><span class=line><span class=cl>check_ram<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> ram_pct
+</span></span><span class=line><span class=cl>    <span class=nv>ram_pct</span><span class=o>=</span><span class=k>$(</span>free <span class=p>|</span> awk <span class=s1>&#39;/Mem:/ {printf &#34;%.1f&#34;, $3/$2*100}&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> <span class=s2>&#34;</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$ram_pct</span><span class=s2> &gt; </span><span class=nv>$RAM_THRESHOLD</span><span class=s2>&#34;</span> <span class=p>|</span> bc 2&gt;/dev/null <span class=o>||</span> <span class=nb>echo</span> 0<span class=k>)</span><span class=s2>&#34;</span> -eq <span class=m>1</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        log <span class=s2>&#34;WARN&#34;</span> <span class=s2>&#34;RAM usage: </span><span class=si>${</span><span class=nv>ram_pct</span><span class=si>}</span><span class=s2>% (threshold: </span><span class=si>${</span><span class=nv>RAM_THRESHOLD</span><span class=si>}</span><span class=s2>%)&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=c1># Drop page cache (safe, no data loss)</span>
+</span></span><span class=line><span class=cl>        sync
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=m>3</span> &gt; /proc/sys/vm/drop_caches 2&gt;/dev/null <span class=o>||</span> <span class=nb>true</span>
+</span></span><span class=line><span class=cl>        log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;Dropped page cache&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>else</span>
+</span></span><span class=line><span class=cl>        log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;RAM: </span><span class=si>${</span><span class=nv>ram_pct</span><span class=si>}</span><span class=s2>% — OK&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Check Disk</span>
+</span></span><span class=line><span class=cl>check_disk<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>while</span> <span class=nb>read</span> -r mount usage<span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>        <span class=nb>local</span> pct
+</span></span><span class=line><span class=cl>        <span class=nv>pct</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$usage</span><span class=s2>&#34;</span> <span class=p>|</span> tr -d <span class=s1>&#39;%&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=o>[[</span> <span class=s2>&#34;</span><span class=nv>$pct</span><span class=s2>&#34;</span> -ge <span class=s2>&#34;</span><span class=nv>$DISK_THRESHOLD</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>            log <span class=s2>&#34;WARN&#34;</span> <span class=s2>&#34;Disk </span><span class=nv>$mount</span><span class=s2> usage: </span><span class=si>${</span><span class=nv>pct</span><span class=si>}</span><span class=s2>% (threshold: </span><span class=si>${</span><span class=nv>DISK_THRESHOLD</span><span class=si>}</span><span class=s2>%)&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>            <span class=c1># Auto-clean compressed logs older than 30 days</span>
+</span></span><span class=line><span class=cl>            find /var/log -name <span class=s2>&#34;*.gz&#34;</span> -mtime +30 -delete 2&gt;/dev/null <span class=o>||</span> <span class=nb>true</span>
+</span></span><span class=line><span class=cl>            log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;Cleaned old compressed logs (&gt;30 days)&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    <span class=k>done</span> &lt; &lt;<span class=o>(</span>df -h --output<span class=o>=</span>target,pcent 2&gt;/dev/null <span class=p>|</span> tail -n +2<span class=o>)</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Check critical services</span>
+</span></span><span class=line><span class=cl>check_services<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>critical_services</span><span class=o>=(</span><span class=s2>&#34;nginx&#34;</span> <span class=s2>&#34;docker&#34;</span> <span class=s2>&#34;sshd&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> svc in <span class=s2>&#34;</span><span class=si>${</span><span class=nv>critical_services</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> ! systemctl is-active --quiet <span class=s2>&#34;</span><span class=nv>$svc</span><span class=s2>&#34;</span> 2&gt;/dev/null<span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>            log <span class=s2>&#34;WARN&#34;</span> <span class=s2>&#34;Service </span><span class=nv>$svc</span><span class=s2> is not running — attempting restart&#34;</span>
+</span></span><span class=line><span class=cl>            systemctl restart <span class=s2>&#34;</span><span class=nv>$svc</span><span class=s2>&#34;</span> 2&gt;/dev/null <span class=o>||</span> <span class=nb>true</span>
+</span></span><span class=line><span class=cl>            sleep <span class=m>2</span>
+</span></span><span class=line><span class=cl>            <span class=k>if</span> systemctl is-active --quiet <span class=s2>&#34;</span><span class=nv>$svc</span><span class=s2>&#34;</span> 2&gt;/dev/null<span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>                log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;Service </span><span class=nv>$svc</span><span class=s2> restarted successfully&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=k>else</span>
+</span></span><span class=line><span class=cl>                log <span class=s2>&#34;ERROR&#34;</span> <span class=s2>&#34;Failed to restart service </span><span class=nv>$svc</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>            <span class=k>fi</span>
+</span></span><span class=line><span class=cl>        <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    <span class=k>done</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Check critical ports</span>
+</span></span><span class=line><span class=cl>check_ports<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>critical_ports</span><span class=o>=(</span><span class=m>22</span> <span class=m>80</span> 443<span class=o>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> port in <span class=s2>&#34;</span><span class=si>${</span><span class=nv>critical_ports</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> ! ss -tln <span class=p>|</span> grep -q <span class=s2>&#34;:</span><span class=si>${</span><span class=nv>port</span><span class=si>}</span><span class=s2> &#34;</span> 2&gt;/dev/null<span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>            log <span class=s2>&#34;WARN&#34;</span> <span class=s2>&#34;Port </span><span class=nv>$port</span><span class=s2> is not listening&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    <span class=k>done</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>main<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;=== System monitoring started ===&#34;</span>
+</span></span><span class=line><span class=cl>    check_cpu
+</span></span><span class=line><span class=cl>    check_ram
+</span></span><span class=line><span class=cl>    check_disk
+</span></span><span class=line><span class=cl>    check_services
+</span></span><span class=line><span class=cl>    check_ports
+</span></span><span class=line><span class=cl>    log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;=== System monitoring completed ===&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>main <span class=s2>&#34;</span><span class=nv>$@</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=cron-configuration-for-periodic-execution>Cron Configuration for Periodic Execution</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Run every 5 minutes</span>
+</span></span><span class=line><span class=cl>crontab -e
+</span></span><span class=line><span class=cl>*/5 * * * * /opt/scripts/system-monitor.sh &gt;&gt; /var/log/system-monitor-cron.log 2&gt;<span class=p>&amp;</span><span class=m>1</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=sample-output>Sample Output</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>[2026-08-29 10:00:01] [INFO] === System monitoring started ===
+</span></span><span class=line><span class=cl>[2026-08-29 10:00:01] [INFO] CPU: 23.5% — OK
+</span></span><span class=line><span class=cl>[2026-08-29 10:00:01] [INFO] RAM: 61.2% — OK
+</span></span><span class=line><span class=cl>[2026-08-29 10:00:02] [WARN] Disk / usage: 87% (threshold: 80%)
+</span></span><span class=line><span class=cl>[2026-08-29 10:00:02] [INFO] Cleaned old compressed logs (&gt;30 days)
+</span></span><span class=line><span class=cl>[2026-08-29 10:00:02] [INFO] Service nginx — running
+</span></span><span class=line><span class=cl>[2026-08-29 10:00:02] [INFO] Service docker — running
+</span></span><span class=line><span class=cl>[2026-08-29 10:00:02] [INFO] Service sshd — running
+</span></span><span class=line><span class=cl>[2026-08-29 10:00:02] [INFO] === System monitoring completed ===
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=deployment-notes--best-practices>Deployment Notes & Best Practices</h2><ul><li><strong>Avoid killing critical processes:</strong> Never <code>kill -9</code> a process without fully identifying what it is. Always review <code>ps aux</code> output carefully before intervening. In the example script above, we only kill the highest CPU consumer—but in production, add a whitelist to protect important PIDs (databases, application servers).</li><li><strong>Log rotation:</strong> The script auto-rotates logs when the file exceeds 10MB. In practice, integrate with <code>logrotate</code> for centralized log management and to retain necessary historical data.</li><li><strong>Configurable thresholds:</strong> Use environment variables (<code>CPU_THRESHOLD</code>, <code>RAM_THRESHOLD</code>, <code>DISK_THRESHOLD</code>) instead of hardcoding values, so you can adjust per server without modifying the script.</li><li><strong>Consider alternative solutions:</strong> Bash is well-suited for simple monitoring scripts. As your infrastructure grows (hundreds of servers), combine it with Prometheus + Grafana or dedicated monitoring tools—but Bash remains a fast choice for creating emergency intervention scripts.</li><li><strong>Test before deployment:</strong> Always run scripts on staging or debug with <code>bash -x</code> before adding them to cron in production.</li></ul><hr><h2 id=conclusion>Conclusion</h2><p>System management does not demand complex tools—often, a clean Bash script combining <code>ps</code>, <code>top</code>, <code>free</code>, <code>df</code>, <code>systemctl</code>, and <code>ss</code> is sufficient to keep servers running reliably. From monitoring CPU/RAM, checking disk usage, tracking service status, to automatically remediating detected issues, Bash remains a trustworthy companion for the DevOps Engineer.</p><p>In the <a class=link href=/posts/bash/bash-step-thirteen/>next post</a>, we will explore <strong>automating SSH with Bash</strong>: managing multiple servers simultaneously, executing remote commands, and transferring files securely with <code>ssh</code>, <code>scp</code>, and <code>rsync</code>.</p></section><div class=hd-article-tags-wrap><span class=tags-label>TAGS:</span><div class=hd-article-tags><a href=/tags/bash/ class=hd-tag-pill>#bash
+</a><a href=/tags/shell-script/ class=hd-tag-pill>#shell-script
+</a><a href=/tags/devops/ class=hd-tag-pill>#devops
+</a><a href=/tags/system-monitoring/ class=hd-tag-pill>#system-monitoring
+</a><a href=/tags/process-management/ class=hd-tag-pill>#process-management
+</a><a href=/tags/linux-admin/ class=hd-tag-pill>#linux-admin</a></div></div><div class=hd-article-footer-box><div class=footer-box-item><span class=box-label>AUTHOR</span>
+<span class=box-value>Hoàng Dương</span></div><div class=footer-box-item><span class=box-label>UPDATED</span>
+<span class=box-value>29/08/2026 00:00</span></div><div class=footer-box-item><span class=box-label>LICENSE</span>
+<span class=box-value>CC BY-NC-SA 4.0</span></div></div><nav class=hd-post-nav><a href=/posts/bash/bash-step-eleven/ class="post-nav-card nav-prev"><span class=nav-direction>&larr; PREVIOUS POST</span>
+<span class=nav-post-title>Bash in CI/CD: Building Secure, Automated Pipelines for DevOps</span></a></nav><section class=hd-comments-section><div class=comments-section-header><span class=mono-label>RESPONSES & DISCUSSION</span></div><div class=utterances-container><script>(function(){var t=document.documentElement.dataset.scheme||"light",n=t==="dark"?"github-dark":"github-light",e=document.createElement("script");e.src="https://utteranc.es/client.js",e.setAttribute("repo","hoangduonng/blog_comments"),e.setAttribute("issue-term","pathname"),e.setAttribute("label","comments"),e.setAttribute("theme",n),e.setAttribute("crossorigin","anonymous"),e.async=!0,document.currentScript.parentElement.appendChild(e)})()</script></div><style>.utterances-container{width:100%;margin-top:8px;position:relative}.utterances{max-width:100%!important;margin:0!important}[data-scheme=light] .utterances iframe,html:not([data-scheme=dark]) .utterances iframe{mix-blend-mode:multiply;transition:mix-blend-mode .2s ease}[data-scheme=dark] .utterances iframe{mix-blend-mode:lighten;transition:mix-blend-mode .2s ease}</style><script>let utterancesLoaded=!1;function setUtterancesTheme(e){let t=document.querySelector(".utterances iframe");if(t&&t.contentWindow){let n=e==="dark"?"github-dark":"github-light";t.contentWindow.postMessage({type:"set-theme",theme:n},"https://utteranc.es")}}addEventListener("message",e=>{if(e.origin!=="https://utteranc.es")return;utterancesLoaded=!0,setUtterancesTheme(document.documentElement.dataset.scheme||"light")}),window.addEventListener("onColorSchemeChange",e=>{if(!utterancesLoaded)return;setUtterancesTheme(e.detail)})</script></section></article></div><aside class=hd-article-sidebar><div class=hd-sticky-sidebar-inner><div class=hd-toc-card><div class=toc-header><span class=toc-title-label>ON THIS PAGE</span></div><div class=toc-content id=toc-content><nav id=TableOfContents><ol><li><a href=#system-management-with-bash-in-devops>System Management with Bash in DevOps</a></li><li><a href=#system-resource-monitoring>System Resource Monitoring</a><ol><li><a href=#cpu-and-system-load>CPU and System Load</a></li><li><a href=#ram-and-swap>RAM and Swap</a></li><li><a href=#disk-and-inode>Disk and Inode</a></li></ol></li><li><a href=#process-management>Process Management</a><ol><li><a href=#listing-and-finding-processes>Listing and Finding Processes</a></li><li><a href=#controlling-processes>Controlling Processes</a></li><li><a href=#real-time-process-monitoring>Real-Time Process Monitoring</a></li></ol></li><li><a href=#service-management-with-systemctl>Service Management with systemctl</a></li><li><a href=#checking-ports-and-network-connections>Checking Ports and Network Connections</a></li><li><a href=#practical-example-system-monitoring-and-auto-remediation-script>Practical Example: System Monitoring and Auto-Remediation Script</a><ol><li><a href=#cron-configuration-for-periodic-execution>Cron Configuration for Periodic Execution</a></li><li><a href=#sample-output>Sample Output</a></li></ol></li><li><a href=#deployment-notes--best-practices>Deployment Notes & Best Practices</a></li><li><a href=#conclusion>Conclusion</a></li></ol></nav></div><div class=toc-scroll-indicator id=toc-indicator style=display:none></div></div></div></aside></div></div><div class=hd-edge-callout-rail><aside class=hd-floating-callout aria-label="Also of interest"><a href=/posts/bash/bash-step-eleven/ class=floating-callout-art><img src=/images/bash/bash-step-eleven.jpg alt="Bash in CI/CD: Building Secure, Automated Pipelines for DevOps" class=floating-callout-img></a><div class=floating-callout-badge>ALSO <span class=callout-of>of</span> INTEREST</div><div class=floating-callout-body><h4 class=floating-callout-title><a href=/posts/bash/bash-step-eleven/>Bash in CI/CD: Building Secure, Automated Pipelines for DevOps</a></h4><p class=floating-callout-excerpt>Bash in CI/CD for DevOps In the previous post, we explored capturing errors and …</p><a href=/posts/bash/bash-step-eleven/ class=floating-callout-btn>READ &rarr;</a></div></aside></div></div><script>document.addEventListener("DOMContentLoaded",function(){var e=document.getElementById("toc-content"),t=document.getElementById("toc-indicator");if(e&&t){function n(){var s,o,n=e.scrollHeight-e.clientHeight;if(n<=2){t.style.display="none";return}t.style.display="block",s=e.scrollTop/n,o=e.clientHeight-32,t.style.top=e.offsetTop+s*o+"px"}e.addEventListener("scroll",n,{passive:!0}),n(),window.addEventListener("resize",n,{passive:!0}),window.addEventListener("load",n,{passive:!0})}})</script><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><div id=hd-search-overlay class=hd-search-overlay aria-hidden=true data-index-url=/search/index.json data-lang=en data-no-results="No matching articles found" data-no-results-sub="Try searching with different keywords" data-initial-hint="Type a keyword to search articles..." data-results-count=results><div class=hd-search-backdrop id=hd-search-backdrop tabindex=-1></div><div class=hd-search-dialog role=dialog aria-modal=true aria-label="Search Articles"><div class=hd-search-header><div class=hd-search-input-wrapper><svg class="hd-search-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentcolor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<input id=hd-search-input class=hd-search-input type=text placeholder="Search articles, categories, topics..." autocomplete=off autocorrect=off autocapitalize=off spellcheck=false aria-autocomplete=list aria-controls=hd-search-results>
+<button id=hd-search-clear class=hd-search-clear type=button aria-label="Clear input" style=display:none><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentcolor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div><button id=hd-search-close class=hd-search-close-btn type=button aria-label="Close search">
+<kbd class=hd-search-kbd>ESC</kbd></button></div><div class=hd-search-body><div id=hd-search-loading class="hd-search-state hd-search-loading" style=display:none><div class=hd-search-spinner aria-hidden=true></div><span>Loading search index...</span></div><div id=hd-search-initial class="hd-search-state hd-search-initial"><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentcolor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p class=state-title>Quick Search</p><p class=state-desc>Type a keyword or topic to search across all published articles.</p></div><div id=hd-search-empty class="hd-search-state hd-search-empty" style=display:none><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentcolor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="8" x2="14" y2="14"/><line x1="14" y1="8" x2="8" y2="14"/></svg><p class=state-title id=hd-search-empty-title>No matching articles found</p><p class=state-desc id=hd-search-empty-desc>Try searching with different keywords</p></div><div id=hd-search-results class=hd-search-results role=listbox style=display:none></div></div><div class=hd-search-footer><div class=hd-search-shortcuts><span class=shortcut-item><kbd>↑</kbd><kbd>↓</kbd>
+<span class=shortcut-label>Navigate</span>
+</span><span class=shortcut-item><kbd>↵</kbd>
+<span class=shortcut-label>Open</span>
+</span><span class=shortcut-item><kbd>ESC</kbd>
+<span class=shortcut-label>Close</span></span></div><div id=hd-search-count class=hd-search-count style=display:none></div></div></div></div><footer class=hd-site-footer><div class=hd-footer-container><div class=hd-footer-grid><div class=footer-brand-col><a href=/ class=footer-logo><span class=footer-logo-title>Hoang Duong</span></a><div class=footer-status><span class=status-dot></span>
+<span class=status-text>All Systems Operational</span></div><ul class=footer-meta-links><li><a href=/about/>About Blog</a></li><li><a href=/archives/>Archives</a></li></ul></div><div class=footer-links-grid><div class=footer-col><h3 class=footer-col-title>Categories</h3><ul class=footer-col-list><li><a href=/categories/bash/>Bash Series</a></li><li><a href=/categories/devops/>DevOps</a></li><li><a href=/categories/docker/>Docker</a></li><li><a href=/categories/installation-guides/>Installation Guides</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Resources</h3><ul class=footer-col-list><li><a href=/about/>About Me</a></li><li><a href=/archives/>All Articles</a></li><li><a href=#search data-open-search>Search</a></li><li><a href=/links/>Useful Links</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Featured Series</h3><ul class=footer-col-list><li><a href=/posts/bash/bash-step-eight/>Cron Jobs & Bash</a></li><li><a href=/categories/devops/>DevOps Automation</a></li><li><a href=/categories/docker/>Docker Essentials</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Connect</h3><ul class=footer-col-list><li><a href=https://github.com/hoangduonng target=_blank rel=noopener>GitHub ↗</a></li><li><a href=https://www.instagram.com/ngu_uuen/ target=_blank rel=noopener>Instagram ↗</a></li><li><a href=https://www.linkedin.com/in/hoangduonng/ target=_blank rel=noopener>LinkedIn ↗</a></li><li><a href=/index.xml>RSS Feed ↗</a></li></ul></div></div></div><div class=hd-footer-bottom-bar><span class=footer-copyright>&copy; 2026 Hoang Duong. All rights reserved.</span></div></div></footer><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.ee266d8948a6a32b88423f5d374fca9833845f738717cf8061ae442a91efe347.js defer></script></body></html>
