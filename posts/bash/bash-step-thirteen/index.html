@@ -1,0 +1,661 @@
+<!doctype html><html lang=en dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="Comprehensive guide to automating SSH with Bash for multi-server management: ssh-keygen, ssh-copy-id, ~/.ssh/config, scp, rsync, and parallel remote execution with & and wait."><title>Automating SSH with Bash: Managing Multiple Servers in DevOps</title>
+<link rel=canonical href=https://tech.nguuyen.io.vn/posts/bash/bash-step-thirteen/><link rel=stylesheet href=/scss/style.min.9ca857cbc7cfaec08156eb36b947742d1bc56963af1c366181da56b4a8f1705b.css><meta property='og:title' content="Automating SSH with Bash: Managing Multiple Servers in DevOps"><meta property='og:description' content="Comprehensive guide to automating SSH with Bash for multi-server management: ssh-keygen, ssh-copy-id, ~/.ssh/config, scp, rsync, and parallel remote execution with & and wait."><meta property='og:url' content='https://tech.nguuyen.io.vn/posts/bash/bash-step-thirteen/'><meta property='og:site_name' content='Hoang Duong'><meta property='og:type' content='article'><meta property='article:section' content='Posts'><meta property='article:tag' content='bash'><meta property='article:tag' content='shell-script'><meta property='article:tag' content='devops'><meta property='article:tag' content='ssh'><meta property='article:tag' content='multi-server'><meta property='article:tag' content='automation'><meta property='article:tag' content='rsync'><meta property='article:tag' content='remote-execution'><meta property='article:published_time' content='2026-08-30T00:00:00+00:00'><meta property='article:modified_time' content='2026-08-30T00:00:00+07:00'><meta property='og:image' content='https://tech.nguuyen.io.vn/images/bash/bash-step-thirteen.jpg'><meta name=twitter:title content="Automating SSH with Bash: Managing Multiple Servers in DevOps"><meta name=twitter:description content="Comprehensive guide to automating SSH with Bash for multi-server management: ssh-keygen, ssh-copy-id, ~/.ssh/config, scp, rsync, and parallel remote execution with & and wait."><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://tech.nguuyen.io.vn/images/bash/bash-step-thirteen.jpg'><link rel=icon type=image/x-icon href=/favicon.ico><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel=stylesheet></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><header class="hd-header is-article-header"><div class=hd-header-inner><div class=hd-brand><a href=/ class=hd-logo-link><span class=hd-logo-text>Hoang Duong</span></a></div><div class=hd-header-divider aria-hidden=true></div><div class=hd-header-rail><a href=/ class="header-rail-crumb header-rail-home">BLOG
+</a><span class=header-rail-sep>//</span>
+<a href=/categories/devops/ class="header-rail-crumb header-rail-cat">[DEVOPS]
+</a><span class=header-rail-title>Automating SSH with Bash: Managing Multiple Servers in DevOps</span></div><div class=hd-header-spacer></div><nav class=hd-nav-links><button id=hd-menu-toggle class=hd-menu-trigger-fixed aria-label="Toggle Menu" title=Menu type=button><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentcolor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" class="chevron-icon"><polyline points="6 9 12 15 18 9"/></svg></button></nav></div></header><div id=hd-menu-dropdown class=hd-menu-popover aria-hidden=true><div class=hd-popover-inner><div class=hd-popover-nav><span class=popover-section-label>NAVIGATION</span>
+<a href=/ class=popover-item>Home</a>
+<a href=/about/ class=popover-item>About</a>
+<a href=/archives/ class=popover-item>Archives</a>
+<a href=/links/ class=popover-item>Links</a>
+<a href=/categories/ class=popover-item>Categories</a></div><div class=hd-popover-footer><a href=/vi/posts/bash/bash-step-thirteen/ class="popover-btn lang-btn" title="Tiếng Việt"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentcolor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>VI</span>
+</a><button class="popover-btn theme-btn dark-mode-toggle" data-toggle-theme title="Dark Mode" type=button>
+<svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+</button>
+<button type=button class="popover-btn search-btn search-trigger-btn" data-open-search aria-label="Search (Cmd+K)" title="Search (Cmd+K)">
+<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentcolor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<span class=search-kbd-badge>⌘K</span></button></div></div></div><div id=hd-menu-backdrop class=hd-menu-backdrop aria-hidden=true></div><div class=hd-site-wrapper><main class=hd-main><div class=hd-article-layout><div class=hd-hero-banner-wrap><div class=hd-hero-banner><img src=/images/bash/bash-step-thirteen.jpg alt="Automating SSH with Bash: Managing Multiple Servers in DevOps" class=hd-hero-banner-img></div></div><div class=hd-article-container><div class=hd-article-grid><div class=hd-article-main><article class=hd-article-body><header class=hd-article-header><div class=hd-article-meta-top><time class=meta-date datetime=2026-08-30T00:00:00Z>AUGUST 30, 2026
+</time><span class=meta-dot>&#183;</span>
+<span class=meta-reading-time>9 MIN READ</span>
+<span class=meta-dot>&#183;</span>
+<span class=meta-author>HOÀNG DƯƠNG</span>
+<span class=meta-dot>&#183;</span>
+<a href=/vi/posts/bash/bash-step-thirteen/ class=meta-lang-switch><svg viewBox="0 0 24 24" width="13" height="13" stroke="currentcolor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:3px"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>VI</span></a></div><h1 class=hd-article-title>Automating SSH with Bash: Managing Multiple Servers in DevOps</h1><p class=hd-article-description>Comprehensive guide to automating SSH with Bash for multi-server management: ssh-keygen, ssh-copy-id, ~/.ssh/config, scp, rsync, and parallel remote execution with & and wait.</p><div class=hd-article-categories><a href=/categories/devops/ class=hd-cat-pill>DEVOPS
+</a><a href=/categories/bash/ class=hd-cat-pill>BASH</a></div></header><section class="article-content hd-prose"><h2 id=automating-ssh-with-bash-in-devops>Automating SSH with Bash in DevOps</h2><p>In the <a class=link href=/posts/bash/bash-step-twelve/>previous post</a>, we explored monitoring system resources and managing processes on a single server. However, in real-world DevOps, you rarely manage just one machine. As infrastructure scales to 10, 50, or even hundreds of servers, manually SSHing into each machine to run commands becomes a nightmare—slow, error-prone, and impossible to reproduce consistently.</p><p>Automating SSH with Bash solves this: write once, run across every server, with consistent results that can integrate into CI/CD pipelines or cron jobs. This article covers setting up SSH key-based authentication, configuring <code>~/.ssh/config</code> for multi-server management, transferring files securely with <code>scp</code> and <code>rsync</code>, and includes a practical script for parallel remote execution across multiple servers.</p><hr><h2 id=setting-up-ssh-key-based-authentication>Setting Up SSH Key-Based Authentication</h2><p>SSH key-based authentication eliminates password prompts on every connection—a mandatory requirement for any automation script.</p><h3 id=generate-an-ssh-key-pair>Generate an SSH Key Pair</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Generate RSA 4096-bit key</span>
+</span></span><span class=line><span class=cl>ssh-keygen -t rsa -b <span class=m>4096</span> -f ~/.ssh/id_rsa_deploy -C <span class=s2>&#34;deploy@automation&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Or use Ed25519 (faster, more secure)</span>
+</span></span><span class=line><span class=cl>ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_deploy -C <span class=s2>&#34;deploy@automation&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p><strong>Note:</strong> If you use a key for automation, set an empty passphrase (press Enter when prompted) or use <code>ssh-agent</code> to manage passphrases. However, in CI/CD environments, use a passphrase-less key and protect it with filesystem permissions.</p><h3 id=copy-the-key-to-target-servers>Copy the Key to Target Servers</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Standard method using ssh-copy-id</span>
+</span></span><span class=line><span class=cl>ssh-copy-id -i ~/.ssh/id_ed25519_deploy.pub user@server1
+</span></span><span class=line><span class=cl>ssh-copy-id -i ~/.ssh/id_ed25519_deploy.pub user@server2
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Manual method if ssh-copy-id is unavailable</span>
+</span></span><span class=line><span class=cl>cat ~/.ssh/id_ed25519_deploy.pub <span class=p>|</span> ssh user@server1 <span class=s2>&#34;mkdir -p ~/.ssh &amp;&amp; cat &gt;&gt; ~/.ssh/authorized_keys&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=verify-the-connection>Verify the Connection</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Test passwordless SSH</span>
+</span></span><span class=line><span class=cl>ssh -i ~/.ssh/id_ed25519_deploy user@server1 <span class=s2>&#34;echo &#39;SSH connection successful&#39;&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=configuring-sshconfig>Configuring ~/.ssh/config</h2><p>The <code>~/.ssh/config</code> file lets you access servers using short aliases instead of memorizing IP addresses and usernames:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl># ~/.ssh/config
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl># Staging servers
+</span></span><span class=line><span class=cl>Host staging-web
+</span></span><span class=line><span class=cl>    HostName 192.168.1.10
+</span></span><span class=line><span class=cl>    User deploy
+</span></span><span class=line><span class=cl>    IdentityFile ~/.ssh/id_ed25519_deploy
+</span></span><span class=line><span class=cl>    Port 22
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Host staging-db
+</span></span><span class=line><span class=cl>    HostName 192.168.1.11
+</span></span><span class=line><span class=cl>    User deploy
+</span></span><span class=line><span class=cl>    IdentityFile ~/.ssh/id_ed25519_deploy
+</span></span><span class=line><span class=cl>    Port 22
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl># Production servers
+</span></span><span class=line><span class=cl>Host prod-web
+</span></span><span class=line><span class=cl>    HostName 10.0.0.10
+</span></span><span class=line><span class=cl>    User deploy
+</span></span><span class=line><span class=cl>    IdentityFile ~/.ssh/id_ed25519_deploy
+</span></span><span class=line><span class=cl>    Port 2222
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Host prod-db
+</span></span><span class=line><span class=cl>    HostName 10.0.0.11
+</span></span><span class=line><span class=cl>    User deploy
+</span></span><span class=line><span class=cl>    IdentityFile ~/.ssh/id_ed25519_deploy
+</span></span><span class=line><span class=cl>    Port 2222
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl># Global defaults
+</span></span><span class=line><span class=cl>Host *
+</span></span><span class=line><span class=cl>    ServerAliveInterval 60
+</span></span><span class=line><span class=cl>    ServerAliveCountMax 3
+</span></span><span class=line><span class=cl>    StrictHostKeyChecking accept-new
+</span></span><span class=line><span class=cl>    LogLevel ERROR
+</span></span></code></pre></td></tr></table></div></div><p>After configuration, access servers using short host names:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Instead of: ssh deploy@192.168.1.10</span>
+</span></span><span class=line><span class=cl>ssh staging-web <span class=s2>&#34;df -h /&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Or add a Bash alias</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;alias prod-web=&#39;ssh prod-web&#39;&#34;</span> &gt;&gt; ~/.bashrc
+</span></span></code></pre></td></tr></table></div></div><p><strong>Key configuration explained:</strong></p><ul><li><code>ServerAliveInterval 60</code>: Send keepalive every 60 seconds to prevent disconnection.</li><li><code>ServerAliveCountMax 3</code>: Disconnect after 3 failed keepalive attempts.</li><li><code>StrictHostKeyChecking accept-new</code>: Automatically accept new host keys without prompting.</li><li><code>LogLevel ERROR</code>: Show only errors, reducing verbosity in scripts.</li></ul><hr><h2 id=remote-command-execution>Remote Command Execution</h2><h3 id=basic-commands>Basic Commands</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Run a single command on a remote server</span>
+</span></span><span class=line><span class=cl>ssh user@server1 <span class=s2>&#34;uptime&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Run multiple commands sequentially</span>
+</span></span><span class=line><span class=cl>ssh user@server1 <span class=s2>&#34;cd /opt/app &amp;&amp; git pull &amp;&amp; systemctl restart myapp&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Run commands with sudo</span>
+</span></span><span class=line><span class=cl>ssh user@server1 <span class=s2>&#34;sudo systemctl status nginx&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=passing-environment-variables>Passing Environment Variables</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Pass variables into SSH session</span>
+</span></span><span class=line><span class=cl><span class=nv>DEPLOY_ENV</span><span class=o>=</span><span class=s2>&#34;staging&#34;</span> <span class=nv>APP_VERSION</span><span class=o>=</span><span class=s2>&#34;v2.1.0&#34;</span> ssh user@server1 <span class=s2>&#34;echo \$DEPLOY_ENV \$APP_VERSION&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Safer approach using heredoc</span>
+</span></span><span class=line><span class=cl>ssh user@server1 <span class=s>&lt;&lt; &#39;REMOTE_SCRIPT&#39;
+</span></span></span><span class=line><span class=cl><span class=s>    export DEPLOY_ENV=&#34;staging&#34;
+</span></span></span><span class=line><span class=cl><span class=s>    cd /opt/app
+</span></span></span><span class=line><span class=cl><span class=s>    git pull origin main
+</span></span></span><span class=line><span class=cl><span class=s>    npm install --production
+</span></span></span><span class=line><span class=cl><span class=s>    systemctl restart myapp
+</span></span></span><span class=line><span class=cl><span class=s>REMOTE_SCRIPT</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=handling-remote-execution-errors>Handling Remote Execution Errors</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Check exit code</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> ssh user@server1 <span class=s2>&#34;systemctl status nginx&#34;</span> 2&gt;/dev/null<span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Nginx is running on server1&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>else</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Nginx is down on server1 — attempting restart&#34;</span>
+</span></span><span class=line><span class=cl>    ssh user@server1 <span class=s2>&#34;sudo systemctl restart nginx&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=file-transfer-between-servers>File Transfer Between Servers</h2><h3 id=scp--secure-copy>scp — Secure Copy</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Copy file from local to remote</span>
+</span></span><span class=line><span class=cl>scp /local/path/config.yml user@server1:/opt/app/config.yml
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Copy directory recursively</span>
+</span></span><span class=line><span class=cl>scp -r /local/path/dist/ user@server1:/opt/app/dist/
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Copy from remote to local</span>
+</span></span><span class=line><span class=cl>scp user@server1:/var/log/app.log /local/logs/
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Copy between two servers (via local intermediary)</span>
+</span></span><span class=line><span class=cl>scp user@server1:/data/backup.sql user@server2:/data/restore.sql
+</span></span></code></pre></td></tr></table></div></div><h3 id=rsync--remote-sync>rsync — Remote Sync</h3><p><code>rsync</code> is more powerful than <code>scp</code> because it supports incremental synchronization—only transferring changed files:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Sync dist directory to server</span>
+</span></span><span class=line><span class=cl>rsync -avz --progress /local/path/dist/ user@server1:/opt/app/dist/
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># rsync over SSH with custom port</span>
+</span></span><span class=line><span class=cl>rsync -avz -e <span class=s2>&#34;ssh -p 2222&#34;</span> /local/path/ user@server1:/opt/app/
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Sync only files modified within the last day</span>
+</span></span><span class=line><span class=cl>rsync -avz --max-age<span class=o>=</span><span class=m>1</span> /local/path/logs/ user@server1:/backup/logs/
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Dry-run before executing</span>
+</span></span><span class=line><span class=cl>rsync -avzn --delete /local/path/ user@server1:/opt/app/
+</span></span></code></pre></td></tr></table></div></div><p><strong>Flag explanation:</strong></p><ul><li><code>-a</code>: Archive mode (preserves file permissions, symlinks, timestamps).</li><li><code>-v</code>: Verbose—displays files being transferred.</li><li><code>-z</code>: Compress data during network transfer.</li><li><code>--delete</code>: Remove files at the destination that don&rsquo;t exist in the source.</li><li><code>--progress</code>: Display transfer progress.</li></ul><hr><h2 id=looping-through-multiple-servers>Looping Through Multiple Servers</h2><h3 id=basic-loop>Basic Loop</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nv>SERVERS</span><span class=o>=(</span><span class=s2>&#34;web-01&#34;</span> <span class=s2>&#34;web-02&#34;</span> <span class=s2>&#34;web-03&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> server in <span class=s2>&#34;</span><span class=si>${</span><span class=nv>SERVERS</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;=== </span><span class=nv>$server</span><span class=s2> ===&#34;</span>
+</span></span><span class=line><span class=cl>    ssh <span class=s2>&#34;deploy@</span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2>&#34;</span> <span class=s2>&#34;hostname &amp;&amp; uptime &amp;&amp; df -h / | tail -1&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=reading-server-list-from-a-file>Reading Server List from a File</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># servers.txt contains one server per line</span>
+</span></span><span class=line><span class=cl><span class=c1># web-01</span>
+</span></span><span class=line><span class=cl><span class=c1># web-02</span>
+</span></span><span class=line><span class=cl><span class=c1># db-01</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>while</span> <span class=nv>IFS</span><span class=o>=</span> <span class=nb>read</span> -r server<span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    <span class=o>[[</span> -z <span class=s2>&#34;</span><span class=nv>$server</span><span class=s2>&#34;</span> <span class=o>||</span> <span class=s2>&#34;</span><span class=nv>$server</span><span class=s2>&#34;</span> <span class=o>=</span>~ ^# <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=k>continue</span>
+</span></span><span class=line><span class=cl>    ssh <span class=s2>&#34;deploy@</span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2>&#34;</span> <span class=s2>&#34;hostname&#34;</span> 2&gt;/dev/null <span class=o>&amp;&amp;</span> <span class=nb>echo</span> <span class=s2>&#34;OK: </span><span class=nv>$server</span><span class=s2>&#34;</span> <span class=o>||</span> <span class=nb>echo</span> <span class=s2>&#34;FAIL: </span><span class=nv>$server</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>done</span> &lt; servers.txt
+</span></span></code></pre></td></tr></table></div></div><h3 id=error-handling-in-loops>Error Handling in Loops</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nv>SERVERS</span><span class=o>=(</span><span class=s2>&#34;web-01&#34;</span> <span class=s2>&#34;web-02&#34;</span> <span class=s2>&#34;web-03&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl><span class=nv>FAILED</span><span class=o>=()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> server in <span class=s2>&#34;</span><span class=si>${</span><span class=nv>SERVERS</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> ! ssh <span class=s2>&#34;deploy@</span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2>&#34;</span> <span class=s2>&#34;echo OK&#34;</span> 2&gt;/dev/null<span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nv>FAILED</span><span class=o>+=(</span><span class=s2>&#34;</span><span class=nv>$server</span><span class=s2>&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;[ERROR] Cannot connect to </span><span class=nv>$server</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[[</span> <span class=si>${#</span><span class=nv>FAILED</span><span class=p>[@]</span><span class=si>}</span> -gt <span class=m>0</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Failed servers: </span><span class=si>${</span><span class=nv>FAILED</span><span class=p>[*]</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=parallel-execution-with--and-wait>Parallel Execution with & and wait</h2><p>When managing multiple servers, sequential execution can be extremely slow. Bash supports parallel execution using <code>&</code> (background process) and <code>wait</code> (wait for all to complete):</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nv>SERVERS</span><span class=o>=(</span><span class=s2>&#34;web-01&#34;</span> <span class=s2>&#34;web-02&#34;</span> <span class=s2>&#34;web-03&#34;</span> <span class=s2>&#34;db-01&#34;</span> <span class=s2>&#34;db-02&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl><span class=nv>MAX_PARALLEL</span><span class=o>=</span><span class=m>3</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>run_on_server<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>server</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;[START] </span><span class=nv>$server</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    ssh <span class=s2>&#34;deploy@</span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2>&#34;</span> <span class=s2>&#34;sudo apt update &amp;&amp; sudo apt upgrade -y&#34;</span> 2&gt;/dev/null
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>status</span><span class=o>=</span><span class=nv>$?</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;[DONE] </span><span class=nv>$server</span><span class=s2> (exit: </span><span class=nv>$status</span><span class=s2>)&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=nv>$status</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Run in parallel with concurrency limit</span>
+</span></span><span class=line><span class=cl><span class=nv>pids</span><span class=o>=()</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> server in <span class=s2>&#34;</span><span class=si>${</span><span class=nv>SERVERS</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    run_on_server <span class=s2>&#34;</span><span class=nv>$server</span><span class=s2>&#34;</span> <span class=p>&amp;</span>
+</span></span><span class=line><span class=cl>    <span class=nv>pids</span><span class=o>+=(</span><span class=nv>$!</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Limit concurrent processes</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> <span class=si>${#</span><span class=nv>pids</span><span class=p>[@]</span><span class=si>}</span> -ge <span class=nv>$MAX_PARALLEL</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>wait</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>pids</span><span class=p>[0]</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nv>pids</span><span class=o>=(</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>pids</span><span class=p>[@]:</span><span class=nv>1</span><span class=si>}</span><span class=s2>&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Wait for all remaining processes</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> pid in <span class=s2>&#34;</span><span class=si>${</span><span class=nv>pids</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    <span class=nb>wait</span> <span class=s2>&#34;</span><span class=nv>$pid</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;All servers updated.&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p><strong>Explanation:</strong></p><ul><li><code>run_on_server "$server" &</code>: Run the function in the background.</li><li><code>pids+=($!)</code>: Save the PID of the background process.</li><li><code>wait "${pids[0]}"</code>: Wait for the first process to finish before starting a new one.</li><li><code>MAX_PARALLEL=3</code>: Limit to a maximum of 3 concurrent processes.</li></ul><hr><h2 id=practical-example-multi-server-management-script>Practical Example: Multi-Server Management Script</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span><span class=lnt>117
+</span><span class=lnt>118
+</span><span class=lnt>119
+</span><span class=lnt>120
+</span><span class=lnt>121
+</span><span class=lnt>122
+</span><span class=lnt>123
+</span><span class=lnt>124
+</span><span class=lnt>125
+</span><span class=lnt>126
+</span><span class=lnt>127
+</span><span class=lnt>128
+</span><span class=lnt>129
+</span><span class=lnt>130
+</span><span class=lnt>131
+</span><span class=lnt>132
+</span><span class=lnt>133
+</span><span class=lnt>134
+</span><span class=lnt>135
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=cp></span><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl><span class=c1># Script : multi-server-deploy.sh</span>
+</span></span><span class=line><span class=cl><span class=c1># Purpose: Deploy application to multiple servers in parallel</span>
+</span></span><span class=line><span class=cl><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl><span class=nv>IFS</span><span class=o>=</span><span class=s1>$&#39;\n\t&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>SERVERS_FILE</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>SERVERS_FILE</span><span class=k>:-</span><span class=p>/etc/deploy/servers.txt</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>SSH_USER</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>SSH_USER</span><span class=k>:-</span><span class=nv>deploy</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>SSH_KEY</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>SSH_KEY</span><span class=k>:-</span><span class=nv>$HOME</span><span class=p>/.ssh/id_ed25519_deploy</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>APP_DIR</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>APP_DIR</span><span class=k>:-</span><span class=p>/opt/app</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>MAX_PARALLEL</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>MAX_PARALLEL</span><span class=k>:-</span><span class=nv>5</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>LOG_DIR</span><span class=o>=</span><span class=s2>&#34;/var/log/multi-deploy&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>TIMESTAMP</span><span class=o>=</span><span class=k>$(</span>date <span class=s1>&#39;+%Y%m%d_%H%M%S&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>LOG_FILE</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>LOG_DIR</span><span class=si>}</span><span class=s2>/deploy_</span><span class=si>${</span><span class=nv>TIMESTAMP</span><span class=si>}</span><span class=s2>.log&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>mkdir -p <span class=s2>&#34;</span><span class=nv>$LOG_DIR</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>log<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>level</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span><span class=p>;</span> <span class=nb>shift</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;[</span><span class=k>$(</span>date <span class=s1>&#39;+%Y-%m-%d %H:%M:%S&#39;</span><span class=k>)</span><span class=s2>] [</span><span class=nv>$level</span><span class=s2>] </span><span class=nv>$*</span><span class=s2>&#34;</span> <span class=p>|</span> tee -a <span class=s2>&#34;</span><span class=nv>$LOG_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>load_servers<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> ! -f <span class=s2>&#34;</span><span class=nv>$SERVERS_FILE</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        log <span class=s2>&#34;ERROR&#34;</span> <span class=s2>&#34;Servers file not found: </span><span class=nv>$SERVERS_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    mapfile -t SERVERS &lt; &lt;<span class=o>(</span>grep -vE <span class=s1>&#39;^\s*#|^\s*$&#39;</span> <span class=s2>&#34;</span><span class=nv>$SERVERS_FILE</span><span class=s2>&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> <span class=si>${#</span><span class=nv>SERVERS</span><span class=p>[@]</span><span class=si>}</span> -eq <span class=m>0</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        log <span class=s2>&#34;ERROR&#34;</span> <span class=s2>&#34;No servers defined in </span><span class=nv>$SERVERS_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;Loaded </span><span class=si>${#</span><span class=nv>SERVERS</span><span class=p>[@]</span><span class=si>}</span><span class=s2> servers from </span><span class=nv>$SERVERS_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>check_connectivity<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>server</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>identity_file</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$SSH_KEY</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> ! -f <span class=s2>&#34;</span><span class=nv>$identity_file</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        log <span class=s2>&#34;ERROR&#34;</span> <span class=s2>&#34;SSH key not found: </span><span class=nv>$identity_file</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    ssh -i <span class=s2>&#34;</span><span class=nv>$identity_file</span><span class=s2>&#34;</span> -o <span class=nv>ConnectTimeout</span><span class=o>=</span><span class=m>10</span> -o <span class=nv>BatchMode</span><span class=o>=</span>yes <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>        <span class=s2>&#34;</span><span class=si>${</span><span class=nv>SSH_USER</span><span class=si>}</span><span class=s2>@</span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2>&#34;</span> <span class=s2>&#34;echo OK&#34;</span> 2&gt;/dev/null
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>deploy_to_server<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>server</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>deploy_log</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>LOG_DIR</span><span class=si>}</span><span class=s2>/deploy_</span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2>_</span><span class=si>${</span><span class=nv>TIMESTAMP</span><span class=si>}</span><span class=s2>.log&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;Deploying to </span><span class=nv>$server</span><span class=s2>...&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> ! check_connectivity <span class=s2>&#34;</span><span class=nv>$server</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        log <span class=s2>&#34;ERROR&#34;</span> <span class=s2>&#34;Cannot connect to </span><span class=nv>$server</span><span class=s2> — skipping&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    ssh -i <span class=s2>&#34;</span><span class=nv>$SSH_KEY</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>SSH_USER</span><span class=si>}</span><span class=s2>@</span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2>&#34;</span> <span class=s>&lt;&lt; REMOTE &gt; &#34;$deploy_log&#34; 2&gt;&amp;1
+</span></span></span><span class=line><span class=cl><span class=s>        set -euo pipefail
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>        echo &#34;=== Deployment on \$(hostname) ===&#34;
+</span></span></span><span class=line><span class=cl><span class=s>        echo &#34;Time: \$(date)&#34;
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>        cd &#34;$APP_DIR&#34; || { echo &#34;Directory $APP_DIR not found&#34;; exit 1; }
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>        echo &#34;Pulling latest code...&#34;
+</span></span></span><span class=line><span class=cl><span class=s>        git pull origin main
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>        echo &#34;Installing dependencies...&#34;
+</span></span></span><span class=line><span class=cl><span class=s>        npm install --production 2&gt;/dev/null || pip install -r requirements.txt 2&gt;/dev/null || true
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>        echo &#34;Restarting service...&#34;
+</span></span></span><span class=line><span class=cl><span class=s>        sudo systemctl restart myapp
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>        echo &#34;Checking service status...&#34;
+</span></span></span><span class=line><span class=cl><span class=s>        sleep 3
+</span></span></span><span class=line><span class=cl><span class=s>        if systemctl is-active --quiet myapp; then
+</span></span></span><span class=line><span class=cl><span class=s>            echo &#34;Service myapp is running&#34;
+</span></span></span><span class=line><span class=cl><span class=s>        else
+</span></span></span><span class=line><span class=cl><span class=s>            echo &#34;ERROR: Service myapp failed to start&#34;
+</span></span></span><span class=line><span class=cl><span class=s>            exit 1
+</span></span></span><span class=line><span class=cl><span class=s>        fi
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>        echo &#34;=== Deployment completed ===&#34;
+</span></span></span><span class=line><span class=cl><span class=s>REMOTE</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> <span class=nv>$?</span> -eq <span class=m>0</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;Deploy SUCCESS: </span><span class=nv>$server</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>else</span>
+</span></span><span class=line><span class=cl>        log <span class=s2>&#34;ERROR&#34;</span> <span class=s2>&#34;Deploy FAILED: </span><span class=nv>$server</span><span class=s2> (check </span><span class=nv>$deploy_log</span><span class=s2>)&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>main<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;=== Multi-server deployment started ===&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    load_servers
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nv>pids</span><span class=o>=()</span>
+</span></span><span class=line><span class=cl>    <span class=nv>failed</span><span class=o>=()</span>
+</span></span><span class=line><span class=cl>    <span class=nv>succeeded</span><span class=o>=</span><span class=m>0</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> server in <span class=s2>&#34;</span><span class=si>${</span><span class=nv>SERVERS</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>        deploy_to_server <span class=s2>&#34;</span><span class=nv>$server</span><span class=s2>&#34;</span> <span class=p>&amp;</span>
+</span></span><span class=line><span class=cl>        <span class=nv>pids</span><span class=o>+=(</span><span class=nv>$!</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=o>[[</span> <span class=si>${#</span><span class=nv>pids</span><span class=p>[@]</span><span class=si>}</span> -ge <span class=nv>$MAX_PARALLEL</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>            <span class=nb>wait</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>pids</span><span class=p>[0]</span><span class=si>}</span><span class=s2>&#34;</span> <span class=o>||</span> <span class=nv>failed</span><span class=o>+=(</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>SERVERS</span><span class=p>[0]</span><span class=si>}</span><span class=s2>&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>            <span class=nv>pids</span><span class=o>=(</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>pids</span><span class=p>[@]:</span><span class=nv>1</span><span class=si>}</span><span class=s2>&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    <span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> pid in <span class=s2>&#34;</span><span class=si>${</span><span class=nv>pids</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>        <span class=nb>wait</span> <span class=s2>&#34;</span><span class=nv>$pid</span><span class=s2>&#34;</span> <span class=o>||</span> <span class=nv>failed</span><span class=o>+=(</span><span class=s2>&#34;server&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;=== Deployment completed ===&#34;</span>
+</span></span><span class=line><span class=cl>    log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;Results: </span><span class=k>$((</span> <span class=si>${#</span><span class=nv>SERVERS</span><span class=p>[@]</span><span class=si>}</span> <span class=o>-</span> <span class=si>${#</span><span class=nv>failed</span><span class=p>[@]</span><span class=si>}</span> <span class=k>))</span><span class=s2>/</span><span class=si>${#</span><span class=nv>SERVERS</span><span class=p>[@]</span><span class=si>}</span><span class=s2> succeeded&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> <span class=si>${#</span><span class=nv>failed</span><span class=p>[@]</span><span class=si>}</span> -gt <span class=m>0</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        log <span class=s2>&#34;WARN&#34;</span> <span class=s2>&#34;Failed servers: </span><span class=si>${</span><span class=nv>failed</span><span class=p>[*]</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>main <span class=s2>&#34;</span><span class=nv>$@</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=serverstxt-file-structure>servers.txt File Structure</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl># Staging servers
+</span></span><span class=line><span class=cl>web-staging-01
+</span></span><span class=line><span class=cl>web-staging-02
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl># Production servers
+</span></span><span class=line><span class=cl>web-prod-01
+</span></span><span class=line><span class=cl>web-prod-02
+</span></span><span class=line><span class=cl>web-prod-03
+</span></span></code></pre></td></tr></table></div></div><h3 id=running-the-script>Running the Script</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>chmod +x multi-server-deploy.sh
+</span></span><span class=line><span class=cl>./multi-server-deploy.sh
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=deployment-notes--best-practices>Deployment Notes & Best Practices</h2><ul><li><strong>Secure SSH keys:</strong> Set <code>chmod 600</code> on private keys and <code>chmod 644</code> on public keys. Never commit keys to a repository. In CI/CD, store keys as secrets and mount them as temporary files.</li><li><strong>Host key verification:</strong> On the first connection, SSH prompts you to confirm the host key. In automated scripts, use <code>StrictHostKeyChecking accept-new</code> in <code>~/.ssh/config</code> or the <code>-o StrictHostKeyChecking=accept-new</code> flag to auto-accept.</li><li><strong>Concurrency limits:</strong> Running too many SSH sessions simultaneously can overload the network or source server. Always set <code>MAX_PARALLEL</code> appropriate for your infrastructure.</li><li><strong>Connection timeouts:</strong> Use <code>-o ConnectTimeout=10</code> and <code>-o BatchMode=yes</code> to prevent scripts from hanging indefinitely when a server is unresponsive.</li><li><strong>Rollback strategy:</strong> Always have a rollback plan before bulk deployments. The example script above only deploys—in production, add a snapshot or backup step before making changes.</li></ul><hr><h2 id=conclusion>Conclusion</h2><p>Automating SSH with Bash not only saves time but also ensures consistency when managing multiple servers. From setting up key-based authentication, configuring <code>~/.ssh/config</code> for quick access, using <code>scp</code>/<code>rsync</code> for file transfers, to running commands in parallel with <code>&</code> and <code>wait</code>—all can be combined into a clean Bash script.</p><p>In the <a class=link href=/posts/bash/bash-step-fourteen/>next post</a>, we will explore <strong>combining Bash and Docker</strong>: writing wrapper scripts to manage containers, auto-restarting on crashes, and deploying stacks with <code>docker compose</code>.</p></section><div class=hd-article-tags-wrap><span class=tags-label>TAGS:</span><div class=hd-article-tags><a href=/tags/bash/ class=hd-tag-pill>#bash
+</a><a href=/tags/shell-script/ class=hd-tag-pill>#shell-script
+</a><a href=/tags/devops/ class=hd-tag-pill>#devops
+</a><a href=/tags/ssh/ class=hd-tag-pill>#ssh
+</a><a href=/tags/multi-server/ class=hd-tag-pill>#multi-server
+</a><a href=/tags/automation/ class=hd-tag-pill>#automation
+</a><a href=/tags/rsync/ class=hd-tag-pill>#rsync
+</a><a href=/tags/remote-execution/ class=hd-tag-pill>#remote-execution</a></div></div><div class=hd-article-footer-box><div class=footer-box-item><span class=box-label>AUTHOR</span>
+<span class=box-value>Hoàng Dương</span></div><div class=footer-box-item><span class=box-label>UPDATED</span>
+<span class=box-value>30/08/2026 00:00</span></div><div class=footer-box-item><span class=box-label>LICENSE</span>
+<span class=box-value>CC BY-NC-SA 4.0</span></div></div><nav class=hd-post-nav><a href=/posts/bash/bash-step-twelve/ class="post-nav-card nav-prev"><span class=nav-direction>&larr; PREVIOUS POST</span>
+<span class=nav-post-title>System Management with Bash: Monitoring Resources and Controlling Processes in DevOps</span></a></nav><section class=hd-comments-section><div class=comments-section-header><span class=mono-label>RESPONSES & DISCUSSION</span></div><div class=utterances-container><script>(function(){var t=document.documentElement.dataset.scheme||"light",n=t==="dark"?"github-dark":"github-light",e=document.createElement("script");e.src="https://utteranc.es/client.js",e.setAttribute("repo","hoangduonng/blog_comments"),e.setAttribute("issue-term","pathname"),e.setAttribute("label","comments"),e.setAttribute("theme",n),e.setAttribute("crossorigin","anonymous"),e.async=!0,document.currentScript.parentElement.appendChild(e)})()</script></div><style>.utterances-container{width:100%;margin-top:8px;position:relative}.utterances{max-width:100%!important;margin:0!important}[data-scheme=light] .utterances iframe,html:not([data-scheme=dark]) .utterances iframe{mix-blend-mode:multiply;transition:mix-blend-mode .2s ease}[data-scheme=dark] .utterances iframe{mix-blend-mode:lighten;transition:mix-blend-mode .2s ease}</style><script>let utterancesLoaded=!1;function setUtterancesTheme(e){let t=document.querySelector(".utterances iframe");if(t&&t.contentWindow){let n=e==="dark"?"github-dark":"github-light";t.contentWindow.postMessage({type:"set-theme",theme:n},"https://utteranc.es")}}addEventListener("message",e=>{if(e.origin!=="https://utteranc.es")return;utterancesLoaded=!0,setUtterancesTheme(document.documentElement.dataset.scheme||"light")}),window.addEventListener("onColorSchemeChange",e=>{if(!utterancesLoaded)return;setUtterancesTheme(e.detail)})</script></section></article></div><aside class=hd-article-sidebar><div class=hd-sticky-sidebar-inner><div class=hd-toc-card><div class=toc-header><span class=toc-title-label>ON THIS PAGE</span></div><div class=toc-content id=toc-content><nav id=TableOfContents><ol><li><a href=#automating-ssh-with-bash-in-devops>Automating SSH with Bash in DevOps</a></li><li><a href=#setting-up-ssh-key-based-authentication>Setting Up SSH Key-Based Authentication</a><ol><li><a href=#generate-an-ssh-key-pair>Generate an SSH Key Pair</a></li><li><a href=#copy-the-key-to-target-servers>Copy the Key to Target Servers</a></li><li><a href=#verify-the-connection>Verify the Connection</a></li></ol></li><li><a href=#configuring-sshconfig>Configuring ~/.ssh/config</a></li><li><a href=#remote-command-execution>Remote Command Execution</a><ol><li><a href=#basic-commands>Basic Commands</a></li><li><a href=#passing-environment-variables>Passing Environment Variables</a></li><li><a href=#handling-remote-execution-errors>Handling Remote Execution Errors</a></li></ol></li><li><a href=#file-transfer-between-servers>File Transfer Between Servers</a><ol><li><a href=#scp--secure-copy>scp — Secure Copy</a></li><li><a href=#rsync--remote-sync>rsync — Remote Sync</a></li></ol></li><li><a href=#looping-through-multiple-servers>Looping Through Multiple Servers</a><ol><li><a href=#basic-loop>Basic Loop</a></li><li><a href=#reading-server-list-from-a-file>Reading Server List from a File</a></li><li><a href=#error-handling-in-loops>Error Handling in Loops</a></li></ol></li><li><a href=#parallel-execution-with--and-wait>Parallel Execution with & and wait</a></li><li><a href=#practical-example-multi-server-management-script>Practical Example: Multi-Server Management Script</a><ol><li><a href=#serverstxt-file-structure>servers.txt File Structure</a></li><li><a href=#running-the-script>Running the Script</a></li></ol></li><li><a href=#deployment-notes--best-practices>Deployment Notes & Best Practices</a></li><li><a href=#conclusion>Conclusion</a></li></ol></nav></div><div class=toc-scroll-indicator id=toc-indicator style=display:none></div></div></div></aside></div></div><div class=hd-edge-callout-rail><aside class=hd-floating-callout aria-label="Also of interest"><a href=/posts/bash/bash-step-eleven/ class=floating-callout-art><img src=/images/bash/bash-step-eleven.jpg alt="Bash in CI/CD: Building Secure, Automated Pipelines for DevOps" class=floating-callout-img></a><div class=floating-callout-badge>ALSO <span class=callout-of>of</span> INTEREST</div><div class=floating-callout-body><h4 class=floating-callout-title><a href=/posts/bash/bash-step-eleven/>Bash in CI/CD: Building Secure, Automated Pipelines for DevOps</a></h4><p class=floating-callout-excerpt>Bash in CI/CD for DevOps In the previous post, we explored capturing errors and …</p><a href=/posts/bash/bash-step-eleven/ class=floating-callout-btn>READ &rarr;</a></div></aside></div></div><script>document.addEventListener("DOMContentLoaded",function(){var e=document.getElementById("toc-content"),t=document.getElementById("toc-indicator");if(e&&t){function n(){var s,o,n=e.scrollHeight-e.clientHeight;if(n<=2){t.style.display="none";return}t.style.display="block",s=e.scrollTop/n,o=e.clientHeight-32,t.style.top=e.offsetTop+s*o+"px"}e.addEventListener("scroll",n,{passive:!0}),n(),window.addEventListener("resize",n,{passive:!0}),window.addEventListener("load",n,{passive:!0})}})</script><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><div id=hd-search-overlay class=hd-search-overlay aria-hidden=true data-index-url=/search/index.json data-lang=en data-no-results="No matching articles found" data-no-results-sub="Try searching with different keywords" data-initial-hint="Type a keyword to search articles..." data-results-count=results><div class=hd-search-backdrop id=hd-search-backdrop tabindex=-1></div><div class=hd-search-dialog role=dialog aria-modal=true aria-label="Search Articles"><div class=hd-search-header><div class=hd-search-input-wrapper><svg class="hd-search-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentcolor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<input id=hd-search-input class=hd-search-input type=text placeholder="Search articles, categories, topics..." autocomplete=off autocorrect=off autocapitalize=off spellcheck=false aria-autocomplete=list aria-controls=hd-search-results>
+<button id=hd-search-clear class=hd-search-clear type=button aria-label="Clear input" style=display:none><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentcolor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div><button id=hd-search-close class=hd-search-close-btn type=button aria-label="Close search">
+<kbd class=hd-search-kbd>ESC</kbd></button></div><div class=hd-search-body><div id=hd-search-loading class="hd-search-state hd-search-loading" style=display:none><div class=hd-search-spinner aria-hidden=true></div><span>Loading search index...</span></div><div id=hd-search-initial class="hd-search-state hd-search-initial"><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentcolor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p class=state-title>Quick Search</p><p class=state-desc>Type a keyword or topic to search across all published articles.</p></div><div id=hd-search-empty class="hd-search-state hd-search-empty" style=display:none><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentcolor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="8" x2="14" y2="14"/><line x1="14" y1="8" x2="8" y2="14"/></svg><p class=state-title id=hd-search-empty-title>No matching articles found</p><p class=state-desc id=hd-search-empty-desc>Try searching with different keywords</p></div><div id=hd-search-results class=hd-search-results role=listbox style=display:none></div></div><div class=hd-search-footer><div class=hd-search-shortcuts><span class=shortcut-item><kbd>↑</kbd><kbd>↓</kbd>
+<span class=shortcut-label>Navigate</span>
+</span><span class=shortcut-item><kbd>↵</kbd>
+<span class=shortcut-label>Open</span>
+</span><span class=shortcut-item><kbd>ESC</kbd>
+<span class=shortcut-label>Close</span></span></div><div id=hd-search-count class=hd-search-count style=display:none></div></div></div></div><footer class=hd-site-footer><div class=hd-footer-container><div class=hd-footer-grid><div class=footer-brand-col><a href=/ class=footer-logo><span class=footer-logo-title>Hoang Duong</span></a><div class=footer-status><span class=status-dot></span>
+<span class=status-text>All Systems Operational</span></div><ul class=footer-meta-links><li><a href=/about/>About Blog</a></li><li><a href=/archives/>Archives</a></li></ul></div><div class=footer-links-grid><div class=footer-col><h3 class=footer-col-title>Categories</h3><ul class=footer-col-list><li><a href=/categories/bash/>Bash Series</a></li><li><a href=/categories/devops/>DevOps</a></li><li><a href=/categories/docker/>Docker</a></li><li><a href=/categories/installation-guides/>Installation Guides</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Resources</h3><ul class=footer-col-list><li><a href=/about/>About Me</a></li><li><a href=/archives/>All Articles</a></li><li><a href=#search data-open-search>Search</a></li><li><a href=/links/>Useful Links</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Featured Series</h3><ul class=footer-col-list><li><a href=/posts/bash/bash-step-eight/>Cron Jobs & Bash</a></li><li><a href=/categories/devops/>DevOps Automation</a></li><li><a href=/categories/docker/>Docker Essentials</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Connect</h3><ul class=footer-col-list><li><a href=https://github.com/hoangduonng target=_blank rel=noopener>GitHub ↗</a></li><li><a href=https://www.instagram.com/ngu_uuen/ target=_blank rel=noopener>Instagram ↗</a></li><li><a href=https://www.linkedin.com/in/hoangduonng/ target=_blank rel=noopener>LinkedIn ↗</a></li><li><a href=/index.xml>RSS Feed ↗</a></li></ul></div></div></div><div class=hd-footer-bottom-bar><span class=footer-copyright>&copy; 2026 Hoang Duong. All rights reserved.</span></div></div></footer><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.ee266d8948a6a32b88423f5d374fca9833845f738717cf8061ae442a91efe347.js defer></script></body></html>

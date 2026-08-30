@@ -1,0 +1,660 @@
+<!doctype html><html lang=vi dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="Hướng dẫn tự động hóa SSH với Bash để quản lý multi-server: ssh-keygen, ssh-copy-id, ~/.ssh/config, scp, rsync, chạy lệnh từ xa song song với & và wait."><title>Tự động hóa SSH với Bash: Quản lý multi-server hiệu quả trong DevOps</title>
+<link rel=canonical href=https://tech.nguuyen.io.vn/vi/posts/bash/bash-step-thirteen/><link rel=stylesheet href=/scss/style.min.9ca857cbc7cfaec08156eb36b947742d1bc56963af1c366181da56b4a8f1705b.css><meta property='og:title' content="Tự động hóa SSH với Bash: Quản lý multi-server hiệu quả trong DevOps"><meta property='og:description' content="Hướng dẫn tự động hóa SSH với Bash để quản lý multi-server: ssh-keygen, ssh-copy-id, ~/.ssh/config, scp, rsync, chạy lệnh từ xa song song với & và wait."><meta property='og:url' content='https://tech.nguuyen.io.vn/vi/posts/bash/bash-step-thirteen/'><meta property='og:site_name' content='Hoàng Dương'><meta property='og:type' content='article'><meta property='article:section' content='Posts'><meta property='article:tag' content='bash'><meta property='article:tag' content='shell-script'><meta property='article:tag' content='devops'><meta property='article:tag' content='ssh'><meta property='article:tag' content='multi-server'><meta property='article:tag' content='automation'><meta property='article:tag' content='rsync'><meta property='article:tag' content='remote-execution'><meta property='article:published_time' content='2026-08-30T00:00:00+00:00'><meta property='article:modified_time' content='2026-08-30T00:00:00+00:00'><meta property='og:image' content='https://tech.nguuyen.io.vn/images/bash/bash-step-thirteen.jpg'><meta name=twitter:title content="Tự động hóa SSH với Bash: Quản lý multi-server hiệu quả trong DevOps"><meta name=twitter:description content="Hướng dẫn tự động hóa SSH với Bash để quản lý multi-server: ssh-keygen, ssh-copy-id, ~/.ssh/config, scp, rsync, chạy lệnh từ xa song song với & và wait."><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://tech.nguuyen.io.vn/images/bash/bash-step-thirteen.jpg'><link rel=icon type=image/x-icon href=/favicon.ico><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel=stylesheet></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><header class="hd-header is-article-header"><div class=hd-header-inner><div class=hd-brand><a href=/vi/ class=hd-logo-link><span class=hd-logo-text>Hoang Duong</span></a></div><div class=hd-header-divider aria-hidden=true></div><div class=hd-header-rail><a href=/vi/ class="header-rail-crumb header-rail-home">BÀI VIẾT
+</a><span class=header-rail-sep>//</span>
+<a href=/vi/categories/devops/ class="header-rail-crumb header-rail-cat">[DEVOPS]
+</a><span class=header-rail-title>Tự động hóa SSH với Bash: Quản lý multi-server hiệu quả trong DevOps</span></div><div class=hd-header-spacer></div><nav class=hd-nav-links><button id=hd-menu-toggle class=hd-menu-trigger-fixed aria-label="Toggle Menu" title=Menu type=button><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentcolor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" class="chevron-icon"><polyline points="6 9 12 15 18 9"/></svg></button></nav></div></header><div id=hd-menu-dropdown class=hd-menu-popover aria-hidden=true><div class=hd-popover-inner><div class=hd-popover-nav><span class=popover-section-label>ĐIỀU HƯỚNG</span>
+<a href=/vi/ class=popover-item>Trang chủ</a>
+<a href=/vi/about/ class=popover-item>Về tôi</a>
+<a href=/vi/archives/ class=popover-item>Lưu trữ</a>
+<a href=/vi/links/ class=popover-item>Liên kết</a>
+<a href=/vi/categories/ class=popover-item>Chuyên mục</a></div><div class=hd-popover-footer><a href=/posts/bash/bash-step-thirteen/ class="popover-btn lang-btn" title=English><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentcolor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>EN</span>
+</a><button class="popover-btn theme-btn dark-mode-toggle" data-toggle-theme title="Chế độ tối" type=button>
+<svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+</button>
+<button type=button class="popover-btn search-btn search-trigger-btn" data-open-search aria-label="Tìm kiếm (Cmd+K)" title="Tìm kiếm (Cmd+K)">
+<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentcolor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<span class=search-kbd-badge>⌘K</span></button></div></div></div><div id=hd-menu-backdrop class=hd-menu-backdrop aria-hidden=true></div><div class=hd-site-wrapper><main class=hd-main><div class=hd-article-layout><div class=hd-hero-banner-wrap><div class=hd-hero-banner><img src=/images/bash/bash-step-thirteen.jpg alt="Tự động hóa SSH với Bash: Quản lý multi-server hiệu quả trong DevOps" class=hd-hero-banner-img></div></div><div class=hd-article-container><div class=hd-article-grid><div class=hd-article-main><article class=hd-article-body><header class=hd-article-header><div class=hd-article-meta-top><time class=meta-date datetime=2026-08-30T00:00:00Z>AUGUST 30, 2026
+</time><span class=meta-dot>&#183;</span>
+<span class=meta-reading-time>10 PHÚT ĐỌC</span>
+<span class=meta-dot>&#183;</span>
+<span class=meta-author>HOÀNG DƯƠNG</span>
+<span class=meta-dot>&#183;</span>
+<a href=/posts/bash/bash-step-thirteen/ class=meta-lang-switch><svg viewBox="0 0 24 24" width="13" height="13" stroke="currentcolor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:3px"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>EN</span></a></div><h1 class=hd-article-title>Tự động hóa SSH với Bash: Quản lý multi-server hiệu quả trong DevOps</h1><p class=hd-article-description>Hướng dẫn tự động hóa SSH với Bash để quản lý multi-server: ssh-keygen, ssh-copy-id, ~/.ssh/config, scp, rsync, chạy lệnh từ xa song song với & và wait.</p><div class=hd-article-categories><a href=/vi/categories/devops/ class=hd-cat-pill>DEVOPS
+</a><a href=/vi/categories/bash/ class=hd-cat-pill>BASH</a></div></header><section class="article-content hd-prose"><h2 id=tự-động-hóa-ssh-với-bash-trong-devops>Tự động hóa SSH với Bash trong DevOps</h2><p>Trong <a class=link href=/posts/bash/bash-step-twelve/>bài viết trước</a>, chúng ta đã tìm hiểu cách giám sát tài nguyên hệ thống và can thiệp tiến trình ngay trên một server duy nhất. Nhưng trong thực tế DevOps, bạn hiếm khi chỉ quản lý một máy. Khi hạ tầng mở rộng đến 10, 50 hay thậm chí hàng trăm server, việc SSH thủ công vào từng máy để chạy lệnh là một ác mộng — chậm, dễ sai và không thể lặp lại.</p><p>Tự động hóa SSH bằng Bash giải quyết vấn đề này: bạn viết một lần, chạy trên mọi server, kết quả đồng nhất và có thể tích hợp vào pipeline CI/CD hoặc cron job. Bài viết này sẽ hướng dẫn bạn thiết lập SSH key-based authentication, cấu hình <code>~/.ssh/config</code> để quản lý nhiều server, truyền file an toàn với <code>scp</code> và <code>rsync</code>, cùng một script thực hành chạy lệnh song song trên nhiều server.</p><hr><h2 id=thiết-lập-ssh-key-based-authentication>Thiết lập SSH key-based authentication</h2><p>SSH key-based authentication loại bỏ việc nhập mật khẩu每次 khi kết nối — đây là yêu cầu bắt buộc cho bất kỳ script tự động hóa nào.</p><h3 id=tạo-ssh-key-pair>Tạo SSH key pair</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Tạo key RSA 4096-bit</span>
+</span></span><span class=line><span class=cl>ssh-keygen -t rsa -b <span class=m>4096</span> -f ~/.ssh/id_rsa_deploy -C <span class=s2>&#34;deploy@automation&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Hoặc dùng Ed25519 (nhanh hơn, an toàn hơn)</span>
+</span></span><span class=line><span class=cl>ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519_deploy -C <span class=s2>&#34;deploy@automation&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p><strong>Lưu ý:</strong> Nếu bạn dùng key cho mục đích tự động hóa, hãy đặt passphrase rỗng (nhấn Enter khi được hỏi) hoặc dùng <code>ssh-agent</code> để quản lý passphrase. Tuy nhiên, trong môi trường CI/CD, nên dùng key không passphrase và bảo vệ key bằng quyền truy cập filesystem.</p><h3 id=copy-key-sang-server>Copy key sang server</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Dùng ssh-copy-id (cách chuẩn)</span>
+</span></span><span class=line><span class=cl>ssh-copy-id -i ~/.ssh/id_ed25519_deploy.pub user@server1
+</span></span><span class=line><span class=cl>ssh-copy-id -i ~/.ssh/id_ed25519_deploy.pub user@server2
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Hoặc copy thủ công nếu ssh-copy-id không khả dụng</span>
+</span></span><span class=line><span class=cl>cat ~/.ssh/id_ed25519_deploy.pub <span class=p>|</span> ssh user@server1 <span class=s2>&#34;mkdir -p ~/.ssh &amp;&amp; cat &gt;&gt; ~/.ssh/authorized_keys&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=kiểm-tra-kết-nối>Kiểm tra kết nối</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Test không cần mật khẩu</span>
+</span></span><span class=line><span class=cl>ssh -i ~/.ssh/id_ed25519_deploy user@server1 <span class=s2>&#34;echo &#39;SSH connection successful&#39;&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=cấu-hình-sshconfig>Cấu hình ~/.ssh/config</h2><p>File <code>~/.ssh/config</code> giúp bạn truy cập server bằng tên ngắn thay vì nhớ địa chỉ IP và username:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl># ~/.ssh/config
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl># Server staging
+</span></span><span class=line><span class=cl>Host staging-web
+</span></span><span class=line><span class=cl>    HostName 192.168.1.10
+</span></span><span class=line><span class=cl>    User deploy
+</span></span><span class=line><span class=cl>    IdentityFile ~/.ssh/id_ed25519_deploy
+</span></span><span class=line><span class=cl>    Port 22
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Host staging-db
+</span></span><span class=line><span class=cl>    HostName 192.168.1.11
+</span></span><span class=line><span class=cl>    User deploy
+</span></span><span class=line><span class=cl>    IdentityFile ~/.ssh/id_ed25519_deploy
+</span></span><span class=line><span class=cl>    Port 22
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl># Server production
+</span></span><span class=line><span class=cl>Host prod-web
+</span></span><span class=line><span class=cl>    HostName 10.0.0.10
+</span></span><span class=line><span class=cl>    User deploy
+</span></span><span class=line><span class=cl>    IdentityFile ~/.ssh/id_ed25519_deploy
+</span></span><span class=line><span class=cl>    Port 2222
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Host prod-db
+</span></span><span class=line><span class=cl>    HostName 10.0.0.11
+</span></span><span class=line><span class=cl>    User deploy
+</span></span><span class=line><span class=cl>    IdentityFile ~/.ssh/id_ed25519_deploy
+</span></span><span class=line><span class=cl>    Port 2222
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl># Global defaults
+</span></span><span class=line><span class=cl>Host *
+</span></span><span class=line><span class=cl>    ServerAliveInterval 60
+</span></span><span class=line><span class=cl>    ServerAliveCountMax 3
+</span></span><span class=line><span class=cl>    StrictHostKeyChecking accept-new
+</span></span><span class=line><span class=cl>    LogLevel ERROR
+</span></span></code></pre></td></tr></table></div></div><p>Sau khi cấu hình, bạn có thể truy cập server bằng tên host ngắn:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Thay vì: ssh deploy@192.168.1.10</span>
+</span></span><span class=line><span class=cl>ssh staging-web <span class=s2>&#34;df -h /&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Hoặc dùng alias trong Bash</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;alias prod-web=&#39;ssh prod-web&#39;&#34;</span> &gt;&gt; ~/.bashrc
+</span></span></code></pre></td></tr></table></div></div><p><strong>Giải thích các cấu hình quan trọng:</strong></p><ul><li><code>ServerAliveInterval 60</code>: Gửi keepalive mỗi 60 giây để tránh bị ngắt kết nối.</li><li><code>ServerAliveCountMax 3</code>: Ngắt kết nối sau 3 lần keepalive thất bại.</li><li><code>StrictHostKeyChecking accept-new</code>: Tự động chấp nhận host key mới mà không hỏi.</li><li><code>LogLevel ERROR</code>: Chỉ hiển thị lỗi, giảm verbosity khi chạy script.</li></ul><hr><h2 id=chạy-lệnh-từ-xa>Chạy lệnh từ xa</h2><h3 id=lệnh-cơ-bản>Lệnh cơ bản</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Chạy một lệnh trên server</span>
+</span></span><span class=line><span class=cl>ssh user@server1 <span class=s2>&#34;uptime&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Chạy nhiều lệnh</span>
+</span></span><span class=line><span class=cl>ssh user@server1 <span class=s2>&#34;cd /opt/app &amp;&amp; git pull &amp;&amp; systemctl restart myapp&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Chạy lệnh với sudo</span>
+</span></span><span class=line><span class=cl>ssh user@server1 <span class=s2>&#34;sudo systemctl status nginx&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=truyền-biến-môi-trường>Truyền biến môi trường</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Truyền biến vào phiên SSH</span>
+</span></span><span class=line><span class=cl><span class=nv>DEPLOY_ENV</span><span class=o>=</span><span class=s2>&#34;staging&#34;</span> <span class=nv>APP_VERSION</span><span class=o>=</span><span class=s2>&#34;v2.1.0&#34;</span> ssh user@server1 <span class=s2>&#34;echo \$DEPLOY_ENV \$APP_VERSION&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># An toàn hơn: dùng heredoc</span>
+</span></span><span class=line><span class=cl>ssh user@server1 <span class=s>&lt;&lt; &#39;REMOTE_SCRIPT&#39;
+</span></span></span><span class=line><span class=cl><span class=s>    export DEPLOY_ENV=&#34;staging&#34;
+</span></span></span><span class=line><span class=cl><span class=s>    cd /opt/app
+</span></span></span><span class=line><span class=cl><span class=s>    git pull origin main
+</span></span></span><span class=line><span class=cl><span class=s>    npm install --production
+</span></span></span><span class=line><span class=cl><span class=s>    systemctl restart myapp
+</span></span></span><span class=line><span class=cl><span class=s>REMOTE_SCRIPT</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=xử-lý-lỗi-khi-chạy-remote>Xử lý lỗi khi chạy remote</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Kiểm tra exit code</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> ssh user@server1 <span class=s2>&#34;systemctl status nginx&#34;</span> 2&gt;/dev/null<span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Nginx is running on server1&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>else</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Nginx is down on server1 — attempting restart&#34;</span>
+</span></span><span class=line><span class=cl>    ssh user@server1 <span class=s2>&#34;sudo systemctl restart nginx&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=truyền-file-giữa-các-server>Truyền file giữa các server</h2><h3 id=scp--secure-copy>scp — Secure Copy</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Copy file từ local sang remote</span>
+</span></span><span class=line><span class=cl>scp /local/path/config.yml user@server1:/opt/app/config.yml
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Copy thư mục (recursive)</span>
+</span></span><span class=line><span class=cl>scp -r /local/path/dist/ user@server1:/opt/app/dist/
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Copy từ remote sang local</span>
+</span></span><span class=line><span class=cl>scp user@server1:/var/log/app.log /local/logs/
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Copy giữa hai server (qua local trung gian)</span>
+</span></span><span class=line><span class=cl>scp user@server1:/data/backup.sql user@server2:/data/restore.sql
+</span></span></code></pre></td></tr></table></div></div><h3 id=rsync--remote-sync>rsync — Remote Sync</h3><p><code>rsync</code> mạnh hơn <code>scp</code> vì hỗ trợ đồng bộ chỉ các file thay đổi (incremental sync):</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Đồng bộ thư mụcdist lên server</span>
+</span></span><span class=line><span class=cl>rsync -avz --progress /local/path/dist/ user@server1:/opt/app/dist/
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># rsync qua SSH với port tùy chỉnh</span>
+</span></span><span class=line><span class=cl>rsync -avz -e <span class=s2>&#34;ssh -p 2222&#34;</span> /local/path/ user@server1:/opt/app/
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Chỉ sync file đã thay đổi trong 1 ngày</span>
+</span></span><span class=line><span class=cl>rsync -avz --max-age<span class=o>=</span><span class=m>1</span> /local/path/logs/ user@server1:/backup/logs/
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Dry-run trước khi thực hiện</span>
+</span></span><span class=line><span class=cl>rsync -avzn --delete /local/path/ user@server1:/opt/app/
+</span></span></code></pre></td></tr></table></div></div><p><strong>Giải thích flags:</strong></p><ul><li><code>-a</code>: Archive mode (giữ quyền file, symlink, timestamp).</li><li><code>-v</code>: Verbose — hiển thị file đang được sync.</li><li><code>-z</code>: Nén dữ liệu khi truyền qua mạng.</li><li><code>--delete</code>: Xóa file ở destination không có trong source.</li><li><code>--progress</code>: Hiển thị tiến trình truyền file.</li></ul><hr><h2 id=lặp-qua-nhiều-server>Lặp qua nhiều server</h2><h3 id=vòng-lặp-cơ-bản>Vòng lặp cơ bản</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nv>SERVERS</span><span class=o>=(</span><span class=s2>&#34;web-01&#34;</span> <span class=s2>&#34;web-02&#34;</span> <span class=s2>&#34;web-03&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> server in <span class=s2>&#34;</span><span class=si>${</span><span class=nv>SERVERS</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;=== </span><span class=nv>$server</span><span class=s2> ===&#34;</span>
+</span></span><span class=line><span class=cl>    ssh <span class=s2>&#34;deploy@</span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2>&#34;</span> <span class=s2>&#34;hostname &amp;&amp; uptime &amp;&amp; df -h / | tail -1&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=đọc-danh-sách-server-từ-file>Đọc danh sách server từ file</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># File servers.txt chứa mỗi server một dòng</span>
+</span></span><span class=line><span class=cl><span class=c1># web-01</span>
+</span></span><span class=line><span class=cl><span class=c1># web-02</span>
+</span></span><span class=line><span class=cl><span class=c1># db-01</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>while</span> <span class=nv>IFS</span><span class=o>=</span> <span class=nb>read</span> -r server<span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    <span class=o>[[</span> -z <span class=s2>&#34;</span><span class=nv>$server</span><span class=s2>&#34;</span> <span class=o>||</span> <span class=s2>&#34;</span><span class=nv>$server</span><span class=s2>&#34;</span> <span class=o>=</span>~ ^# <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=k>continue</span>
+</span></span><span class=line><span class=cl>    ssh <span class=s2>&#34;deploy@</span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2>&#34;</span> <span class=s2>&#34;hostname&#34;</span> 2&gt;/dev/null <span class=o>&amp;&amp;</span> <span class=nb>echo</span> <span class=s2>&#34;OK: </span><span class=nv>$server</span><span class=s2>&#34;</span> <span class=o>||</span> <span class=nb>echo</span> <span class=s2>&#34;FAIL: </span><span class=nv>$server</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>done</span> &lt; servers.txt
+</span></span></code></pre></td></tr></table></div></div><h3 id=xử-lý-lỗi-trong-vòng-lặp>Xử lý lỗi trong vòng lặp</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nv>SERVERS</span><span class=o>=(</span><span class=s2>&#34;web-01&#34;</span> <span class=s2>&#34;web-02&#34;</span> <span class=s2>&#34;web-03&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl><span class=nv>FAILED</span><span class=o>=()</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> server in <span class=s2>&#34;</span><span class=si>${</span><span class=nv>SERVERS</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> ! ssh <span class=s2>&#34;deploy@</span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2>&#34;</span> <span class=s2>&#34;echo OK&#34;</span> 2&gt;/dev/null<span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nv>FAILED</span><span class=o>+=(</span><span class=s2>&#34;</span><span class=nv>$server</span><span class=s2>&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;[ERROR] Cannot connect to </span><span class=nv>$server</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[[</span> <span class=si>${#</span><span class=nv>FAILED</span><span class=p>[@]</span><span class=si>}</span> -gt <span class=m>0</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Failed servers: </span><span class=si>${</span><span class=nv>FAILED</span><span class=p>[*]</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=chạy-lệnh-song-song-với--và-wait>Chạy lệnh song song với & và wait</h2><p>Khi quản lý nhiều server, chạy tuần tự từng máy sẽ rất chậm. Bash hỗ trợ chạy song song bằng <code>&</code> (background process) và <code>wait</code> (đợi tất cả hoàn thành):</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nv>SERVERS</span><span class=o>=(</span><span class=s2>&#34;web-01&#34;</span> <span class=s2>&#34;web-02&#34;</span> <span class=s2>&#34;web-03&#34;</span> <span class=s2>&#34;db-01&#34;</span> <span class=s2>&#34;db-02&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl><span class=nv>MAX_PARALLEL</span><span class=o>=</span><span class=m>3</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>run_on_server<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>server</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;[START] </span><span class=nv>$server</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    ssh <span class=s2>&#34;deploy@</span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2>&#34;</span> <span class=s2>&#34;sudo apt update &amp;&amp; sudo apt upgrade -y&#34;</span> 2&gt;/dev/null
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>status</span><span class=o>=</span><span class=nv>$?</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;[DONE] </span><span class=nv>$server</span><span class=s2> (exit: </span><span class=nv>$status</span><span class=s2>)&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=nv>$status</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Chạy song song với giới hạn concurrency</span>
+</span></span><span class=line><span class=cl><span class=nv>pids</span><span class=o>=()</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> server in <span class=s2>&#34;</span><span class=si>${</span><span class=nv>SERVERS</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    run_on_server <span class=s2>&#34;</span><span class=nv>$server</span><span class=s2>&#34;</span> <span class=p>&amp;</span>
+</span></span><span class=line><span class=cl>    <span class=nv>pids</span><span class=o>+=(</span><span class=nv>$!</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Giới hạn số tiến trình chạy đồng thời</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> <span class=si>${#</span><span class=nv>pids</span><span class=p>[@]</span><span class=si>}</span> -ge <span class=nv>$MAX_PARALLEL</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>wait</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>pids</span><span class=p>[0]</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nv>pids</span><span class=o>=(</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>pids</span><span class=p>[@]:</span><span class=nv>1</span><span class=si>}</span><span class=s2>&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Đợi tất cả tiến trình còn lại hoàn thành</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> pid in <span class=s2>&#34;</span><span class=si>${</span><span class=nv>pids</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    <span class=nb>wait</span> <span class=s2>&#34;</span><span class=nv>$pid</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;All servers updated.&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p><strong>Giải thích:</strong></p><ul><li><code>run_on_server "$server" &</code>: Chạy hàm trong background.</li><li><code>pids+=($!)</code>: Lưu PID của tiến trình background.</li><li><code>wait "${pids[0]}"</code>: Đợi tiến trình đầu tiên hoàn thành trước khi chạy tiến trình mới.</li><li><code>MAX_PARALLEL=3</code>: Giới hạn tối đa 3 server chạy cùng lúc.</li></ul><hr><h2 id=ví-dụ-thực-hành-script-quản-lý-multi-server>Ví dụ thực hành: Script quản lý multi-server</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span><span class=lnt>117
+</span><span class=lnt>118
+</span><span class=lnt>119
+</span><span class=lnt>120
+</span><span class=lnt>121
+</span><span class=lnt>122
+</span><span class=lnt>123
+</span><span class=lnt>124
+</span><span class=lnt>125
+</span><span class=lnt>126
+</span><span class=lnt>127
+</span><span class=lnt>128
+</span><span class=lnt>129
+</span><span class=lnt>130
+</span><span class=lnt>131
+</span><span class=lnt>132
+</span><span class=lnt>133
+</span><span class=lnt>134
+</span><span class=lnt>135
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=cp></span><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl><span class=c1># Script : multi-server-deploy.sh</span>
+</span></span><span class=line><span class=cl><span class=c1># Mục đích: Triển khai ứng dụng lên nhiều server song song</span>
+</span></span><span class=line><span class=cl><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl><span class=nv>IFS</span><span class=o>=</span><span class=s1>$&#39;\n\t&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>SERVERS_FILE</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>SERVERS_FILE</span><span class=k>:-</span><span class=p>/etc/deploy/servers.txt</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>SSH_USER</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>SSH_USER</span><span class=k>:-</span><span class=nv>deploy</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>SSH_KEY</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>SSH_KEY</span><span class=k>:-</span><span class=nv>$HOME</span><span class=p>/.ssh/id_ed25519_deploy</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>APP_DIR</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>APP_DIR</span><span class=k>:-</span><span class=p>/opt/app</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>MAX_PARALLEL</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>MAX_PARALLEL</span><span class=k>:-</span><span class=nv>5</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>LOG_DIR</span><span class=o>=</span><span class=s2>&#34;/var/log/multi-deploy&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>TIMESTAMP</span><span class=o>=</span><span class=k>$(</span>date <span class=s1>&#39;+%Y%m%d_%H%M%S&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>LOG_FILE</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>LOG_DIR</span><span class=si>}</span><span class=s2>/deploy_</span><span class=si>${</span><span class=nv>TIMESTAMP</span><span class=si>}</span><span class=s2>.log&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>mkdir -p <span class=s2>&#34;</span><span class=nv>$LOG_DIR</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>log<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>level</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span><span class=p>;</span> <span class=nb>shift</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;[</span><span class=k>$(</span>date <span class=s1>&#39;+%Y-%m-%d %H:%M:%S&#39;</span><span class=k>)</span><span class=s2>] [</span><span class=nv>$level</span><span class=s2>] </span><span class=nv>$*</span><span class=s2>&#34;</span> <span class=p>|</span> tee -a <span class=s2>&#34;</span><span class=nv>$LOG_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>load_servers<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> ! -f <span class=s2>&#34;</span><span class=nv>$SERVERS_FILE</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        log <span class=s2>&#34;ERROR&#34;</span> <span class=s2>&#34;Servers file not found: </span><span class=nv>$SERVERS_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    mapfile -t SERVERS &lt; &lt;<span class=o>(</span>grep -vE <span class=s1>&#39;^\s*#|^\s*$&#39;</span> <span class=s2>&#34;</span><span class=nv>$SERVERS_FILE</span><span class=s2>&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> <span class=si>${#</span><span class=nv>SERVERS</span><span class=p>[@]</span><span class=si>}</span> -eq <span class=m>0</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        log <span class=s2>&#34;ERROR&#34;</span> <span class=s2>&#34;No servers defined in </span><span class=nv>$SERVERS_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;Loaded </span><span class=si>${#</span><span class=nv>SERVERS</span><span class=p>[@]</span><span class=si>}</span><span class=s2> servers from </span><span class=nv>$SERVERS_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>check_connectivity<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>server</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>identity_file</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$SSH_KEY</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> ! -f <span class=s2>&#34;</span><span class=nv>$identity_file</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        log <span class=s2>&#34;ERROR&#34;</span> <span class=s2>&#34;SSH key not found: </span><span class=nv>$identity_file</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    ssh -i <span class=s2>&#34;</span><span class=nv>$identity_file</span><span class=s2>&#34;</span> -o <span class=nv>ConnectTimeout</span><span class=o>=</span><span class=m>10</span> -o <span class=nv>BatchMode</span><span class=o>=</span>yes <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>        <span class=s2>&#34;</span><span class=si>${</span><span class=nv>SSH_USER</span><span class=si>}</span><span class=s2>@</span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2>&#34;</span> <span class=s2>&#34;echo OK&#34;</span> 2&gt;/dev/null
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>deploy_to_server<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>server</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>deploy_log</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>LOG_DIR</span><span class=si>}</span><span class=s2>/deploy_</span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2>_</span><span class=si>${</span><span class=nv>TIMESTAMP</span><span class=si>}</span><span class=s2>.log&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;Deploying to </span><span class=nv>$server</span><span class=s2>...&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> ! check_connectivity <span class=s2>&#34;</span><span class=nv>$server</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        log <span class=s2>&#34;ERROR&#34;</span> <span class=s2>&#34;Cannot connect to </span><span class=nv>$server</span><span class=s2> — skipping&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    ssh -i <span class=s2>&#34;</span><span class=nv>$SSH_KEY</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>SSH_USER</span><span class=si>}</span><span class=s2>@</span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2>&#34;</span> <span class=s>&lt;&lt; REMOTE &gt; &#34;$deploy_log&#34; 2&gt;&amp;1
+</span></span></span><span class=line><span class=cl><span class=s>        set -euo pipefail
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>        echo &#34;=== Deployment on \$(hostname) ===&#34;
+</span></span></span><span class=line><span class=cl><span class=s>        echo &#34;Time: \$(date)&#34;
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>        cd &#34;$APP_DIR&#34; || { echo &#34;Directory $APP_DIR not found&#34;; exit 1; }
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>        echo &#34;Pulling latest code...&#34;
+</span></span></span><span class=line><span class=cl><span class=s>        git pull origin main
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>        echo &#34;Installing dependencies...&#34;
+</span></span></span><span class=line><span class=cl><span class=s>        npm install --production 2&gt;/dev/null || pip install -r requirements.txt 2&gt;/dev/null || true
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>        echo &#34;Restarting service...&#34;
+</span></span></span><span class=line><span class=cl><span class=s>        sudo systemctl restart myapp
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>        echo &#34;Checking service status...&#34;
+</span></span></span><span class=line><span class=cl><span class=s>        sleep 3
+</span></span></span><span class=line><span class=cl><span class=s>        if systemctl is-active --quiet myapp; then
+</span></span></span><span class=line><span class=cl><span class=s>            echo &#34;Service myapp is running&#34;
+</span></span></span><span class=line><span class=cl><span class=s>        else
+</span></span></span><span class=line><span class=cl><span class=s>            echo &#34;ERROR: Service myapp failed to start&#34;
+</span></span></span><span class=line><span class=cl><span class=s>            exit 1
+</span></span></span><span class=line><span class=cl><span class=s>        fi
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>        echo &#34;=== Deployment completed ===&#34;
+</span></span></span><span class=line><span class=cl><span class=s>REMOTE</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> <span class=nv>$?</span> -eq <span class=m>0</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;Deploy SUCCESS: </span><span class=nv>$server</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>else</span>
+</span></span><span class=line><span class=cl>        log <span class=s2>&#34;ERROR&#34;</span> <span class=s2>&#34;Deploy FAILED: </span><span class=nv>$server</span><span class=s2> (check </span><span class=nv>$deploy_log</span><span class=s2>)&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>main<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;=== Multi-server deployment started ===&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    load_servers
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nv>pids</span><span class=o>=()</span>
+</span></span><span class=line><span class=cl>    <span class=nv>failed</span><span class=o>=()</span>
+</span></span><span class=line><span class=cl>    <span class=nv>succeeded</span><span class=o>=</span><span class=m>0</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> server in <span class=s2>&#34;</span><span class=si>${</span><span class=nv>SERVERS</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>        deploy_to_server <span class=s2>&#34;</span><span class=nv>$server</span><span class=s2>&#34;</span> <span class=p>&amp;</span>
+</span></span><span class=line><span class=cl>        <span class=nv>pids</span><span class=o>+=(</span><span class=nv>$!</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=o>[[</span> <span class=si>${#</span><span class=nv>pids</span><span class=p>[@]</span><span class=si>}</span> -ge <span class=nv>$MAX_PARALLEL</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>            <span class=nb>wait</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>pids</span><span class=p>[0]</span><span class=si>}</span><span class=s2>&#34;</span> <span class=o>||</span> <span class=nv>failed</span><span class=o>+=(</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>SERVERS</span><span class=p>[0]</span><span class=si>}</span><span class=s2>&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>            <span class=nv>pids</span><span class=o>=(</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>pids</span><span class=p>[@]:</span><span class=nv>1</span><span class=si>}</span><span class=s2>&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    <span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> pid in <span class=s2>&#34;</span><span class=si>${</span><span class=nv>pids</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>        <span class=nb>wait</span> <span class=s2>&#34;</span><span class=nv>$pid</span><span class=s2>&#34;</span> <span class=o>||</span> <span class=nv>failed</span><span class=o>+=(</span><span class=s2>&#34;server&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;=== Deployment completed ===&#34;</span>
+</span></span><span class=line><span class=cl>    log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;Results: </span><span class=k>$((</span> <span class=si>${#</span><span class=nv>SERVERS</span><span class=p>[@]</span><span class=si>}</span> <span class=o>-</span> <span class=si>${#</span><span class=nv>failed</span><span class=p>[@]</span><span class=si>}</span> <span class=k>))</span><span class=s2>/</span><span class=si>${#</span><span class=nv>SERVERS</span><span class=p>[@]</span><span class=si>}</span><span class=s2> succeeded&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> <span class=si>${#</span><span class=nv>failed</span><span class=p>[@]</span><span class=si>}</span> -gt <span class=m>0</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        log <span class=s2>&#34;WARN&#34;</span> <span class=s2>&#34;Failed servers: </span><span class=si>${</span><span class=nv>failed</span><span class=p>[*]</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>main <span class=s2>&#34;</span><span class=nv>$@</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=cấu-trúc-file-serverstxt>Cấu trúc file servers.txt</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl># Staging servers
+</span></span><span class=line><span class=cl>web-staging-01
+</span></span><span class=line><span class=cl>web-staging-02
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl># Production servers
+</span></span><span class=line><span class=cl>web-prod-01
+</span></span><span class=line><span class=cl>web-prod-02
+</span></span><span class=line><span class=cl>web-prod-03
+</span></span></code></pre></td></tr></table></div></div><h3 id=chạy-script>Chạy script</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>chmod +x multi-server-deploy.sh
+</span></span><span class=line><span class=cl>./multi-server-deploy.sh
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=ghi-chú-triển-khai>Ghi chú triển khai</h2><ul><li><strong>Bảo mật SSH key:</strong> Đặt quyền <code>chmod 600</code> cho private key và <code>chmod 644</code> cho public key. Không bao giờ commit key vào repository. Trong CI/CD, lưu key dưới dạng secret và mount vào file tạm thời.</li><li><strong>Host key verification:</strong> Ở第一次 kết nối, SSH sẽ hỏi xác nhận host key. Trong script tự động, dùng <code>StrictHostKeyChecking accept-new</code> trong <code>~/.ssh/config</code> hoặc flag <code>-o StrictHostKeyChecking=accept-new</code> để tự động chấp nhận.</li><li><strong>Giới hạn concurrency:</strong> Chạy quá nhiều SSH session cùng lúc có thể gây overload cho network hoặc server nguồn. Luôn thiết lập <code>MAX_PARALLEL</code> phù hợp với hạ tầng.</li><li><strong>Timeout kết nối:</strong> Sử dụng <code>-o ConnectTimeout=10</code> và <code>-o BatchMode=yes</code> để tránh script treo vô hạn khi server không phản hồi.</li><li><strong>Rollback strategy:</strong> Luôn có kế hoạch rollback trước khi deploy hàng loạt. Script ví dụ trên chỉ deploy — trong thực tế, bạn nên thêm bước snapshot hoặc backup trước khi thay đổi.</li></ul><hr><h2 id=lời-kết>Lời kết</h2><p>Tự động hóa SSH bằng Bash không chỉ giúp bạn tiết kiệm thời gian mà còn đảm bảo tính nhất quán khi quản lý nhiều server. Từ việc thiết lập key-based authentication, cấu hình <code>~/.ssh/config</code> để truy cập nhanh, sử dụng <code>scp</code>/<code>rsync</code> để truyền file, đến việc chạy lệnh song song với <code>&</code> và <code>wait</code> — tất cả đều có thể kết hợp trong một script Bash gọn gàng.</p><p>Ở <a class=link href=/posts/bash/bash-step-fourteen/>bài tiếp theo</a>, chúng ta sẽ khám phá cách <strong>kết hợp Bash và Docker</strong>: viết wrapper script để quản lý container, tự động restart khi crash, và deploy stack với <code>docker compose</code>.</p></section><div class=hd-article-tags-wrap><span class=tags-label>THẺ:</span><div class=hd-article-tags><a href=/vi/tags/bash/ class=hd-tag-pill>#bash
+</a><a href=/vi/tags/shell-script/ class=hd-tag-pill>#shell-script
+</a><a href=/vi/tags/devops/ class=hd-tag-pill>#devops
+</a><a href=/vi/tags/ssh/ class=hd-tag-pill>#ssh
+</a><a href=/vi/tags/multi-server/ class=hd-tag-pill>#multi-server
+</a><a href=/vi/tags/automation/ class=hd-tag-pill>#automation
+</a><a href=/vi/tags/rsync/ class=hd-tag-pill>#rsync
+</a><a href=/vi/tags/remote-execution/ class=hd-tag-pill>#remote-execution</a></div></div><div class=hd-article-footer-box><div class=footer-box-item><span class=box-label>TÁC GIẢ</span>
+<span class=box-value>Hoàng Dương</span></div><div class=footer-box-item><span class=box-label>BẢN QUYỀN</span>
+<span class=box-value>CC BY-NC-SA 4.0</span></div></div><nav class=hd-post-nav><a href=/vi/posts/bash/bash-step-twelve/ class="post-nav-card nav-prev"><span class=nav-direction>&larr; BÀI TRƯỚC</span>
+<span class=nav-post-title>Quản lý hệ thống với Bash: Theo dõi tài nguyên và can thiệp tiến trình trong DevOps</span></a></nav><section class=hd-comments-section><div class=comments-section-header><span class=mono-label>THẢO LUẬN & BÌNH LUẬN</span></div><div class=utterances-container><script>(function(){var t=document.documentElement.dataset.scheme||"light",n=t==="dark"?"github-dark":"github-light",e=document.createElement("script");e.src="https://utteranc.es/client.js",e.setAttribute("repo","hoangduonng/blog_comments"),e.setAttribute("issue-term","pathname"),e.setAttribute("label","comments"),e.setAttribute("theme",n),e.setAttribute("crossorigin","anonymous"),e.async=!0,document.currentScript.parentElement.appendChild(e)})()</script></div><style>.utterances-container{width:100%;margin-top:8px;position:relative}.utterances{max-width:100%!important;margin:0!important}[data-scheme=light] .utterances iframe,html:not([data-scheme=dark]) .utterances iframe{mix-blend-mode:multiply;transition:mix-blend-mode .2s ease}[data-scheme=dark] .utterances iframe{mix-blend-mode:lighten;transition:mix-blend-mode .2s ease}</style><script>let utterancesLoaded=!1;function setUtterancesTheme(e){let t=document.querySelector(".utterances iframe");if(t&&t.contentWindow){let n=e==="dark"?"github-dark":"github-light";t.contentWindow.postMessage({type:"set-theme",theme:n},"https://utteranc.es")}}addEventListener("message",e=>{if(e.origin!=="https://utteranc.es")return;utterancesLoaded=!0,setUtterancesTheme(document.documentElement.dataset.scheme||"light")}),window.addEventListener("onColorSchemeChange",e=>{if(!utterancesLoaded)return;setUtterancesTheme(e.detail)})</script></section></article></div><aside class=hd-article-sidebar><div class=hd-sticky-sidebar-inner><div class=hd-toc-card><div class=toc-header><span class=toc-title-label>MỤC LỤC</span></div><div class=toc-content id=toc-content><nav id=TableOfContents><ol><li><a href=#tự-động-hóa-ssh-với-bash-trong-devops>Tự động hóa SSH với Bash trong DevOps</a></li><li><a href=#thiết-lập-ssh-key-based-authentication>Thiết lập SSH key-based authentication</a><ol><li><a href=#tạo-ssh-key-pair>Tạo SSH key pair</a></li><li><a href=#copy-key-sang-server>Copy key sang server</a></li><li><a href=#kiểm-tra-kết-nối>Kiểm tra kết nối</a></li></ol></li><li><a href=#cấu-hình-sshconfig>Cấu hình ~/.ssh/config</a></li><li><a href=#chạy-lệnh-từ-xa>Chạy lệnh từ xa</a><ol><li><a href=#lệnh-cơ-bản>Lệnh cơ bản</a></li><li><a href=#truyền-biến-môi-trường>Truyền biến môi trường</a></li><li><a href=#xử-lý-lỗi-khi-chạy-remote>Xử lý lỗi khi chạy remote</a></li></ol></li><li><a href=#truyền-file-giữa-các-server>Truyền file giữa các server</a><ol><li><a href=#scp--secure-copy>scp — Secure Copy</a></li><li><a href=#rsync--remote-sync>rsync — Remote Sync</a></li></ol></li><li><a href=#lặp-qua-nhiều-server>Lặp qua nhiều server</a><ol><li><a href=#vòng-lặp-cơ-bản>Vòng lặp cơ bản</a></li><li><a href=#đọc-danh-sách-server-từ-file>Đọc danh sách server từ file</a></li><li><a href=#xử-lý-lỗi-trong-vòng-lặp>Xử lý lỗi trong vòng lặp</a></li></ol></li><li><a href=#chạy-lệnh-song-song-với--và-wait>Chạy lệnh song song với & và wait</a></li><li><a href=#ví-dụ-thực-hành-script-quản-lý-multi-server>Ví dụ thực hành: Script quản lý multi-server</a><ol><li><a href=#cấu-trúc-file-serverstxt>Cấu trúc file servers.txt</a></li><li><a href=#chạy-script>Chạy script</a></li></ol></li><li><a href=#ghi-chú-triển-khai>Ghi chú triển khai</a></li><li><a href=#lời-kết>Lời kết</a></li></ol></nav></div><div class=toc-scroll-indicator id=toc-indicator style=display:none></div></div></div></aside></div></div><div class=hd-edge-callout-rail><aside class=hd-floating-callout aria-label="Bài viết liên quan"><a href=/vi/posts/bash/bash-step-eleven/ class=floating-callout-art><img src=/images/bash/bash-step-eleven.jpg alt="Bash trong CI/CD: Tích hợp Pipeline tự động hóa an toàn cho DevOps" class=floating-callout-img></a><div class=floating-callout-badge>BÀI VIẾT <span class=callout-of>liên quan</span></div><div class=floating-callout-body><h4 class=floating-callout-title><a href=/vi/posts/bash/bash-step-eleven/>Bash trong CI/CD: Tích hợp Pipeline tự động hóa an toàn cho DevOps</a></h4><p class=floating-callout-excerpt>Bash trong CI/CD cho DevOps Trong bài viết trước, chúng ta đã tìm hiểu cách bẫy …</p><a href=/vi/posts/bash/bash-step-eleven/ class=floating-callout-btn>ĐỌC TIẾP &rarr;</a></div></aside></div></div><script>document.addEventListener("DOMContentLoaded",function(){var e=document.getElementById("toc-content"),t=document.getElementById("toc-indicator");if(e&&t){function n(){var s,o,n=e.scrollHeight-e.clientHeight;if(n<=2){t.style.display="none";return}t.style.display="block",s=e.scrollTop/n,o=e.clientHeight-32,t.style.top=e.offsetTop+s*o+"px"}e.addEventListener("scroll",n,{passive:!0}),n(),window.addEventListener("resize",n,{passive:!0}),window.addEventListener("load",n,{passive:!0})}})</script><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><div id=hd-search-overlay class=hd-search-overlay aria-hidden=true data-index-url=/vi/search/index.json data-lang=vi data-no-results="Không tìm thấy kết quả phù hợp" data-no-results-sub="Hãy thử với từ khóa khác hoặc kiểm tra lại chính tả" data-initial-hint="Nhập từ khoá để tìm kiếm bài viết..." data-results-count="kết quả"><div class=hd-search-backdrop id=hd-search-backdrop tabindex=-1></div><div class=hd-search-dialog role=dialog aria-modal=true aria-label="Tìm kiếm bài viết"><div class=hd-search-header><div class=hd-search-input-wrapper><svg class="hd-search-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentcolor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<input id=hd-search-input class=hd-search-input type=text placeholder="Tìm kiếm bài viết, chuyên mục, chủ đề..." autocomplete=off autocorrect=off autocapitalize=off spellcheck=false aria-autocomplete=list aria-controls=hd-search-results>
+<button id=hd-search-clear class=hd-search-clear type=button aria-label="Xóa từ khóa" style=display:none><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentcolor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div><button id=hd-search-close class=hd-search-close-btn type=button aria-label="Đóng tìm kiếm">
+<kbd class=hd-search-kbd>ESC</kbd></button></div><div class=hd-search-body><div id=hd-search-loading class="hd-search-state hd-search-loading" style=display:none><div class=hd-search-spinner aria-hidden=true></div><span>Đang tải dữ liệu tìm kiếm...</span></div><div id=hd-search-initial class="hd-search-state hd-search-initial"><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentcolor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p class=state-title>Tìm kiếm nhanh</p><p class=state-desc>Nhập từ khoá hoặc chủ đề để tìm kiếm trong tất cả bài viết đã xuất bản.</p></div><div id=hd-search-empty class="hd-search-state hd-search-empty" style=display:none><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentcolor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="8" x2="14" y2="14"/><line x1="14" y1="8" x2="8" y2="14"/></svg><p class=state-title id=hd-search-empty-title>Không tìm thấy kết quả phù hợp</p><p class=state-desc id=hd-search-empty-desc>Hãy thử với từ khóa khác hoặc kiểm tra lại chính tả</p></div><div id=hd-search-results class=hd-search-results role=listbox style=display:none></div></div><div class=hd-search-footer><div class=hd-search-shortcuts><span class=shortcut-item><kbd>↑</kbd><kbd>↓</kbd>
+<span class=shortcut-label>Điều hướng</span>
+</span><span class=shortcut-item><kbd>↵</kbd>
+<span class=shortcut-label>Mở bài viết</span>
+</span><span class=shortcut-item><kbd>ESC</kbd>
+<span class=shortcut-label>Đóng</span></span></div><div id=hd-search-count class=hd-search-count style=display:none></div></div></div></div><footer class=hd-site-footer><div class=hd-footer-container><div class=hd-footer-grid><div class=footer-brand-col><a href=/vi/ class=footer-logo><span class=footer-logo-title>Hoang Duong</span></a><div class=footer-status><span class=status-dot></span>
+<span class=status-text>Hệ thống hoạt động ổn định</span></div><ul class=footer-meta-links><li><a href=/vi/about/>Giới thiệu Blog</a></li><li><a href=/vi/archives/>Lưu trữ bài viết</a></li></ul></div><div class=footer-links-grid><div class=footer-col><h3 class=footer-col-title>Chuyên mục</h3><ul class=footer-col-list><li><a href=/vi/categories/bash/>Bash Series</a></li><li><a href=/vi/categories/devops/>DevOps</a></li><li><a href=/vi/categories/docker/>Docker</a></li><li><a href=/vi/categories/installation-guides/>Hướng dẫn cài đặt</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Tài nguyên</h3><ul class=footer-col-list><li><a href=/vi/about/>Về tôi</a></li><li><a href=/vi/archives/>Tất cả bài viết</a></li><li><a href=#search data-open-search>Tìm kiếm</a></li><li><a href=/vi/links/>Liên kết hữu ích</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Series Nổi Bật</h3><ul class=footer-col-list><li><a href=/vi/posts/bash/bash-step-eight/>Cron Jobs & Bash</a></li><li><a href=/vi/categories/devops/>DevOps Automation</a></li><li><a href=/vi/categories/docker/>Docker Essentials</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Kết nối</h3><ul class=footer-col-list><li><a href=https://github.com/hoangduonng target=_blank rel=noopener>GitHub ↗</a></li><li><a href=https://www.instagram.com/ngu_uuen/ target=_blank rel=noopener>Instagram ↗</a></li><li><a href=https://www.linkedin.com/in/hoangduonng/ target=_blank rel=noopener>LinkedIn ↗</a></li><li><a href=/vi/index.xml>RSS Feed ↗</a></li></ul></div></div></div><div class=hd-footer-bottom-bar><span class=footer-copyright>&copy; 2026 Hoang Duong. All rights reserved.</span></div></div></footer><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.ee266d8948a6a32b88423f5d374fca9833845f738717cf8061ae442a91efe347.js defer></script></body></html>
