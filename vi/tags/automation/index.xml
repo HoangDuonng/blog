@@ -1,4 +1,768 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Automation on Hoàng Dương</title><link>https://tech.nguuyen.io.vn/vi/tags/automation/</link><description>Recent content in Automation on Hoàng Dương</description><generator>Hugo -- gohugo.io</generator><language>vi</language><lastBuildDate>Sun, 30 Aug 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/vi/tags/automation/index.xml" rel="self" type="application/rss+xml"/><item><title>Tự động hóa SSH với Bash: Quản lý multi-server hiệu quả trong DevOps</title><link>https://tech.nguuyen.io.vn/vi/posts/bash/bash-step-thirteen/</link><pubDate>Sun, 30 Aug 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/bash/bash-step-thirteen/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/bash/bash-step-thirteen.jpg" alt="Featured image of post Tự động hóa SSH với Bash: Quản lý multi-server hiệu quả trong DevOps" />&lt;h2 id="tự-động-hóa-ssh-với-bash-trong-devops">Tự động hóa SSH với Bash trong DevOps
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Automation on Hoàng Dương</title><link>https://tech.nguuyen.io.vn/vi/tags/automation/</link><description>Recent content in Automation on Hoàng Dương</description><generator>Hugo -- gohugo.io</generator><language>vi</language><lastBuildDate>Mon, 31 Aug 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/vi/tags/automation/index.xml" rel="self" type="application/rss+xml"/><item><title>Bash và Docker trong DevOps: Quản lý container hiệu quả</title><link>https://tech.nguuyen.io.vn/vi/posts/bash/bash-step-fourteen/</link><pubDate>Mon, 31 Aug 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/bash/bash-step-fourteen/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/bash/bash-step-fourteen.jpg" alt="Featured image of post Bash và Docker trong DevOps: Quản lý container hiệu quả" />&lt;h2 id="bash-và-docker-trong-devops">Bash và Docker trong DevOps
+&lt;/h2>&lt;p>Trong &lt;a class="link" href="https://tech.nguuyen.io.vn/posts/bash/bash-step-thirteen/" >bài viết trước&lt;/a>, chúng ta đã tìm hiểu cách tự động hóa SSH để quản lý nhiều server song song. Bây giờ, chúng ta sẽ bước vào thế giới container — nơi Bash đóng vai trò như một bridge mạnh mẽ giữa bạn và Docker daemon, giúp bạn quản lý container một cách linh hoạt hơn bất kỳ UI nào.&lt;/p>
+&lt;p>Docker CLI đã rất mạnh mẽ, nhưng khi bạn cần chạy hàng loạt container, kiểm tra health status định kỳ, dọn dẹp image cũ, hay deploy một stack phức tạp — việc gõ lệnh từng cái một không còn thực tế. Bash cho phép bạn viết wrapper script để &lt;strong>tự động hóa toàn bộ vòng đời container&lt;/strong>: từ build, deploy, healthcheck, restart khi crash, đến cleanup resource.&lt;/p>
+&lt;p>Bài viết này sẽ hướng dẫn bạn các kỹ thuật kết hợp Bash và Docker, từ những lệnh cơ bản đến một script thực hành quản lý container hoàn chỉnh.&lt;/p>
+&lt;hr>
+&lt;h2 id="lệnh-docker-cơ-bản-trong-bash">Lệnh Docker cơ bản trong Bash
+&lt;/h2>&lt;h3 id="liệt-kê-và-lọc-container">Liệt kê và lọc container
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Liệt kê tất cả container đang chạy&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker ps
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Liệt kê cả container đã dừng&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker ps -a
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Chỉ lấy container ID (phù hợp cho script)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker ps -q
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Lọc theo tên&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker ps --filter &lt;span class="s2">&amp;#34;name=nginx&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Lọc theo trạng thái&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker ps --filter &lt;span class="s2">&amp;#34;status=running&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker ps --filter &lt;span class="s2">&amp;#34;status=exited&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Kết hợp filter và format output&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker ps --format &lt;span class="s2">&amp;#34;{{.ID}} {{.Names}} {{.Status}} {{.Ports}}&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="kiểm-tra-trạng-thái-container">Kiểm tra trạng thái container
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Kiểm tra container có đang chạy không (trả về 0 nếu có)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker inspect --format&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;{{.State.Running}}&amp;#39;&lt;/span> myapp
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Lấy trạng thái chi tiết&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker inspect --format&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;{{.State.Status}}&amp;#39;&lt;/span> myapp
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Kiểm tra health status (nếu có healthcheck)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker inspect --format&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;{{.State.Health.Status}}&amp;#39;&lt;/span> myapp
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="quản-lý-container">Quản lý container
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Khởi động container đã dừng&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker start myapp
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Dừng container&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker stop myapp
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Restart container&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker restart myapp
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Xóa container đã dừng&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker rm myapp
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Force remove (kể cả khi đang chạy)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker rm -f myapp
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="docker-compose">Docker Compose
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Khởi động stack&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker compose up -d
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Dừng stack&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker compose down
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Xem log&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker compose logs -f
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Restart một service&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker compose restart nginx
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;hr>
+&lt;h2 id="wrapper-script-cho-docker">Wrapper script cho Docker
+&lt;/h2>&lt;h3 id="hàm-tiện-ích">Hàm tiện ích
+&lt;/h3>&lt;p>Trước khi viết script phức tạp, hãy tạo một số hàm tiện ích để tái sử dụng:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="cp">#!/usr/bin/env bash
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cp">&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Kiểm tra Docker daemon có chạy không&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">docker_ready&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> docker info &amp;gt;/dev/null 2&amp;gt;&lt;span class="p">&amp;amp;&lt;/span>&lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Lấy ID của container theo tên, trả về rỗng nếu không tồn tại&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">container_id&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> docker ps -q --filter &lt;span class="s2">&amp;#34;name=&lt;/span>&lt;span class="nv">$1&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Kiểm tra container có đang chạy không&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">container_running&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">[[&lt;/span> -n &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="k">$(&lt;/span>container_id &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$1&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="k">)&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="o">]]&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Kiểm tra container có tồn tại (dù đã dừng) không&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">container_exists&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> docker ps -a -q --filter &lt;span class="s2">&amp;#34;name=&lt;/span>&lt;span class="nv">$1&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="p">|&lt;/span> grep -q .
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Lấy logs của container (số dòng gần nhất)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">container_logs&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> &lt;span class="nv">name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">1&lt;/span>&lt;span class="p">:?Container name required&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> &lt;span class="nv">lines&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">2&lt;/span>&lt;span class="k">:-&lt;/span>&lt;span class="nv">50&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> docker logs --tail &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$lines&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$name&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> 2&amp;gt;&lt;span class="p">&amp;amp;&lt;/span>&lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="dọn-dẹp-docker-resource">Dọn dẹp Docker resource
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Xóa container đã dừng&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cleanup_containers&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> count
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">count&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>docker ps -a -q --filter &lt;span class="s2">&amp;#34;status=exited&amp;#34;&lt;/span> &lt;span class="p">|&lt;/span> wc -l&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">[[&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$count&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> -gt &lt;span class="m">0&lt;/span> &lt;span class="o">]]&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;Cleaning up &lt;/span>&lt;span class="nv">$count&lt;/span>&lt;span class="s2"> stopped containers...&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> docker ps -a -q --filter &lt;span class="s2">&amp;#34;status=exited&amp;#34;&lt;/span> &lt;span class="p">|&lt;/span> xargs docker rm -f
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Xóa dangling image (image không gắn với container nào)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cleanup_images&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> count
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">count&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>docker images -f &lt;span class="s2">&amp;#34;dangling=true&amp;#34;&lt;/span> -q &lt;span class="p">|&lt;/span> wc -l&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">[[&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$count&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> -gt &lt;span class="m">0&lt;/span> &lt;span class="o">]]&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;Cleaning up &lt;/span>&lt;span class="nv">$count&lt;/span>&lt;span class="s2"> dangling images...&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> docker image prune -f
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Xóa tất cả unused resource (cẩn thận!)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cleanup_all&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> docker system prune -f --volumes
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;hr>
+&lt;h2 id="healthcheck-container-với-bash">Healthcheck container với Bash
+&lt;/h2>&lt;p>Khi container không có Docker healthcheck tích hợp sẵn, bạn có thể tự viết script kiểm tra bằng Bash:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="cp">#!/usr/bin/env bash
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cp">&lt;/span>&lt;span class="c1"># Kiểm tra HTTP endpoint của container&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">check_http&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> &lt;span class="nv">container_name&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">1&lt;/span>&lt;span class="p">:?Container name required&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> &lt;span class="nv">port&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">2&lt;/span>&lt;span class="k">:-&lt;/span>&lt;span class="nv">80&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> &lt;span class="nv">path&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">3&lt;/span>&lt;span class="k">:-&lt;/span>&lt;span class="p">/&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> &lt;span class="nv">expected_status&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">4&lt;/span>&lt;span class="k">:-&lt;/span>&lt;span class="nv">200&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> ip
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">ip&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>docker inspect --format&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;{{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}&amp;#39;&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$container_name&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> 2&amp;gt;/dev/null&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">[[&lt;/span> -z &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$ip&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="o">]]&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;[ERROR] Cannot get IP for container &lt;/span>&lt;span class="nv">$container_name&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> status
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">status&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>curl -s -o /dev/null -w &lt;span class="s2">&amp;#34;%{http_code}&amp;#34;&lt;/span> &lt;span class="s2">&amp;#34;http://&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">ip&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">:&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">port&lt;/span>&lt;span class="si">}${&lt;/span>&lt;span class="nv">path&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> 2&amp;gt;/dev/null &lt;span class="o">||&lt;/span> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;000&amp;#34;&lt;/span>&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">[[&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$status&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$expected_status&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="o">]]&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;[OK] &lt;/span>&lt;span class="nv">$container_name&lt;/span>&lt;span class="s2"> HTTP check passed (status: &lt;/span>&lt;span class="nv">$status&lt;/span>&lt;span class="s2">)&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="m">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;[WARN] &lt;/span>&lt;span class="nv">$container_name&lt;/span>&lt;span class="s2"> HTTP check failed (status: &lt;/span>&lt;span class="nv">$status&lt;/span>&lt;span class="s2">, expected: &lt;/span>&lt;span class="nv">$expected_status&lt;/span>&lt;span class="s2">)&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Kiểm tra nhiều containers&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">check_http &lt;span class="s2">&amp;#34;nginx&amp;#34;&lt;/span> &lt;span class="m">80&lt;/span> &lt;span class="s2">&amp;#34;/&amp;#34;&lt;/span> &lt;span class="s2">&amp;#34;200&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">check_http &lt;span class="s2">&amp;#34;api&amp;#34;&lt;/span> &lt;span class="m">8080&lt;/span> &lt;span class="s2">&amp;#34;/health&amp;#34;&lt;/span> &lt;span class="s2">&amp;#34;200&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;hr>
+&lt;h2 id="deploy-stack-với-bash">Deploy stack với Bash
+&lt;/h2>&lt;p>Khi deploy một Docker Compose stack, bạn thường cần: pull image mới, dừng service cũ, khởi động lại, và kiểm tra status. Bash giúp bạn orchestrate toàn bộ quá trình này:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;span class="lnt">37
+&lt;/span>&lt;span class="lnt">38
+&lt;/span>&lt;span class="lnt">39
+&lt;/span>&lt;span class="lnt">40
+&lt;/span>&lt;span class="lnt">41
+&lt;/span>&lt;span class="lnt">42
+&lt;/span>&lt;span class="lnt">43
+&lt;/span>&lt;span class="lnt">44
+&lt;/span>&lt;span class="lnt">45
+&lt;/span>&lt;span class="lnt">46
+&lt;/span>&lt;span class="lnt">47
+&lt;/span>&lt;span class="lnt">48
+&lt;/span>&lt;span class="lnt">49
+&lt;/span>&lt;span class="lnt">50
+&lt;/span>&lt;span class="lnt">51
+&lt;/span>&lt;span class="lnt">52
+&lt;/span>&lt;span class="lnt">53
+&lt;/span>&lt;span class="lnt">54
+&lt;/span>&lt;span class="lnt">55
+&lt;/span>&lt;span class="lnt">56
+&lt;/span>&lt;span class="lnt">57
+&lt;/span>&lt;span class="lnt">58
+&lt;/span>&lt;span class="lnt">59
+&lt;/span>&lt;span class="lnt">60
+&lt;/span>&lt;span class="lnt">61
+&lt;/span>&lt;span class="lnt">62
+&lt;/span>&lt;span class="lnt">63
+&lt;/span>&lt;span class="lnt">64
+&lt;/span>&lt;span class="lnt">65
+&lt;/span>&lt;span class="lnt">66
+&lt;/span>&lt;span class="lnt">67
+&lt;/span>&lt;span class="lnt">68
+&lt;/span>&lt;span class="lnt">69
+&lt;/span>&lt;span class="lnt">70
+&lt;/span>&lt;span class="lnt">71
+&lt;/span>&lt;span class="lnt">72
+&lt;/span>&lt;span class="lnt">73
+&lt;/span>&lt;span class="lnt">74
+&lt;/span>&lt;span class="lnt">75
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="cp">#!/usr/bin/env bash
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cp">&lt;/span>&lt;span class="c1"># deploy-stack.sh — Deploy Docker Compose stack với healthcheck&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">set&lt;/span> -euo pipefail
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">readonly&lt;/span> &lt;span class="nv">COMPOSE_FILE&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">1&lt;/span>&lt;span class="k">:-&lt;/span>&lt;span class="nv">docker&lt;/span>&lt;span class="p">-compose.yml&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">readonly&lt;/span> &lt;span class="nv">PROJECT_NAME&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">2&lt;/span>&lt;span class="k">:-&lt;/span>&lt;span class="nv">myapp&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">readonly&lt;/span> &lt;span class="nv">HEALTH_TIMEOUT&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">HEALTH_TIMEOUT&lt;/span>&lt;span class="k">:-&lt;/span>&lt;span class="nv">60&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">readonly&lt;/span> &lt;span class="nv">LOG_FILE&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;/var/log/docker-deploy.log&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">log&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;[&lt;/span>&lt;span class="k">$(&lt;/span>date &lt;span class="s1">&amp;#39;+%Y-%m-%d %H:%M:%S&amp;#39;&lt;/span>&lt;span class="k">)&lt;/span>&lt;span class="s2">] &lt;/span>&lt;span class="nv">$*&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="p">|&lt;/span> tee -a &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$LOG_FILE&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Pull image mới nhất&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">pull_images&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> log &lt;span class="s2">&amp;#34;Pulling latest images...&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> docker compose -f &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$COMPOSE_FILE&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> -p &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$PROJECT_NAME&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> pull
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Deploy stack&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">deploy_stack&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> log &lt;span class="s2">&amp;#34;Deploying stack...&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> docker compose -f &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$COMPOSE_FILE&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> -p &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$PROJECT_NAME&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> up -d --remove-orphans
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Đợi container healthy&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">wait_healthy&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> &lt;span class="nv">service&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$1&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> &lt;span class="nv">elapsed&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> log &lt;span class="s2">&amp;#34;Waiting for &lt;/span>&lt;span class="nv">$service&lt;/span>&lt;span class="s2"> to become healthy...&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">while&lt;/span> &lt;span class="o">[[&lt;/span> &lt;span class="nv">$elapsed&lt;/span> -lt &lt;span class="nv">$HEALTH_TIMEOUT&lt;/span> &lt;span class="o">]]&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">do&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> status
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">status&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>docker compose -f &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$COMPOSE_FILE&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> -p &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$PROJECT_NAME&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> ps --format json &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$service&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> 2&amp;gt;/dev/null &lt;span class="p">|&lt;/span> grep -o &lt;span class="s1">&amp;#39;&amp;#34;Health&amp;#34;:&amp;#34;[^&amp;#34;]*&amp;#34;&amp;#39;&lt;/span> &lt;span class="p">|&lt;/span> cut -d&lt;span class="s1">&amp;#39;&amp;#34;&amp;#39;&lt;/span> -f4&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">[[&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$status&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;healthy&amp;#34;&lt;/span> &lt;span class="o">]]&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> log &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$service&lt;/span>&lt;span class="s2"> is healthy&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="m">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> sleep &lt;span class="m">2&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">elapsed&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$((&lt;/span>elapsed &lt;span class="o">+&lt;/span> &lt;span class="m">2&lt;/span>&lt;span class="k">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">done&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> log &lt;span class="s2">&amp;#34;[WARN] &lt;/span>&lt;span class="nv">$service&lt;/span>&lt;span class="s2"> did not become healthy within &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">HEALTH_TIMEOUT&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">s&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Rollback khi deploy thất bại&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">rollback&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> log &lt;span class="s2">&amp;#34;[ERROR] Deployment failed — rolling back...&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> docker compose -f &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$COMPOSE_FILE&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> -p &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$PROJECT_NAME&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> down
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># Có thể restore từ backup ở đây&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">trap&lt;/span> rollback ERR
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">main&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> log &lt;span class="s2">&amp;#34;=== Deployment started ===&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> pull_images
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> deploy_stack
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># Đợi tất cả service healthy&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> services
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">services&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>docker compose -f &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$COMPOSE_FILE&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> -p &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$PROJECT_NAME&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> ps --services&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> svc in &lt;span class="nv">$services&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">do&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> wait_healthy &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$svc&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">done&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> log &lt;span class="s2">&amp;#34;=== Deployment completed successfully ===&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">main &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$@&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;hr>
+&lt;h2 id="ví-dụ-thực-hành-script-tự-động-restart-container-khi-crash">Ví dụ thực hành: Script tự động restart container khi crash
+&lt;/h2>&lt;p>Đây là script hoàn chỉnh kết hợp tất cả kỹ thuật trên, được thiết kế chạy qua cron để giữ container luôn hoạt động:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt"> 10
+&lt;/span>&lt;span class="lnt"> 11
+&lt;/span>&lt;span class="lnt"> 12
+&lt;/span>&lt;span class="lnt"> 13
+&lt;/span>&lt;span class="lnt"> 14
+&lt;/span>&lt;span class="lnt"> 15
+&lt;/span>&lt;span class="lnt"> 16
+&lt;/span>&lt;span class="lnt"> 17
+&lt;/span>&lt;span class="lnt"> 18
+&lt;/span>&lt;span class="lnt"> 19
+&lt;/span>&lt;span class="lnt"> 20
+&lt;/span>&lt;span class="lnt"> 21
+&lt;/span>&lt;span class="lnt"> 22
+&lt;/span>&lt;span class="lnt"> 23
+&lt;/span>&lt;span class="lnt"> 24
+&lt;/span>&lt;span class="lnt"> 25
+&lt;/span>&lt;span class="lnt"> 26
+&lt;/span>&lt;span class="lnt"> 27
+&lt;/span>&lt;span class="lnt"> 28
+&lt;/span>&lt;span class="lnt"> 29
+&lt;/span>&lt;span class="lnt"> 30
+&lt;/span>&lt;span class="lnt"> 31
+&lt;/span>&lt;span class="lnt"> 32
+&lt;/span>&lt;span class="lnt"> 33
+&lt;/span>&lt;span class="lnt"> 34
+&lt;/span>&lt;span class="lnt"> 35
+&lt;/span>&lt;span class="lnt"> 36
+&lt;/span>&lt;span class="lnt"> 37
+&lt;/span>&lt;span class="lnt"> 38
+&lt;/span>&lt;span class="lnt"> 39
+&lt;/span>&lt;span class="lnt"> 40
+&lt;/span>&lt;span class="lnt"> 41
+&lt;/span>&lt;span class="lnt"> 42
+&lt;/span>&lt;span class="lnt"> 43
+&lt;/span>&lt;span class="lnt"> 44
+&lt;/span>&lt;span class="lnt"> 45
+&lt;/span>&lt;span class="lnt"> 46
+&lt;/span>&lt;span class="lnt"> 47
+&lt;/span>&lt;span class="lnt"> 48
+&lt;/span>&lt;span class="lnt"> 49
+&lt;/span>&lt;span class="lnt"> 50
+&lt;/span>&lt;span class="lnt"> 51
+&lt;/span>&lt;span class="lnt"> 52
+&lt;/span>&lt;span class="lnt"> 53
+&lt;/span>&lt;span class="lnt"> 54
+&lt;/span>&lt;span class="lnt"> 55
+&lt;/span>&lt;span class="lnt"> 56
+&lt;/span>&lt;span class="lnt"> 57
+&lt;/span>&lt;span class="lnt"> 58
+&lt;/span>&lt;span class="lnt"> 59
+&lt;/span>&lt;span class="lnt"> 60
+&lt;/span>&lt;span class="lnt"> 61
+&lt;/span>&lt;span class="lnt"> 62
+&lt;/span>&lt;span class="lnt"> 63
+&lt;/span>&lt;span class="lnt"> 64
+&lt;/span>&lt;span class="lnt"> 65
+&lt;/span>&lt;span class="lnt"> 66
+&lt;/span>&lt;span class="lnt"> 67
+&lt;/span>&lt;span class="lnt"> 68
+&lt;/span>&lt;span class="lnt"> 69
+&lt;/span>&lt;span class="lnt"> 70
+&lt;/span>&lt;span class="lnt"> 71
+&lt;/span>&lt;span class="lnt"> 72
+&lt;/span>&lt;span class="lnt"> 73
+&lt;/span>&lt;span class="lnt"> 74
+&lt;/span>&lt;span class="lnt"> 75
+&lt;/span>&lt;span class="lnt"> 76
+&lt;/span>&lt;span class="lnt"> 77
+&lt;/span>&lt;span class="lnt"> 78
+&lt;/span>&lt;span class="lnt"> 79
+&lt;/span>&lt;span class="lnt"> 80
+&lt;/span>&lt;span class="lnt"> 81
+&lt;/span>&lt;span class="lnt"> 82
+&lt;/span>&lt;span class="lnt"> 83
+&lt;/span>&lt;span class="lnt"> 84
+&lt;/span>&lt;span class="lnt"> 85
+&lt;/span>&lt;span class="lnt"> 86
+&lt;/span>&lt;span class="lnt"> 87
+&lt;/span>&lt;span class="lnt"> 88
+&lt;/span>&lt;span class="lnt"> 89
+&lt;/span>&lt;span class="lnt"> 90
+&lt;/span>&lt;span class="lnt"> 91
+&lt;/span>&lt;span class="lnt"> 92
+&lt;/span>&lt;span class="lnt"> 93
+&lt;/span>&lt;span class="lnt"> 94
+&lt;/span>&lt;span class="lnt"> 95
+&lt;/span>&lt;span class="lnt"> 96
+&lt;/span>&lt;span class="lnt"> 97
+&lt;/span>&lt;span class="lnt"> 98
+&lt;/span>&lt;span class="lnt"> 99
+&lt;/span>&lt;span class="lnt">100
+&lt;/span>&lt;span class="lnt">101
+&lt;/span>&lt;span class="lnt">102
+&lt;/span>&lt;span class="lnt">103
+&lt;/span>&lt;span class="lnt">104
+&lt;/span>&lt;span class="lnt">105
+&lt;/span>&lt;span class="lnt">106
+&lt;/span>&lt;span class="lnt">107
+&lt;/span>&lt;span class="lnt">108
+&lt;/span>&lt;span class="lnt">109
+&lt;/span>&lt;span class="lnt">110
+&lt;/span>&lt;span class="lnt">111
+&lt;/span>&lt;span class="lnt">112
+&lt;/span>&lt;span class="lnt">113
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="cp">#!/usr/bin/env bash
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cp">&lt;/span>&lt;span class="c1"># ==============================================================================&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Script : docker-watchdog.sh&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Mục đích: Giám sát container và tự động restart khi crash&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Chạy qua cron: */2 * * * * /opt/scripts/docker-watchdog.sh&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># ==============================================================================&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">set&lt;/span> -euo pipefail
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">IFS&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">$&amp;#39;\n\t&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">readonly&lt;/span> &lt;span class="nv">WATCHED_CONTAINERS&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">WATCHED_CONTAINERS&lt;/span>&lt;span class="k">:-&lt;/span>&lt;span class="nv">nginx&lt;/span>&lt;span class="p">,api,worker&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">readonly&lt;/span> &lt;span class="nv">MAX_RESTART&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">MAX_RESTART&lt;/span>&lt;span class="k">:-&lt;/span>&lt;span class="nv">3&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">readonly&lt;/span> &lt;span class="nv">RESTART_WINDOW&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">RESTART_WINDOW&lt;/span>&lt;span class="k">:-&lt;/span>&lt;span class="nv">300&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">readonly&lt;/span> &lt;span class="nv">LOG_FILE&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;/var/log/docker-watchdog.log&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">readonly&lt;/span> &lt;span class="nv">STATE_DIR&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;/var/run/docker-watchdog&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">mkdir -p &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$STATE_DIR&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">log&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;[&lt;/span>&lt;span class="k">$(&lt;/span>date &lt;span class="s1">&amp;#39;+%Y-%m-%d %H:%M:%S&amp;#39;&lt;/span>&lt;span class="k">)&lt;/span>&lt;span class="s2">] &lt;/span>&lt;span class="nv">$*&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="p">|&lt;/span> tee -a &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$LOG_FILE&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> 2&amp;gt;/dev/null
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Đếm số lần restart trong khoảng thời gian&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">restart_count&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> &lt;span class="nv">container&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$1&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> &lt;span class="nv">state_file&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">STATE_DIR&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">/&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">container&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">.restarts&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> &lt;span class="nv">count&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="m">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">[[&lt;/span> -f &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$state_file&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="o">]]&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">while&lt;/span> &lt;span class="nv">IFS&lt;/span>&lt;span class="o">=&lt;/span> &lt;span class="nb">read&lt;/span> -r timestamp&lt;span class="p">;&lt;/span> &lt;span class="k">do&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">[[&lt;/span> &lt;span class="k">$(&lt;/span>date +%s&lt;span class="k">)&lt;/span> -lt &lt;span class="k">$((&lt;/span>timestamp &lt;span class="o">+&lt;/span> RESTART_WINDOW&lt;span class="k">))&lt;/span> &lt;span class="o">]]&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">count&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$((&lt;/span>count &lt;span class="o">+&lt;/span> &lt;span class="m">1&lt;/span>&lt;span class="k">))&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">done&lt;/span> &amp;lt; &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$state_file&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># Dọn timestamp cũ&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> awk -v &lt;span class="nv">cutoff&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(($(&lt;/span>date +%s&lt;span class="k">)&lt;/span> &lt;span class="o">-&lt;/span> RESTART_WINDOW&lt;span class="k">))&lt;/span> &lt;span class="s1">&amp;#39;$1 &amp;gt;= cutoff&amp;#39;&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$state_file&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &amp;gt; &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">state_file&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">.tmp&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> mv &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">state_file&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">.tmp&amp;#34;&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$state_file&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$count&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">record_restart&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> &lt;span class="nv">container&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$1&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="k">$(&lt;/span>date +%s&lt;span class="k">)&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &amp;gt;&amp;gt; &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">STATE_DIR&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">/&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">container&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">.restarts&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Kiểm tra container có đang chạy không&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">is_running&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> docker ps --format &lt;span class="s1">&amp;#39;{{.Names}}&amp;#39;&lt;/span> &lt;span class="p">|&lt;/span> grep -q &lt;span class="s2">&amp;#34;^&lt;/span>&lt;span class="nv">$1&lt;/span>$&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Kiểm tra container có tồn tại không&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">container_exists&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> docker ps -a --format &lt;span class="s1">&amp;#39;{{.Names}}&amp;#39;&lt;/span> &lt;span class="p">|&lt;/span> grep -q &lt;span class="s2">&amp;#34;^&lt;/span>&lt;span class="nv">$1&lt;/span>$&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">restart_container&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> &lt;span class="nv">container&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$1&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> count
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">count&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>restart_count &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$container&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">[[&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$count&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> -ge &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$MAX_RESTART&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="o">]]&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> log &lt;span class="s2">&amp;#34;[CRIT] &lt;/span>&lt;span class="nv">$container&lt;/span>&lt;span class="s2"> restarted &lt;/span>&lt;span class="nv">$count&lt;/span>&lt;span class="s2"> times in &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">RESTART_WINDOW&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">s — manual intervention required&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> log &lt;span class="s2">&amp;#34;[WARN] &lt;/span>&lt;span class="nv">$container&lt;/span>&lt;span class="s2"> is not running — restarting...&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> docker restart &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$container&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> 2&amp;gt;/dev/null
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> record_restart &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$container&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> sleep &lt;span class="m">5&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> is_running &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$container&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> log &lt;span class="s2">&amp;#34;[INFO] &lt;/span>&lt;span class="nv">$container&lt;/span>&lt;span class="s2"> restarted successfully&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> log &lt;span class="s2">&amp;#34;[ERROR] &lt;/span>&lt;span class="nv">$container&lt;/span>&lt;span class="s2"> failed to restart&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">check_container&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> &lt;span class="nv">container&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$1&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> ! container_exists &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$container&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> log &lt;span class="s2">&amp;#34;[WARN] &lt;/span>&lt;span class="nv">$container&lt;/span>&lt;span class="s2"> does not exist — skipping&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="m">0&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> is_running &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$container&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># Kiểm tra health status nếu có&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> health
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">health&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>docker inspect --format&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;{{if .State.Health}}{{.State.Health.Status}}{{else}}no-healthcheck{{end}}&amp;#39;&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$container&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> 2&amp;gt;/dev/null&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">[[&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$health&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="o">==&lt;/span> &lt;span class="s2">&amp;#34;unhealthy&amp;#34;&lt;/span> &lt;span class="o">]]&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> log &lt;span class="s2">&amp;#34;[WARN] &lt;/span>&lt;span class="nv">$container&lt;/span>&lt;span class="s2"> is unhealthy&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> restart_container &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$container&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> restart_container &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$container&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">main&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">IFS&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">&amp;#39;,&amp;#39;&lt;/span> &lt;span class="nb">read&lt;/span> -ra CONTAINERS &lt;span class="o">&amp;lt;&amp;lt;&amp;lt;&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$WATCHED_CONTAINERS&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">for&lt;/span> container in &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">CONTAINERS&lt;/span>&lt;span class="p">[@]&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">do&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">container&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>&lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$container&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="p">|&lt;/span> xargs&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> check_container &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$container&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">done&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">main &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$@&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="cấu-hình-cron">Cấu hình cron
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Chạy mỗi 2 phút&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">crontab -e
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">*/2 * * * * /opt/scripts/docker-watchdog.sh &amp;gt;&amp;gt; /var/log/docker-watchdog-cron.log 2&amp;gt;&lt;span class="p">&amp;amp;&lt;/span>&lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="kết-quả-mẫu">Kết quả mẫu
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-text" data-lang="text">&lt;span class="line">&lt;span class="cl">[2026-08-31 10:00:01] [INFO] nginx is healthy
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">[2026-08-31 10:00:01] [WARN] api is not running — restarting...
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">[2026-08-31 10:00:06] [INFO] api restarted successfully
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">[2026-08-31 10:00:06] [INFO] worker is healthy
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;hr>
+&lt;h2 id="ghi-chú-triển-khai">Ghi chú triển khai
+&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>Docker socket permission:&lt;/strong> Script Bash cần truy cập Docker daemon qua socket &lt;code>/var/run/docker.sock&lt;/code>. Đảm bảo user chạy script thuộc nhóm &lt;code>docker&lt;/code> hoặc có quyền sudo.&lt;/li>
+&lt;li>&lt;strong>BatchMode SSH:&lt;/strong> Khi chạy script Docker qua SSH (từ bài trước), sử dụng &lt;code>ssh -o BatchMode=yes&lt;/code> để tránh prompt xác nhận host key.&lt;/li>
+&lt;li>&lt;strong>Container naming convention:&lt;/strong> Luôn dùng &lt;code>--name&lt;/code> khi chạy container để dễ quản lý. Tránh dùng generated ID vì khó nhớ và không ổn định.&lt;/li>
+&lt;li>&lt;strong>Resource cleanup:&lt;/strong> Script watchdog chỉ restart container — không tự động xóa. Kết hợp với &lt;code>docker system prune&lt;/code> chạy định kỳ để giải phóng disk space.&lt;/li>
+&lt;li>&lt;strong>Logging aggregation:&lt;/strong> Trong môi trường production, container logs nên được ship đến centralized logging system (ELK, Loki) thay vì chỉ ghi local file.&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="lời-kết">Lời kết
+&lt;/h2>&lt;p>Kết hợp Bash và Docker tạo ra một công cụ quản lý container mạnh mẽ, linh hoạt và nhẹ nhàng hơn bất kỳ orchestration tool phức tạp nào. Từ việc liệt kê container, kiểm tra health status, dọn dẹp resource đến viết script watchdog tự động restart khi crash — tất cả đều nằm trong tay bạn chỉ với Bash và Docker CLI.&lt;/p>
+&lt;p>Ở &lt;a class="link" href="https://tech.nguuyen.io.vn/posts/bash/bash-step-fifteen/" >bài tiếp theo&lt;/a>, chúng ta sẽ khám phá cách &lt;strong>monitoring với Bash&lt;/strong>: thu thập metric hệ thống, gửi báo cáo qua email/webhook, và tạo dashboard báo cáo hàng ngày.&lt;/p></description></item><item><title>Tự động hóa SSH với Bash: Quản lý multi-server hiệu quả trong DevOps</title><link>https://tech.nguuyen.io.vn/vi/posts/bash/bash-step-thirteen/</link><pubDate>Sun, 30 Aug 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/bash/bash-step-thirteen/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/bash/bash-step-thirteen.jpg" alt="Featured image of post Tự động hóa SSH với Bash: Quản lý multi-server hiệu quả trong DevOps" />&lt;h2 id="tự-động-hóa-ssh-với-bash-trong-devops">Tự động hóa SSH với Bash trong DevOps
 &lt;/h2>&lt;p>Trong &lt;a class="link" href="https://tech.nguuyen.io.vn/posts/bash/bash-step-twelve/" >bài viết trước&lt;/a>, chúng ta đã tìm hiểu cách giám sát tài nguyên hệ thống và can thiệp tiến trình ngay trên một server duy nhất. Nhưng trong thực tế DevOps, bạn hiếm khi chỉ quản lý một máy. Khi hạ tầng mở rộng đến 10, 50 hay thậm chí hàng trăm server, việc SSH thủ công vào từng máy để chạy lệnh là một ác mộng — chậm, dễ sai và không thể lặp lại.&lt;/p>
 &lt;p>Tự động hóa SSH bằng Bash giải quyết vấn đề này: bạn viết một lần, chạy trên mọi server, kết quả đồng nhất và có thể tích hợp vào pipeline CI/CD hoặc cron job. Bài viết này sẽ hướng dẫn bạn thiết lập SSH key-based authentication, cấu hình &lt;code>~/.ssh/config&lt;/code> để quản lý nhiều server, truyền file an toàn với &lt;code>scp&lt;/code> và &lt;code>rsync&lt;/code>, cùng một script thực hành chạy lệnh song song trên nhiều server.&lt;/p>
 &lt;hr>
