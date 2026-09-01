@@ -1,0 +1,780 @@
+<!doctype html><html lang=en dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="Comprehensive guide to building monitoring systems with Bash: collecting CPU/RAM/Disk/Network metrics, sending alerts via Slack/Telegram/email, logging to CSV, and generating daily reports."><title>Monitoring with Bash: System Reporting and Automated Alerting in DevOps</title>
+<link rel=canonical href=https://tech.nguuyen.io.vn/posts/bash/bash-step-fifteen/><link rel=stylesheet href=/scss/style.min.9ca857cbc7cfaec08156eb36b947742d1bc56963af1c366181da56b4a8f1705b.css><meta property='og:title' content="Monitoring with Bash: System Reporting and Automated Alerting in DevOps"><meta property='og:description' content="Comprehensive guide to building monitoring systems with Bash: collecting CPU/RAM/Disk/Network metrics, sending alerts via Slack/Telegram/email, logging to CSV, and generating daily reports."><meta property='og:url' content='https://tech.nguuyen.io.vn/posts/bash/bash-step-fifteen/'><meta property='og:site_name' content='Hoang Duong'><meta property='og:type' content='article'><meta property='article:section' content='Posts'><meta property='article:tag' content='bash'><meta property='article:tag' content='shell-script'><meta property='article:tag' content='devops'><meta property='article:tag' content='monitoring'><meta property='article:tag' content='alerting'><meta property='article:tag' content='slack'><meta property='article:tag' content='telegram'><meta property='article:tag' content='cron'><meta property='article:tag' content='system-report'><meta property='article:published_time' content='2026-09-01T00:00:00+00:00'><meta property='article:modified_time' content='2026-09-01T00:00:00+07:00'><meta property='og:image' content='https://tech.nguuyen.io.vn/images/bash/bash-step-fifteen.jpg'><meta name=twitter:title content="Monitoring with Bash: System Reporting and Automated Alerting in DevOps"><meta name=twitter:description content="Comprehensive guide to building monitoring systems with Bash: collecting CPU/RAM/Disk/Network metrics, sending alerts via Slack/Telegram/email, logging to CSV, and generating daily reports."><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://tech.nguuyen.io.vn/images/bash/bash-step-fifteen.jpg'><link rel=icon type=image/x-icon href=/favicon.ico><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel=stylesheet></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><header class="hd-header is-article-header"><div class=hd-header-inner><div class=hd-brand><a href=/ class=hd-logo-link><span class=hd-logo-text>Hoang Duong</span></a></div><div class=hd-header-divider aria-hidden=true></div><div class=hd-header-rail><a href=/ class="header-rail-crumb header-rail-home">BLOG
+</a><span class=header-rail-sep>//</span>
+<a href=/categories/devops/ class="header-rail-crumb header-rail-cat">[DEVOPS]
+</a><span class=header-rail-title>Monitoring with Bash: System Reporting and Automated Alerting in DevOps</span></div><div class=hd-header-spacer></div><nav class=hd-nav-links><button id=hd-menu-toggle class=hd-menu-trigger-fixed aria-label="Toggle Menu" title=Menu type=button><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentcolor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" class="chevron-icon"><polyline points="6 9 12 15 18 9"/></svg></button></nav></div></header><div id=hd-menu-dropdown class=hd-menu-popover aria-hidden=true><div class=hd-popover-inner><div class=hd-popover-nav><span class=popover-section-label>NAVIGATION</span>
+<a href=/ class=popover-item>Home</a>
+<a href=/about/ class=popover-item>About</a>
+<a href=/archives/ class=popover-item>Archives</a>
+<a href=/links/ class=popover-item>Links</a>
+<a href=/categories/ class=popover-item>Categories</a></div><div class=hd-popover-footer><a href=/vi/posts/bash/bash-step-fifteen/ class="popover-btn lang-btn" title="Tiếng Việt"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentcolor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>VI</span>
+</a><button class="popover-btn theme-btn dark-mode-toggle" data-toggle-theme title="Dark Mode" type=button>
+<svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+</button>
+<button type=button class="popover-btn search-btn search-trigger-btn" data-open-search aria-label="Search (Cmd+K)" title="Search (Cmd+K)">
+<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentcolor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<span class=search-kbd-badge>⌘K</span></button></div></div></div><div id=hd-menu-backdrop class=hd-menu-backdrop aria-hidden=true></div><div class=hd-site-wrapper><main class=hd-main><div class=hd-article-layout><div class=hd-hero-banner-wrap><div class=hd-hero-banner><img src=/images/bash/bash-step-fifteen.jpg alt="Monitoring with Bash: System Reporting and Automated Alerting in DevOps" class=hd-hero-banner-img></div></div><div class=hd-article-container><div class=hd-article-grid><div class=hd-article-main><article class=hd-article-body><header class=hd-article-header><div class=hd-article-meta-top><time class=meta-date datetime=2026-09-01T00:00:00Z>SEPTEMBER 01, 2026
+</time><span class=meta-dot>&#183;</span>
+<span class=meta-reading-time>10 MIN READ</span>
+<span class=meta-dot>&#183;</span>
+<span class=meta-author>HOÀNG DƯƠNG</span>
+<span class=meta-dot>&#183;</span>
+<a href=/vi/posts/bash/bash-step-fifteen/ class=meta-lang-switch><svg viewBox="0 0 24 24" width="13" height="13" stroke="currentcolor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:3px"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>VI</span></a></div><h1 class=hd-article-title>Monitoring with Bash: System Reporting and Automated Alerting in DevOps</h1><p class=hd-article-description>Comprehensive guide to building monitoring systems with Bash: collecting CPU/RAM/Disk/Network metrics, sending alerts via Slack/Telegram/email, logging to CSV, and generating daily reports.</p><div class=hd-article-categories><a href=/categories/devops/ class=hd-cat-pill>DEVOPS
+</a><a href=/categories/bash/ class=hd-cat-pill>BASH</a></div></header><section class="article-content hd-prose"><h2 id=monitoring-with-bash-in-devops>Monitoring with Bash in DevOps</h2><p>In the <a class=link href=/posts/bash/bash-step-fourteen/>previous post</a>, we explored combining Bash and Docker to manage containers and write watchdog scripts for automatic crash recovery. Now, we expand the monitoring scope—not just containers, but the entire system: CPU, RAM, Disk, Network—and alert the team when issues arise.</p><p>In DevOps, monitoring is the &ldquo;eyes&rdquo; that help you detect problems before they become serious incidents. Many assume monitoring requires Prometheus, Grafana, or Datadog—but in reality, a Bash script combined with cron can collect metrics, send alerts via Slack/Telegram, and generate daily reports without installing any agents.</p><p>This article covers collecting core system metrics, sending alerts via webhooks, storing data as CSV for later analysis, and combining everything into a complete daily report script.</p><hr><h2 id=collecting-system-metrics>Collecting System Metrics</h2><h3 id=cpu>CPU</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># CPU usage from idle</span>
+</span></span><span class=line><span class=cl>cpu_usage<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    top -bn1 <span class=p>|</span> grep <span class=s2>&#34;Cpu(s)&#34;</span> <span class=p>|</span> awk <span class=s1>&#39;{printf &#34;%.1f&#34;, 100 - $8}&#39;</span> <span class=p>|</span> tr -d <span class=s1>&#39;,&#39;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># 1-minute load average</span>
+</span></span><span class=line><span class=cl>load_avg<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    awk <span class=s1>&#39;{print $1}&#39;</span> /proc/loadavg
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Number of CPU cores</span>
+</span></span><span class=line><span class=cl>cpu_cores<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    nproc
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=ram>RAM</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># RAM usage percentage</span>
+</span></span><span class=line><span class=cl>ram_usage<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    free <span class=p>|</span> awk <span class=s1>&#39;/Mem:/ {printf &#34;%.1f&#34;, $3/$2*100}&#39;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># RAM used (MB)</span>
+</span></span><span class=line><span class=cl>ram_used_mb<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    free -m <span class=p>|</span> awk <span class=s1>&#39;/Mem:/ {print $3}&#39;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># RAM total (MB)</span>
+</span></span><span class=line><span class=cl>ram_total<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    free -m <span class=p>|</span> awk <span class=s1>&#39;/Mem:/ {print $2}&#39;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Swap usage percentage</span>
+</span></span><span class=line><span class=cl>swap_usage<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    free <span class=p>|</span> awk <span class=s1>&#39;/Swap:/ {if ($2 &gt; 0) printf &#34;%.1f&#34;, $3/$2*100; else print &#34;0&#34;}&#39;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=disk>Disk</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Root partition usage percentage</span>
+</span></span><span class=line><span class=cl>disk_usage<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    df / <span class=p>|</span> tail -1 <span class=p>|</span> awk <span class=s1>&#39;{print $5}&#39;</span> <span class=p>|</span> tr -d <span class=s1>&#39;%&#39;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Disk used (GB)</span>
+</span></span><span class=line><span class=cl>disk_used_gb<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    df -BG / <span class=p>|</span> tail -1 <span class=p>|</span> awk <span class=s1>&#39;{print $3}&#39;</span> <span class=p>|</span> tr -d <span class=s1>&#39;G&#39;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Disk total (GB)</span>
+</span></span><span class=line><span class=cl>disk_total<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    df -BG / <span class=p>|</span> tail -1 <span class=p>|</span> awk <span class=s1>&#39;{print $2}&#39;</span> <span class=p>|</span> tr -d <span class=s1>&#39;G&#39;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=network>Network</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Network bytes received (since boot)</span>
+</span></span><span class=line><span class=cl>net_rx<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    awk <span class=s1>&#39;/eth0|ens/ {print $2}&#39;</span> /proc/net/dev
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Network bytes transmitted (since boot)</span>
+</span></span><span class=line><span class=cl>net_tx<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    awk <span class=s1>&#39;/eth0|ens/ {print $10}&#39;</span> /proc/net/dev
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Number of established TCP connections</span>
+</span></span><span class=line><span class=cl>tcp_connections<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    ss -s <span class=p>|</span> awk <span class=s1>&#39;/^TCP:/ {print $4}&#39;</span> <span class=p>|</span> tr -d <span class=s1>&#39;,&#39;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=processes-and-uptime>Processes and Uptime</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Number of running processes</span>
+</span></span><span class=line><span class=cl>running_procs<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    ps aux <span class=p>|</span> wc -l
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Uptime in hours</span>
+</span></span><span class=line><span class=cl>uptime_hours<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    awk <span class=s1>&#39;{printf &#34;%.1f&#34;, $1/3600}&#39;</span> /proc/uptime
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=sending-alerts-via-webhook>Sending Alerts via Webhook</h2><h3 id=slack-webhook>Slack Webhook</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>send_slack<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>message</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>webhook</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>SLACK_WEBHOOK</span><span class=k>:-</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> -z <span class=s2>&#34;</span><span class=nv>$webhook</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;[WARN] SLACK_WEBHOOK not set — skipping notification&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    curl -s -X POST -H <span class=s1>&#39;Content-type: application/json&#39;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>        --data <span class=s2>&#34;{\&#34;text\&#34;:\&#34;</span><span class=si>${</span><span class=nv>message</span><span class=si>}</span><span class=s2>\&#34;}&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>        <span class=s2>&#34;</span><span class=nv>$webhook</span><span class=s2>&#34;</span> &gt;/dev/null 2&gt;<span class=p>&amp;</span><span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=telegram-bot-api>Telegram Bot API</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>send_telegram<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>message</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>bot_token</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>TELEGRAM_BOT_TOKEN</span><span class=k>:-</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>chat_id</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>TELEGRAM_CHAT_ID</span><span class=k>:-</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> -z <span class=s2>&#34;</span><span class=nv>$bot_token</span><span class=s2>&#34;</span> <span class=o>||</span> -z <span class=s2>&#34;</span><span class=nv>$chat_id</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;[WARN] TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID not set&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    curl -s -X POST <span class=s2>&#34;https://api.telegram.org/bot</span><span class=si>${</span><span class=nv>bot_token</span><span class=si>}</span><span class=s2>/sendMessage&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>        -d <span class=s2>&#34;chat_id=</span><span class=si>${</span><span class=nv>chat_id</span><span class=si>}</span><span class=s2>&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>        -d <span class=s2>&#34;text=</span><span class=si>${</span><span class=nv>message</span><span class=si>}</span><span class=s2>&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>        -d <span class=s2>&#34;parse_mode=Markdown&#34;</span> &gt;/dev/null 2&gt;<span class=p>&amp;</span><span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=email-via-mailxsendmail>Email (via mailx/sendmail)</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>send_email<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>subject</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>body</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$2</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>recipient</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>ALERT_EMAIL</span><span class=k>:-</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> -z <span class=s2>&#34;</span><span class=nv>$recipient</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;[WARN] ALERT_EMAIL not set&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$body</span><span class=s2>&#34;</span> <span class=p>|</span> mail -s <span class=s2>&#34;</span><span class=nv>$subject</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$recipient</span><span class=s2>&#34;</span> 2&gt;/dev/null
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=storing-metrics-to-csv>Storing Metrics to CSV</h2><p>Writing metrics to a CSV file enables trend analysis and chart generation later:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>CSV_FILE</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>CSV_FILE</span><span class=k>:-</span><span class=p>/var/log/metrics.csv</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Create header if file doesn&#39;t exist</span>
+</span></span><span class=line><span class=cl>init_csv<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> ! -f <span class=s2>&#34;</span><span class=nv>$CSV_FILE</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;timestamp,hostname,cpu_pct,ram_pct,disk_pct,load_avg,procs,tcp_conn&#34;</span> &gt; <span class=s2>&#34;</span><span class=nv>$CSV_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Write a metric row</span>
+</span></span><span class=line><span class=cl>record_metric<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> ts hostname cpu ram disk load procs conn
+</span></span><span class=line><span class=cl>    <span class=nv>ts</span><span class=o>=</span><span class=k>$(</span>date <span class=s1>&#39;+%Y-%m-%d %H:%M:%S&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>    <span class=nv>hostname</span><span class=o>=</span><span class=k>$(</span>hostname -s<span class=k>)</span>
+</span></span><span class=line><span class=cl>    <span class=nv>cpu</span><span class=o>=</span><span class=k>$(</span>cpu_usage<span class=k>)</span>
+</span></span><span class=line><span class=cl>    <span class=nv>ram</span><span class=o>=</span><span class=k>$(</span>ram_usage<span class=k>)</span>
+</span></span><span class=line><span class=cl>    <span class=nv>disk</span><span class=o>=</span><span class=k>$(</span>disk_usage<span class=k>)</span>
+</span></span><span class=line><span class=cl>    <span class=nv>load</span><span class=o>=</span><span class=k>$(</span>load_avg<span class=k>)</span>
+</span></span><span class=line><span class=cl>    <span class=nv>procs</span><span class=o>=</span><span class=k>$(</span>running_procs<span class=k>)</span>
+</span></span><span class=line><span class=cl>    <span class=nv>conn</span><span class=o>=</span><span class=k>$(</span>tcp_connections<span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>ts</span><span class=si>}</span><span class=s2>,</span><span class=si>${</span><span class=nv>hostname</span><span class=si>}</span><span class=s2>,</span><span class=si>${</span><span class=nv>cpu</span><span class=si>}</span><span class=s2>,</span><span class=si>${</span><span class=nv>ram</span><span class=si>}</span><span class=s2>,</span><span class=si>${</span><span class=nv>disk</span><span class=si>}</span><span class=s2>,</span><span class=si>${</span><span class=nv>load</span><span class=si>}</span><span class=s2>,</span><span class=si>${</span><span class=nv>procs</span><span class=si>}</span><span class=s2>,</span><span class=si>${</span><span class=nv>conn</span><span class=si>}</span><span class=s2>&#34;</span> &gt;&gt; <span class=s2>&#34;</span><span class=nv>$CSV_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=practical-example-daily-report-script>Practical Example: Daily Report Script</h2><p>Combining all the techniques above into a complete script that runs daily via cron to generate a comprehensive report and alert when needed:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span><span class=lnt>117
+</span><span class=lnt>118
+</span><span class=lnt>119
+</span><span class=lnt>120
+</span><span class=lnt>121
+</span><span class=lnt>122
+</span><span class=lnt>123
+</span><span class=lnt>124
+</span><span class=lnt>125
+</span><span class=lnt>126
+</span><span class=lnt>127
+</span><span class=lnt>128
+</span><span class=lnt>129
+</span><span class=lnt>130
+</span><span class=lnt>131
+</span><span class=lnt>132
+</span><span class=lnt>133
+</span><span class=lnt>134
+</span><span class=lnt>135
+</span><span class=lnt>136
+</span><span class=lnt>137
+</span><span class=lnt>138
+</span><span class=lnt>139
+</span><span class=lnt>140
+</span><span class=lnt>141
+</span><span class=lnt>142
+</span><span class=lnt>143
+</span><span class=lnt>144
+</span><span class=lnt>145
+</span><span class=lnt>146
+</span><span class=lnt>147
+</span><span class=lnt>148
+</span><span class=lnt>149
+</span><span class=lnt>150
+</span><span class=lnt>151
+</span><span class=lnt>152
+</span><span class=lnt>153
+</span><span class=lnt>154
+</span><span class=lnt>155
+</span><span class=lnt>156
+</span><span class=lnt>157
+</span><span class=lnt>158
+</span><span class=lnt>159
+</span><span class=lnt>160
+</span><span class=lnt>161
+</span><span class=lnt>162
+</span><span class=lnt>163
+</span><span class=lnt>164
+</span><span class=lnt>165
+</span><span class=lnt>166
+</span><span class=lnt>167
+</span><span class=lnt>168
+</span><span class=lnt>169
+</span><span class=lnt>170
+</span><span class=lnt>171
+</span><span class=lnt>172
+</span><span class=lnt>173
+</span><span class=lnt>174
+</span><span class=lnt>175
+</span><span class=lnt>176
+</span><span class=lnt>177
+</span><span class=lnt>178
+</span><span class=lnt>179
+</span><span class=lnt>180
+</span><span class=lnt>181
+</span><span class=lnt>182
+</span><span class=lnt>183
+</span><span class=lnt>184
+</span><span class=lnt>185
+</span><span class=lnt>186
+</span><span class=lnt>187
+</span><span class=lnt>188
+</span><span class=lnt>189
+</span><span class=lnt>190
+</span><span class=lnt>191
+</span><span class=lnt>192
+</span><span class=lnt>193
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=cp></span><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl><span class=c1># Script : daily-report.sh</span>
+</span></span><span class=line><span class=cl><span class=c1># Purpose: Collect metrics, generate daily report, alert on threshold breaches</span>
+</span></span><span class=line><span class=cl><span class=c1># Schedule via cron: 0 8 * * * /opt/scripts/daily-report.sh</span>
+</span></span><span class=line><span class=cl><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl><span class=nv>IFS</span><span class=o>=</span><span class=s1>$&#39;\n\t&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>LOG_DIR</span><span class=o>=</span><span class=s2>&#34;/var/log/daily-report&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>TIMESTAMP</span><span class=o>=</span><span class=k>$(</span>date <span class=s1>&#39;+%Y%m%d_%H%M%S&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>REPORT_FILE</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>LOG_DIR</span><span class=si>}</span><span class=s2>/report_</span><span class=si>${</span><span class=nv>TIMESTAMP</span><span class=si>}</span><span class=s2>.txt&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>CSV_FILE</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>LOG_DIR</span><span class=si>}</span><span class=s2>/metrics.csv&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>HOSTNAME</span><span class=o>=</span><span class=k>$(</span>hostname -s<span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>DATE_STR</span><span class=o>=</span><span class=k>$(</span>date <span class=s1>&#39;+%Y-%m-%d %H:%M:%S&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Thresholds</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>CPU_WARN</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>CPU_WARN</span><span class=k>:-</span><span class=nv>80</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>CPU_CRIT</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>CPU_CRIT</span><span class=k>:-</span><span class=nv>95</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>RAM_WARN</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>RAM_WARN</span><span class=k>:-</span><span class=nv>80</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>RAM_CRIT</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>RAM_CRIT</span><span class=k>:-</span><span class=nv>95</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>DISK_WARN</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>DISK_WARN</span><span class=k>:-</span><span class=nv>80</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>DISK_CRIT</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>DISK_CRIT</span><span class=k>:-</span><span class=nv>90</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>mkdir -p <span class=s2>&#34;</span><span class=nv>$LOG_DIR</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># --- Metric collection functions ---</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>cpu_usage<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    top -bn1 <span class=p>|</span> grep <span class=s2>&#34;Cpu(s)&#34;</span> <span class=p>|</span> awk <span class=s1>&#39;{printf &#34;%.1f&#34;, 100 - $8}&#39;</span> <span class=p>|</span> tr -d <span class=s1>&#39;,&#39;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>ram_usage<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    free <span class=p>|</span> awk <span class=s1>&#39;/Mem:/ {printf &#34;%.1f&#34;, $3/$2*100}&#39;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>ram_used_mb<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    free -m <span class=p>|</span> awk <span class=s1>&#39;/Mem:/ {print $3}&#39;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>disk_usage<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    df / <span class=p>|</span> tail -1 <span class=p>|</span> awk <span class=s1>&#39;{print $5}&#39;</span> <span class=p>|</span> tr -d <span class=s1>&#39;%&#39;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>disk_used_gb<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    df -BG / <span class=p>|</span> tail -1 <span class=p>|</span> awk <span class=s1>&#39;{print $3}&#39;</span> <span class=p>|</span> tr -d <span class=s1>&#39;G&#39;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>load_avg<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    awk <span class=s1>&#39;{print $1}&#39;</span> /proc/loadavg
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>tcp_connections<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    ss -s <span class=p>|</span> awk <span class=s1>&#39;/^TCP:/ {print $4}&#39;</span> <span class=p>|</span> tr -d <span class=s1>&#39;,&#39;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>running_procs<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    ps aux <span class=p>|</span> wc -l
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>uptime_display<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    uptime -p 2&gt;/dev/null <span class=o>||</span> awk <span class=s1>&#39;{d=int($1/86400); h=int(($1%86400)/3600); m=int(($1%3600)/60); printf &#34;up %dd %dh %dm&#34;, d, h, m}&#39;</span> /proc/uptime
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># --- CSV recording ---</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>init_csv<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> ! -f <span class=s2>&#34;</span><span class=nv>$CSV_FILE</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;timestamp,hostname,cpu_pct,ram_pct,disk_pct,load_avg,procs,tcp_conn&#34;</span> &gt; <span class=s2>&#34;</span><span class=nv>$CSV_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>record_csv<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>cpu</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span> <span class=nv>ram</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$2</span><span class=s2>&#34;</span> <span class=nv>disk</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$3</span><span class=s2>&#34;</span> <span class=nv>load</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$4</span><span class=s2>&#34;</span> <span class=nv>procs</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$5</span><span class=s2>&#34;</span> <span class=nv>conn</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$6</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>DATE_STR</span><span class=si>}</span><span class=s2>,</span><span class=si>${</span><span class=nv>HOSTNAME</span><span class=si>}</span><span class=s2>,</span><span class=si>${</span><span class=nv>cpu</span><span class=si>}</span><span class=s2>,</span><span class=si>${</span><span class=nv>ram</span><span class=si>}</span><span class=s2>,</span><span class=si>${</span><span class=nv>disk</span><span class=si>}</span><span class=s2>,</span><span class=si>${</span><span class=nv>load</span><span class=si>}</span><span class=s2>,</span><span class=si>${</span><span class=nv>procs</span><span class=si>}</span><span class=s2>,</span><span class=si>${</span><span class=nv>conn</span><span class=si>}</span><span class=s2>&#34;</span> &gt;&gt; <span class=s2>&#34;</span><span class=nv>$CSV_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># --- Alert functions ---</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>determine_level<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>value</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span> <span class=nv>warn</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$2</span><span class=s2>&#34;</span> <span class=nv>crit</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$3</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> <span class=s2>&#34;</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$value</span><span class=s2> &gt;= </span><span class=nv>$crit</span><span class=s2>&#34;</span> <span class=p>|</span> bc 2&gt;/dev/null <span class=o>||</span> <span class=nb>echo</span> 0<span class=k>)</span><span class=s2>&#34;</span> -eq <span class=m>1</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;CRITICAL&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>elif</span> <span class=o>[[</span> <span class=s2>&#34;</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$value</span><span class=s2> &gt;= </span><span class=nv>$warn</span><span class=s2>&#34;</span> <span class=p>|</span> bc 2&gt;/dev/null <span class=o>||</span> <span class=nb>echo</span> 0<span class=k>)</span><span class=s2>&#34;</span> -eq <span class=m>1</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;WARNING&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>else</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;OK&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>send_slack<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>msg</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> -n <span class=s2>&#34;</span><span class=si>${</span><span class=nv>SLACK_WEBHOOK</span><span class=k>:-</span><span class=si>}</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        curl -s -X POST -H <span class=s1>&#39;Content-type: application/json&#39;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>            --data <span class=s2>&#34;{\&#34;text\&#34;:\&#34;</span><span class=si>${</span><span class=nv>msg</span><span class=si>}</span><span class=s2>\&#34;}&#34;</span> <span class=s2>&#34;</span><span class=nv>$SLACK_WEBHOOK</span><span class=s2>&#34;</span> &gt;/dev/null 2&gt;<span class=p>&amp;</span><span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>send_telegram<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>msg</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> -n <span class=s2>&#34;</span><span class=si>${</span><span class=nv>TELEGRAM_BOT_TOKEN</span><span class=k>:-</span><span class=si>}</span><span class=s2>&#34;</span> <span class=o>&amp;&amp;</span> -n <span class=s2>&#34;</span><span class=si>${</span><span class=nv>TELEGRAM_CHAT_ID</span><span class=k>:-</span><span class=si>}</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        curl -s -X POST <span class=s2>&#34;https://api.telegram.org/bot</span><span class=si>${</span><span class=nv>TELEGRAM_BOT_TOKEN</span><span class=si>}</span><span class=s2>/sendMessage&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>            -d <span class=s2>&#34;chat_id=</span><span class=si>${</span><span class=nv>TELEGRAM_CHAT_ID</span><span class=si>}</span><span class=s2>&#34;</span> -d <span class=s2>&#34;text=</span><span class=si>${</span><span class=nv>msg</span><span class=si>}</span><span class=s2>&#34;</span> -d <span class=s2>&#34;parse_mode=Markdown&#34;</span> &gt;/dev/null 2&gt;<span class=p>&amp;</span><span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>notify<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>msg</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    send_slack <span class=s2>&#34;</span><span class=nv>$msg</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    send_telegram <span class=s2>&#34;</span><span class=nv>$msg</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># --- Main report generation ---</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>generate_report<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> cpu ram disk load procs conn uptime ram_used disk_used
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nv>cpu</span><span class=o>=</span><span class=k>$(</span>cpu_usage<span class=k>)</span>
+</span></span><span class=line><span class=cl>    <span class=nv>ram</span><span class=o>=</span><span class=k>$(</span>ram_usage<span class=k>)</span>
+</span></span><span class=line><span class=cl>    <span class=nv>disk</span><span class=o>=</span><span class=k>$(</span>disk_usage<span class=k>)</span>
+</span></span><span class=line><span class=cl>    <span class=nv>load</span><span class=o>=</span><span class=k>$(</span>load_avg<span class=k>)</span>
+</span></span><span class=line><span class=cl>    <span class=nv>procs</span><span class=o>=</span><span class=k>$(</span>running_procs<span class=k>)</span>
+</span></span><span class=line><span class=cl>    <span class=nv>conn</span><span class=o>=</span><span class=k>$(</span>tcp_connections<span class=k>)</span>
+</span></span><span class=line><span class=cl>    <span class=nv>uptime_display</span><span class=o>=</span><span class=k>$(</span>uptime_display<span class=k>)</span>
+</span></span><span class=line><span class=cl>    <span class=nv>ram_used</span><span class=o>=</span><span class=k>$(</span>ram_used_mb<span class=k>)</span>
+</span></span><span class=line><span class=cl>    <span class=nv>disk_used</span><span class=o>=</span><span class=k>$(</span>disk_used_gb<span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Write report file</span>
+</span></span><span class=line><span class=cl>    <span class=o>{</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;========================================&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;  DAILY SYSTEM REPORT&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;  Host: </span><span class=si>${</span><span class=nv>HOSTNAME</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;  Date: </span><span class=si>${</span><span class=nv>DATE_STR</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;========================================&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;--- System Info ---&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;  Uptime:          </span><span class=si>${</span><span class=nv>uptime_display</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;  Processes:       </span><span class=si>${</span><span class=nv>procs</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;  TCP Connections: </span><span class=si>${</span><span class=nv>conn</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;--- Resource Usage ---&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;  CPU:    </span><span class=si>${</span><span class=nv>cpu</span><span class=si>}</span><span class=s2>%&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;  RAM:    </span><span class=si>${</span><span class=nv>ram</span><span class=si>}</span><span class=s2>% (</span><span class=si>${</span><span class=nv>ram_used</span><span class=si>}</span><span class=s2> MB used)&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;  Disk:   </span><span class=si>${</span><span class=nv>disk</span><span class=si>}</span><span class=s2>% (</span><span class=si>${</span><span class=nv>disk_used</span><span class=si>}</span><span class=s2> GB used)&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;  Load:   </span><span class=si>${</span><span class=nv>load</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;--- Thresholds ---&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;  CPU:    </span><span class=k>$(</span>determine_level <span class=s2>&#34;</span><span class=nv>$cpu</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$CPU_WARN</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$CPU_CRIT</span><span class=s2>&#34;</span><span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;  RAM:    </span><span class=k>$(</span>determine_level <span class=s2>&#34;</span><span class=nv>$ram</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$RAM_WARN</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$RAM_CRIT</span><span class=s2>&#34;</span><span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;  Disk:   </span><span class=k>$(</span>determine_level <span class=s2>&#34;</span><span class=nv>$disk</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$DISK_WARN</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$DISK_CRIT</span><span class=s2>&#34;</span><span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;--- Top 5 CPU Processes ---&#34;</span>
+</span></span><span class=line><span class=cl>        ps aux --sort<span class=o>=</span>-%cpu <span class=p>|</span> head -6 <span class=p>|</span> awk <span class=s1>&#39;{printf &#34;  %-8s %5s%% CPU  %5s%% RAM  %s\n&#34;, $1, $3, $4, $11}&#39;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;--- Top 5 RAM Processes ---&#34;</span>
+</span></span><span class=line><span class=cl>        ps aux --sort<span class=o>=</span>-%mem <span class=p>|</span> head -6 <span class=p>|</span> awk <span class=s1>&#39;{printf &#34;  %-8s %5s%% CPU  %5s%% RAM  %s\n&#34;, $1, $3, $4, $11}&#39;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;========================================&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=o>}</span> &gt; <span class=s2>&#34;</span><span class=nv>$REPORT_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Record to CSV</span>
+</span></span><span class=line><span class=cl>    init_csv
+</span></span><span class=line><span class=cl>    record_csv <span class=s2>&#34;</span><span class=nv>$cpu</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$ram</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$disk</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$load</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$procs</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$conn</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Print report to stdout</span>
+</span></span><span class=line><span class=cl>    cat <span class=s2>&#34;</span><span class=nv>$REPORT_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Send alerts if needed</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>alerts</span><span class=o>=</span><span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> cpu_level ram_level disk_level
+</span></span><span class=line><span class=cl>    <span class=nv>cpu_level</span><span class=o>=</span><span class=k>$(</span>determine_level <span class=s2>&#34;</span><span class=nv>$cpu</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$CPU_WARN</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$CPU_CRIT</span><span class=s2>&#34;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>    <span class=nv>ram_level</span><span class=o>=</span><span class=k>$(</span>determine_level <span class=s2>&#34;</span><span class=nv>$ram</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$RAM_WARN</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$RAM_CRIT</span><span class=s2>&#34;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>    <span class=nv>disk_level</span><span class=o>=</span><span class=k>$(</span>determine_level <span class=s2>&#34;</span><span class=nv>$disk</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$DISK_WARN</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$DISK_CRIT</span><span class=s2>&#34;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=o>[[</span> <span class=s2>&#34;</span><span class=nv>$cpu_level</span><span class=s2>&#34;</span> !<span class=o>=</span> <span class=s2>&#34;OK&#34;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=nv>alerts</span><span class=o>+=</span><span class=s2>&#34;CPU: </span><span class=si>${</span><span class=nv>cpu</span><span class=si>}</span><span class=s2>% (</span><span class=si>${</span><span class=nv>cpu_level</span><span class=si>}</span><span class=s2>)\n&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=o>[[</span> <span class=s2>&#34;</span><span class=nv>$ram_level</span><span class=s2>&#34;</span> !<span class=o>=</span> <span class=s2>&#34;OK&#34;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=nv>alerts</span><span class=o>+=</span><span class=s2>&#34;RAM: </span><span class=si>${</span><span class=nv>ram</span><span class=si>}</span><span class=s2>% (</span><span class=si>${</span><span class=nv>ram_level</span><span class=si>}</span><span class=s2>)\n&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=o>[[</span> <span class=s2>&#34;</span><span class=nv>$disk_level</span><span class=s2>&#34;</span> !<span class=o>=</span> <span class=s2>&#34;OK&#34;</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=nv>alerts</span><span class=o>+=</span><span class=s2>&#34;Disk: </span><span class=si>${</span><span class=nv>disk</span><span class=si>}</span><span class=s2>% (</span><span class=si>${</span><span class=nv>disk_level</span><span class=si>}</span><span class=s2>)\n&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> -n <span class=s2>&#34;</span><span class=nv>$alerts</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>local</span> <span class=nv>alert_msg</span><span class=o>=</span><span class=s2>&#34;*[</span><span class=si>${</span><span class=nv>HOSTNAME</span><span class=si>}</span><span class=s2>] System Alert*\n</span><span class=si>${</span><span class=nv>alerts</span><span class=si>}</span><span class=s2>Uptime: </span><span class=si>${</span><span class=nv>uptime_display</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        notify -e <span class=s2>&#34;</span><span class=nv>$alert_msg</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>main<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    generate_report
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Report saved to: </span><span class=nv>$REPORT_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;CSV log: </span><span class=nv>$CSV_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>main <span class=s2>&#34;</span><span class=nv>$@</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=cron-configuration>Cron Configuration</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Run daily at 8:00 AM</span>
+</span></span><span class=line><span class=cl><span class=m>0</span> <span class=m>8</span> * * * /opt/scripts/daily-report.sh &gt;&gt; /var/log/daily-report/cron.log 2&gt;<span class=p>&amp;</span><span class=m>1</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=sample-output>Sample Output</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>========================================
+</span></span><span class=line><span class=cl>  DAILY SYSTEM REPORT
+</span></span><span class=line><span class=cl>  Host: web-prod-01
+</span></span><span class=line><span class=cl>  Date: 2026-09-01 08:00:00
+</span></span><span class=line><span class=cl>========================================
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>--- System Info ---
+</span></span><span class=line><span class=cl>  Uptime:          up 45 days 3 hours 22 minutes
+</span></span><span class=line><span class=cl>  Processes:       234
+</span></span><span class=line><span class=cl>  TCP Connections: 187
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>--- Resource Usage ---
+</span></span><span class=line><span class=cl>  CPU:    23.4%
+</span></span><span class=line><span class=cl>  RAM:    67.2% (5412 MB used)
+</span></span><span class=line><span class=cl>  Disk:   72% (58 GB used)
+</span></span><span class=line><span class=cl>  Load:   1.85
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>--- Thresholds ---
+</span></span><span class=line><span class=cl>  CPU:    OK
+</span></span><span class=line><span class=cl>  RAM:    OK
+</span></span><span class=line><span class=cl>  Disk:    OK
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>--- Top 5 CPU Processes ---
+</span></span><span class=line><span class=cl>  root       12.3% CPU   0.1% RAM  nginx: worker
+</span></span><span class=line><span class=cl>  www-data    8.7% CPU   2.1% RAM  php-fpm: pool
+</span></span><span class=line><span class=cl>  mysql       5.2% CPU  15.3% RAM  mysqld
+</span></span><span class=line><span class=cl>  root        3.1% CPU   0.8% RAM  node /opt/api
+</span></span><span class=line><span class=cl>  root        1.4% CPU   0.2% RAM  sshd
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>--- Top 5 RAM Processes ---
+</span></span><span class=line><span class=cl>  mysql      15.3% RAM   5.2% CPU  mysqld
+</span></span><span class=line><span class=cl>  www-data    2.1% RAM   8.7% CPU  php-fpm: pool
+</span></span><span class=line><span class=cl>  root        1.8% RAM   0.9% CPU  node /opt/api
+</span></span><span class=line><span class=cl>  root        0.8% RAM   3.1% CPU  node /opt/api
+</span></span><span class=line><span class=cl>  redis       0.5% RAM   0.3% CPU  redis-server
+</span></span><span class=line><span class=cl>========================================
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=deployment-notes--best-practices>Deployment Notes & Best Practices</h2><ul><li><strong>Webhook security:</strong> Store Slack webhook URLs and Telegram bot tokens as environment variables or in files with <code>600</code> permissions—never hardcode them in scripts.</li><li><strong>Metric history:</strong> CSV files grow over time. Combine with <code>logrotate</code> or a periodic cleanup script to keep file sizes manageable. You can also use <code>awk</code> or <code>python</code> to analyze trends from the CSV.</li><li><strong>Threshold tuning:</strong> The defaults (80%/95%) work for most servers. Adjust for specific workloads—batch processing servers may need higher CPU thresholds.</li><li><strong>Multi-server monitoring:</strong> To monitor multiple servers, combine with SSH from <a class=link href=/posts/bash/bash-step-thirteen/>Post 13</a>—run the script on each server and aggregate results in one place.</li><li><strong>Escalation:</strong> When receiving a CRITICAL alert, the script can call APIs to create tickets in issue tracking systems (Jira, GitHub Issues).</li></ul><hr><h2 id=conclusion>Conclusion</h2><p>Monitoring with Bash doesn&rsquo;t need to be complex—just collect the right metrics, set appropriate alert thresholds, and send notifications to the right channels. From reading CPU/RAM/Disk, logging to CSV for trend analysis, sending alerts via Slack/Telegram, to generating daily reports—all within a single Bash script running periodically via cron.</p><p>In the <a class=link href=/posts/bash/bash-step-sixteen/>next post</a>, we will explore <strong>Advanced Bash: Parallel Execution</strong>—optimizing script performance with background processes, <code>xargs -P</code>, <code>GNU parallel</code>, and concurrency management.</p></section><div class=hd-article-tags-wrap><span class=tags-label>TAGS:</span><div class=hd-article-tags><a href=/tags/bash/ class=hd-tag-pill>#bash
+</a><a href=/tags/shell-script/ class=hd-tag-pill>#shell-script
+</a><a href=/tags/devops/ class=hd-tag-pill>#devops
+</a><a href=/tags/monitoring/ class=hd-tag-pill>#monitoring
+</a><a href=/tags/alerting/ class=hd-tag-pill>#alerting
+</a><a href=/tags/slack/ class=hd-tag-pill>#slack
+</a><a href=/tags/telegram/ class=hd-tag-pill>#telegram
+</a><a href=/tags/cron/ class=hd-tag-pill>#cron
+</a><a href=/tags/system-report/ class=hd-tag-pill>#system-report</a></div></div><div class=hd-article-footer-box><div class=footer-box-item><span class=box-label>AUTHOR</span>
+<span class=box-value>Hoàng Dương</span></div><div class=footer-box-item><span class=box-label>UPDATED</span>
+<span class=box-value>01/09/2026 00:00</span></div><div class=footer-box-item><span class=box-label>LICENSE</span>
+<span class=box-value>CC BY-NC-SA 4.0</span></div></div><nav class=hd-post-nav><a href=/posts/bash/bash-step-fourteen/ class="post-nav-card nav-prev"><span class=nav-direction>&larr; PREVIOUS POST</span>
+<span class=nav-post-title>Bash and Docker in DevOps: Managing Containers Efficiently</span></a></nav><section class=hd-comments-section><div class=comments-section-header><span class=mono-label>RESPONSES & DISCUSSION</span></div><div class=utterances-container><script>(function(){var t=document.documentElement.dataset.scheme||"light",n=t==="dark"?"github-dark":"github-light",e=document.createElement("script");e.src="https://utteranc.es/client.js",e.setAttribute("repo","hoangduonng/blog_comments"),e.setAttribute("issue-term","pathname"),e.setAttribute("label","comments"),e.setAttribute("theme",n),e.setAttribute("crossorigin","anonymous"),e.async=!0,document.currentScript.parentElement.appendChild(e)})()</script></div><style>.utterances-container{width:100%;margin-top:8px;position:relative}.utterances{max-width:100%!important;margin:0!important}[data-scheme=light] .utterances iframe,html:not([data-scheme=dark]) .utterances iframe{mix-blend-mode:multiply;transition:mix-blend-mode .2s ease}[data-scheme=dark] .utterances iframe{mix-blend-mode:lighten;transition:mix-blend-mode .2s ease}</style><script>let utterancesLoaded=!1;function setUtterancesTheme(e){let t=document.querySelector(".utterances iframe");if(t&&t.contentWindow){let n=e==="dark"?"github-dark":"github-light";t.contentWindow.postMessage({type:"set-theme",theme:n},"https://utteranc.es")}}addEventListener("message",e=>{if(e.origin!=="https://utteranc.es")return;utterancesLoaded=!0,setUtterancesTheme(document.documentElement.dataset.scheme||"light")}),window.addEventListener("onColorSchemeChange",e=>{if(!utterancesLoaded)return;setUtterancesTheme(e.detail)})</script></section></article></div><aside class=hd-article-sidebar><div class=hd-sticky-sidebar-inner><div class=hd-toc-card><div class=toc-header><span class=toc-title-label>ON THIS PAGE</span></div><div class=toc-content id=toc-content><nav id=TableOfContents><ol><li><a href=#monitoring-with-bash-in-devops>Monitoring with Bash in DevOps</a></li><li><a href=#collecting-system-metrics>Collecting System Metrics</a><ol><li><a href=#cpu>CPU</a></li><li><a href=#ram>RAM</a></li><li><a href=#disk>Disk</a></li><li><a href=#network>Network</a></li><li><a href=#processes-and-uptime>Processes and Uptime</a></li></ol></li><li><a href=#sending-alerts-via-webhook>Sending Alerts via Webhook</a><ol><li><a href=#slack-webhook>Slack Webhook</a></li><li><a href=#telegram-bot-api>Telegram Bot API</a></li><li><a href=#email-via-mailxsendmail>Email (via mailx/sendmail)</a></li></ol></li><li><a href=#storing-metrics-to-csv>Storing Metrics to CSV</a></li><li><a href=#practical-example-daily-report-script>Practical Example: Daily Report Script</a><ol><li><a href=#cron-configuration>Cron Configuration</a></li><li><a href=#sample-output>Sample Output</a></li></ol></li><li><a href=#deployment-notes--best-practices>Deployment Notes & Best Practices</a></li><li><a href=#conclusion>Conclusion</a></li></ol></nav></div><div class=toc-scroll-indicator id=toc-indicator style=display:none></div></div></div></aside></div></div><div class=hd-edge-callout-rail><aside class=hd-floating-callout aria-label="Also of interest"><a href=/posts/bash/bash-step-eight/ class=floating-callout-art><img src=/images/bash/bash-step-eight.jpg alt="Cron Jobs with Bash: Scheduled Automation for DevOps" class=floating-callout-img></a><div class=floating-callout-badge>ALSO <span class=callout-of>of</span> INTEREST</div><div class=floating-callout-body><h4 class=floating-callout-title><a href=/posts/bash/bash-step-eight/>Cron Jobs with Bash: Scheduled Automation for DevOps</a></h4><p class=floating-callout-excerpt>Cron jobs in Bash for DevOps In the previous article we managed variables, .env …</p><a href=/posts/bash/bash-step-eight/ class=floating-callout-btn>READ &rarr;</a></div></aside></div></div><script>document.addEventListener("DOMContentLoaded",function(){var e=document.getElementById("toc-content"),t=document.getElementById("toc-indicator");if(e&&t){function n(){var s,o,n=e.scrollHeight-e.clientHeight;if(n<=2){t.style.display="none";return}t.style.display="block",s=e.scrollTop/n,o=e.clientHeight-32,t.style.top=e.offsetTop+s*o+"px"}e.addEventListener("scroll",n,{passive:!0}),n(),window.addEventListener("resize",n,{passive:!0}),window.addEventListener("load",n,{passive:!0})}})</script><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><div id=hd-search-overlay class=hd-search-overlay aria-hidden=true data-index-url=/search/index.json data-lang=en data-no-results="No matching articles found" data-no-results-sub="Try searching with different keywords" data-initial-hint="Type a keyword to search articles..." data-results-count=results><div class=hd-search-backdrop id=hd-search-backdrop tabindex=-1></div><div class=hd-search-dialog role=dialog aria-modal=true aria-label="Search Articles"><div class=hd-search-header><div class=hd-search-input-wrapper><svg class="hd-search-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentcolor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<input id=hd-search-input class=hd-search-input type=text placeholder="Search articles, categories, topics..." autocomplete=off autocorrect=off autocapitalize=off spellcheck=false aria-autocomplete=list aria-controls=hd-search-results>
+<button id=hd-search-clear class=hd-search-clear type=button aria-label="Clear input" style=display:none><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentcolor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div><button id=hd-search-close class=hd-search-close-btn type=button aria-label="Close search">
+<kbd class=hd-search-kbd>ESC</kbd></button></div><div class=hd-search-body><div id=hd-search-loading class="hd-search-state hd-search-loading" style=display:none><div class=hd-search-spinner aria-hidden=true></div><span>Loading search index...</span></div><div id=hd-search-initial class="hd-search-state hd-search-initial"><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentcolor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p class=state-title>Quick Search</p><p class=state-desc>Type a keyword or topic to search across all published articles.</p></div><div id=hd-search-empty class="hd-search-state hd-search-empty" style=display:none><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentcolor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="8" x2="14" y2="14"/><line x1="14" y1="8" x2="8" y2="14"/></svg><p class=state-title id=hd-search-empty-title>No matching articles found</p><p class=state-desc id=hd-search-empty-desc>Try searching with different keywords</p></div><div id=hd-search-results class=hd-search-results role=listbox style=display:none></div></div><div class=hd-search-footer><div class=hd-search-shortcuts><span class=shortcut-item><kbd>↑</kbd><kbd>↓</kbd>
+<span class=shortcut-label>Navigate</span>
+</span><span class=shortcut-item><kbd>↵</kbd>
+<span class=shortcut-label>Open</span>
+</span><span class=shortcut-item><kbd>ESC</kbd>
+<span class=shortcut-label>Close</span></span></div><div id=hd-search-count class=hd-search-count style=display:none></div></div></div></div><footer class=hd-site-footer><div class=hd-footer-container><div class=hd-footer-grid><div class=footer-brand-col><a href=/ class=footer-logo><span class=footer-logo-title>Hoang Duong</span></a><div class=footer-status><span class=status-dot></span>
+<span class=status-text>All Systems Operational</span></div><ul class=footer-meta-links><li><a href=/about/>About Blog</a></li><li><a href=/archives/>Archives</a></li></ul></div><div class=footer-links-grid><div class=footer-col><h3 class=footer-col-title>Categories</h3><ul class=footer-col-list><li><a href=/categories/bash/>Bash Series</a></li><li><a href=/categories/devops/>DevOps</a></li><li><a href=/categories/docker/>Docker</a></li><li><a href=/categories/installation-guides/>Installation Guides</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Resources</h3><ul class=footer-col-list><li><a href=/about/>About Me</a></li><li><a href=/archives/>All Articles</a></li><li><a href=#search data-open-search>Search</a></li><li><a href=/links/>Useful Links</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Featured Series</h3><ul class=footer-col-list><li><a href=/posts/bash/bash-step-eight/>Cron Jobs & Bash</a></li><li><a href=/categories/devops/>DevOps Automation</a></li><li><a href=/categories/docker/>Docker Essentials</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Connect</h3><ul class=footer-col-list><li><a href=https://github.com/hoangduonng target=_blank rel=noopener>GitHub ↗</a></li><li><a href=https://www.instagram.com/ngu_uuen/ target=_blank rel=noopener>Instagram ↗</a></li><li><a href=https://www.linkedin.com/in/hoangduonng/ target=_blank rel=noopener>LinkedIn ↗</a></li><li><a href=/index.xml>RSS Feed ↗</a></li></ul></div></div></div><div class=hd-footer-bottom-bar><span class=footer-copyright>&copy; 2026 Hoang Duong. All rights reserved.</span></div></div></footer><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.ee266d8948a6a32b88423f5d374fca9833845f738717cf8061ae442a91efe347.js defer></script></body></html>

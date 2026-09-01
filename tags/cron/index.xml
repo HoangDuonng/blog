@@ -1,4 +1,840 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Cron on Hoang Duong</title><link>https://tech.nguuyen.io.vn/tags/cron/</link><description>Recent content in Cron on Hoang Duong</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Tue, 07 Jul 2026 00:00:00 +0700</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/cron/index.xml" rel="self" type="application/rss+xml"/><item><title>Cron Jobs with Bash: Scheduled Automation for DevOps</title><link>https://tech.nguuyen.io.vn/posts/bash/bash-step-eight/</link><pubDate>Sun, 28 Jun 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/bash/bash-step-eight/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/bash/bash-step-eight.jpg" alt="Featured image of post Cron Jobs with Bash: Scheduled Automation for DevOps" />&lt;h2 id="cron-jobs-in-bash-for-devops">Cron jobs in Bash for DevOps
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Cron on Hoang Duong</title><link>https://tech.nguuyen.io.vn/tags/cron/</link><description>Recent content in Cron on Hoang Duong</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Tue, 01 Sep 2026 00:00:00 +0700</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/cron/index.xml" rel="self" type="application/rss+xml"/><item><title>Monitoring with Bash: System Reporting and Automated Alerting in DevOps</title><link>https://tech.nguuyen.io.vn/posts/bash/bash-step-fifteen/</link><pubDate>Tue, 01 Sep 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/bash/bash-step-fifteen/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/bash/bash-step-fifteen.jpg" alt="Featured image of post Monitoring with Bash: System Reporting and Automated Alerting in DevOps" />&lt;h2 id="monitoring-with-bash-in-devops">Monitoring with Bash in DevOps
+&lt;/h2>&lt;p>In the &lt;a class="link" href="https://tech.nguuyen.io.vn/posts/bash/bash-step-fourteen/" >previous post&lt;/a>, we explored combining Bash and Docker to manage containers and write watchdog scripts for automatic crash recovery. Now, we expand the monitoring scope—not just containers, but the entire system: CPU, RAM, Disk, Network—and alert the team when issues arise.&lt;/p>
+&lt;p>In DevOps, monitoring is the &amp;ldquo;eyes&amp;rdquo; that help you detect problems before they become serious incidents. Many assume monitoring requires Prometheus, Grafana, or Datadog—but in reality, a Bash script combined with cron can collect metrics, send alerts via Slack/Telegram, and generate daily reports without installing any agents.&lt;/p>
+&lt;p>This article covers collecting core system metrics, sending alerts via webhooks, storing data as CSV for later analysis, and combining everything into a complete daily report script.&lt;/p>
+&lt;hr>
+&lt;h2 id="collecting-system-metrics">Collecting System Metrics
+&lt;/h2>&lt;h3 id="cpu">CPU
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># CPU usage from idle&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cpu_usage&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> top -bn1 &lt;span class="p">|&lt;/span> grep &lt;span class="s2">&amp;#34;Cpu(s)&amp;#34;&lt;/span> &lt;span class="p">|&lt;/span> awk &lt;span class="s1">&amp;#39;{printf &amp;#34;%.1f&amp;#34;, 100 - $8}&amp;#39;&lt;/span> &lt;span class="p">|&lt;/span> tr -d &lt;span class="s1">&amp;#39;,&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># 1-minute load average&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">load_avg&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> awk &lt;span class="s1">&amp;#39;{print $1}&amp;#39;&lt;/span> /proc/loadavg
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Number of CPU cores&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cpu_cores&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> nproc
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="ram">RAM
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># RAM usage percentage&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ram_usage&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> free &lt;span class="p">|&lt;/span> awk &lt;span class="s1">&amp;#39;/Mem:/ {printf &amp;#34;%.1f&amp;#34;, $3/$2*100}&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># RAM used (MB)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ram_used_mb&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> free -m &lt;span class="p">|&lt;/span> awk &lt;span class="s1">&amp;#39;/Mem:/ {print $3}&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># RAM total (MB)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ram_total&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> free -m &lt;span class="p">|&lt;/span> awk &lt;span class="s1">&amp;#39;/Mem:/ {print $2}&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Swap usage percentage&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">swap_usage&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> free &lt;span class="p">|&lt;/span> awk &lt;span class="s1">&amp;#39;/Swap:/ {if ($2 &amp;gt; 0) printf &amp;#34;%.1f&amp;#34;, $3/$2*100; else print &amp;#34;0&amp;#34;}&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="disk">Disk
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Root partition usage percentage&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">disk_usage&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> df / &lt;span class="p">|&lt;/span> tail -1 &lt;span class="p">|&lt;/span> awk &lt;span class="s1">&amp;#39;{print $5}&amp;#39;&lt;/span> &lt;span class="p">|&lt;/span> tr -d &lt;span class="s1">&amp;#39;%&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Disk used (GB)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">disk_used_gb&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> df -BG / &lt;span class="p">|&lt;/span> tail -1 &lt;span class="p">|&lt;/span> awk &lt;span class="s1">&amp;#39;{print $3}&amp;#39;&lt;/span> &lt;span class="p">|&lt;/span> tr -d &lt;span class="s1">&amp;#39;G&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Disk total (GB)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">disk_total&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> df -BG / &lt;span class="p">|&lt;/span> tail -1 &lt;span class="p">|&lt;/span> awk &lt;span class="s1">&amp;#39;{print $2}&amp;#39;&lt;/span> &lt;span class="p">|&lt;/span> tr -d &lt;span class="s1">&amp;#39;G&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="network">Network
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Network bytes received (since boot)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">net_rx&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> awk &lt;span class="s1">&amp;#39;/eth0|ens/ {print $2}&amp;#39;&lt;/span> /proc/net/dev
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Network bytes transmitted (since boot)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">net_tx&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> awk &lt;span class="s1">&amp;#39;/eth0|ens/ {print $10}&amp;#39;&lt;/span> /proc/net/dev
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Number of established TCP connections&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">tcp_connections&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> ss -s &lt;span class="p">|&lt;/span> awk &lt;span class="s1">&amp;#39;/^TCP:/ {print $4}&amp;#39;&lt;/span> &lt;span class="p">|&lt;/span> tr -d &lt;span class="s1">&amp;#39;,&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="processes-and-uptime">Processes and Uptime
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;span class="lnt">3
+&lt;/span>&lt;span class="lnt">4
+&lt;/span>&lt;span class="lnt">5
+&lt;/span>&lt;span class="lnt">6
+&lt;/span>&lt;span class="lnt">7
+&lt;/span>&lt;span class="lnt">8
+&lt;/span>&lt;span class="lnt">9
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Number of running processes&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">running_procs&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> ps aux &lt;span class="p">|&lt;/span> wc -l
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Uptime in hours&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">uptime_hours&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> awk &lt;span class="s1">&amp;#39;{printf &amp;#34;%.1f&amp;#34;, $1/3600}&amp;#39;&lt;/span> /proc/uptime
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;hr>
+&lt;h2 id="sending-alerts-via-webhook">Sending Alerts via Webhook
+&lt;/h2>&lt;h3 id="slack-webhook">Slack Webhook
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">send_slack&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> &lt;span class="nv">message&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$1&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> &lt;span class="nv">webhook&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">SLACK_WEBHOOK&lt;/span>&lt;span class="k">:-&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">[[&lt;/span> -z &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$webhook&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="o">]]&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;[WARN] SLACK_WEBHOOK not set — skipping notification&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> curl -s -X POST -H &lt;span class="s1">&amp;#39;Content-type: application/json&amp;#39;&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --data &lt;span class="s2">&amp;#34;{\&amp;#34;text\&amp;#34;:\&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">message&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">\&amp;#34;}&amp;#34;&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$webhook&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &amp;gt;/dev/null 2&amp;gt;&lt;span class="p">&amp;amp;&lt;/span>&lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="telegram-bot-api">Telegram Bot API
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">send_telegram&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> &lt;span class="nv">message&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$1&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> &lt;span class="nv">bot_token&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">TELEGRAM_BOT_TOKEN&lt;/span>&lt;span class="k">:-&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> &lt;span class="nv">chat_id&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">TELEGRAM_CHAT_ID&lt;/span>&lt;span class="k">:-&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">[[&lt;/span> -z &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$bot_token&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="o">||&lt;/span> -z &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$chat_id&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="o">]]&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;[WARN] TELEGRAM_BOT_TOKEN or TELEGRAM_CHAT_ID not set&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> curl -s -X POST &lt;span class="s2">&amp;#34;https://api.telegram.org/bot&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">bot_token&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">/sendMessage&amp;#34;&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> -d &lt;span class="s2">&amp;#34;chat_id=&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">chat_id&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> -d &lt;span class="s2">&amp;#34;text=&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">message&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> -d &lt;span class="s2">&amp;#34;parse_mode=Markdown&amp;#34;&lt;/span> &amp;gt;/dev/null 2&amp;gt;&lt;span class="p">&amp;amp;&lt;/span>&lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="email-via-mailxsendmail">Email (via mailx/sendmail)
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">send_email&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> &lt;span class="nv">subject&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$1&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> &lt;span class="nv">body&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$2&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> &lt;span class="nv">recipient&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">ALERT_EMAIL&lt;/span>&lt;span class="k">:-&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">[[&lt;/span> -z &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$recipient&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="o">]]&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;[WARN] ALERT_EMAIL not set&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">return&lt;/span> &lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$body&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="p">|&lt;/span> mail -s &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$subject&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$recipient&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> 2&amp;gt;/dev/null
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;hr>
+&lt;h2 id="storing-metrics-to-csv">Storing Metrics to CSV
+&lt;/h2>&lt;p>Writing metrics to a CSV file enables trend analysis and chart generation later:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="nb">readonly&lt;/span> &lt;span class="nv">CSV_FILE&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">CSV_FILE&lt;/span>&lt;span class="k">:-&lt;/span>&lt;span class="p">/var/log/metrics.csv&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Create header if file doesn&amp;#39;t exist&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">init_csv&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">[[&lt;/span> ! -f &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$CSV_FILE&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="o">]]&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;timestamp,hostname,cpu_pct,ram_pct,disk_pct,load_avg,procs,tcp_conn&amp;#34;&lt;/span> &amp;gt; &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$CSV_FILE&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Write a metric row&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">record_metric&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> ts hostname cpu ram disk load procs conn
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">ts&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>date &lt;span class="s1">&amp;#39;+%Y-%m-%d %H:%M:%S&amp;#39;&lt;/span>&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">hostname&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>hostname -s&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">cpu&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>cpu_usage&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">ram&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>ram_usage&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">disk&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>disk_usage&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">load&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>load_avg&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">procs&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>running_procs&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">conn&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>tcp_connections&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">ts&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">,&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">hostname&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">,&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">cpu&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">,&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">ram&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">,&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">disk&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">,&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">load&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">,&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">procs&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">,&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">conn&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &amp;gt;&amp;gt; &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$CSV_FILE&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;hr>
+&lt;h2 id="practical-example-daily-report-script">Practical Example: Daily Report Script
+&lt;/h2>&lt;p>Combining all the techniques above into a complete script that runs daily via cron to generate a comprehensive report and alert when needed:&lt;/p>
+&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt"> 10
+&lt;/span>&lt;span class="lnt"> 11
+&lt;/span>&lt;span class="lnt"> 12
+&lt;/span>&lt;span class="lnt"> 13
+&lt;/span>&lt;span class="lnt"> 14
+&lt;/span>&lt;span class="lnt"> 15
+&lt;/span>&lt;span class="lnt"> 16
+&lt;/span>&lt;span class="lnt"> 17
+&lt;/span>&lt;span class="lnt"> 18
+&lt;/span>&lt;span class="lnt"> 19
+&lt;/span>&lt;span class="lnt"> 20
+&lt;/span>&lt;span class="lnt"> 21
+&lt;/span>&lt;span class="lnt"> 22
+&lt;/span>&lt;span class="lnt"> 23
+&lt;/span>&lt;span class="lnt"> 24
+&lt;/span>&lt;span class="lnt"> 25
+&lt;/span>&lt;span class="lnt"> 26
+&lt;/span>&lt;span class="lnt"> 27
+&lt;/span>&lt;span class="lnt"> 28
+&lt;/span>&lt;span class="lnt"> 29
+&lt;/span>&lt;span class="lnt"> 30
+&lt;/span>&lt;span class="lnt"> 31
+&lt;/span>&lt;span class="lnt"> 32
+&lt;/span>&lt;span class="lnt"> 33
+&lt;/span>&lt;span class="lnt"> 34
+&lt;/span>&lt;span class="lnt"> 35
+&lt;/span>&lt;span class="lnt"> 36
+&lt;/span>&lt;span class="lnt"> 37
+&lt;/span>&lt;span class="lnt"> 38
+&lt;/span>&lt;span class="lnt"> 39
+&lt;/span>&lt;span class="lnt"> 40
+&lt;/span>&lt;span class="lnt"> 41
+&lt;/span>&lt;span class="lnt"> 42
+&lt;/span>&lt;span class="lnt"> 43
+&lt;/span>&lt;span class="lnt"> 44
+&lt;/span>&lt;span class="lnt"> 45
+&lt;/span>&lt;span class="lnt"> 46
+&lt;/span>&lt;span class="lnt"> 47
+&lt;/span>&lt;span class="lnt"> 48
+&lt;/span>&lt;span class="lnt"> 49
+&lt;/span>&lt;span class="lnt"> 50
+&lt;/span>&lt;span class="lnt"> 51
+&lt;/span>&lt;span class="lnt"> 52
+&lt;/span>&lt;span class="lnt"> 53
+&lt;/span>&lt;span class="lnt"> 54
+&lt;/span>&lt;span class="lnt"> 55
+&lt;/span>&lt;span class="lnt"> 56
+&lt;/span>&lt;span class="lnt"> 57
+&lt;/span>&lt;span class="lnt"> 58
+&lt;/span>&lt;span class="lnt"> 59
+&lt;/span>&lt;span class="lnt"> 60
+&lt;/span>&lt;span class="lnt"> 61
+&lt;/span>&lt;span class="lnt"> 62
+&lt;/span>&lt;span class="lnt"> 63
+&lt;/span>&lt;span class="lnt"> 64
+&lt;/span>&lt;span class="lnt"> 65
+&lt;/span>&lt;span class="lnt"> 66
+&lt;/span>&lt;span class="lnt"> 67
+&lt;/span>&lt;span class="lnt"> 68
+&lt;/span>&lt;span class="lnt"> 69
+&lt;/span>&lt;span class="lnt"> 70
+&lt;/span>&lt;span class="lnt"> 71
+&lt;/span>&lt;span class="lnt"> 72
+&lt;/span>&lt;span class="lnt"> 73
+&lt;/span>&lt;span class="lnt"> 74
+&lt;/span>&lt;span class="lnt"> 75
+&lt;/span>&lt;span class="lnt"> 76
+&lt;/span>&lt;span class="lnt"> 77
+&lt;/span>&lt;span class="lnt"> 78
+&lt;/span>&lt;span class="lnt"> 79
+&lt;/span>&lt;span class="lnt"> 80
+&lt;/span>&lt;span class="lnt"> 81
+&lt;/span>&lt;span class="lnt"> 82
+&lt;/span>&lt;span class="lnt"> 83
+&lt;/span>&lt;span class="lnt"> 84
+&lt;/span>&lt;span class="lnt"> 85
+&lt;/span>&lt;span class="lnt"> 86
+&lt;/span>&lt;span class="lnt"> 87
+&lt;/span>&lt;span class="lnt"> 88
+&lt;/span>&lt;span class="lnt"> 89
+&lt;/span>&lt;span class="lnt"> 90
+&lt;/span>&lt;span class="lnt"> 91
+&lt;/span>&lt;span class="lnt"> 92
+&lt;/span>&lt;span class="lnt"> 93
+&lt;/span>&lt;span class="lnt"> 94
+&lt;/span>&lt;span class="lnt"> 95
+&lt;/span>&lt;span class="lnt"> 96
+&lt;/span>&lt;span class="lnt"> 97
+&lt;/span>&lt;span class="lnt"> 98
+&lt;/span>&lt;span class="lnt"> 99
+&lt;/span>&lt;span class="lnt">100
+&lt;/span>&lt;span class="lnt">101
+&lt;/span>&lt;span class="lnt">102
+&lt;/span>&lt;span class="lnt">103
+&lt;/span>&lt;span class="lnt">104
+&lt;/span>&lt;span class="lnt">105
+&lt;/span>&lt;span class="lnt">106
+&lt;/span>&lt;span class="lnt">107
+&lt;/span>&lt;span class="lnt">108
+&lt;/span>&lt;span class="lnt">109
+&lt;/span>&lt;span class="lnt">110
+&lt;/span>&lt;span class="lnt">111
+&lt;/span>&lt;span class="lnt">112
+&lt;/span>&lt;span class="lnt">113
+&lt;/span>&lt;span class="lnt">114
+&lt;/span>&lt;span class="lnt">115
+&lt;/span>&lt;span class="lnt">116
+&lt;/span>&lt;span class="lnt">117
+&lt;/span>&lt;span class="lnt">118
+&lt;/span>&lt;span class="lnt">119
+&lt;/span>&lt;span class="lnt">120
+&lt;/span>&lt;span class="lnt">121
+&lt;/span>&lt;span class="lnt">122
+&lt;/span>&lt;span class="lnt">123
+&lt;/span>&lt;span class="lnt">124
+&lt;/span>&lt;span class="lnt">125
+&lt;/span>&lt;span class="lnt">126
+&lt;/span>&lt;span class="lnt">127
+&lt;/span>&lt;span class="lnt">128
+&lt;/span>&lt;span class="lnt">129
+&lt;/span>&lt;span class="lnt">130
+&lt;/span>&lt;span class="lnt">131
+&lt;/span>&lt;span class="lnt">132
+&lt;/span>&lt;span class="lnt">133
+&lt;/span>&lt;span class="lnt">134
+&lt;/span>&lt;span class="lnt">135
+&lt;/span>&lt;span class="lnt">136
+&lt;/span>&lt;span class="lnt">137
+&lt;/span>&lt;span class="lnt">138
+&lt;/span>&lt;span class="lnt">139
+&lt;/span>&lt;span class="lnt">140
+&lt;/span>&lt;span class="lnt">141
+&lt;/span>&lt;span class="lnt">142
+&lt;/span>&lt;span class="lnt">143
+&lt;/span>&lt;span class="lnt">144
+&lt;/span>&lt;span class="lnt">145
+&lt;/span>&lt;span class="lnt">146
+&lt;/span>&lt;span class="lnt">147
+&lt;/span>&lt;span class="lnt">148
+&lt;/span>&lt;span class="lnt">149
+&lt;/span>&lt;span class="lnt">150
+&lt;/span>&lt;span class="lnt">151
+&lt;/span>&lt;span class="lnt">152
+&lt;/span>&lt;span class="lnt">153
+&lt;/span>&lt;span class="lnt">154
+&lt;/span>&lt;span class="lnt">155
+&lt;/span>&lt;span class="lnt">156
+&lt;/span>&lt;span class="lnt">157
+&lt;/span>&lt;span class="lnt">158
+&lt;/span>&lt;span class="lnt">159
+&lt;/span>&lt;span class="lnt">160
+&lt;/span>&lt;span class="lnt">161
+&lt;/span>&lt;span class="lnt">162
+&lt;/span>&lt;span class="lnt">163
+&lt;/span>&lt;span class="lnt">164
+&lt;/span>&lt;span class="lnt">165
+&lt;/span>&lt;span class="lnt">166
+&lt;/span>&lt;span class="lnt">167
+&lt;/span>&lt;span class="lnt">168
+&lt;/span>&lt;span class="lnt">169
+&lt;/span>&lt;span class="lnt">170
+&lt;/span>&lt;span class="lnt">171
+&lt;/span>&lt;span class="lnt">172
+&lt;/span>&lt;span class="lnt">173
+&lt;/span>&lt;span class="lnt">174
+&lt;/span>&lt;span class="lnt">175
+&lt;/span>&lt;span class="lnt">176
+&lt;/span>&lt;span class="lnt">177
+&lt;/span>&lt;span class="lnt">178
+&lt;/span>&lt;span class="lnt">179
+&lt;/span>&lt;span class="lnt">180
+&lt;/span>&lt;span class="lnt">181
+&lt;/span>&lt;span class="lnt">182
+&lt;/span>&lt;span class="lnt">183
+&lt;/span>&lt;span class="lnt">184
+&lt;/span>&lt;span class="lnt">185
+&lt;/span>&lt;span class="lnt">186
+&lt;/span>&lt;span class="lnt">187
+&lt;/span>&lt;span class="lnt">188
+&lt;/span>&lt;span class="lnt">189
+&lt;/span>&lt;span class="lnt">190
+&lt;/span>&lt;span class="lnt">191
+&lt;/span>&lt;span class="lnt">192
+&lt;/span>&lt;span class="lnt">193
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="cp">#!/usr/bin/env bash
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="cp">&lt;/span>&lt;span class="c1"># ==============================================================================&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Script : daily-report.sh&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Purpose: Collect metrics, generate daily report, alert on threshold breaches&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Schedule via cron: 0 8 * * * /opt/scripts/daily-report.sh&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># ==============================================================================&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">set&lt;/span> -euo pipefail
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nv">IFS&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s1">$&amp;#39;\n\t&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">readonly&lt;/span> &lt;span class="nv">LOG_DIR&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;/var/log/daily-report&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">readonly&lt;/span> &lt;span class="nv">TIMESTAMP&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>date &lt;span class="s1">&amp;#39;+%Y%m%d_%H%M%S&amp;#39;&lt;/span>&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">readonly&lt;/span> &lt;span class="nv">REPORT_FILE&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">LOG_DIR&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">/report_&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">TIMESTAMP&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">.txt&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">readonly&lt;/span> &lt;span class="nv">CSV_FILE&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">LOG_DIR&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">/metrics.csv&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">readonly&lt;/span> &lt;span class="nv">HOSTNAME&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>hostname -s&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">readonly&lt;/span> &lt;span class="nv">DATE_STR&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>date &lt;span class="s1">&amp;#39;+%Y-%m-%d %H:%M:%S&amp;#39;&lt;/span>&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Thresholds&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">readonly&lt;/span> &lt;span class="nv">CPU_WARN&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">CPU_WARN&lt;/span>&lt;span class="k">:-&lt;/span>&lt;span class="nv">80&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">readonly&lt;/span> &lt;span class="nv">CPU_CRIT&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">CPU_CRIT&lt;/span>&lt;span class="k">:-&lt;/span>&lt;span class="nv">95&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">readonly&lt;/span> &lt;span class="nv">RAM_WARN&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">RAM_WARN&lt;/span>&lt;span class="k">:-&lt;/span>&lt;span class="nv">80&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">readonly&lt;/span> &lt;span class="nv">RAM_CRIT&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">RAM_CRIT&lt;/span>&lt;span class="k">:-&lt;/span>&lt;span class="nv">95&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">readonly&lt;/span> &lt;span class="nv">DISK_WARN&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">DISK_WARN&lt;/span>&lt;span class="k">:-&lt;/span>&lt;span class="nv">80&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="nb">readonly&lt;/span> &lt;span class="nv">DISK_CRIT&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">DISK_CRIT&lt;/span>&lt;span class="k">:-&lt;/span>&lt;span class="nv">90&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">mkdir -p &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$LOG_DIR&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># --- Metric collection functions ---&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">cpu_usage&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> top -bn1 &lt;span class="p">|&lt;/span> grep &lt;span class="s2">&amp;#34;Cpu(s)&amp;#34;&lt;/span> &lt;span class="p">|&lt;/span> awk &lt;span class="s1">&amp;#39;{printf &amp;#34;%.1f&amp;#34;, 100 - $8}&amp;#39;&lt;/span> &lt;span class="p">|&lt;/span> tr -d &lt;span class="s1">&amp;#39;,&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ram_usage&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> free &lt;span class="p">|&lt;/span> awk &lt;span class="s1">&amp;#39;/Mem:/ {printf &amp;#34;%.1f&amp;#34;, $3/$2*100}&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">ram_used_mb&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> free -m &lt;span class="p">|&lt;/span> awk &lt;span class="s1">&amp;#39;/Mem:/ {print $3}&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">disk_usage&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> df / &lt;span class="p">|&lt;/span> tail -1 &lt;span class="p">|&lt;/span> awk &lt;span class="s1">&amp;#39;{print $5}&amp;#39;&lt;/span> &lt;span class="p">|&lt;/span> tr -d &lt;span class="s1">&amp;#39;%&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">disk_used_gb&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> df -BG / &lt;span class="p">|&lt;/span> tail -1 &lt;span class="p">|&lt;/span> awk &lt;span class="s1">&amp;#39;{print $3}&amp;#39;&lt;/span> &lt;span class="p">|&lt;/span> tr -d &lt;span class="s1">&amp;#39;G&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">load_avg&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> awk &lt;span class="s1">&amp;#39;{print $1}&amp;#39;&lt;/span> /proc/loadavg
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">tcp_connections&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> ss -s &lt;span class="p">|&lt;/span> awk &lt;span class="s1">&amp;#39;/^TCP:/ {print $4}&amp;#39;&lt;/span> &lt;span class="p">|&lt;/span> tr -d &lt;span class="s1">&amp;#39;,&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">running_procs&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> ps aux &lt;span class="p">|&lt;/span> wc -l
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">uptime_display&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> uptime -p 2&amp;gt;/dev/null &lt;span class="o">||&lt;/span> awk &lt;span class="s1">&amp;#39;{d=int($1/86400); h=int(($1%86400)/3600); m=int(($1%3600)/60); printf &amp;#34;up %dd %dh %dm&amp;#34;, d, h, m}&amp;#39;&lt;/span> /proc/uptime
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># --- CSV recording ---&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">init_csv&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">[[&lt;/span> ! -f &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$CSV_FILE&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="o">]]&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;timestamp,hostname,cpu_pct,ram_pct,disk_pct,load_avg,procs,tcp_conn&amp;#34;&lt;/span> &amp;gt; &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$CSV_FILE&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">record_csv&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> &lt;span class="nv">cpu&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$1&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="nv">ram&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$2&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="nv">disk&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$3&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="nv">load&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$4&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="nv">procs&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$5&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="nv">conn&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$6&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">DATE_STR&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">,&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">HOSTNAME&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">,&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">cpu&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">,&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">ram&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">,&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">disk&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">,&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">load&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">,&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">procs&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">,&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">conn&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &amp;gt;&amp;gt; &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$CSV_FILE&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># --- Alert functions ---&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">determine_level&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> &lt;span class="nv">value&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$1&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="nv">warn&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$2&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="nv">crit&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$3&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">[[&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="k">$(&lt;/span>&lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$value&lt;/span>&lt;span class="s2"> &amp;gt;= &lt;/span>&lt;span class="nv">$crit&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="p">|&lt;/span> bc 2&amp;gt;/dev/null &lt;span class="o">||&lt;/span> &lt;span class="nb">echo&lt;/span> 0&lt;span class="k">)&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> -eq &lt;span class="m">1&lt;/span> &lt;span class="o">]]&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;CRITICAL&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">elif&lt;/span> &lt;span class="o">[[&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="k">$(&lt;/span>&lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$value&lt;/span>&lt;span class="s2"> &amp;gt;= &lt;/span>&lt;span class="nv">$warn&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="p">|&lt;/span> bc 2&amp;gt;/dev/null &lt;span class="o">||&lt;/span> &lt;span class="nb">echo&lt;/span> 0&lt;span class="k">)&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> -eq &lt;span class="m">1&lt;/span> &lt;span class="o">]]&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;WARNING&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">else&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;OK&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">send_slack&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> &lt;span class="nv">msg&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$1&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">[[&lt;/span> -n &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">SLACK_WEBHOOK&lt;/span>&lt;span class="k">:-&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="o">]]&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> curl -s -X POST -H &lt;span class="s1">&amp;#39;Content-type: application/json&amp;#39;&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> --data &lt;span class="s2">&amp;#34;{\&amp;#34;text\&amp;#34;:\&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">msg&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">\&amp;#34;}&amp;#34;&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$SLACK_WEBHOOK&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &amp;gt;/dev/null 2&amp;gt;&lt;span class="p">&amp;amp;&lt;/span>&lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">send_telegram&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> &lt;span class="nv">msg&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$1&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">[[&lt;/span> -n &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">TELEGRAM_BOT_TOKEN&lt;/span>&lt;span class="k">:-&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> -n &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">TELEGRAM_CHAT_ID&lt;/span>&lt;span class="k">:-&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="o">]]&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> curl -s -X POST &lt;span class="s2">&amp;#34;https://api.telegram.org/bot&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">TELEGRAM_BOT_TOKEN&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">/sendMessage&amp;#34;&lt;/span> &lt;span class="se">\
+&lt;/span>&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="se">&lt;/span> -d &lt;span class="s2">&amp;#34;chat_id=&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">TELEGRAM_CHAT_ID&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> -d &lt;span class="s2">&amp;#34;text=&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">msg&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> -d &lt;span class="s2">&amp;#34;parse_mode=Markdown&amp;#34;&lt;/span> &amp;gt;/dev/null 2&amp;gt;&lt;span class="p">&amp;amp;&lt;/span>&lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">notify&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> &lt;span class="nv">msg&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$1&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> send_slack &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$msg&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> send_telegram &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$msg&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># --- Main report generation ---&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">generate_report&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> cpu ram disk load procs conn uptime ram_used disk_used
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">cpu&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>cpu_usage&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">ram&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>ram_usage&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">disk&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>disk_usage&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">load&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>load_avg&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">procs&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>running_procs&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">conn&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>tcp_connections&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">uptime_display&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>uptime_display&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">ram_used&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>ram_used_mb&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">disk_used&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>disk_used_gb&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># Write report file&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;========================================&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34; DAILY SYSTEM REPORT&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34; Host: &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">HOSTNAME&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34; Date: &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">DATE_STR&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;========================================&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;--- System Info ---&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34; Uptime: &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">uptime_display&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34; Processes: &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">procs&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34; TCP Connections: &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">conn&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;--- Resource Usage ---&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34; CPU: &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">cpu&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">%&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34; RAM: &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">ram&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">% (&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">ram_used&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2"> MB used)&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34; Disk: &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">disk&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">% (&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">disk_used&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2"> GB used)&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34; Load: &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">load&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;--- Thresholds ---&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34; CPU: &lt;/span>&lt;span class="k">$(&lt;/span>determine_level &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$cpu&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$CPU_WARN&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$CPU_CRIT&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="k">)&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34; RAM: &lt;/span>&lt;span class="k">$(&lt;/span>determine_level &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$ram&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$RAM_WARN&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$RAM_CRIT&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="k">)&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34; Disk: &lt;/span>&lt;span class="k">$(&lt;/span>determine_level &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$disk&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$DISK_WARN&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$DISK_CRIT&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="k">)&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;--- Top 5 CPU Processes ---&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> ps aux --sort&lt;span class="o">=&lt;/span>-%cpu &lt;span class="p">|&lt;/span> head -6 &lt;span class="p">|&lt;/span> awk &lt;span class="s1">&amp;#39;{printf &amp;#34; %-8s %5s%% CPU %5s%% RAM %s\n&amp;#34;, $1, $3, $4, $11}&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;--- Top 5 RAM Processes ---&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> ps aux --sort&lt;span class="o">=&lt;/span>-%mem &lt;span class="p">|&lt;/span> head -6 &lt;span class="p">|&lt;/span> awk &lt;span class="s1">&amp;#39;{printf &amp;#34; %-8s %5s%% CPU %5s%% RAM %s\n&amp;#34;, $1, $3, $4, $11}&amp;#39;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;========================================&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">}&lt;/span> &amp;gt; &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$REPORT_FILE&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># Record to CSV&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> init_csv
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> record_csv &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$cpu&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$ram&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$disk&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$load&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$procs&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$conn&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># Print report to stdout&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> cat &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$REPORT_FILE&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="c1"># Send alerts if needed&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> &lt;span class="nv">alerts&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> cpu_level ram_level disk_level
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">cpu_level&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>determine_level &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$cpu&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$CPU_WARN&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$CPU_CRIT&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">ram_level&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>determine_level &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$ram&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$RAM_WARN&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$RAM_CRIT&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nv">disk_level&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="k">$(&lt;/span>determine_level &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$disk&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$DISK_WARN&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$DISK_CRIT&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="k">)&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">[[&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$cpu_level&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> !&lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;OK&amp;#34;&lt;/span> &lt;span class="o">]]&lt;/span> &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> &lt;span class="nv">alerts&lt;/span>&lt;span class="o">+=&lt;/span>&lt;span class="s2">&amp;#34;CPU: &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">cpu&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">% (&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">cpu_level&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">)\n&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">[[&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$ram_level&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> !&lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;OK&amp;#34;&lt;/span> &lt;span class="o">]]&lt;/span> &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> &lt;span class="nv">alerts&lt;/span>&lt;span class="o">+=&lt;/span>&lt;span class="s2">&amp;#34;RAM: &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">ram&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">% (&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">ram_level&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">)\n&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="o">[[&lt;/span> &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$disk_level&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> !&lt;span class="o">=&lt;/span> &lt;span class="s2">&amp;#34;OK&amp;#34;&lt;/span> &lt;span class="o">]]&lt;/span> &lt;span class="o">&amp;amp;&amp;amp;&lt;/span> &lt;span class="nv">alerts&lt;/span>&lt;span class="o">+=&lt;/span>&lt;span class="s2">&amp;#34;Disk: &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">disk&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">% (&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">disk_level&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">)\n&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">if&lt;/span> &lt;span class="o">[[&lt;/span> -n &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$alerts&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span> &lt;span class="o">]]&lt;/span>&lt;span class="p">;&lt;/span> &lt;span class="k">then&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">local&lt;/span> &lt;span class="nv">alert_msg&lt;/span>&lt;span class="o">=&lt;/span>&lt;span class="s2">&amp;#34;*[&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">HOSTNAME&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">] System Alert*\n&lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">alerts&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">Uptime: &lt;/span>&lt;span class="si">${&lt;/span>&lt;span class="nv">uptime_display&lt;/span>&lt;span class="si">}&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> notify -e &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$alert_msg&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="k">fi&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">main&lt;span class="o">()&lt;/span> &lt;span class="o">{&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> generate_report
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;Report saved to: &lt;/span>&lt;span class="nv">$REPORT_FILE&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> &lt;span class="nb">echo&lt;/span> &lt;span class="s2">&amp;#34;CSV log: &lt;/span>&lt;span class="nv">$CSV_FILE&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="o">}&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">main &lt;span class="s2">&amp;#34;&lt;/span>&lt;span class="nv">$@&lt;/span>&lt;span class="s2">&amp;#34;&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="cron-configuration">Cron Configuration
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt">1
+&lt;/span>&lt;span class="lnt">2
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-bash" data-lang="bash">&lt;span class="line">&lt;span class="cl">&lt;span class="c1"># Run daily at 8:00 AM&lt;/span>
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">&lt;span class="m">0&lt;/span> &lt;span class="m">8&lt;/span> * * * /opt/scripts/daily-report.sh &amp;gt;&amp;gt; /var/log/daily-report/cron.log 2&amp;gt;&lt;span class="p">&amp;amp;&lt;/span>&lt;span class="m">1&lt;/span>
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;h3 id="sample-output">Sample Output
+&lt;/h3>&lt;div class="highlight">&lt;div class="chroma">
+&lt;table class="lntable">&lt;tr>&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code>&lt;span class="lnt"> 1
+&lt;/span>&lt;span class="lnt"> 2
+&lt;/span>&lt;span class="lnt"> 3
+&lt;/span>&lt;span class="lnt"> 4
+&lt;/span>&lt;span class="lnt"> 5
+&lt;/span>&lt;span class="lnt"> 6
+&lt;/span>&lt;span class="lnt"> 7
+&lt;/span>&lt;span class="lnt"> 8
+&lt;/span>&lt;span class="lnt"> 9
+&lt;/span>&lt;span class="lnt">10
+&lt;/span>&lt;span class="lnt">11
+&lt;/span>&lt;span class="lnt">12
+&lt;/span>&lt;span class="lnt">13
+&lt;/span>&lt;span class="lnt">14
+&lt;/span>&lt;span class="lnt">15
+&lt;/span>&lt;span class="lnt">16
+&lt;/span>&lt;span class="lnt">17
+&lt;/span>&lt;span class="lnt">18
+&lt;/span>&lt;span class="lnt">19
+&lt;/span>&lt;span class="lnt">20
+&lt;/span>&lt;span class="lnt">21
+&lt;/span>&lt;span class="lnt">22
+&lt;/span>&lt;span class="lnt">23
+&lt;/span>&lt;span class="lnt">24
+&lt;/span>&lt;span class="lnt">25
+&lt;/span>&lt;span class="lnt">26
+&lt;/span>&lt;span class="lnt">27
+&lt;/span>&lt;span class="lnt">28
+&lt;/span>&lt;span class="lnt">29
+&lt;/span>&lt;span class="lnt">30
+&lt;/span>&lt;span class="lnt">31
+&lt;/span>&lt;span class="lnt">32
+&lt;/span>&lt;span class="lnt">33
+&lt;/span>&lt;span class="lnt">34
+&lt;/span>&lt;span class="lnt">35
+&lt;/span>&lt;span class="lnt">36
+&lt;/span>&lt;/code>&lt;/pre>&lt;/td>
+&lt;td class="lntd">
+&lt;pre tabindex="0" class="chroma">&lt;code class="language-text" data-lang="text">&lt;span class="line">&lt;span class="cl">========================================
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> DAILY SYSTEM REPORT
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Host: web-prod-01
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Date: 2026-09-01 08:00:00
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">========================================
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">--- System Info ---
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Uptime: up 45 days 3 hours 22 minutes
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Processes: 234
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> TCP Connections: 187
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">--- Resource Usage ---
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> CPU: 23.4%
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> RAM: 67.2% (5412 MB used)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Disk: 72% (58 GB used)
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Load: 1.85
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">--- Thresholds ---
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> CPU: OK
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> RAM: OK
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> Disk: OK
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">--- Top 5 CPU Processes ---
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> root 12.3% CPU 0.1% RAM nginx: worker
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> www-data 8.7% CPU 2.1% RAM php-fpm: pool
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> mysql 5.2% CPU 15.3% RAM mysqld
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> root 3.1% CPU 0.8% RAM node /opt/api
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> root 1.4% CPU 0.2% RAM sshd
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">--- Top 5 RAM Processes ---
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> mysql 15.3% RAM 5.2% CPU mysqld
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> www-data 2.1% RAM 8.7% CPU php-fpm: pool
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> root 1.8% RAM 0.9% CPU node /opt/api
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> root 0.8% RAM 3.1% CPU node /opt/api
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl"> redis 0.5% RAM 0.3% CPU redis-server
+&lt;/span>&lt;/span>&lt;span class="line">&lt;span class="cl">========================================
+&lt;/span>&lt;/span>&lt;/code>&lt;/pre>&lt;/td>&lt;/tr>&lt;/table>
+&lt;/div>
+&lt;/div>&lt;hr>
+&lt;h2 id="deployment-notes--best-practices">Deployment Notes &amp;amp; Best Practices
+&lt;/h2>&lt;ul>
+&lt;li>&lt;strong>Webhook security:&lt;/strong> Store Slack webhook URLs and Telegram bot tokens as environment variables or in files with &lt;code>600&lt;/code> permissions—never hardcode them in scripts.&lt;/li>
+&lt;li>&lt;strong>Metric history:&lt;/strong> CSV files grow over time. Combine with &lt;code>logrotate&lt;/code> or a periodic cleanup script to keep file sizes manageable. You can also use &lt;code>awk&lt;/code> or &lt;code>python&lt;/code> to analyze trends from the CSV.&lt;/li>
+&lt;li>&lt;strong>Threshold tuning:&lt;/strong> The defaults (80%/95%) work for most servers. Adjust for specific workloads—batch processing servers may need higher CPU thresholds.&lt;/li>
+&lt;li>&lt;strong>Multi-server monitoring:&lt;/strong> To monitor multiple servers, combine with SSH from &lt;a class="link" href="https://tech.nguuyen.io.vn/posts/bash/bash-step-thirteen/" >Post 13&lt;/a>—run the script on each server and aggregate results in one place.&lt;/li>
+&lt;li>&lt;strong>Escalation:&lt;/strong> When receiving a CRITICAL alert, the script can call APIs to create tickets in issue tracking systems (Jira, GitHub Issues).&lt;/li>
+&lt;/ul>
+&lt;hr>
+&lt;h2 id="conclusion">Conclusion
+&lt;/h2>&lt;p>Monitoring with Bash doesn&amp;rsquo;t need to be complex—just collect the right metrics, set appropriate alert thresholds, and send notifications to the right channels. From reading CPU/RAM/Disk, logging to CSV for trend analysis, sending alerts via Slack/Telegram, to generating daily reports—all within a single Bash script running periodically via cron.&lt;/p>
+&lt;p>In the &lt;a class="link" href="https://tech.nguuyen.io.vn/posts/bash/bash-step-sixteen/" >next post&lt;/a>, we will explore &lt;strong>Advanced Bash: Parallel Execution&lt;/strong>—optimizing script performance with background processes, &lt;code>xargs -P&lt;/code>, &lt;code>GNU parallel&lt;/code>, and concurrency management.&lt;/p></description></item><item><title>Cron Jobs with Bash: Scheduled Automation for DevOps</title><link>https://tech.nguuyen.io.vn/posts/bash/bash-step-eight/</link><pubDate>Sun, 28 Jun 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/bash/bash-step-eight/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/bash/bash-step-eight.jpg" alt="Featured image of post Cron Jobs with Bash: Scheduled Automation for DevOps" />&lt;h2 id="cron-jobs-in-bash-for-devops">Cron jobs in Bash for DevOps
 &lt;/h2>&lt;p>In the &lt;a class="link" href="https://tech.nguuyen.io.vn/posts/bash/bash-step-seven/" >previous article&lt;/a> we managed variables, &lt;code>.env&lt;/code> files, CLI arguments, and special Bash variables. Once a script works reliably when you run it manually, the next question is: &lt;strong>how do you make it run at the right time automatically?&lt;/strong>&lt;/p>
 &lt;p>&lt;code>cron&lt;/code> is the classic Linux/Unix tool for running commands or scripts on a schedule. In DevOps, cron is often used for periodic backups, log cleanup, health checks, file sync, reports, SSL certificate checks, or lightweight maintenance endpoints.&lt;/p>
 &lt;p>The important detail is that cron runs with a much smaller environment than your interactive terminal. A script that works manually may still fail in cron if it depends on &lt;code>PATH&lt;/code>, the current directory, environment variables, or clear logging.&lt;/p>
