@@ -1,0 +1,693 @@
+<!doctype html><html lang=en dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="Comprehensive guide to parallel execution in Bash: background processes, wait, jobs, xargs -P, GNU parallel, concurrency management, race conditions, and file locking with flock in DevOps."><title>Advanced Bash: Parallel Execution in DevOps</title>
+<link rel=canonical href=https://tech.nguuyen.io.vn/posts/bash/bash-step-sixteen/><link rel=stylesheet href=/scss/style.min.f81849b8316928f1a4acd8bedb13fe9bc537531cf21b3a0d71ee770cb5069c1f.css><meta property='og:title' content="Advanced Bash: Parallel Execution in DevOps"><meta property='og:description' content="Comprehensive guide to parallel execution in Bash: background processes, wait, jobs, xargs -P, GNU parallel, concurrency management, race conditions, and file locking with flock in DevOps."><meta property='og:url' content='https://tech.nguuyen.io.vn/posts/bash/bash-step-sixteen/'><meta property='og:site_name' content='Hoang Duong'><meta property='og:type' content='article'><meta property='article:section' content='Posts'><meta property='article:tag' content='bash'><meta property='article:tag' content='shell-script'><meta property='article:tag' content='devops'><meta property='article:tag' content='parallel-execution'><meta property='article:tag' content='xargs'><meta property='article:tag' content='gnu-parallel'><meta property='article:tag' content='concurrency'><meta property='article:tag' content='performance'><meta property='article:published_time' content='2026-09-02T00:00:00+00:00'><meta property='article:modified_time' content='2026-09-02T00:00:00+07:00'><meta property='og:image' content='https://tech.nguuyen.io.vn/images/bash/bash-step-sixteen.jpg'><meta name=twitter:title content="Advanced Bash: Parallel Execution in DevOps"><meta name=twitter:description content="Comprehensive guide to parallel execution in Bash: background processes, wait, jobs, xargs -P, GNU parallel, concurrency management, race conditions, and file locking with flock in DevOps."><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://tech.nguuyen.io.vn/images/bash/bash-step-sixteen.jpg'><link rel=icon type=image/x-icon href=/favicon.ico><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel=stylesheet></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><header class="hd-header is-article-header"><div class=hd-header-inner><div class=hd-brand><a href=/ class=hd-logo-link><span class=hd-logo-text>Hoang Duong</span></a></div><div class=hd-header-divider aria-hidden=true></div><div class=hd-header-rail><a href=/ class="header-rail-crumb header-rail-home">BLOG
+</a><span class=header-rail-sep>//</span>
+<a href=/categories/devops/ class="header-rail-crumb header-rail-cat">[DEVOPS]
+</a><span class=header-rail-title>Advanced Bash: Parallel Execution in DevOps</span></div><div class=hd-header-spacer></div><nav class=hd-nav-links><button id=hd-menu-toggle class=hd-menu-trigger-fixed aria-label="Toggle Menu" title=Menu type=button><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentcolor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" class="chevron-icon"><polyline points="6 9 12 15 18 9"/></svg></button></nav></div></header><div id=hd-menu-dropdown class=hd-menu-popover aria-hidden=true><div class=hd-popover-inner><div class=hd-popover-nav><span class=popover-section-label>NAVIGATION</span>
+<a href=/ class=popover-item>Home</a>
+<a href=/about/ class=popover-item>About</a>
+<a href=/archives/ class=popover-item>Archives</a>
+<a href=/links/ class=popover-item>Links</a>
+<a href=/categories/ class=popover-item>Categories</a></div><div class=hd-popover-footer><a href=/vi/posts/bash/bash-step-sixteen/ class="popover-btn lang-btn" title="Tiếng Việt"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentcolor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>VI</span>
+</a><button class="popover-btn theme-btn dark-mode-toggle" data-toggle-theme title="Dark Mode" type=button>
+<svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+</button>
+<button type=button class="popover-btn search-btn search-trigger-btn" data-open-search aria-label="Search (Cmd+K)" title="Search (Cmd+K)">
+<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentcolor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<span class=search-kbd-badge>⌘K</span></button></div></div></div><div id=hd-menu-backdrop class=hd-menu-backdrop aria-hidden=true></div><div class=hd-site-wrapper><main class=hd-main><div class=hd-article-layout><div class=hd-hero-banner-wrap><div class=hd-hero-banner><img src=/images/bash/bash-step-sixteen.jpg alt="Advanced Bash: Parallel Execution in DevOps" class=hd-hero-banner-img></div></div><div class=hd-article-container><div class=hd-article-grid><div class=hd-article-main><article class=hd-article-body><header class=hd-article-header><div class=hd-article-meta-top><time class=meta-date datetime=2026-09-02T00:00:00Z>SEPTEMBER 02, 2026
+</time><span class=meta-dot>&#183;</span>
+<span class=meta-reading-time>10 MIN READ</span>
+<span class=meta-dot>&#183;</span>
+<span class=meta-author>HOÀNG DƯƠNG</span>
+<span class=meta-dot>&#183;</span>
+<a href=/vi/posts/bash/bash-step-sixteen/ class=meta-lang-switch><svg viewBox="0 0 24 24" width="13" height="13" stroke="currentcolor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:3px"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>VI</span></a></div><h1 class=hd-article-title>Advanced Bash: Parallel Execution in DevOps</h1><p class=hd-article-description>Comprehensive guide to parallel execution in Bash: background processes, wait, jobs, xargs -P, GNU parallel, concurrency management, race conditions, and file locking with flock in DevOps.</p><div class=hd-article-categories><a href=/categories/devops/ class=hd-cat-pill>DEVOPS
+</a><a href=/categories/bash/ class=hd-cat-pill>BASH</a></div></header><section class="article-content hd-prose"><h2 id=parallel-execution-in-bash>Parallel Execution in Bash</h2><p>In the <a class=link href=/posts/bash/bash-step-fifteen/>previous post</a>, we explored collecting system metrics and sending automated alerts. But there&rsquo;s a common problem with monitoring scripts: when you need to check 50 servers simultaneously, sequential execution can take minutes—or even hours if each server takes a few seconds to respond.</p><p>Parallel Execution solves this: instead of waiting for server A to finish before moving to server B, you run both at the same time. Bash provides multiple mechanisms for parallelism—from simple <code>&</code>/<code>wait</code>, to convenient <code>xargs -P</code>, to powerful <code>GNU parallel</code>. This article covers leveraging parallelism to optimize DevOps script performance.</p><hr><h2 id=basic-parallel-mechanisms-in-bash>Basic Parallel Mechanisms in Bash</h2><h3 id=background-processes-with->Background Processes with <code>&</code></h3><p>The <code>&</code> symbol at the end of a command runs it in the background, allowing Bash to continue executing the next statement:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Sequential: takes ~9 seconds</span>
+</span></span><span class=line><span class=cl>sleep <span class=m>3</span>
+</span></span><span class=line><span class=cl>sleep <span class=m>3</span>
+</span></span><span class=line><span class=cl>sleep <span class=m>3</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Parallel with &amp;: takes ~3 seconds</span>
+</span></span><span class=line><span class=cl>sleep <span class=m>3</span> <span class=p>&amp;</span>
+</span></span><span class=line><span class=cl>sleep <span class=m>3</span> <span class=p>&amp;</span>
+</span></span><span class=line><span class=cl>sleep <span class=m>3</span> <span class=p>&amp;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=waiting-with-wait>Waiting with <code>wait</code></h3><p><code>wait</code> blocks until all background processes complete:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Starting...&#34;</span>
+</span></span><span class=line><span class=cl>sleep <span class=m>3</span> <span class=p>&amp;</span>
+</span></span><span class=line><span class=cl>sleep <span class=m>2</span> <span class=p>&amp;</span>
+</span></span><span class=line><span class=cl>sleep <span class=m>1</span> <span class=p>&amp;</span>
+</span></span><span class=line><span class=cl><span class=nb>wait</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;All done!&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=checking-running-processes-with-jobs>Checking Running Processes with <code>jobs</code></h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># List background jobs</span>
+</span></span><span class=line><span class=cl><span class=nb>jobs</span> -l
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Count only running jobs</span>
+</span></span><span class=line><span class=cl><span class=nb>jobs</span> -r <span class=p>|</span> wc -l
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Count only stopped jobs</span>
+</span></span><span class=line><span class=cl><span class=nb>jobs</span> -s <span class=p>|</span> wc -l
+</span></span></code></pre></td></tr></table></div></div><h3 id=pid-management>PID Management</h3><p>Each background process has a unique PID. You can save the PID for control:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Save PID</span>
+</span></span><span class=line><span class=cl>sleep <span class=m>60</span> <span class=p>&amp;</span>
+</span></span><span class=line><span class=cl><span class=nv>PID</span><span class=o>=</span><span class=nv>$!</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Started background job with PID: </span><span class=nv>$PID</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Check if job is still running</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=nb>kill</span> -0 <span class=s2>&#34;</span><span class=nv>$PID</span><span class=s2>&#34;</span> 2&gt;/dev/null<span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Job </span><span class=nv>$PID</span><span class=s2> is still running&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>else</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Job </span><span class=nv>$PID</span><span class=s2> has finished&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Stop the job</span>
+</span></span><span class=line><span class=cl><span class=nb>kill</span> <span class=s2>&#34;</span><span class=nv>$PID</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Force stop</span>
+</span></span><span class=line><span class=cl><span class=nb>kill</span> -9 <span class=s2>&#34;</span><span class=nv>$PID</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=limiting-concurrency>Limiting Concurrency</h2><p>Running too many background processes simultaneously can cause overload. The most common way to limit concurrency is using PID arrays or job counting:</p><h3 id=method-1-pid-array>Method 1: PID Array</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nv>MAX_PARALLEL</span><span class=o>=</span><span class=m>3</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>pids</span><span class=o>=()</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> i in <span class=k>$(</span>seq <span class=m>1</span> 10<span class=k>)</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Starting task </span><span class=nv>$i</span><span class=s2>...&#34;</span>
+</span></span><span class=line><span class=cl>    sleep <span class=m>2</span> <span class=p>&amp;</span>  <span class=c1># Simulate task</span>
+</span></span><span class=line><span class=cl>    <span class=nv>pids</span><span class=o>+=(</span><span class=nv>$!</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Wait when limit reached</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> <span class=si>${#</span><span class=nv>pids</span><span class=p>[@]</span><span class=si>}</span> -ge <span class=nv>$MAX_PARALLEL</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>wait</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>pids</span><span class=p>[0]</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nv>pids</span><span class=o>=(</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>pids</span><span class=p>[@]:</span><span class=nv>1</span><span class=si>}</span><span class=s2>&#34;</span><span class=o>)</span>  <span class=c1># Remove first PID</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Wait for remaining</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> pid in <span class=s2>&#34;</span><span class=si>${</span><span class=nv>pids</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    <span class=nb>wait</span> <span class=s2>&#34;</span><span class=nv>$pid</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;All tasks completed.&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=method-2-job-counting>Method 2: Job Counting</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nv>MAX_PARALLEL</span><span class=o>=</span><span class=m>3</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> server in server1 server2 server3 server4 server5<span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    ssh <span class=s2>&#34;</span><span class=nv>$server</span><span class=s2>&#34;</span> <span class=s2>&#34;uptime&#34;</span> <span class=p>&amp;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Wait when too many jobs running</span>
+</span></span><span class=line><span class=cl>    <span class=k>while</span> <span class=o>[[</span> <span class=k>$(</span><span class=nb>jobs</span> -r <span class=p>|</span> wc -l<span class=k>)</span> -ge <span class=nv>$MAX_PARALLEL</span> <span class=o>]]</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>        sleep 0.1
+</span></span><span class=line><span class=cl>    <span class=k>done</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>wait</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;All servers checked.&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=xargs--parallel-with--p>xargs — Parallel with <code>-P</code></h2><p><code>xargs</code> is a powerful tool for running commands on input lists. The <code>-P</code> flag enables parallel execution:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Run ssh on 3 servers in parallel</span>
+</span></span><span class=line><span class=cl><span class=nb>printf</span> <span class=s2>&#34;%s\n&#34;</span> server1 server2 server3 <span class=p>|</span> xargs -n <span class=m>1</span> -P <span class=m>3</span> -I <span class=o>{}</span> ssh user@<span class=o>{}</span> <span class=s2>&#34;hostname&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Check disk on multiple servers</span>
+</span></span><span class=line><span class=cl><span class=nb>printf</span> <span class=s2>&#34;%s\n&#34;</span> server<span class=o>{</span>1..10<span class=o>}</span> <span class=p>|</span> xargs -n <span class=m>1</span> -P <span class=m>5</span> -I <span class=o>{}</span> bash -c <span class=s1>&#39;
+</span></span></span><span class=line><span class=cl><span class=s1>    disk=$(ssh user@{} &#34;df / | tail -1 | awk \&#34;{print \$5}\&#34;&#34; 2&gt;/dev/null)
+</span></span></span><span class=line><span class=cl><span class=s1>    echo &#34;{}: ${disk:-FAIL}&#34;
+</span></span></span><span class=line><span class=cl><span class=s1>&#39;</span>
+</span></span></code></pre></td></tr></table></div></div><p><strong>Flag explanation:</strong></p><ul><li><code>-n 1</code>: Take only 1 argument from input per invocation.</li><li><code>-P 3</code>: Maximum 3 concurrent processes.</li><li><code>-I {}</code>: Placeholder to insert input values into the command.</li></ul><h3 id=practical-example-parallel-database-backups>Practical Example: Parallel Database Backups</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=nv>DATABASES</span><span class=o>=(</span><span class=s2>&#34;db_users&#34;</span> <span class=s2>&#34;db_orders&#34;</span> <span class=s2>&#34;db_inventory&#34;</span> <span class=s2>&#34;db_logs&#34;</span> <span class=s2>&#34;db_analytics&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>printf</span> <span class=s2>&#34;%s\n&#34;</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>DATABASES</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span> <span class=p>|</span> xargs -n <span class=m>1</span> -P <span class=m>3</span> -I <span class=o>{}</span> bash -c <span class=s1>&#39;
+</span></span></span><span class=line><span class=cl><span class=s1>    echo &#34;Backing up {}...&#34;
+</span></span></span><span class=line><span class=cl><span class=s1>    mysqldump --single-transaction {} &gt; /backup/{}_$(date +%Y%m%d).sql
+</span></span></span><span class=line><span class=cl><span class=s1>    if [[ $? -eq 0 ]]; then
+</span></span></span><span class=line><span class=cl><span class=s1>        echo &#34;SUCCESS: {}&#34;
+</span></span></span><span class=line><span class=cl><span class=s1>    else
+</span></span></span><span class=line><span class=cl><span class=s1>        echo &#34;FAILED: {}&#34;
+</span></span></span><span class=line><span class=cl><span class=s1>    fi
+</span></span></span><span class=line><span class=cl><span class=s1>&#39;</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=gnu-parallel--the-most-powerful-tool>GNU parallel — The Most Powerful Tool</h2><p><code>GNU parallel</code> is a dedicated parallel execution tool, more powerful than <code>xargs</code> with many features:</p><h3 id=installation>Installation</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Debian/Ubuntu</span>
+</span></span><span class=line><span class=cl>apt-get install -y parallel
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># CentOS/RHEL</span>
+</span></span><span class=line><span class=cl>yum install -y parallel
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># macOS</span>
+</span></span><span class=line><span class=cl>brew install parallel
+</span></span></code></pre></td></tr></table></div></div><h3 id=basic-usage>Basic Usage</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Run ssh on multiple servers</span>
+</span></span><span class=line><span class=cl>parallel -j <span class=m>3</span> ssh user@<span class=o>{}</span> <span class=s2>&#34;df -h /&#34;</span> ::: server1 server2 server3 server4
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Run with multiple arguments</span>
+</span></span><span class=line><span class=cl>parallel -j <span class=m>3</span> <span class=nb>echo</span> <span class=s2>&#34;Processing {1} with {2}&#34;</span> ::: A B C ::: <span class=m>1</span> <span class=m>2</span> <span class=m>3</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Read input from file</span>
+</span></span><span class=line><span class=cl>parallel -j <span class=m>5</span> &lt; server_list.txt ssh <span class=o>{}</span> <span class=s2>&#34;uptime&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=advanced-features>Advanced Features</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Show progress</span>
+</span></span><span class=line><span class=cl>parallel --progress -j <span class=m>3</span> sleep <span class=o>{}</span> ::: <span class=m>1</span> <span class=m>2</span> <span class=m>3</span> <span class=m>4</span> <span class=m>5</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Show ETA</span>
+</span></span><span class=line><span class=cl>parallel --eta -j <span class=m>3</span> sleep <span class=o>{}</span> ::: <span class=m>1</span> <span class=m>2</span> <span class=m>3</span> <span class=m>4</span> <span class=m>5</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Results in order</span>
+</span></span><span class=line><span class=cl>parallel --keep-order -j <span class=m>3</span> <span class=nb>echo</span> <span class=o>{}</span> ::: C B A
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Write output to separate files</span>
+</span></span><span class=line><span class=cl>parallel --results /tmp/results/ -j <span class=m>3</span> <span class=nb>echo</span> <span class=o>{}</span> ::: task1 task2 task3
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Dry-run (print commands without executing)</span>
+</span></span><span class=line><span class=cl>parallel --dry-run -j <span class=m>3</span> ssh user@<span class=o>{}</span> <span class=s2>&#34;apt update&#34;</span> ::: server1 server2 server3
+</span></span></code></pre></td></tr></table></div></div><h3 id=example-parallel-ssh-execution-on-production>Example: Parallel SSH Execution on Production</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=cp></span><span class=c1># parallel-ssh.sh — Run commands on multiple servers in parallel with GNU parallel</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>SERVERS_FILE</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=nv>servers</span><span class=p>.txt</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>COMMAND</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>2</span><span class=p>:?Usage: </span><span class=nv>$0</span><span class=p> &lt;servers.txt&gt; &lt;command&gt;</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>MAX_JOBS</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>MAX_JOBS</span><span class=k>:-</span><span class=nv>5</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>SSH_OPTS</span><span class=o>=</span><span class=s2>&#34;-o ConnectTimeout=10 -o StrictHostKeyChecking=accept-new&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[[</span> ! -f <span class=s2>&#34;</span><span class=nv>$SERVERS_FILE</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Error: Server file </span><span class=nv>$SERVERS_FILE</span><span class=s2> not found&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Running on </span><span class=k>$(</span>grep -cvE <span class=s1>&#39;^\s*#|^\s*$&#39;</span> <span class=s2>&#34;</span><span class=nv>$SERVERS_FILE</span><span class=s2>&#34;</span><span class=k>)</span><span class=s2> servers with max </span><span class=nv>$MAX_JOBS</span><span class=s2> parallel jobs...&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>grep -vE <span class=s1>&#39;^\s*#|^\s*$&#39;</span> <span class=s2>&#34;</span><span class=nv>$SERVERS_FILE</span><span class=s2>&#34;</span> <span class=p>|</span> parallel -j <span class=s2>&#34;</span><span class=nv>$MAX_JOBS</span><span class=s2>&#34;</span> --keep-order --joblog /tmp/parallel-ssh.log <span class=s1>&#39;
+</span></span></span><span class=line><span class=cl><span class=s1>    result=$(ssh &#39;</span><span class=s2>&#34;</span><span class=nv>$SSH_OPTS</span><span class=s2>&#34;</span><span class=s1>&#39; {} &#34;&#39;</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>COMMAND</span><span class=si>}</span><span class=s2>&#34;</span><span class=s1>&#39;&#34; 2&gt;&amp;1)
+</span></span></span><span class=line><span class=cl><span class=s1>    exit_code=$?
+</span></span></span><span class=line><span class=cl><span class=s1>    if [[ $exit_code -eq 0 ]]; then
+</span></span></span><span class=line><span class=cl><span class=s1>        echo &#34;[OK] {}&#34;
+</span></span></span><span class=line><span class=cl><span class=s1>    else
+</span></span></span><span class=line><span class=cl><span class=s1>        echo &#34;[FAIL] {} (exit: $exit_code)&#34;
+</span></span></span><span class=line><span class=cl><span class=s1>    fi
+</span></span></span><span class=line><span class=cl><span class=s1>    echo &#34;  Output: $result&#34;
+</span></span></span><span class=line><span class=cl><span class=s1>&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Job log saved to /tmp/parallel-ssh.log&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=race-conditions-and-file-locking>Race Conditions and File Locking</h2><p>When multiple processes write to the same file, race conditions can occur—data gets overwritten or interleaved. <code>flock</code> solves this with file locking:</p><h3 id=the-race-condition-problem>The Race Condition Problem</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># DANGEROUS: Multiple processes writing to same log → race condition</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> i in <span class=k>$(</span>seq <span class=m>1</span> 10<span class=k>)</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Task </span><span class=nv>$i</span><span class=s2> completed&#34;</span> &gt;&gt; /tmp/shared.log <span class=p>&amp;</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span><span class=line><span class=cl><span class=nb>wait</span>
+</span></span><span class=line><span class=cl><span class=c1># Result: May lose lines or be out of order</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=solution-with-flock>Solution with flock</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Safe: Use flock to lock file before writing</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> i in <span class=k>$(</span>seq <span class=m>1</span> 10<span class=k>)</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    <span class=o>(</span>
+</span></span><span class=line><span class=cl>        flock <span class=m>200</span>  <span class=c1># Lock file descriptor 200</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;Task </span><span class=nv>$i</span><span class=s2> completed at </span><span class=k>$(</span>date <span class=s1>&#39;+%H:%M:%S.%N&#39;</span><span class=k>)</span><span class=s2>&#34;</span> &gt;&gt; /tmp/shared.log
+</span></span><span class=line><span class=cl>    <span class=o>)</span> 200&gt;/tmp/shared.log <span class=p>&amp;</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span><span class=line><span class=cl><span class=nb>wait</span>
+</span></span><span class=line><span class=cl><span class=c1># Result: Correct order, no lost lines</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=embedding-flock-in-scripts>Embedding flock in Scripts</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=cp></span><span class=c1># safe-concurrent-write.sh — Safe concurrent logging with flock</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>exec</span> 200&gt;/tmp/app.lock  <span class=c1># Open file descriptor for locking</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> task in task1 task2 task3 task4 task5<span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    <span class=o>(</span>
+</span></span><span class=line><span class=cl>        flock <span class=m>200</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;[</span><span class=k>$(</span>date <span class=s1>&#39;+%Y-%m-%d %H:%M:%S&#39;</span><span class=k>)</span><span class=s2>] Processing </span><span class=nv>$task</span><span class=s2>&#34;</span> &gt;&gt; /tmp/app.log
+</span></span><span class=line><span class=cl>        sleep <span class=k>$((</span>RANDOM <span class=o>%</span> <span class=m>3</span><span class=k>))</span>  <span class=c1># Simulate task</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;[</span><span class=k>$(</span>date <span class=s1>&#39;+%Y-%m-%d %H:%M:%S&#39;</span><span class=k>)</span><span class=s2>] Completed </span><span class=nv>$task</span><span class=s2>&#34;</span> &gt;&gt; /tmp/app.log
+</span></span><span class=line><span class=cl>    <span class=o>)</span> <span class=p>&amp;</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>wait</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;All tasks finished. Log:&#34;</span>
+</span></span><span class=line><span class=cl>cat /tmp/app.log
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=practical-example-parallel-system-health-check>Practical Example: Parallel System Health Check</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=cp></span><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl><span class=c1># Script : parallel-healthcheck.sh</span>
+</span></span><span class=line><span class=cl><span class=c1># Purpose: Health check multiple servers in parallel with aggregated results</span>
+</span></span><span class=line><span class=cl><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>SERVERS_FILE</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>SERVERS_FILE</span><span class=k>:-</span><span class=p>/etc/healthcheck/servers.txt</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>MAX_JOBS</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>MAX_JOBS</span><span class=k>:-</span><span class=nv>10</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>TIMEOUT</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>TIMEOUT</span><span class=k>:-</span><span class=nv>10</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>LOG_DIR</span><span class=o>=</span><span class=s2>&#34;/var/log/healthcheck&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>TIMESTAMP</span><span class=o>=</span><span class=k>$(</span>date <span class=s1>&#39;+%Y%m%d_%H%M%S&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>RESULT_FILE</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>LOG_DIR</span><span class=si>}</span><span class=s2>/result_</span><span class=si>${</span><span class=nv>TIMESTAMP</span><span class=si>}</span><span class=s2>.txt&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>FAIL_FILE</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>LOG_DIR</span><span class=si>}</span><span class=s2>/failures_</span><span class=si>${</span><span class=nv>TIMESTAMP</span><span class=si>}</span><span class=s2>.txt&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>mkdir -p <span class=s2>&#34;</span><span class=nv>$LOG_DIR</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Check functions</span>
+</span></span><span class=line><span class=cl>check_ssh<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>server</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    ssh -o <span class=nv>ConnectTimeout</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$TIMEOUT</span><span class=s2>&#34;</span> -o <span class=nv>BatchMode</span><span class=o>=</span>yes <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>        <span class=s2>&#34;deploy@</span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2>&#34;</span> <span class=s2>&#34;echo OK&#34;</span> 2&gt;/dev/null
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>check_disk<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>server</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    ssh -o <span class=nv>ConnectTimeout</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$TIMEOUT</span><span class=s2>&#34;</span> -o <span class=nv>BatchMode</span><span class=o>=</span>yes <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>        <span class=s2>&#34;deploy@</span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2>&#34;</span> <span class=s2>&#34;df / | tail -1 | awk &#39;{print \$5}&#39; | tr -d &#39;%&#39;&#34;</span> 2&gt;/dev/null
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>check_service<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>server</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span> <span class=nv>service</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$2</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    ssh -o <span class=nv>ConnectTimeout</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$TIMEOUT</span><span class=s2>&#34;</span> -o <span class=nv>BatchMode</span><span class=o>=</span>yes <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>        <span class=s2>&#34;deploy@</span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2>&#34;</span> <span class=s2>&#34;systemctl is-active --quiet </span><span class=si>${</span><span class=nv>service</span><span class=si>}</span><span class=s2> &amp;&amp; echo OK || echo DOWN&#34;</span> 2&gt;/dev/null
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Worker function for parallel</span>
+</span></span><span class=line><span class=cl>check_server<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>server</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>status</span><span class=o>=</span><span class=s2>&#34;OK&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>details</span><span class=o>=</span><span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Check SSH</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> ! check_ssh <span class=s2>&#34;</span><span class=nv>$server</span><span class=s2>&#34;</span> &gt;/dev/null 2&gt;<span class=p>&amp;</span>1<span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;FAIL </span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2> SSH connection failed&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Check disk</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> disk
+</span></span><span class=line><span class=cl>    <span class=nv>disk</span><span class=o>=</span><span class=k>$(</span>check_disk <span class=s2>&#34;</span><span class=nv>$server</span><span class=s2>&#34;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> -n <span class=s2>&#34;</span><span class=nv>$disk</span><span class=s2>&#34;</span> <span class=o>&amp;&amp;</span> <span class=s2>&#34;</span><span class=nv>$disk</span><span class=s2>&#34;</span> -gt <span class=m>85</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nv>details</span><span class=o>+=</span><span class=s2>&#34;disk:</span><span class=si>${</span><span class=nv>disk</span><span class=si>}</span><span class=s2>% &#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nv>status</span><span class=o>=</span><span class=s2>&#34;WARN&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Check services</span>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> svc in nginx docker sshd<span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>        <span class=nb>local</span> svc_status
+</span></span><span class=line><span class=cl>        <span class=nv>svc_status</span><span class=o>=</span><span class=k>$(</span>check_service <span class=s2>&#34;</span><span class=nv>$server</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$svc</span><span class=s2>&#34;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=o>[[</span> <span class=s2>&#34;</span><span class=nv>$svc_status</span><span class=s2>&#34;</span> <span class=o>==</span> <span class=s2>&#34;DOWN&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>            <span class=nv>details</span><span class=o>+=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>svc</span><span class=si>}</span><span class=s2>:down &#34;</span>
+</span></span><span class=line><span class=cl>            <span class=nv>status</span><span class=o>=</span><span class=s2>&#34;WARN&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    <span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>status</span><span class=si>}</span><span class=s2> </span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2> </span><span class=si>${</span><span class=nv>details</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>export</span> -f check_ssh check_disk check_service check_server
+</span></span><span class=line><span class=cl><span class=nb>export</span> TIMEOUT
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>main<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> ! -f <span class=s2>&#34;</span><span class=nv>$SERVERS_FILE</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;Error: </span><span class=nv>$SERVERS_FILE</span><span class=s2> not found&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>        <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> total
+</span></span><span class=line><span class=cl>    <span class=nv>total</span><span class=o>=</span><span class=k>$(</span>grep -cvE <span class=s1>&#39;^\s*#|^\s*$&#39;</span> <span class=s2>&#34;</span><span class=nv>$SERVERS_FILE</span><span class=s2>&#34;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Checking </span><span class=nv>$total</span><span class=s2> servers with max </span><span class=nv>$MAX_JOBS</span><span class=s2> parallel jobs...&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    grep -vE <span class=s1>&#39;^\s*#|^\s*$&#39;</span> <span class=s2>&#34;</span><span class=nv>$SERVERS_FILE</span><span class=s2>&#34;</span> <span class=p>|</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>        parallel -j <span class=s2>&#34;</span><span class=nv>$MAX_JOBS</span><span class=s2>&#34;</span> --keep-order --joblog <span class=s2>&#34;</span><span class=si>${</span><span class=nv>LOG_DIR</span><span class=si>}</span><span class=s2>/joblog_</span><span class=si>${</span><span class=nv>TIMESTAMP</span><span class=si>}</span><span class=s2>.log&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>        check_server <span class=o>{}</span> 2&gt;/dev/null <span class=p>|</span> tee <span class=s2>&#34;</span><span class=nv>$RESULT_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Summary</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> ok_count warn_count fail_count
+</span></span><span class=line><span class=cl>    <span class=nv>ok_count</span><span class=o>=</span><span class=k>$(</span>grep -c <span class=s2>&#34;^OK&#34;</span> <span class=s2>&#34;</span><span class=nv>$RESULT_FILE</span><span class=s2>&#34;</span> 2&gt;/dev/null <span class=o>||</span> <span class=nb>echo</span> 0<span class=k>)</span>
+</span></span><span class=line><span class=cl>    <span class=nv>warn_count</span><span class=o>=</span><span class=k>$(</span>grep -c <span class=s2>&#34;^WARN&#34;</span> <span class=s2>&#34;</span><span class=nv>$RESULT_FILE</span><span class=s2>&#34;</span> 2&gt;/dev/null <span class=o>||</span> <span class=nb>echo</span> 0<span class=k>)</span>
+</span></span><span class=line><span class=cl>    <span class=nv>fail_count</span><span class=o>=</span><span class=k>$(</span>grep -c <span class=s2>&#34;^FAIL&#34;</span> <span class=s2>&#34;</span><span class=nv>$RESULT_FILE</span><span class=s2>&#34;</span> 2&gt;/dev/null <span class=o>||</span> <span class=nb>echo</span> 0<span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;========================================&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;  SUMMARY&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;  Total:  </span><span class=nv>$total</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;  OK:     </span><span class=nv>$ok_count</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;  WARN:   </span><span class=nv>$warn_count</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;  FAIL:   </span><span class=nv>$fail_count</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;========================================&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># List failures</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> <span class=s2>&#34;</span><span class=nv>$fail_count</span><span class=s2>&#34;</span> -gt <span class=m>0</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;Failures:&#34;</span>
+</span></span><span class=line><span class=cl>        grep <span class=s2>&#34;^FAIL&#34;</span> <span class=s2>&#34;</span><span class=nv>$RESULT_FILE</span><span class=s2>&#34;</span> <span class=p>|</span> tee <span class=s2>&#34;</span><span class=nv>$FAIL_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Exit with error if any failures</span>
+</span></span><span class=line><span class=cl>    <span class=o>[[</span> <span class=s2>&#34;</span><span class=nv>$fail_count</span><span class=s2>&#34;</span> -gt <span class=m>0</span> <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>main <span class=s2>&#34;</span><span class=nv>$@</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=sample-output>Sample Output</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>Checking 8 servers with max 5 parallel jobs...
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>OK web-01
+</span></span><span class=line><span class=cl>OK web-02
+</span></span><span class=line><span class=cl>WARN db-01 disk:87% docker:down
+</span></span><span class=line><span class=cl>OK web-03
+</span></span><span class=line><span class=cl>OK worker-01
+</span></span><span class=line><span class=cl>OK worker-02
+</span></span><span class=line><span class=cl>FAIL bastion SSH connection failed
+</span></span><span class=line><span class=cl>OK web-04
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>========================================
+</span></span><span class=line><span class=cl>  SUMMARY
+</span></span><span class=line><span class=cl>  Total:  8
+</span></span><span class=line><span class=cl>  OK:     6
+</span></span><span class=line><span class=cl>  WARN:   1
+</span></span><span class=line><span class=cl>  FAIL:   1
+</span></span><span class=line><span class=cl>========================================
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>Failures:
+</span></span><span class=line><span class=cl>FAIL bastion SSH connection failed
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=deployment-notes--best-practices>Deployment Notes & Best Practices</h2><ul><li><strong>Always limit concurrency:</strong> Running too many SSH sessions or HTTP requests simultaneously can overload the network or source server. Always set <code>MAX_JOBS</code> appropriately—typically 5-10 for SSH, 20-50 for HTTP requests.</li><li><strong>Race conditions when logging:</strong> When parallel scripts write to the same file, always use <code>flock</code> or have each process write to a separate file and aggregate afterward.</li><li><strong>Test sequentially before parallelizing:</strong> Always run the script in sequential mode (MAX_JOBS=1) first to confirm logic is correct, then increase parallelism.</li><li><strong>GNU parallel vs xargs:</strong> <code>xargs -P</code> is sufficient for most simple use cases. GNU parallel excels when you need: ordered output, progress/ETA display, complex error handling, or multi-host execution.</li><li><strong>Timeouts:</strong> Always set timeouts for SSH and HTTP requests to prevent scripts from hanging indefinitely when a server is unresponsive.</li></ul><hr><h2 id=conclusion>Conclusion</h2><p>Parallel Execution is an advanced but extremely useful skill in Bash scripting. From simple background processes with <code>&</code>/<code>wait</code>, to convenient <code>xargs -P</code>, to powerful <code>GNU parallel</code>—you can dramatically reduce processing time for large tasks. Combined with <code>flock</code> to prevent race conditions, you&rsquo;ll have a safe and efficient parallel execution system.</p><p>In the <a class=link href=/posts/bash/bash-step-seventeen/>next post</a>, we will explore <strong>Bash and REST APIs</strong>: calling APIs with <code>curl</code>, parsing JSON with <code>jq</code>, sending bearer auth tokens, and automating workflows with GitHub/Slack APIs.</p></section><div class=hd-article-tags-wrap><span class=tags-label>TAGS:</span><div class=hd-article-tags><a href=/tags/bash/ class=hd-tag-pill>#bash
+</a><a href=/tags/shell-script/ class=hd-tag-pill>#shell-script
+</a><a href=/tags/devops/ class=hd-tag-pill>#devops
+</a><a href=/tags/parallel-execution/ class=hd-tag-pill>#parallel-execution
+</a><a href=/tags/xargs/ class=hd-tag-pill>#xargs
+</a><a href=/tags/gnu-parallel/ class=hd-tag-pill>#gnu-parallel
+</a><a href=/tags/concurrency/ class=hd-tag-pill>#concurrency
+</a><a href=/tags/performance/ class=hd-tag-pill>#performance</a></div></div><div class=hd-article-footer-box><div class=footer-box-item><span class=box-label>AUTHOR</span>
+<span class=box-value>Hoàng Dương</span></div><div class=footer-box-item><span class=box-label>UPDATED</span>
+<span class=box-value>02/09/2026 00:00</span></div><div class=footer-box-item><span class=box-label>LICENSE</span>
+<span class=box-value>CC BY-NC-SA 4.0</span></div></div><nav class=hd-post-nav><a href=/posts/bash/bash-step-fifteen/ class="post-nav-card nav-prev"><span class=nav-direction>&larr; PREVIOUS POST</span>
+<span class=nav-post-title>Monitoring with Bash: System Reporting and Automated Alerting in DevOps</span></a></nav><section class=hd-comments-section><div class=comments-section-header><span class=mono-label>RESPONSES & DISCUSSION</span></div><div class=utterances-container><script>(function(){var t=document.documentElement.dataset.scheme||"light",n=t==="dark"?"github-dark":"github-light",e=document.createElement("script");e.src="https://utteranc.es/client.js",e.setAttribute("repo","hoangduonng/blog_comments"),e.setAttribute("issue-term","pathname"),e.setAttribute("label","comments"),e.setAttribute("theme",n),e.setAttribute("crossorigin","anonymous"),e.async=!0,document.currentScript.parentElement.appendChild(e)})()</script></div><style>.utterances-container{width:100%;margin-top:8px;position:relative}.utterances{max-width:100%!important;margin:0!important}[data-scheme=light] .utterances iframe,html:not([data-scheme=dark]) .utterances iframe{mix-blend-mode:multiply;transition:mix-blend-mode .2s ease}[data-scheme=dark] .utterances iframe{mix-blend-mode:lighten;transition:mix-blend-mode .2s ease}</style><script>let utterancesLoaded=!1;function setUtterancesTheme(e){let t=document.querySelector(".utterances iframe");if(t&&t.contentWindow){let n=e==="dark"?"github-dark":"github-light";t.contentWindow.postMessage({type:"set-theme",theme:n},"https://utteranc.es")}}addEventListener("message",e=>{if(e.origin!=="https://utteranc.es")return;utterancesLoaded=!0,setUtterancesTheme(document.documentElement.dataset.scheme||"light")}),window.addEventListener("onColorSchemeChange",e=>{if(!utterancesLoaded)return;setUtterancesTheme(e.detail)})</script></section></article></div><aside class=hd-article-sidebar><div class=hd-sticky-sidebar-inner><div class=hd-toc-card><div class=toc-header><span class=toc-title-label>ON THIS PAGE</span></div><div class=toc-content id=toc-content><nav id=TableOfContents><ol><li><a href=#parallel-execution-in-bash>Parallel Execution in Bash</a></li><li><a href=#basic-parallel-mechanisms-in-bash>Basic Parallel Mechanisms in Bash</a><ol><li><a href=#background-processes-with->Background Processes with <code>&</code></a></li><li><a href=#waiting-with-wait>Waiting with <code>wait</code></a></li><li><a href=#checking-running-processes-with-jobs>Checking Running Processes with <code>jobs</code></a></li><li><a href=#pid-management>PID Management</a></li></ol></li><li><a href=#limiting-concurrency>Limiting Concurrency</a><ol><li><a href=#method-1-pid-array>Method 1: PID Array</a></li><li><a href=#method-2-job-counting>Method 2: Job Counting</a></li></ol></li><li><a href=#xargs--parallel-with--p>xargs — Parallel with <code>-P</code></a><ol><li><a href=#practical-example-parallel-database-backups>Practical Example: Parallel Database Backups</a></li></ol></li><li><a href=#gnu-parallel--the-most-powerful-tool>GNU parallel — The Most Powerful Tool</a><ol><li><a href=#installation>Installation</a></li><li><a href=#basic-usage>Basic Usage</a></li><li><a href=#advanced-features>Advanced Features</a></li><li><a href=#example-parallel-ssh-execution-on-production>Example: Parallel SSH Execution on Production</a></li></ol></li><li><a href=#race-conditions-and-file-locking>Race Conditions and File Locking</a><ol><li><a href=#the-race-condition-problem>The Race Condition Problem</a></li><li><a href=#solution-with-flock>Solution with flock</a></li><li><a href=#embedding-flock-in-scripts>Embedding flock in Scripts</a></li></ol></li><li><a href=#practical-example-parallel-system-health-check>Practical Example: Parallel System Health Check</a><ol><li><a href=#sample-output>Sample Output</a></li></ol></li><li><a href=#deployment-notes--best-practices>Deployment Notes & Best Practices</a></li><li><a href=#conclusion>Conclusion</a></li></ol></nav></div><div class=toc-scroll-indicator id=toc-indicator style=display:none></div></div></div></aside></div></div><div class=hd-edge-callout-rail><aside class=hd-floating-callout aria-label="Also of interest"><a href=/posts/bash/bash-step-fifteen/ class=floating-callout-art><img src=/images/bash/bash-step-fifteen.jpg alt="Monitoring with Bash: System Reporting and Automated Alerting in DevOps" class=floating-callout-img></a><div class=floating-callout-badge>ALSO <span class=callout-of>of</span> INTEREST</div><div class=floating-callout-body><h4 class=floating-callout-title><a href=/posts/bash/bash-step-fifteen/>Monitoring with Bash: System Reporting and Automated Alerting in DevOps</a></h4><p class=floating-callout-excerpt>Monitoring with Bash in DevOps In the previous post, we explored combining Bash …</p><a href=/posts/bash/bash-step-fifteen/ class=floating-callout-btn>READ &rarr;</a></div></aside></div></div><script>document.addEventListener("DOMContentLoaded",function(){var e=document.getElementById("toc-content"),t=document.getElementById("toc-indicator");if(e&&t){function n(){var s,o,n=e.scrollHeight-e.clientHeight;if(n<=2){t.style.display="none";return}t.style.display="block",s=e.scrollTop/n,o=e.clientHeight-32,t.style.top=e.offsetTop+s*o+"px"}e.addEventListener("scroll",n,{passive:!0}),n(),window.addEventListener("resize",n,{passive:!0}),window.addEventListener("load",n,{passive:!0})}})</script><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><div id=hd-search-overlay class=hd-search-overlay aria-hidden=true data-index-url=/search/index.json data-lang=en data-no-results="No matching articles found" data-no-results-sub="Try searching with different keywords" data-initial-hint="Type a keyword to search articles..." data-results-count=results><div class=hd-search-backdrop id=hd-search-backdrop tabindex=-1></div><div class=hd-search-dialog role=dialog aria-modal=true aria-label="Search Articles"><div class=hd-search-header><div class=hd-search-input-wrapper><svg class="hd-search-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentcolor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<input id=hd-search-input class=hd-search-input type=text placeholder="Search articles, categories, topics..." autocomplete=off autocorrect=off autocapitalize=off spellcheck=false aria-autocomplete=list aria-controls=hd-search-results>
+<button id=hd-search-clear class=hd-search-clear type=button aria-label="Clear input" style=display:none><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentcolor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div><button id=hd-search-close class=hd-search-close-btn type=button aria-label="Close search">
+<kbd class=hd-search-kbd>ESC</kbd></button></div><div class=hd-search-body><div id=hd-search-loading class="hd-search-state hd-search-loading" style=display:none><div class=hd-search-spinner aria-hidden=true></div><span>Loading search index...</span></div><div id=hd-search-initial class="hd-search-state hd-search-initial"><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentcolor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p class=state-title>Quick Search</p><p class=state-desc>Type a keyword or topic to search across all published articles.</p></div><div id=hd-search-empty class="hd-search-state hd-search-empty" style=display:none><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentcolor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="8" x2="14" y2="14"/><line x1="14" y1="8" x2="8" y2="14"/></svg><p class=state-title id=hd-search-empty-title>No matching articles found</p><p class=state-desc id=hd-search-empty-desc>Try searching with different keywords</p></div><div id=hd-search-results class=hd-search-results role=listbox style=display:none></div></div><div class=hd-search-footer><div class=hd-search-shortcuts><span class=shortcut-item><kbd>↑</kbd><kbd>↓</kbd>
+<span class=shortcut-label>Navigate</span>
+</span><span class=shortcut-item><kbd>↵</kbd>
+<span class=shortcut-label>Open</span>
+</span><span class=shortcut-item><kbd>ESC</kbd>
+<span class=shortcut-label>Close</span></span></div><div id=hd-search-count class=hd-search-count style=display:none></div></div></div></div><footer class=hd-site-footer><div class=hd-footer-container><div class=hd-footer-grid><div class=footer-brand-col><a href=/ class=footer-logo><span class=footer-logo-title>Hoang Duong</span></a><div class=footer-status><span class=status-dot></span>
+<span class=status-text>All Systems Operational</span></div><ul class=footer-meta-links><li><a href=/about/>About Blog</a></li><li><a href=/archives/>Archives</a></li></ul></div><div class=footer-links-grid><div class=footer-col><h3 class=footer-col-title>Categories</h3><ul class=footer-col-list><li><a href=/categories/bash/>Bash Series</a></li><li><a href=/categories/devops/>DevOps</a></li><li><a href=/categories/docker/>Docker</a></li><li><a href=/categories/installation-guides/>Installation Guides</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Resources</h3><ul class=footer-col-list><li><a href=/about/>About Me</a></li><li><a href=/archives/>All Articles</a></li><li><a href=#search data-open-search>Search</a></li><li><a href=/links/>Useful Links</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Featured Series</h3><ul class=footer-col-list><li><a href=/posts/bash/bash-step-eight/>Cron Jobs & Bash</a></li><li><a href=/categories/devops/>DevOps Automation</a></li><li><a href=/categories/docker/>Docker Essentials</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Connect</h3><ul class=footer-col-list><li><a href=https://github.com/hoangduonng target=_blank rel=noopener>GitHub ↗</a></li><li><a href=https://www.instagram.com/ngu_uuen/ target=_blank rel=noopener>Instagram ↗</a></li><li><a href=https://www.linkedin.com/in/hoangduonng/ target=_blank rel=noopener>LinkedIn ↗</a></li><li><a href=/index.xml>RSS Feed ↗</a></li></ul></div></div></div><div class=hd-footer-bottom-bar><span class=footer-copyright>&copy; 2026 Hoang Duong. All rights reserved.</span></div></div></footer><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.ee266d8948a6a32b88423f5d374fca9833845f738717cf8061ae442a91efe347.js defer></script></body></html>
