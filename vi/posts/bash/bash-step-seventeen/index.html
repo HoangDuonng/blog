@@ -1,0 +1,603 @@
+<!doctype html><html lang=vi dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="Hướng dẫn gọi REST API với curl trong Bash: GET/POST/PUT/DELETE, parse JSON với jq, bearer auth, retry logic, và tự động hóa GitHub/Slack API trong DevOps."><title>Bash và REST API: Gọi và xử lý API hiệu quả trong DevOps</title>
+<link rel=canonical href=https://tech.nguuyen.io.vn/vi/posts/bash/bash-step-seventeen/><link rel=stylesheet href=/scss/style.min.f81849b8316928f1a4acd8bedb13fe9bc537531cf21b3a0d71ee770cb5069c1f.css><meta property='og:title' content="Bash và REST API: Gọi và xử lý API hiệu quả trong DevOps"><meta property='og:description' content="Hướng dẫn gọi REST API với curl trong Bash: GET/POST/PUT/DELETE, parse JSON với jq, bearer auth, retry logic, và tự động hóa GitHub/Slack API trong DevOps."><meta property='og:url' content='https://tech.nguuyen.io.vn/vi/posts/bash/bash-step-seventeen/'><meta property='og:site_name' content='Hoàng Dương'><meta property='og:type' content='article'><meta property='article:section' content='Posts'><meta property='article:tag' content='bash'><meta property='article:tag' content='shell-script'><meta property='article:tag' content='devops'><meta property='article:tag' content='rest-api'><meta property='article:tag' content='curl'><meta property='article:tag' content='jq'><meta property='article:tag' content='json'><meta property='article:tag' content='github-api'><meta property='article:tag' content='slack-api'><meta property='article:published_time' content='2026-09-03T00:00:00+00:00'><meta property='article:modified_time' content='2026-09-03T00:00:00+00:00'><meta property='og:image' content='https://tech.nguuyen.io.vn/images/bash/bash-step-seventeen.jpg'><meta name=twitter:title content="Bash và REST API: Gọi và xử lý API hiệu quả trong DevOps"><meta name=twitter:description content="Hướng dẫn gọi REST API với curl trong Bash: GET/POST/PUT/DELETE, parse JSON với jq, bearer auth, retry logic, và tự động hóa GitHub/Slack API trong DevOps."><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://tech.nguuyen.io.vn/images/bash/bash-step-seventeen.jpg'><link rel=icon type=image/x-icon href=/favicon.ico><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel=stylesheet></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><header class="hd-header is-article-header"><div class=hd-header-inner><div class=hd-brand><a href=/vi/ class=hd-logo-link><span class=hd-logo-text>Hoang Duong</span></a></div><div class=hd-header-divider aria-hidden=true></div><div class=hd-header-rail><a href=/vi/ class="header-rail-crumb header-rail-home">BÀI VIẾT
+</a><span class=header-rail-sep>//</span>
+<a href=/vi/categories/devops/ class="header-rail-crumb header-rail-cat">[DEVOPS]
+</a><span class=header-rail-title>Bash và REST API: Gọi và xử lý API hiệu quả trong DevOps</span></div><div class=hd-header-spacer></div><nav class=hd-nav-links><button id=hd-menu-toggle class=hd-menu-trigger-fixed aria-label="Toggle Menu" title=Menu type=button><svg viewBox="0 0 24 24" width="20" height="20" stroke="currentcolor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" class="chevron-icon"><polyline points="6 9 12 15 18 9"/></svg></button></nav></div></header><div id=hd-menu-dropdown class=hd-menu-popover aria-hidden=true><div class=hd-popover-inner><div class=hd-popover-nav><span class=popover-section-label>ĐIỀU HƯỚNG</span>
+<a href=/vi/ class=popover-item>Trang chủ</a>
+<a href=/vi/about/ class=popover-item>Về tôi</a>
+<a href=/vi/archives/ class=popover-item>Lưu trữ</a>
+<a href=/vi/links/ class=popover-item>Liên kết</a>
+<a href=/vi/categories/ class=popover-item>Chuyên mục</a></div><div class=hd-popover-footer><a href=/posts/bash/bash-step-seventeen/ class="popover-btn lang-btn" title=English><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentcolor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>EN</span>
+</a><button class="popover-btn theme-btn dark-mode-toggle" data-toggle-theme title="Chế độ tối" type=button>
+<svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentcolor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+</button>
+<button type=button class="popover-btn search-btn search-trigger-btn" data-open-search aria-label="Tìm kiếm (Cmd+K)" title="Tìm kiếm (Cmd+K)">
+<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentcolor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<span class=search-kbd-badge>⌘K</span></button></div></div></div><div id=hd-menu-backdrop class=hd-menu-backdrop aria-hidden=true></div><div class=hd-site-wrapper><main class=hd-main><div class=hd-article-layout><div class=hd-hero-banner-wrap><div class=hd-hero-banner><img src=/images/bash/bash-step-seventeen.jpg alt="Bash và REST API: Gọi và xử lý API hiệu quả trong DevOps" class=hd-hero-banner-img></div></div><div class=hd-article-container><div class=hd-article-grid><div class=hd-article-main><article class=hd-article-body><header class=hd-article-header><div class=hd-article-meta-top><time class=meta-date datetime=2026-09-03T00:00:00Z>SEPTEMBER 03, 2026
+</time><span class=meta-dot>&#183;</span>
+<span class=meta-reading-time>9 PHÚT ĐỌC</span>
+<span class=meta-dot>&#183;</span>
+<span class=meta-author>HOÀNG DƯƠNG</span>
+<span class=meta-dot>&#183;</span>
+<a href=/posts/bash/bash-step-seventeen/ class=meta-lang-switch><svg viewBox="0 0 24 24" width="13" height="13" stroke="currentcolor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:3px"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>EN</span></a></div><h1 class=hd-article-title>Bash và REST API: Gọi và xử lý API hiệu quả trong DevOps</h1><p class=hd-article-description>Hướng dẫn gọi REST API với curl trong Bash: GET/POST/PUT/DELETE, parse JSON với jq, bearer auth, retry logic, và tự động hóa GitHub/Slack API trong DevOps.</p><div class=hd-article-categories><a href=/vi/categories/devops/ class=hd-cat-pill>DEVOPS
+</a><a href=/vi/categories/bash/ class=hd-cat-pill>BASH</a></div></header><section class="article-content hd-prose"><h2 id=bash-và-rest-api-trong-devops>Bash và REST API trong DevOps</h2><p>Trong <a class=link href=/posts/bash/bash-step-sixteen/>bài viết trước</a>, chúng ta đã tìm hiểu cách tối ưu hiệu suất với Parallel Execution. Bây giờ, chúng ta sẽ kết hợp Bash với REST API — cầu nối để giao tiếp với hầu hết mọi dịch vụ hiện đại: từ GitHub, Slack, Jira, đến monitoring dashboard và CI/CD platform.</p><p>Trong DevOps, API là cách để lấy dữ liệu, kiểm tra trạng thái, hay điều khiển hệ thống từ xa. Và Bash là công cụ hoàn hảo để gọi API — <code>curl</code> có sẵn trên mọi server, <code>jq</code> parse JSON cực nhanh, và bạn có thể tích hợp vào bất kỳ script nào mà không cần cài thêm thư viện hay framework.</p><p>Bài viết này sẽ hướng dẫn bạn cách gọi API với <code>curl</code>, parse JSON response với <code>jq</code>, xử lý authentication, retry logic, và một script thực hành tự động tạo GitHub Issue khi deploy thất bại.</p><hr><h2 id=gọi-api-với-curl>Gọi API với curl</h2><h3 id=các-method-cơ-bản>Các method cơ bản</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># GET — lấy dữ liệu</span>
+</span></span><span class=line><span class=cl>curl -s <span class=s2>&#34;https://api.example.com/status&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># POST — tạo dữ liệu mới</span>
+</span></span><span class=line><span class=cl>curl -s -X POST <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    -H <span class=s2>&#34;Content-Type: application/json&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    -d <span class=s1>&#39;{&#34;title&#34;: &#34;Bug report&#34;, &#34;body&#34;: &#34;Something went wrong&#34;}&#39;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    <span class=s2>&#34;https://api.example.com/issues&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># PUT — cập nhật dữ liệu</span>
+</span></span><span class=line><span class=cl>curl -s -X PUT <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    -H <span class=s2>&#34;Content-Type: application/json&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    -d <span class=s1>&#39;{&#34;status&#34;: &#34;resolved&#34;}&#39;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    <span class=s2>&#34;https://api.example.com/issues/42&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># DELETE — xóa dữ liệu</span>
+</span></span><span class=line><span class=cl>curl -s -X DELETE <span class=s2>&#34;https://api.example.com/issues/42&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=headers-và-authentication>Headers và authentication</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Bearer token (phổ biến nhất)</span>
+</span></span><span class=line><span class=cl>curl -s -H <span class=s2>&#34;Authorization: Bearer </span><span class=nv>$API_TOKEN</span><span class=s2>&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    <span class=s2>&#34;https://api.example.com/me&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Basic auth</span>
+</span></span><span class=line><span class=cl>curl -s -u <span class=s2>&#34;username:password&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    <span class=s2>&#34;https://api.example.com/private&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Custom headers</span>
+</span></span><span class=line><span class=cl>curl -s -H <span class=s2>&#34;Accept: application/vnd.github.v3+json&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    -H <span class=s2>&#34;X-Custom-Header: value&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    <span class=s2>&#34;https://api.example.com/data&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=flag-quan-trọng>Flag quan trọng</h3><div class=table-wrapper><table><thead><tr><th style=text-align:left>Flag</th><th style=text-align:left>Ý nghĩa</th><th style=text-align:left>Khi nào dùng</th></tr></thead><tbody><tr><td style=text-align:left><code>-s</code></td><td style=text-align:left>Silent — ẩn progress bar</td><td style=text-align:left>Luôn dùng trong script</td></tr><tr><td style=text-align:left><code>-S</code></td><td style=text-align:left>Show error khi dùng với <code>-s</code></td><td style=text-align:left>Luôn dùng kèm <code>-s</code></td></tr><tr><td style=text-align:left><code>-f</code></td><td style=text-align:left>Fail silently trên HTTP error</td><td style=text-align:left>Tránh parse error page</td></tr><tr><td style=text-align:left><code>-w "%{http_code}"</code></td><td style=text-align:left>Xuất HTTP status code</td><td style=text-align:left>Kiểm tra response status</td></tr><tr><td style=text-align:left><code>-o /dev/null</code></td><td style=text-align:left>ẩn output body</td><td style=text-align:left>Chỉ cần check status</td></tr><tr><td style=text-align:left><code>-L</code></td><td style=text-align:left>Theo dõi redirect</td><td style=text-align:left>API trả về 301/302</td></tr><tr><td style=text-align:left><code>--connect-timeout</code></td><td style=text-align:left>Timeout kết nối</td><td style=text-align:left>Tránh treo vô hạn</td></tr><tr><td style=text-align:left><code>--retry 3</code></td><td style=text-align:left>Tự retry khi fail</td><td style=text-align:left>Xử lý network blip</td></tr></tbody></table></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Ví dụ: Kiểm tra API health với timeout và retry</span>
+</span></span><span class=line><span class=cl><span class=nv>HTTP_CODE</span><span class=o>=</span><span class=k>$(</span>curl -s -o /dev/null -w <span class=s2>&#34;%{http_code}&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    --connect-timeout <span class=m>5</span> --retry <span class=m>3</span> --retry-delay <span class=m>2</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    <span class=s2>&#34;https://api.example.com/health&#34;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[[</span> <span class=s2>&#34;</span><span class=nv>$HTTP_CODE</span><span class=s2>&#34;</span> -eq <span class=m>200</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;API is healthy&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>else</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;API returned status </span><span class=nv>$HTTP_CODE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=parse-json-với-jq>Parse JSON với jq</h2><p><code>jq</code> là công cụ line-oriented processor cho JSON — cực kỳ mạnh mẽ khi kết hợp với <code>curl</code>.</p><h3 id=cài-đặt>Cài đặt</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Debian/Ubuntu</span>
+</span></span><span class=line><span class=cl>apt-get install -y jq
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># CentOS/RHEL</span>
+</span></span><span class=line><span class=cl>yum install -y jq
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># macOS</span>
+</span></span><span class=line><span class=cl>brew install jq
+</span></span></code></pre></td></tr></table></div></div><h3 id=các-thao-tác-cơ-bản>Các thao tác cơ bản</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Trích xuất giá trị đơn giản</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s1>&#39;{&#34;name&#34;: &#34;myapp&#34;, &#34;version&#34;: &#34;2.1.0&#34;}&#39;</span> <span class=p>|</span> jq -r <span class=s1>&#39;.name&#39;</span>
+</span></span><span class=line><span class=cl><span class=c1># Output: myapp</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Trích xuất nested value</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s1>&#39;{&#34;repo&#34;: {&#34;owner&#34;: &#34;org&#34;, &#34;name&#34;: &#34;api&#34;}}&#39;</span> <span class=p>|</span> jq -r <span class=s1>&#39;.repo.name&#39;</span>
+</span></span><span class=line><span class=cl><span class=c1># Output: api</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Lấy array elements</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s1>&#39;{&#34;tags&#34;: [&#34;dev&#34;, &#34;prod&#34;, &#34;staging&#34;]}&#39;</span> <span class=p>|</span> jq -r <span class=s1>&#39;.tags[]&#39;</span>
+</span></span><span class=line><span class=cl><span class=c1># Output:</span>
+</span></span><span class=line><span class=cl><span class=c1># dev</span>
+</span></span><span class=line><span class=cl><span class=c1># prod</span>
+</span></span><span class=line><span class=cl><span class=c1># staging</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Đếm phần tử array</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s1>&#39;{&#34;users&#34;: [{&#34;id&#34;:1},{&#34;id&#34;:2},{&#34;id&#34;:3}]}&#39;</span> <span class=p>|</span> jq <span class=s1>&#39;.users | length&#39;</span>
+</span></span><span class=line><span class=cl><span class=c1># Output: 3</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Filter array</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s1>&#39;[{&#34;name&#34;:&#34;a&#34;,&#34;status&#34;:&#34;ok&#34;},{&#34;name&#34;:&#34;b&#34;,&#34;status&#34;:&#34;fail&#34;}]&#39;</span> <span class=p>|</span> jq <span class=s1>&#39;[.[] | select(.status == &#34;fail&#34;)]&#39;</span>
+</span></span><span class=line><span class=cl><span class=c1># Output: [{&#34;name&#34;:&#34;b&#34;,&#34;status&#34;:&#34;fail&#34;}]</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Transform data</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s1>&#39;{&#34;first&#34;:&#34;John&#34;,&#34;last&#34;:&#34;Doe&#34;}&#39;</span> <span class=p>|</span> jq <span class=s1>&#39;{fullName: &#34;\(.first) \(.last)&#34;}&#39;</span>
+</span></span><span class=line><span class=cl><span class=c1># Output: {&#34;fullName&#34;: &#34;John Doe&#34;}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=kết-hợp-curl--jq>Kết hợp curl + jq</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Lấy tên repo và star count từ GitHub API</span>
+</span></span><span class=line><span class=cl><span class=nv>REPO_INFO</span><span class=o>=</span><span class=k>$(</span>curl -s <span class=s2>&#34;https://api.github.com/repos/cli/cli&#34;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=nv>NAME</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$REPO_INFO</span><span class=s2>&#34;</span> <span class=p>|</span> jq -r <span class=s1>&#39;.full_name&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=nv>STARS</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$REPO_INFO</span><span class=s2>&#34;</span> <span class=p>|</span> jq -r <span class=s1>&#39;.stargazers_count&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$NAME</span><span class=s2> has </span><span class=nv>$STARS</span><span class=s2> stars&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Lấy danh sách open issues</span>
+</span></span><span class=line><span class=cl>curl -s <span class=s2>&#34;https://api.github.com/repos/owner/repo/issues?state=open&#34;</span> <span class=p>|</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    jq -r <span class=s1>&#39;.[] | &#34;[\(.number)] \(.title)&#34;&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Lấy commit message mới nhất</span>
+</span></span><span class=line><span class=cl>curl -s <span class=s2>&#34;https://api.github.com/repos/owner/repo/commits?per_page=1&#34;</span> <span class=p>|</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>    jq -r <span class=s1>&#39;.[0] | &#34;\(.commit.author.name): \(.commit.message)&#34;&#39;</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=retry-logic-trong-bash>Retry logic trong Bash</h2><p>Khi gọi API từ script, network có thể bị intermittent failure. Retry logic giúp script tự động thử lại:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Hàm retry cơ bản</span>
+</span></span><span class=line><span class=cl>retry<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>max_attempts</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>delay</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$2</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>shift</span> <span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>cmd</span><span class=o>=(</span><span class=s2>&#34;</span><span class=nv>$@</span><span class=s2>&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=o>((</span><span class=nv>attempt</span><span class=o>=</span>1<span class=p>;</span> attempt&lt;<span class=o>=</span>max_attempts<span class=p>;</span> attempt++<span class=o>))</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>cmd</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=m>0</span>
+</span></span><span class=line><span class=cl>        <span class=k>fi</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;[WARN] Attempt </span><span class=nv>$attempt</span><span class=s2>/</span><span class=nv>$max_attempts</span><span class=s2> failed, retrying in </span><span class=si>${</span><span class=nv>delay</span><span class=si>}</span><span class=s2>s...&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>        sleep <span class=s2>&#34;</span><span class=nv>$delay</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;[ERROR] All </span><span class=nv>$max_attempts</span><span class=s2> attempts failed&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Sử dụng</span>
+</span></span><span class=line><span class=cl>retry <span class=m>3</span> <span class=m>2</span> curl -s <span class=s2>&#34;https://api.example.com/flaky-endpoint&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=retry-với-exponential-backoff>Retry với exponential backoff</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>retry_with_backoff<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>max_attempts</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=nv>3</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>base_delay</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=nv>1</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>shift</span> <span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>cmd</span><span class=o>=(</span><span class=s2>&#34;</span><span class=nv>$@</span><span class=s2>&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>for</span> <span class=o>((</span><span class=nv>attempt</span><span class=o>=</span>1<span class=p>;</span> attempt&lt;<span class=o>=</span>max_attempts<span class=p>;</span> attempt++<span class=o>))</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>        <span class=k>if</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>cmd</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>            <span class=k>return</span> <span class=m>0</span>
+</span></span><span class=line><span class=cl>        <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>        <span class=nb>local</span> <span class=nv>delay</span><span class=o>=</span><span class=k>$((</span>base_delay <span class=o>*</span> <span class=o>(</span><span class=m>2</span> <span class=o>**</span> <span class=o>(</span>attempt <span class=o>-</span> <span class=m>1</span><span class=k>))</span><span class=o>))</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;[WARN] Attempt </span><span class=nv>$attempt</span><span class=s2>/</span><span class=nv>$max_attempts</span><span class=s2> failed, retrying in </span><span class=si>${</span><span class=nv>delay</span><span class=si>}</span><span class=s2>s...&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>        sleep <span class=s2>&#34;</span><span class=nv>$delay</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Sử dụng: retry 3 lần, delay 1s → 2s → 4s</span>
+</span></span><span class=line><span class=cl>retry_with_backoff <span class=m>3</span> <span class=m>1</span> curl -s <span class=s2>&#34;https://api.example.com/data&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=ví-dụ-thực-hành-tự-động-tạo-github-issue-khi-deploy-thất-bại>Ví dụ thực hành: Tự động tạo GitHub Issue khi deploy thất bại</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span><span class=lnt>117
+</span><span class=lnt>118
+</span><span class=lnt>119
+</span><span class=lnt>120
+</span><span class=lnt>121
+</span><span class=lnt>122
+</span><span class=lnt>123
+</span><span class=lnt>124
+</span><span class=lnt>125
+</span><span class=lnt>126
+</span><span class=lnt>127
+</span><span class=lnt>128
+</span><span class=lnt>129
+</span><span class=lnt>130
+</span><span class=lnt>131
+</span><span class=lnt>132
+</span><span class=lnt>133
+</span><span class=lnt>134
+</span><span class=lnt>135
+</span><span class=lnt>136
+</span><span class=lnt>137
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=cp></span><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl><span class=c1># Script : github-issue-on-failure.sh</span>
+</span></span><span class=line><span class=cl><span class=c1># Mục đích: Tự động tạo GitHub Issue khi pipeline deploy thất bại</span>
+</span></span><span class=line><span class=cl><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Cấu hình</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>GITHUB_TOKEN</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>GITHUB_TOKEN</span><span class=p>:?GITHUB_TOKEN is required</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>GITHUB_REPO</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>GITHUB_REPO</span><span class=p>:?GITHUB_REPO is required (owner/repo)</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>API_BASE</span><span class=o>=</span><span class=s2>&#34;https://api.github.com/repos/</span><span class=si>${</span><span class=nv>GITHUB_REPO</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>SLACK_WEBHOOK</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>SLACK_WEBHOOK</span><span class=k>:-</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Thông tin pipeline (từ CI/CD environment)</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>PIPELINE_URL</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>CI_PIPELINE_URL</span><span class=k>:-</span><span class=si>${</span><span class=nv>BUILD_URL</span><span class=k>:-</span><span class=nv>unknown</span><span class=si>}}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>COMMIT_SHA</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>CI_COMMIT_SHA</span><span class=k>:-$(</span>git rev-parse --short HEAD 2&gt;/dev/null <span class=o>||</span> <span class=nb>echo</span> <span class=s1>&#39;unknown&#39;</span><span class=k>)</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>COMMIT_MSG</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>CI_COMMIT_MESSAGE</span><span class=k>:-$(</span>git log -1 --pretty<span class=o>=</span>%B 2&gt;/dev/null <span class=o>||</span> <span class=nb>echo</span> <span class=s1>&#39;unknown&#39;</span><span class=k>)</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>DEPLOY_ENV</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>DEPLOY_ENV</span><span class=k>:-</span><span class=nv>production</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>TIMESTAMP</span><span class=o>=</span><span class=k>$(</span>date <span class=s1>&#39;+%Y-%m-%d %H:%M:%S&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Headers</span>
+</span></span><span class=line><span class=cl><span class=nv>AUTH_HEADER</span><span class=o>=</span><span class=s2>&#34;Authorization: Bearer </span><span class=si>${</span><span class=nv>GITHUB_TOKEN</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>ACCEPT_HEADER</span><span class=o>=</span><span class=s2>&#34;Accept: application/vnd.github.v3+json&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Hàm gọi GitHub API</span>
+</span></span><span class=line><span class=cl>github_api<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>method</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>endpoint</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$2</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>data</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>3</span><span class=k>:-</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>args</span><span class=o>=(</span>
+</span></span><span class=line><span class=cl>        -s -f -S
+</span></span><span class=line><span class=cl>        -X <span class=s2>&#34;</span><span class=nv>$method</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        -H <span class=s2>&#34;</span><span class=nv>$AUTH_HEADER</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        -H <span class=s2>&#34;</span><span class=nv>$ACCEPT_HEADER</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        -H <span class=s2>&#34;Content-Type: application/json&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> -n <span class=s2>&#34;</span><span class=nv>$data</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nv>args</span><span class=o>+=(</span>-d <span class=s2>&#34;</span><span class=nv>$data</span><span class=s2>&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    curl <span class=s2>&#34;</span><span class=si>${</span><span class=nv>args</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>API_BASE</span><span class=si>}${</span><span class=nv>endpoint</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Kiểm tra issue đã tồn tại chưa (tránh duplicate)</span>
+</span></span><span class=line><span class=cl>check_duplicate<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>title</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> existing
+</span></span><span class=line><span class=cl>    <span class=nv>existing</span><span class=o>=</span><span class=k>$(</span>github_api GET <span class=s2>&#34;/issues?state=open&amp;labels=auto-deploy-failure&amp;per_page=100&#34;</span> 2&gt;/dev/null <span class=o>||</span> <span class=nb>echo</span> <span class=s2>&#34;[]&#34;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$existing</span><span class=s2>&#34;</span> <span class=p>|</span> jq -r <span class=s1>&#39;.[].title&#39;</span> <span class=p>|</span> grep -qF <span class=s2>&#34;</span><span class=nv>$title</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Tạo GitHub Issue</span>
+</span></span><span class=line><span class=cl>create_issue<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>title</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>body</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$2</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> check_duplicate <span class=s2>&#34;</span><span class=nv>$title</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;[INFO] Duplicate issue found, skipping creation&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=m>0</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> payload
+</span></span><span class=line><span class=cl>    <span class=nv>payload</span><span class=o>=</span><span class=k>$(</span>jq -n <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>        --arg title <span class=s2>&#34;</span><span class=nv>$title</span><span class=s2>&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>        --arg body <span class=s2>&#34;</span><span class=nv>$body</span><span class=s2>&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>        <span class=s1>&#39;{
+</span></span></span><span class=line><span class=cl><span class=s1>            title: $title,
+</span></span></span><span class=line><span class=cl><span class=s1>            body: $body,
+</span></span></span><span class=line><span class=cl><span class=s1>            labels: [&#34;auto-deploy-failure&#34;, &#34;ops&#34;],
+</span></span></span><span class=line><span class=cl><span class=s1>            assignees: []
+</span></span></span><span class=line><span class=cl><span class=s1>        }&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> response
+</span></span><span class=line><span class=cl>    <span class=nv>response</span><span class=o>=</span><span class=k>$(</span>github_api POST <span class=s2>&#34;/issues&#34;</span> <span class=s2>&#34;</span><span class=nv>$payload</span><span class=s2>&#34;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> <span class=nv>$?</span> -eq <span class=m>0</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>local</span> issue_url
+</span></span><span class=line><span class=cl>        <span class=nv>issue_url</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$response</span><span class=s2>&#34;</span> <span class=p>|</span> jq -r <span class=s1>&#39;.html_url&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>        <span class=nb>local</span> issue_number
+</span></span><span class=line><span class=cl>        <span class=nv>issue_number</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$response</span><span class=s2>&#34;</span> <span class=p>|</span> jq -r <span class=s1>&#39;.number&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;[INFO] Created issue #</span><span class=si>${</span><span class=nv>issue_number</span><span class=si>}</span><span class=s2>: </span><span class=si>${</span><span class=nv>issue_url</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>else</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;[ERROR] Failed to create issue&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Gửi Slack notification</span>
+</span></span><span class=line><span class=cl>notify_slack<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>message</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> -n <span class=s2>&#34;</span><span class=nv>$SLACK_WEBHOOK</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        curl -s -X POST -H <span class=s1>&#39;Content-type: application/json&#39;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl><span class=se></span>            --data <span class=s2>&#34;{\&#34;text\&#34;:\&#34;</span><span class=si>${</span><span class=nv>message</span><span class=si>}</span><span class=s2>\&#34;}&#34;</span> <span class=s2>&#34;</span><span class=nv>$SLACK_WEBHOOK</span><span class=s2>&#34;</span> &gt;/dev/null 2&gt;<span class=p>&amp;</span><span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Main</span>
+</span></span><span class=line><span class=cl>main<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>fail_reason</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=nv>Unknown</span><span class=p> failure</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>issue_title</span><span class=o>=</span><span class=s2>&#34;[DEPLOY FAIL] </span><span class=si>${</span><span class=nv>DEPLOY_ENV</span><span class=si>}</span><span class=s2> — </span><span class=si>${</span><span class=nv>COMMIT_SHA</span><span class=si>}</span><span class=s2> — </span><span class=k>$(</span>date <span class=s1>&#39;+%Y-%m-%d&#39;</span><span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>issue_body</span><span class=o>=</span><span class=s2>&#34;## Deploy Failure Report
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>**Environment:** \`</span><span class=si>${</span><span class=nv>DEPLOY_ENV</span><span class=si>}</span><span class=s2>\`
+</span></span></span><span class=line><span class=cl><span class=s2>**Commit:** \`</span><span class=si>${</span><span class=nv>COMMIT_SHA</span><span class=si>}</span><span class=s2>\`
+</span></span></span><span class=line><span class=cl><span class=s2>**Time:** </span><span class=si>${</span><span class=nv>TIMESTAMP</span><span class=si>}</span><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>**Pipeline:** </span><span class=si>${</span><span class=nv>PIPELINE_URL</span><span class=si>}</span><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>### Commit Message
+</span></span></span><span class=line><span class=cl><span class=s2>\`\`\`
+</span></span></span><span class=line><span class=cl><span class=s2></span><span class=si>${</span><span class=nv>COMMIT_MSG</span><span class=si>}</span><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>\`\`\`
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>### Failure Reason
+</span></span></span><span class=line><span class=cl><span class=s2></span><span class=si>${</span><span class=nv>fail_reason</span><span class=si>}</span><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>### Required Actions
+</span></span></span><span class=line><span class=cl><span class=s2>- [ ] Check pipeline logs
+</span></span></span><span class=line><span class=cl><span class=s2>- [ ] Verify deployment artifacts
+</span></span></span><span class=line><span class=cl><span class=s2>- [ ] Confirm service health
+</span></span></span><span class=line><span class=cl><span class=s2>- [ ] Update issue when resolved
+</span></span></span><span class=line><span class=cl><span class=s2>
+</span></span></span><span class=line><span class=cl><span class=s2>---
+</span></span></span><span class=line><span class=cl><span class=s2>*Auto-generated by deployment monitoring script*&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Creating GitHub issue for failed deploy...&#34;</span>
+</span></span><span class=line><span class=cl>    create_issue <span class=s2>&#34;</span><span class=nv>$issue_title</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$issue_body</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>slack_msg</span><span class=o>=</span><span class=s2>&#34;*[DEPLOY FAILURE]* </span><span class=si>${</span><span class=nv>DEPLOY_ENV</span><span class=si>}</span><span class=s2>\nCommit: \`</span><span class=si>${</span><span class=nv>COMMIT_SHA</span><span class=si>}</span><span class=s2>\`\nReason: </span><span class=si>${</span><span class=nv>fail_reason</span><span class=si>}</span><span class=s2>\nPipeline: </span><span class=si>${</span><span class=nv>PIPELINE_URL</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    notify_slack -e <span class=s2>&#34;</span><span class=nv>$slack_msg</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>main <span class=s2>&#34;</span><span class=nv>$@</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=sử-dụng-trong-pipeline>Sử dụng trong pipeline</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=c># GitHub Actions example</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w></span><span class=nt>deploy</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>script</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=l>bash deploy.sh</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>after_script</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=p>|</span><span class=sd>
+</span></span></span><span class=line><span class=cl><span class=sd>      if [[ &#34;$CI_JOB_STATUS&#34; == &#34;failed&#34; ]]; then
+</span></span></span><span class=line><span class=cl><span class=sd>        bash .github/scripts/github-issue-on-failure.sh &#34;Deploy job failed&#34;
+</span></span></span><span class=line><span class=cl><span class=sd>      fi</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><h3 id=kết-quả-mẫu>Kết quả mẫu</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl>Creating GitHub issue for failed deploy...
+</span></span><span class=line><span class=cl>[INFO] Created issue #247: https://github.com/org/repo/issues/247
+</span></span></code></pre></td></tr></table></div></div><p>GitHub Issue được tạo với:</p><ul><li>Title: <code>[DEPLOY FAIL] production — a1b2c3d — 2026-09-03</code></li><li>Labels: <code>auto-deploy-failure</code>, <code>ops</code></li><li>Body chứa environment, commit info, pipeline URL và checklist</li></ul><hr><h2 id=ghi-chú-triển-khai>Ghi chú triển khai</h2><ul><li><strong>Token security:</strong> Luôn lưu <code>GITHUB_TOKEN</code> dưới dạng secret variable, không hardcode trong script. GitHub token cần scope <code>repo</code> để tạo issue.</li><li><strong>Duplicate prevention:</strong> Script kiểm tra issue trùng lặp trước khi tạo — tránh spam khi pipeline fail nhiều lần liên tiếp.</li><li><strong>jq dependency:</strong> Đảm bảo <code>jq</code> đã cài trên runner/CI machine. Hầu hết CI image đều có sẵn, nhưng nếu không, thêm <code>apt-get install -y jq</code> vào pipeline.</li><li><strong>Rate limiting:</strong> GitHub API có rate limit (5000 requests/hour cho authenticated user). Script này gọi ít request nên không vấn đề, nhưng khi viết script gọi API yoğun, hãy check header <code>X-RateLimit-Remaining</code>.</li><li><strong>Multi-platform:</strong> Script trên dùng GitHub API, nhưng bạn có thể thay thế endpoint để tạo issue trên GitLab, Jira, hay bất kỳ hệ thống issue tracking nào có REST API.</li></ul><hr><h2 id=lời-kết>Lời kết</h2><p>Bash và REST API là combination cực kỳ mạnh mẽ trong DevOps. Từ việc gọi API đơn giản với <code>curl</code>, parse JSON phức tạp với <code>jq</code>, xử lý retry logic, đến tự động tạo GitHub Issue khi deploy thất bại — tất cả đều có thể thực hiện chỉ với Bash mà không cần framework nặng.</p><p>Ở <a class=link href=/posts/bash/bash-step-eighteen/>bài tiếp theo</a>, chúng ta sẽ khám phá <strong>Bash và Cloud CLI</strong>: cách quản lý AWS, GCP, Azure từ Bash, query JSON output, và tự động hóa cloud tasks.</p></section><div class=hd-article-tags-wrap><span class=tags-label>THẺ:</span><div class=hd-article-tags><a href=/vi/tags/bash/ class=hd-tag-pill>#bash
+</a><a href=/vi/tags/shell-script/ class=hd-tag-pill>#shell-script
+</a><a href=/vi/tags/devops/ class=hd-tag-pill>#devops
+</a><a href=/vi/tags/rest-api/ class=hd-tag-pill>#rest-api
+</a><a href=/vi/tags/curl/ class=hd-tag-pill>#curl
+</a><a href=/vi/tags/jq/ class=hd-tag-pill>#jq
+</a><a href=/vi/tags/json/ class=hd-tag-pill>#json
+</a><a href=/vi/tags/github-api/ class=hd-tag-pill>#github-api
+</a><a href=/vi/tags/slack-api/ class=hd-tag-pill>#slack-api</a></div></div><div class=hd-article-footer-box><div class=footer-box-item><span class=box-label>TÁC GIẢ</span>
+<span class=box-value>Hoàng Dương</span></div><div class=footer-box-item><span class=box-label>BẢN QUYỀN</span>
+<span class=box-value>CC BY-NC-SA 4.0</span></div></div><nav class=hd-post-nav><a href=/vi/posts/bash/bash-step-sixteen/ class="post-nav-card nav-prev"><span class=nav-direction>&larr; BÀI TRƯỚC</span>
+<span class=nav-post-title>Bash nâng cao: Parallel Execution trong DevOps</span></a></nav><section class=hd-comments-section><div class=comments-section-header><span class=mono-label>THẢO LUẬN & BÌNH LUẬN</span></div><div class=utterances-container><script>(function(){var t=document.documentElement.dataset.scheme||"light",n=t==="dark"?"github-dark":"github-light",e=document.createElement("script");e.src="https://utteranc.es/client.js",e.setAttribute("repo","hoangduonng/blog_comments"),e.setAttribute("issue-term","pathname"),e.setAttribute("label","comments"),e.setAttribute("theme",n),e.setAttribute("crossorigin","anonymous"),e.async=!0,document.currentScript.parentElement.appendChild(e)})()</script></div><style>.utterances-container{width:100%;margin-top:8px;position:relative}.utterances{max-width:100%!important;margin:0!important}[data-scheme=light] .utterances iframe,html:not([data-scheme=dark]) .utterances iframe{mix-blend-mode:multiply;transition:mix-blend-mode .2s ease}[data-scheme=dark] .utterances iframe{mix-blend-mode:lighten;transition:mix-blend-mode .2s ease}</style><script>let utterancesLoaded=!1;function setUtterancesTheme(e){let t=document.querySelector(".utterances iframe");if(t&&t.contentWindow){let n=e==="dark"?"github-dark":"github-light";t.contentWindow.postMessage({type:"set-theme",theme:n},"https://utteranc.es")}}addEventListener("message",e=>{if(e.origin!=="https://utteranc.es")return;utterancesLoaded=!0,setUtterancesTheme(document.documentElement.dataset.scheme||"light")}),window.addEventListener("onColorSchemeChange",e=>{if(!utterancesLoaded)return;setUtterancesTheme(e.detail)})</script></section></article></div><aside class=hd-article-sidebar><div class=hd-sticky-sidebar-inner><div class=hd-toc-card><div class=toc-header><span class=toc-title-label>MỤC LỤC</span></div><div class=toc-content id=toc-content><nav id=TableOfContents><ol><li><a href=#bash-và-rest-api-trong-devops>Bash và REST API trong DevOps</a></li><li><a href=#gọi-api-với-curl>Gọi API với curl</a><ol><li><a href=#các-method-cơ-bản>Các method cơ bản</a></li><li><a href=#headers-và-authentication>Headers và authentication</a></li><li><a href=#flag-quan-trọng>Flag quan trọng</a></li></ol></li><li><a href=#parse-json-với-jq>Parse JSON với jq</a><ol><li><a href=#cài-đặt>Cài đặt</a></li><li><a href=#các-thao-tác-cơ-bản>Các thao tác cơ bản</a></li><li><a href=#kết-hợp-curl--jq>Kết hợp curl + jq</a></li></ol></li><li><a href=#retry-logic-trong-bash>Retry logic trong Bash</a><ol><li><a href=#retry-với-exponential-backoff>Retry với exponential backoff</a></li></ol></li><li><a href=#ví-dụ-thực-hành-tự-động-tạo-github-issue-khi-deploy-thất-bại>Ví dụ thực hành: Tự động tạo GitHub Issue khi deploy thất bại</a><ol><li><a href=#sử-dụng-trong-pipeline>Sử dụng trong pipeline</a></li><li><a href=#kết-quả-mẫu>Kết quả mẫu</a></li></ol></li><li><a href=#ghi-chú-triển-khai>Ghi chú triển khai</a></li><li><a href=#lời-kết>Lời kết</a></li></ol></nav></div><div class=toc-scroll-indicator id=toc-indicator style=display:none></div></div></div></aside></div></div><div class=hd-edge-callout-rail><aside class=hd-floating-callout aria-label="Bài viết liên quan"><a href=/vi/posts/bash/bash-step-sixteen/ class=floating-callout-art><img src=/images/bash/bash-step-sixteen.jpg alt="Bash nâng cao: Parallel Execution trong DevOps" class=floating-callout-img></a><div class=floating-callout-badge>BÀI VIẾT <span class=callout-of>liên quan</span></div><div class=floating-callout-body><h4 class=floating-callout-title><a href=/vi/posts/bash/bash-step-sixteen/>Bash nâng cao: Parallel Execution trong DevOps</a></h4><p class=floating-callout-excerpt>Parallel Execution trong Bash Trong bài viết trước, chúng ta đã tìm hiểu cách …</p><a href=/vi/posts/bash/bash-step-sixteen/ class=floating-callout-btn>ĐỌC TIẾP &rarr;</a></div></aside></div></div><script>document.addEventListener("DOMContentLoaded",function(){var e=document.getElementById("toc-content"),t=document.getElementById("toc-indicator");if(e&&t){function n(){var s,o,n=e.scrollHeight-e.clientHeight;if(n<=2){t.style.display="none";return}t.style.display="block",s=e.scrollTop/n,o=e.clientHeight-32,t.style.top=e.offsetTop+s*o+"px"}e.addEventListener("scroll",n,{passive:!0}),n(),window.addEventListener("resize",n,{passive:!0}),window.addEventListener("load",n,{passive:!0})}})</script><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><div id=hd-search-overlay class=hd-search-overlay aria-hidden=true data-index-url=/vi/search/index.json data-lang=vi data-no-results="Không tìm thấy kết quả phù hợp" data-no-results-sub="Hãy thử với từ khóa khác hoặc kiểm tra lại chính tả" data-initial-hint="Nhập từ khoá để tìm kiếm bài viết..." data-results-count="kết quả"><div class=hd-search-backdrop id=hd-search-backdrop tabindex=-1></div><div class=hd-search-dialog role=dialog aria-modal=true aria-label="Tìm kiếm bài viết"><div class=hd-search-header><div class=hd-search-input-wrapper><svg class="hd-search-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentcolor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<input id=hd-search-input class=hd-search-input type=text placeholder="Tìm kiếm bài viết, chuyên mục, chủ đề..." autocomplete=off autocorrect=off autocapitalize=off spellcheck=false aria-autocomplete=list aria-controls=hd-search-results>
+<button id=hd-search-clear class=hd-search-clear type=button aria-label="Xóa từ khóa" style=display:none><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentcolor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div><button id=hd-search-close class=hd-search-close-btn type=button aria-label="Đóng tìm kiếm">
+<kbd class=hd-search-kbd>ESC</kbd></button></div><div class=hd-search-body><div id=hd-search-loading class="hd-search-state hd-search-loading" style=display:none><div class=hd-search-spinner aria-hidden=true></div><span>Đang tải dữ liệu tìm kiếm...</span></div><div id=hd-search-initial class="hd-search-state hd-search-initial"><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentcolor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p class=state-title>Tìm kiếm nhanh</p><p class=state-desc>Nhập từ khoá hoặc chủ đề để tìm kiếm trong tất cả bài viết đã xuất bản.</p></div><div id=hd-search-empty class="hd-search-state hd-search-empty" style=display:none><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentcolor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="8" x2="14" y2="14"/><line x1="14" y1="8" x2="8" y2="14"/></svg><p class=state-title id=hd-search-empty-title>Không tìm thấy kết quả phù hợp</p><p class=state-desc id=hd-search-empty-desc>Hãy thử với từ khóa khác hoặc kiểm tra lại chính tả</p></div><div id=hd-search-results class=hd-search-results role=listbox style=display:none></div></div><div class=hd-search-footer><div class=hd-search-shortcuts><span class=shortcut-item><kbd>↑</kbd><kbd>↓</kbd>
+<span class=shortcut-label>Điều hướng</span>
+</span><span class=shortcut-item><kbd>↵</kbd>
+<span class=shortcut-label>Mở bài viết</span>
+</span><span class=shortcut-item><kbd>ESC</kbd>
+<span class=shortcut-label>Đóng</span></span></div><div id=hd-search-count class=hd-search-count style=display:none></div></div></div></div><footer class=hd-site-footer><div class=hd-footer-container><div class=hd-footer-grid><div class=footer-brand-col><a href=/vi/ class=footer-logo><span class=footer-logo-title>Hoang Duong</span></a><div class=footer-status><span class=status-dot></span>
+<span class=status-text>Hệ thống hoạt động ổn định</span></div><ul class=footer-meta-links><li><a href=/vi/about/>Giới thiệu Blog</a></li><li><a href=/vi/archives/>Lưu trữ bài viết</a></li></ul></div><div class=footer-links-grid><div class=footer-col><h3 class=footer-col-title>Chuyên mục</h3><ul class=footer-col-list><li><a href=/vi/categories/bash/>Bash Series</a></li><li><a href=/vi/categories/devops/>DevOps</a></li><li><a href=/vi/categories/docker/>Docker</a></li><li><a href=/vi/categories/installation-guides/>Hướng dẫn cài đặt</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Tài nguyên</h3><ul class=footer-col-list><li><a href=/vi/about/>Về tôi</a></li><li><a href=/vi/archives/>Tất cả bài viết</a></li><li><a href=#search data-open-search>Tìm kiếm</a></li><li><a href=/vi/links/>Liên kết hữu ích</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Series Nổi Bật</h3><ul class=footer-col-list><li><a href=/vi/posts/bash/bash-step-eight/>Cron Jobs & Bash</a></li><li><a href=/vi/categories/devops/>DevOps Automation</a></li><li><a href=/vi/categories/docker/>Docker Essentials</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Kết nối</h3><ul class=footer-col-list><li><a href=https://github.com/hoangduonng target=_blank rel=noopener>GitHub ↗</a></li><li><a href=https://www.instagram.com/ngu_uuen/ target=_blank rel=noopener>Instagram ↗</a></li><li><a href=https://www.linkedin.com/in/hoangduonng/ target=_blank rel=noopener>LinkedIn ↗</a></li><li><a href=/vi/index.xml>RSS Feed ↗</a></li></ul></div></div></div><div class=hd-footer-bottom-bar><span class=footer-copyright>&copy; 2026 Hoang Duong. All rights reserved.</span></div></div></footer><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.ee266d8948a6a32b88423f5d374fca9833845f738717cf8061ae442a91efe347.js defer></script></body></html>

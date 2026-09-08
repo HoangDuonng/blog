@@ -630,7 +630,7 @@
 </span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;  Load:   </span><span class=si>${</span><span class=nv>load</span><span class=si>}</span><span class=s2>&#34;</span>
 </span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
 </span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;--- Thresholds ---&#34;</span>
-</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;  CPU:    </span><span class=k>$(</span>determine_level <span class=s2>&#34;</span><span class=nv>$cpu</span><span class=err>&#34;</span><span class=s2> &#34;</span><span class=nv>$CPU_WARN</span><span class=s2>&#34; &#34;</span><span class=nv>$CPU_CRIT</span><span class=s2>&#34;)&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;  CPU:    </span><span class=k>$(</span>determine_level <span class=s2>&#34;</span><span class=nv>$cpu</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$CPU_WARN</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$CPU_CRIT</span><span class=s2>&#34;</span><span class=k>)</span><span class=s2>&#34;</span>
 </span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;  RAM:    </span><span class=k>$(</span>determine_level <span class=s2>&#34;</span><span class=nv>$ram</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$RAM_WARN</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$RAM_CRIT</span><span class=s2>&#34;</span><span class=k>)</span><span class=s2>&#34;</span>
 </span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;  Disk:   </span><span class=k>$(</span>determine_level <span class=s2>&#34;</span><span class=nv>$disk</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$DISK_WARN</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$DISK_CRIT</span><span class=s2>&#34;</span><span class=k>)</span><span class=s2>&#34;</span>
 </span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
@@ -667,15 +667,15 @@
 </span></span><span class=line><span class=cl>    <span class=k>fi</span>
 </span></span><span class=line><span class=cl><span class=o>}</span>
 </span></span><span class=line><span class=cl>
-</span></span><span class=line><span class=cl>main<span class=o>(</span><span class=k>)</span><span class=s2> {
-</span></span></span><span class=line><span class=cl><span class=s2>    generate_report
-</span></span></span><span class=line><span class=cl><span class=s2>    echo &#34;&#34;
-</span></span></span><span class=line><span class=cl><span class=s2>    echo &#34;</span>Report saved to: <span class=nv>$REPORT_FILE</span><span class=s2>&#34;
-</span></span></span><span class=line><span class=cl><span class=s2>    echo &#34;</span>CSV log: <span class=nv>$CSV_FILE</span><span class=s2>&#34;
-</span></span></span><span class=line><span class=cl><span class=s2>}
-</span></span></span><span class=line><span class=cl><span class=s2>
-</span></span></span><span class=line><span class=cl><span class=s2>main &#34;</span><span class=nv>$@</span><span class=s2>&#34;
-</span></span></span></code></pre></td></tr></table></div></div><h3 id=cấu-hình-cron>Cấu hình cron</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span></span><span class=line><span class=cl>main<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    generate_report
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Report saved to: </span><span class=nv>$REPORT_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;CSV log: </span><span class=nv>$CSV_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>main <span class=s2>&#34;</span><span class=nv>$@</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=cấu-hình-cron>Cấu hình cron</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
 </span><span class=lnt>2
 </span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Chạy hàng ngày lúc 8:00 sáng</span>
 </span></span><span class=line><span class=cl><span class=m>0</span> <span class=m>8</span> * * * /opt/scripts/daily-report.sh &gt;&gt; /var/log/daily-report/cron.log 2&gt;<span class=p>&amp;</span><span class=m>1</span>
