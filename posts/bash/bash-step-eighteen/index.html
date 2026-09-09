@@ -1,0 +1,640 @@
+<!doctype html><html lang=en dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="Guide to managing cloud with Bash and CLI tools: AWS CLI, GCP CLI, Azure CLI — authentication, query JSON output, automate EC2/VM/app service."><title>Bash and Cloud CLI: Manage cloud efficiently with AWS, GCP, Azure</title><link rel=canonical href=https://tech.nguuyen.io.vn/posts/bash/bash-step-eighteen/><link rel=stylesheet href=/scss/style.min.eb77281b84cf8848a1e7482a05d2714447f39bf42fb4243169c88940485a6c71.css><meta property='og:title' content="Bash and Cloud CLI: Manage cloud efficiently with AWS, GCP, Azure"><meta property='og:description' content="Guide to managing cloud with Bash and CLI tools: AWS CLI, GCP CLI, Azure CLI — authentication, query JSON output, automate EC2/VM/app service."><meta property='og:url' content='https://tech.nguuyen.io.vn/posts/bash/bash-step-eighteen/'><meta property='og:site_name' content='Hoang Duong'><meta property='og:type' content='article'><meta property='article:section' content='Posts'><meta property='article:tag' content='bash'><meta property='article:tag' content='shell-script'><meta property='article:tag' content='devops'><meta property='article:tag' content='aws-cli'><meta property='article:tag' content='gcloud'><meta property='article:tag' content='azure-cli'><meta property='article:tag' content='cloud-automation'><meta property='article:published_time' content='2026-09-05T00:00:00+00:00'><meta property='article:modified_time' content='2026-09-05T00:00:00+00:00'><meta property='og:image' content='https://tech.nguuyen.io.vn/images/bash/bash-step-eighteen.jpg'><meta name=twitter:title content="Bash and Cloud CLI: Manage cloud efficiently with AWS, GCP, Azure"><meta name=twitter:description content="Guide to managing cloud with Bash and CLI tools: AWS CLI, GCP CLI, Azure CLI — authentication, query JSON output, automate EC2/VM/app service."><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://tech.nguuyen.io.vn/images/bash/bash-step-eighteen.jpg'><link rel=icon type=image/x-icon href=/favicon.ico><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel=stylesheet></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><header class="hd-header is-article-header"><div class=hd-header-inner><div class=hd-brand><a href=/ class=hd-logo-link><span class=hd-logo-text>Hoang Duong</span></a></div><div class=hd-header-divider aria-hidden=true></div><div class=hd-header-rail><a href=/ class="header-rail-crumb header-rail-home">BLOG
+</a><span class=header-rail-sep>//</span>
+<a href=/categories/devops/ class="header-rail-crumb header-rail-cat">[DEVOPS]
+</a><span class=header-rail-title>Bash and Cloud CLI: Manage cloud efficiently with AWS, GCP, Azure</span></div><div class=hd-header-spacer></div><nav class=hd-nav-links><button id=hd-menu-toggle class=hd-menu-trigger-fixed aria-label="Toggle Menu" title=Menu type=button>
+<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" class="chevron-icon"><polyline points="6 9 12 15 18 9"/></svg></button></nav></div></header><div id=hd-menu-dropdown class=hd-menu-popover aria-hidden=true><div class=hd-popover-inner><div class=hd-popover-nav><span class=popover-section-label>NAVIGATION</span>
+<a href=/ class=popover-item>Home</a>
+<a href=/about/ class=popover-item>About</a>
+<a href=/archives/ class=popover-item>Archives</a>
+<a href=/links/ class=popover-item>Links</a>
+<a href=/categories/ class=popover-item>Categories</a></div><div class=hd-popover-footer><a href=/vi/posts/bash/bash-step-eighteen/ class="popover-btn lang-btn" title="Tiếng Việt"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>VI</span>
+</a><button class="popover-btn theme-btn dark-mode-toggle" data-toggle-theme title="Dark Mode" type=button>
+<svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+</button>
+<button type=button class="popover-btn search-btn search-trigger-btn" data-open-search aria-label="Search (Cmd+K)" title="Search (Cmd+K)">
+<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<span class=search-kbd-badge>⌘K</span></button></div></div></div><div id=hd-menu-backdrop class=hd-menu-backdrop aria-hidden=true></div><div class=hd-site-wrapper><main class=hd-main><div class=hd-article-layout><div class=hd-hero-banner-wrap><div class=hd-hero-banner><img src=/images/bash/bash-step-eighteen.jpg alt="Bash and Cloud CLI: Manage cloud efficiently with AWS, GCP, Azure" class=hd-hero-banner-img></div></div><div class=hd-article-container><div class=hd-article-grid><div class=hd-article-main><article class=hd-article-body><header class=hd-article-header><div class=hd-article-meta-top><time class=meta-date datetime=2026-09-05T00:00:00Z>SEPTEMBER 05, 2026
+</time><span class=meta-dot>&#183;</span>
+<span class=meta-reading-time>9 MIN READ</span>
+<span class=meta-dot>&#183;</span>
+<span class=meta-author>HOÀNG DƯƠNG</span>
+<span class=meta-dot>&#183;</span>
+<a href=/vi/posts/bash/bash-step-eighteen/ class=meta-lang-switch><svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:3px"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>VI</span></a></div><h1 class=hd-article-title>Bash and Cloud CLI: Manage cloud efficiently with AWS, GCP, Azure</h1><p class=hd-article-description>Guide to managing cloud with Bash and CLI tools: AWS CLI, GCP CLI, Azure CLI — authentication, query JSON output, automate EC2/VM/app service.</p><div class=hd-article-categories><a href=/categories/devops/ class=hd-cat-pill>DEVOPS
+</a><a href=/categories/bash/ class=hd-cat-pill>BASH</a></div></header><section class="article-content hd-prose"><h2 id=bash-and-cloud-cli-in-devops>Bash and Cloud CLI in DevOps</h2><p>In the <a class=link href=/en/posts/bash/bash-step-seventeen/>previous post</a>, we learned how to call REST API with <code>curl</code> and <code>jq</code>. Now, we&rsquo;ll apply those skills to cloud — where Bash combines with Cloud CLI to manage resources on AWS, GCP, Azure efficiently and automatically.</p><p>When managing cloud at scale, clicking through the web console is no longer feasible. Cloud CLI lets you start/stop instances, check status, snapshot, scale — all from the terminal. And Bash is the &ldquo;glue&rdquo; that connects these CLI tools into powerful automation scripts.</p><p>This post will guide you through setting up and using AWS CLI, GCP CLI, Azure CLI with Bash, querying JSON output, and building practical cloud management scripts.</p><hr><h2 id=cloud-cli-overview>Cloud CLI overview</h2><h3 id=why-use-cloud-cli>Why use Cloud CLI?</h3><div class=table-wrapper><table><thead><tr><th style=text-align:left>Method</th><th style=text-align:left>Pros</th><th style=text-align:left>Cons</th></tr></thead><tbody><tr><td style=text-align:left><strong>Web Console</strong></td><td style=text-align:left>Visual, easy to use</td><td style=text-align:left>Slow, can&rsquo;t automate</td></tr><tr><td style=text-align:left><strong>Cloud CLI</strong></td><td style=text-align:left>Fast, scriptable, automated</td><td style=text-align:left>Need to learn each cloud&rsquo;s syntax</td></tr><tr><td style=text-align:left><strong>Direct API</strong></td><td style=text-align:left>Most flexible</td><td style=text-align:left>Complex, manual auth handling</td></tr></tbody></table></div><p>Cloud CLI is the sweet spot — powerful enough for automation, simple enough to learn quickly. And Bash is the perfect tool to orchestrate multiple CLI tools.</p><h3 id=installation-and-authentication>Installation and authentication</h3><p>Each cloud provider has its own CLI tool:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># AWS CLI</span>
+</span></span><span class=line><span class=cl>curl <span class=s2>&#34;https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip&#34;</span> -o <span class=s2>&#34;awscliv2.zip&#34;</span>
+</span></span><span class=line><span class=cl>unzip awscliv2.zip
+</span></span><span class=line><span class=cl>sudo ./aws/install
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># GCP CLI</span>
+</span></span><span class=line><span class=cl>curl https://dl.google.com/dl/cloudsdk/channels/rapid/downloads/google-cloud-cli-linux-x86_64.tar.gz <span class=p>|</span> tar xz
+</span></span><span class=line><span class=cl>./google-cloud-sdk/install.sh
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Azure CLI</span>
+</span></span><span class=line><span class=cl>curl -sL https://aka.ms/InstallAzureCli <span class=p>|</span> bash
+</span></span></code></pre></td></tr></table></div></div><p>After installation, each cloud requires authentication:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl> <span class=c1># AWS: configure credentials</span>
+</span></span><span class=line><span class=cl>aws configure
+</span></span><span class=line><span class=cl><span class=c1># Enter Access Key ID, Secret Access Key, Region, Output format</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># GCP: login via browser</span>
+</span></span><span class=line><span class=cl>gcloud auth login
+</span></span><span class=line><span class=cl>gcloud config <span class=nb>set</span> project &lt;your-project-id&gt;
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Azure: login via browser</span>
+</span></span><span class=line><span class=cl>az login
+</span></span><span class=line><span class=cl>az account <span class=nb>set</span> --subscription &lt;your-subscription-id&gt;
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=query-json-output>Query JSON output</h2><p>All cloud CLI tools support JSON output — and combined with <code>jq</code> (from the <a class=link href=/en/posts/bash/bash-step-seventeen/>previous post</a>), you can filter and transform data easily.</p><h3 id=aws-cli>AWS CLI</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># List all running EC2 instances</span>
+</span></span><span class=line><span class=cl>aws ec2 describe-instances <span class=se>\
+</span></span></span><span class=line><span class=cl>    --query <span class=s1>&#39;Reservations[].Instances[?State.Name==`running`].[InstanceId,InstanceType,PrivateIpAddress]&#39;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>    --output table
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Use jq for more detailed filtering</span>
+</span></span><span class=line><span class=cl>aws ec2 describe-instances <span class=p>|</span> jq -r <span class=s1>&#39;.Reservations[].Instances[] | select(.State.Name == &#34;running&#34;) | [.InstanceId, .InstanceType, .PrivateIpAddress] | @tsv&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Get latest AMI</span>
+</span></span><span class=line><span class=cl>aws ec2 describe-images --owners self <span class=se>\
+</span></span></span><span class=line><span class=cl>    --query <span class=s1>&#39;Images | sort_by(@, &amp;CreationDate) | [-1].[ImageId,Name]&#39;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>    --output text
+</span></span></code></pre></td></tr></table></div></div><h3 id=gcp-cli>GCP CLI</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># List running VM instances</span>
+</span></span><span class=line><span class=cl>gcloud compute instances list --filter<span class=o>=</span><span class=s2>&#34;status=RUNNING&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>    --format<span class=o>=</span><span class=s2>&#34;table(name, zone, machineType.basename(), status)&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Get external IP</span>
+</span></span><span class=line><span class=cl>gcloud compute instances list --format<span class=o>=</span><span class=s2>&#34;value(name, networkInterfaces[0].accessConfigs[0].natIP)&#34;</span> <span class=p>|</span> awk <span class=s1>&#39;{print $1&#34;: &#34;$2}&#39;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Query disks</span>
+</span></span><span class=line><span class=cl>gcloud compute disks list --format<span class=o>=</span><span class=s2>&#34;json&#34;</span> <span class=p>|</span> jq <span class=s1>&#39;.[] | {name, sizeGb, status}&#39;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=azure-cli>Azure CLI</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># List running VMs</span>
+</span></span><span class=line><span class=cl>az vm list --query <span class=s2>&#34;[?powerState==&#39;VM running&#39;].[name, resourceGroup, hardwareProfile.vmSize]&#34;</span> --output table
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Get public IP</span>
+</span></span><span class=line><span class=cl>az network public-ip list --query <span class=s2>&#34;[?ipConfiguration!=null].[name, ipAddress]&#34;</span> --output table
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Query app services</span>
+</span></span><span class=line><span class=cl>az webapp list --query <span class=s2>&#34;[].{name:name, state:state, plan:appServicePlan}&#34;</span> --output table
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=hands-on-cloud-health-checker>Hands-on: Cloud health checker</h2><p>Script to check resource status across all 3 cloud providers:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span><span class=lnt>115
+</span><span class=lnt>116
+</span><span class=lnt>117
+</span><span class=lnt>118
+</span><span class=lnt>119
+</span><span class=lnt>120
+</span><span class=lnt>121
+</span><span class=lnt>122
+</span><span class=lnt>123
+</span><span class=lnt>124
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl><span class=c1># Script : cloud-health-checker.sh</span>
+</span></span><span class=line><span class=cl><span class=c1># Purpose: Check resource status on AWS, GCP, Azure</span>
+</span></span><span class=line><span class=cl><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>LOG_FILE</span><span class=o>=</span><span class=s2>&#34;/var/log/cloud-health.log&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>TIMESTAMP</span><span class=o>=</span><span class=k>$(</span>date <span class=s1>&#39;+%Y-%m-%d %H:%M:%S&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>SLACK_WEBHOOK</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>SLACK_WEBHOOK</span><span class=k>:-</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Cloud provider flags (enable/disable per config)</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>CHECK_AWS</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>CHECK_AWS</span><span class=k>:-</span><span class=nv>false</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>CHECK_GCP</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>CHECK_GCP</span><span class=k>:-</span><span class=nv>false</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>CHECK_AZURE</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>CHECK_AZURE</span><span class=k>:-</span><span class=nv>false</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># AWS config</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>AWS_REGION</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>AWS_REGION</span><span class=k>:-</span><span class=nv>ap</span><span class=p>-southeast-1</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>export</span> <span class=nv>AWS_DEFAULT_OUTPUT</span><span class=o>=</span><span class=s2>&#34;json&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># GCP config</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>GCP_PROJECT</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>GCP_PROJECT</span><span class=k>:-</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Azure config</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>AZURE_SUBSCRIPTION</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>AZURE_SUBSCRIPTION</span><span class=k>:-</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Logging</span>
+</span></span><span class=line><span class=cl>log<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>level</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>message</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$2</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;[</span><span class=nv>$TIMESTAMP</span><span class=s2>] [</span><span class=nv>$level</span><span class=s2>] </span><span class=nv>$message</span><span class=s2>&#34;</span> <span class=p>|</span> tee -a <span class=s2>&#34;</span><span class=nv>$LOG_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Slack notification</span>
+</span></span><span class=line><span class=cl>notify_slack<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>message</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> -n <span class=s2>&#34;</span><span class=nv>$SLACK_WEBHOOK</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        curl -s -X POST -H <span class=s1>&#39;Content-type: application/json&#39;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>            --data <span class=s2>&#34;{\&#34;text\&#34;:\&#34;</span><span class=si>${</span><span class=nv>message</span><span class=si>}</span><span class=s2>\&#34;}&#34;</span> <span class=s2>&#34;</span><span class=nv>$SLACK_WEBHOOK</span><span class=s2>&#34;</span> &gt;/dev/null 2&gt;<span class=p>&amp;</span><span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># AWS: Check EC2 instances</span>
+</span></span><span class=line><span class=cl>check_aws_ec2<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;Checking AWS EC2 instances...&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> instances
+</span></span><span class=line><span class=cl>    <span class=nv>instances</span><span class=o>=</span><span class=k>$(</span>aws ec2 describe-instances --region <span class=s2>&#34;</span><span class=nv>$AWS_REGION</span><span class=s2>&#34;</span> 2&gt;/dev/null <span class=o>||</span> <span class=nb>echo</span> <span class=s1>&#39;{&#34;Reservations&#34;:[]}&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> running_count
+</span></span><span class=line><span class=cl>    <span class=nv>running_count</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$instances</span><span class=s2>&#34;</span> <span class=p>|</span> jq <span class=s1>&#39;[.Reservations[].Instances[] | select(.State.Name == &#34;running&#34;)] | length&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> stopped_count
+</span></span><span class=line><span class=cl>    <span class=nv>stopped_count</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$instances</span><span class=s2>&#34;</span> <span class=p>|</span> jq <span class=s1>&#39;[.Reservations[].Instances[] | select(.State.Name == &#34;stopped&#34;)] | length&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;AWS EC2: </span><span class=nv>$running_count</span><span class=s2> running, </span><span class=nv>$stopped_count</span><span class=s2> stopped&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Check unexpectedly stopped instances</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> stopped_instances
+</span></span><span class=line><span class=cl>    <span class=nv>stopped_instances</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$instances</span><span class=s2>&#34;</span> <span class=p>|</span> jq -r <span class=s1>&#39;.Reservations[].Instances[] | select(.State.Name == &#34;stopped&#34;) | .InstanceId&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> -n <span class=s2>&#34;</span><span class=nv>$stopped_instances</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=k>while</span> <span class=nv>IFS</span><span class=o>=</span> <span class=nb>read</span> -r instance_id<span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>            log <span class=s2>&#34;WARN&#34;</span> <span class=s2>&#34;Instance </span><span class=nv>$instance_id</span><span class=s2> is stopped&#34;</span>
+</span></span><span class=line><span class=cl>            notify_slack <span class=s2>&#34;AWS Alert: Instance </span><span class=nv>$instance_id</span><span class=s2> is stopped&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>done</span> <span class=o>&lt;&lt;&lt;</span> <span class=s2>&#34;</span><span class=nv>$stopped_instances</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># GCP: Check VM instances</span>
+</span></span><span class=line><span class=cl>check_gcp_compute<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;Checking GCP Compute instances...&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> instances
+</span></span><span class=line><span class=cl>    <span class=nv>instances</span><span class=o>=</span><span class=k>$(</span>gcloud compute instances list --project <span class=s2>&#34;</span><span class=nv>$GCP_PROJECT</span><span class=s2>&#34;</span> --format<span class=o>=</span>json 2&gt;/dev/null <span class=o>||</span> <span class=nb>echo</span> <span class=s1>&#39;[]&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> running_count
+</span></span><span class=line><span class=cl>    <span class=nv>running_count</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$instances</span><span class=s2>&#34;</span> <span class=p>|</span> jq <span class=s1>&#39;[.[] | select(.status == &#34;RUNNING&#34;)] | length&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> stopped_count
+</span></span><span class=line><span class=cl>    <span class=nv>stopped_count</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$instances</span><span class=s2>&#34;</span> <span class=p>|</span> jq <span class=s1>&#39;[.[] | select(.status == &#34;TERMINATED&#34;)] | length&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;GCP Compute: </span><span class=nv>$running_count</span><span class=s2> running, </span><span class=nv>$stopped_count</span><span class=s2> terminated&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Azure: Check VMs</span>
+</span></span><span class=line><span class=cl>check_azure_vms<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;Checking Azure VMs...&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    az account <span class=nb>set</span> --subscription <span class=s2>&#34;</span><span class=nv>$AZURE_SUBSCRIPTION</span><span class=s2>&#34;</span> 2&gt;/dev/null <span class=o>||</span> <span class=nb>true</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> vms
+</span></span><span class=line><span class=cl>    <span class=nv>vms</span><span class=o>=</span><span class=k>$(</span>az vm list --query <span class=s2>&#34;[].{name:name, state:powerState, group:resourceGroup}&#34;</span> --output json 2&gt;/dev/null <span class=o>||</span> <span class=nb>echo</span> <span class=s1>&#39;[]&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> running_count
+</span></span><span class=line><span class=cl>    <span class=nv>running_count</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$vms</span><span class=s2>&#34;</span> <span class=p>|</span> jq <span class=s1>&#39;[.[] | select(.state | contains(&#34;running&#34;))] | length&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> stopped_count
+</span></span><span class=line><span class=cl>    <span class=nv>stopped_count</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$vms</span><span class=s2>&#34;</span> <span class=p>|</span> jq <span class=s1>&#39;[.[] | select(.state | contains(&#34;deallocated&#34;))] | length&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;Azure VMs: </span><span class=nv>$running_count</span><span class=s2> running, </span><span class=nv>$stopped_count</span><span class=s2> deallocated&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Main</span>
+</span></span><span class=line><span class=cl>main<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;=== Cloud Health Check Started ===&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> <span class=s2>&#34;</span><span class=nv>$CHECK_AWS</span><span class=s2>&#34;</span> <span class=o>==</span> <span class=s2>&#34;true&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        check_aws_ec2
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> <span class=s2>&#34;</span><span class=nv>$CHECK_GCP</span><span class=s2>&#34;</span> <span class=o>==</span> <span class=s2>&#34;true&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        check_gcp_compute
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> <span class=s2>&#34;</span><span class=nv>$CHECK_AZURE</span><span class=s2>&#34;</span> <span class=o>==</span> <span class=s2>&#34;true&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        check_azure_vms
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;=== Cloud Health Check Completed ===&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>main <span class=s2>&#34;</span><span class=nv>$@</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=running-the-script>Running the script</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Enable AWS and GCP checks</span>
+</span></span><span class=line><span class=cl><span class=nv>CHECK_AWS</span><span class=o>=</span><span class=nb>true</span> <span class=nv>CHECK_GCP</span><span class=o>=</span><span class=nb>true</span> bash cloud-health-checker.sh
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Sample output</span>
+</span></span><span class=line><span class=cl><span class=c1># [2026-09-05 10:00:00] [INFO] === Cloud Health Check Started ===</span>
+</span></span><span class=line><span class=cl><span class=c1># [2026-09-05 10:00:01] [INFO] Checking AWS EC2 instances...</span>
+</span></span><span class=line><span class=cl><span class=c1># [2026-09-05 10:00:02] [INFO] AWS EC2: 5 running, 1 stopped</span>
+</span></span><span class=line><span class=cl><span class=c1># [2026-09-05 10:00:02] [WARN] Instance i-0987654321fedcba0 is stopped</span>
+</span></span><span class=line><span class=cl><span class=c1># [2026-09-05 10:00:03] [INFO] Checking GCP Compute instances...</span>
+</span></span><span class=line><span class=cl><span class=c1># [2026-09-05 10:00:04] [INFO] GCP Compute: 3 running, 0 terminated</span>
+</span></span><span class=line><span class=cl><span class=c1># [2026-09-05 10:00:04] [INFO] === Cloud Health Check Completed ===</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=common-automation-tasks>Common automation tasks</h2><h3 id=snapshot-ec2-instances-aws>Snapshot EC2 instances (AWS)</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=c1># Create snapshots for all EBS volumes attached to running instances</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>REGION</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=nv>ap</span><span class=p>-southeast-1</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Getting running instances in </span><span class=nv>$REGION</span><span class=s2>...&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Get volume IDs from running instances</span>
+</span></span><span class=line><span class=cl><span class=nv>VOLUME_IDS</span><span class=o>=</span><span class=k>$(</span>aws ec2 describe-instances --region <span class=s2>&#34;</span><span class=nv>$REGION</span><span class=s2>&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>    --query <span class=s1>&#39;Reservations[].Instances[?State.Name==`running`].BlockDeviceMappings[].Ebs.VolumeId&#39;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>    --output text <span class=p>|</span> tr <span class=s1>&#39;\t&#39;</span> <span class=s1>&#39;\n&#39;</span> <span class=p>|</span> sort -u<span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> vol_id in <span class=nv>$VOLUME_IDS</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Creating snapshot for volume: </span><span class=nv>$vol_id</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    aws ec2 create-snapshot <span class=se>\
+</span></span></span><span class=line><span class=cl>        --volume-id <span class=s2>&#34;</span><span class=nv>$vol_id</span><span class=s2>&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>        --description <span class=s2>&#34;Auto-snapshot </span><span class=k>$(</span>date +%Y-%m-%d<span class=k>)</span><span class=s2>&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>        --tag-specifications <span class=s2>&#34;ResourceType=snapshot,Tags=[{Key=AutoBackup,Value=true}]&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>        --region <span class=s2>&#34;</span><span class=nv>$REGION</span><span class=s2>&#34;</span> &gt; /dev/null
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Snapshot created for </span><span class=nv>$vol_id</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;All snapshots completed&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=auto-scale-vms-based-on-cpu-gcp>Auto-scale VMs based on CPU (GCP)</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=c1># Auto-scale GCP instance group when CPU &gt; 80%</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>PROJECT</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>GCP_PROJECT</span><span class=k>:-</span><span class=nv>my</span><span class=p>-project</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>ZONE</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>GCP_ZONE</span><span class=k>:-</span><span class=nv>asia</span><span class=p>-southeast1-a</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>INSTANCE_GROUP</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>INSTANCE_GROUP</span><span class=k>:-</span><span class=nv>web</span><span class=p>-server-group</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>CPU_THRESHOLD</span><span class=o>=</span><span class=m>80</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Get CPU utilization</span>
+</span></span><span class=line><span class=cl><span class=nv>CPU_USAGE</span><span class=o>=</span><span class=k>$(</span>gcloud monitoring time-series list <span class=se>\
+</span></span></span><span class=line><span class=cl>    --filter<span class=o>=</span><span class=s1>&#39;metric.type=&#34;compute.googleapis.com/instance/cpu/utilization&#34;&#39;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>    --interval-start-time<span class=o>=</span><span class=s2>&#34;-PT5M&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>    --format<span class=o>=</span><span class=s2>&#34;value(points[0].value.doubleValue)&#34;</span> 2&gt;/dev/null <span class=p>|</span> head -1 <span class=o>||</span> <span class=nb>echo</span> <span class=s2>&#34;0&#34;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Convert to percentage</span>
+</span></span><span class=line><span class=cl><span class=nv>CPU_PERCENT</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$CPU_USAGE</span><span class=s2> * 100&#34;</span> <span class=p>|</span> bc 2&gt;/dev/null <span class=p>|</span> cut -d. -f1 <span class=o>||</span> <span class=nb>echo</span> <span class=s2>&#34;0&#34;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Current CPU: </span><span class=si>${</span><span class=nv>CPU_PERCENT</span><span class=si>}</span><span class=s2>%&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>((</span> CPU_PERCENT &gt; CPU_THRESHOLD <span class=o>))</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;CPU above threshold, scaling up...&#34;</span>
+</span></span><span class=line><span class=cl>    gcloud instance-groups managed set-autoscaling <span class=s2>&#34;</span><span class=nv>$INSTANCE_GROUP</span><span class=s2>&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>        --zone<span class=o>=</span><span class=s2>&#34;</span><span class=nv>$ZONE</span><span class=s2>&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>        --project<span class=o>=</span><span class=s2>&#34;</span><span class=nv>$PROJECT</span><span class=s2>&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>        --min-num-replicas<span class=o>=</span><span class=m>2</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>        --max-num-replicas<span class=o>=</span><span class=m>10</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>        --target-cpu-utilization<span class=o>=</span>0.7
+</span></span><span class=line><span class=cl><span class=k>else</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;CPU normal, no action needed&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=stop-all-vms-after-work-hours-azure>Stop all VMs after work hours (Azure)</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=c1># Stop all VMs in resource group (for dev/test environments)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>RESOURCE_GROUP</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>1</span><span class=p>:?Usage: </span><span class=nv>$0</span><span class=p> &lt;resource-group&gt;</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Stopping all VMs in resource group: </span><span class=nv>$RESOURCE_GROUP</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>az vm stop --resource-group <span class=s2>&#34;</span><span class=nv>$RESOURCE_GROUP</span><span class=s2>&#34;</span> --no-wait
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Stop command sent. Check status with:&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;  az vm list -g </span><span class=nv>$RESOURCE_GROUP</span><span class=s2> --query &#39;[].{name:name, state:powerState}&#39; --output table&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=multi-cloud-script-pattern>Multi-cloud script pattern</h2><p>When managing multiple clouds, an abstraction layer prevents vendor lock-in:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl><span class=c1># Abstract layer for multi-cloud operations</span>
+</span></span><span class=line><span class=cl><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Detect cloud provider from instance metadata</span>
+</span></span><span class=line><span class=cl>detect_cloud<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> curl -s --connect-timeout <span class=m>1</span> http://169.254.169.254/latest/meta-data/ &gt;/dev/null 2&gt;<span class=p>&amp;</span>1<span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;aws&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>elif</span> curl -s --connect-timeout <span class=m>1</span> -H <span class=s2>&#34;Metadata-Flavor: Google&#34;</span> http://metadata.google.internal/computeMetadata/v1/ &gt;/dev/null 2&gt;<span class=p>&amp;</span>1<span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;gcp&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>elif</span> curl -s --connect-timeout <span class=m>1</span> http://169.254.169.254/metadata/instance?api-version<span class=o>=</span>2021-02-01 &gt;/dev/null 2&gt;<span class=p>&amp;</span>1<span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;azure&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>else</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;unknown&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Get instance ID by cloud provider</span>
+</span></span><span class=line><span class=cl>get_instance_id<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>cloud</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>case</span> <span class=s2>&#34;</span><span class=nv>$cloud</span><span class=s2>&#34;</span> in
+</span></span><span class=line><span class=cl>        aws<span class=o>)</span>
+</span></span><span class=line><span class=cl>            curl -s http://169.254.169.254/latest/meta-data/instance-id
+</span></span><span class=line><span class=cl>            <span class=p>;;</span>
+</span></span><span class=line><span class=cl>        gcp<span class=o>)</span>
+</span></span><span class=line><span class=cl>            curl -s -H <span class=s2>&#34;Metadata-Flavor: Google&#34;</span> http://metadata.google.internal/computeMetadata/v1/instance/name
+</span></span><span class=line><span class=cl>            <span class=p>;;</span>
+</span></span><span class=line><span class=cl>        azure<span class=o>)</span>
+</span></span><span class=line><span class=cl>            curl -s -H <span class=s2>&#34;Metadata: true&#34;</span> <span class=s2>&#34;http://169.254.169.254/metadata/instance/compute/name?api-version=2021-02-01&#34;</span> <span class=p>|</span> tr -d <span class=s1>&#39;&#34;&#39;</span>
+</span></span><span class=line><span class=cl>            <span class=p>;;</span>
+</span></span><span class=line><span class=cl>    <span class=k>esac</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Usage</span>
+</span></span><span class=line><span class=cl><span class=nv>CLOUD</span><span class=o>=</span><span class=k>$(</span>detect_cloud<span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=nv>INSTANCE_ID</span><span class=o>=</span><span class=k>$(</span>get_instance_id <span class=s2>&#34;</span><span class=nv>$CLOUD</span><span class=s2>&#34;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Running on </span><span class=nv>$CLOUD</span><span class=s2>, instance: </span><span class=nv>$INSTANCE_ID</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=implementation-notes>Implementation notes</h2><ul><li><strong>Security:</strong> Always store credentials in profile files (<code>~/.aws/credentials</code>, <code>~/.config/gcloud/</code>, <code>~/.azure/</code>), never hardcode in scripts. Use IAM roles/service accounts when possible.</li><li><strong>Rate limiting:</strong> Cloud APIs have rate limits. AWS: 100-200 requests/second, GCP: varies, Azure: varies. Add <code>sleep</code> or retry logic for intensive API calls.</li><li><strong>Cost awareness:</strong> Some API calls incur costs (like <code>describe-instances</code> on AWS). Monitor AWS Cost Explorer or equivalent to avoid surprises.</li><li><strong>Error handling:</strong> Cloud CLI can fail for many reasons (network, permission, throttle). Always check exit codes and log details.</li><li><strong>Parallel execution:</strong> When managing many resources, use <a class=link href=/en/posts/bash/bash-step-sixteen/>parallel execution</a> to speed things up, but watch out for rate limits.</li></ul><hr><h2 id=conclusion>Conclusion</h2><p>Bash and Cloud CLI is an incredibly powerful combination in DevOps. From querying JSON output with <code>jq</code>, automating snapshots/scaling, to multi-cloud management — everything can be done with just Bash scripts.</p><p>With a vendor-neutral pattern like above, you can write scripts that run on any cloud provider without lock-in.</p><p>In the <a class=link href=/en/posts/bash/bash-step-nineteen/>next post</a>, we&rsquo;ll explore <strong>Bash and Security</strong>: how to secure scripts, validate input, manage secrets, and scan with shellcheck.</p></section><div class=hd-article-tags-wrap><span class=tags-label>TAGS:</span><div class=hd-article-tags><a href=/tags/bash/ class=hd-tag-pill>#bash
+</a><a href=/tags/shell-script/ class=hd-tag-pill>#shell-script
+</a><a href=/tags/devops/ class=hd-tag-pill>#devops
+</a><a href=/tags/aws-cli/ class=hd-tag-pill>#aws-cli
+</a><a href=/tags/gcloud/ class=hd-tag-pill>#gcloud
+</a><a href=/tags/azure-cli/ class=hd-tag-pill>#azure-cli
+</a><a href=/tags/cloud-automation/ class=hd-tag-pill>#cloud-automation</a></div></div><div class=hd-article-footer-box><div class=footer-box-item><span class=box-label>AUTHOR</span>
+<span class=box-value>Hoàng Dương</span></div><div class=footer-box-item><span class=box-label>LICENSE</span>
+<span class=box-value>CC BY-NC-SA 4.0</span></div></div><nav class=hd-post-nav><a href=/posts/bash/bash-step-seventeen/ class="post-nav-card nav-prev"><span class=nav-direction>&larr; PREVIOUS POST</span>
+<span class=nav-post-title>Bash and REST API: Calling and Handling APIs Effectively in DevOps</span></a></nav><section class=hd-comments-section><div class=comments-section-header><span class=mono-label>RESPONSES & DISCUSSION</span></div><div class=utterances-container><script>(function(){var t=document.documentElement.dataset.scheme||"light",n=t==="dark"?"github-dark":"github-light",e=document.createElement("script");e.src="https://utteranc.es/client.js",e.setAttribute("repo","hoangduonng/blog_comments"),e.setAttribute("issue-term","pathname"),e.setAttribute("label","comments"),e.setAttribute("theme",n),e.setAttribute("crossorigin","anonymous"),e.async=!0,document.currentScript.parentElement.appendChild(e)})()</script></div><style>.utterances-container{width:100%;margin-top:8px;position:relative}.utterances{max-width:100%!important;margin:0!important}[data-scheme=light] .utterances iframe,html:not([data-scheme=dark]) .utterances iframe{mix-blend-mode:multiply;transition:mix-blend-mode .2s ease}[data-scheme=dark] .utterances iframe{mix-blend-mode:lighten;transition:mix-blend-mode .2s ease}</style><script>let utterancesLoaded=!1;function setUtterancesTheme(e){let t=document.querySelector(".utterances iframe");if(t&&t.contentWindow){let n=e==="dark"?"github-dark":"github-light";t.contentWindow.postMessage({type:"set-theme",theme:n},"https://utteranc.es")}}addEventListener("message",e=>{if(e.origin!=="https://utteranc.es")return;utterancesLoaded=!0,setUtterancesTheme(document.documentElement.dataset.scheme||"light")}),window.addEventListener("onColorSchemeChange",e=>{if(!utterancesLoaded)return;setUtterancesTheme(e.detail)})</script></section></article></div><aside class=hd-article-sidebar><div class=hd-sticky-sidebar-inner><div class=hd-toc-card><div class=toc-header><span class=toc-title-label>ON THIS PAGE</span></div><div class=toc-content id=toc-content><nav id=TableOfContents><ol><li><a href=#bash-and-cloud-cli-in-devops>Bash and Cloud CLI in DevOps</a></li><li><a href=#cloud-cli-overview>Cloud CLI overview</a><ol><li><a href=#why-use-cloud-cli>Why use Cloud CLI?</a></li><li><a href=#installation-and-authentication>Installation and authentication</a></li></ol></li><li><a href=#query-json-output>Query JSON output</a><ol><li><a href=#aws-cli>AWS CLI</a></li><li><a href=#gcp-cli>GCP CLI</a></li><li><a href=#azure-cli>Azure CLI</a></li></ol></li><li><a href=#hands-on-cloud-health-checker>Hands-on: Cloud health checker</a><ol><li><a href=#running-the-script>Running the script</a></li></ol></li><li><a href=#common-automation-tasks>Common automation tasks</a><ol><li><a href=#snapshot-ec2-instances-aws>Snapshot EC2 instances (AWS)</a></li><li><a href=#auto-scale-vms-based-on-cpu-gcp>Auto-scale VMs based on CPU (GCP)</a></li><li><a href=#stop-all-vms-after-work-hours-azure>Stop all VMs after work hours (Azure)</a></li></ol></li><li><a href=#multi-cloud-script-pattern>Multi-cloud script pattern</a></li><li><a href=#implementation-notes>Implementation notes</a></li><li><a href=#conclusion>Conclusion</a></li></ol></nav></div><div class=toc-scroll-indicator id=toc-indicator style=display:none></div></div></div></aside></div></div><div class=hd-edge-callout-rail><aside class=hd-floating-callout aria-label="Also of interest"><a href=/posts/bash/bash-step-seventeen/ class=floating-callout-art><img src=/images/bash/bash-step-seventeen.jpg alt="Bash and REST API: Calling and Handling APIs Effectively in DevOps" class=floating-callout-img></a><div class=floating-callout-badge>ALSO <span class=callout-of>of</span> INTEREST</div><div class=floating-callout-body><h4 class=floating-callout-title><a href=/posts/bash/bash-step-seventeen/>Bash and REST API: Calling and Handling APIs Effectively in DevOps</a></h4><p class=floating-callout-excerpt>Bash and REST API in DevOps In the previous post, we explored optimizing …</p><a href=/posts/bash/bash-step-seventeen/ class=floating-callout-btn>READ &rarr;</a></div></aside></div></div><script>document.addEventListener("DOMContentLoaded",function(){var e=document.getElementById("toc-content"),t=document.getElementById("toc-indicator");if(e&&t){function n(){var s,o,n=e.scrollHeight-e.clientHeight;if(n<=2){t.style.display="none";return}t.style.display="block",s=e.scrollTop/n,o=e.clientHeight-32,t.style.top=e.offsetTop+s*o+"px"}e.addEventListener("scroll",n,{passive:!0}),n(),window.addEventListener("resize",n,{passive:!0}),window.addEventListener("load",n,{passive:!0})}})</script><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><div id=hd-search-overlay class=hd-search-overlay aria-hidden=true data-index-url=/search/index.json data-lang=en data-no-results="No matching articles found" data-no-results-sub="Try searching with different keywords" data-initial-hint="Type a keyword to search articles..." data-results-count=results><div class=hd-search-backdrop id=hd-search-backdrop tabindex=-1></div><div class=hd-search-dialog role=dialog aria-modal=true aria-label="Search Articles"><div class=hd-search-header><div class=hd-search-input-wrapper><svg class="hd-search-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<input id=hd-search-input class=hd-search-input type=text placeholder="Search articles, categories, topics..." autocomplete=off autocorrect=off autocapitalize=off spellcheck=false aria-autocomplete=list aria-controls=hd-search-results>
+<button id=hd-search-clear class=hd-search-clear type=button aria-label="Clear input" style=display:none>
+<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div><button id=hd-search-close class=hd-search-close-btn type=button aria-label="Close search">
+<kbd class=hd-search-kbd>ESC</kbd></button></div><div class=hd-search-body><div id=hd-search-loading class="hd-search-state hd-search-loading" style=display:none><div class=hd-search-spinner aria-hidden=true></div><span>Loading search index...</span></div><div id=hd-search-initial class="hd-search-state hd-search-initial"><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p class=state-title>Quick Search</p><p class=state-desc>Type a keyword or topic to search across all published articles.</p></div><div id=hd-search-empty class="hd-search-state hd-search-empty" style=display:none><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="8" x2="14" y2="14"/><line x1="14" y1="8" x2="8" y2="14"/></svg><p class=state-title id=hd-search-empty-title>No matching articles found</p><p class=state-desc id=hd-search-empty-desc>Try searching with different keywords</p></div><div id=hd-search-results class=hd-search-results role=listbox style=display:none></div></div><div class=hd-search-footer><div class=hd-search-shortcuts><span class=shortcut-item><kbd>↑</kbd><kbd>↓</kbd>
+<span class=shortcut-label>Navigate</span>
+</span><span class=shortcut-item><kbd>↵</kbd>
+<span class=shortcut-label>Open</span>
+</span><span class=shortcut-item><kbd>ESC</kbd>
+<span class=shortcut-label>Close</span></span></div><div id=hd-search-count class=hd-search-count style=display:none></div></div></div></div><footer class=hd-site-footer><div class=hd-footer-container><div class=hd-footer-grid><div class=footer-brand-col><a href=/ class=footer-logo><span class=footer-logo-title>Hoang Duong</span></a><div class=footer-status><span class=status-dot></span>
+<span class=status-text>All Systems Operational</span></div><ul class=footer-meta-links><li><a href=/about/>About Blog</a></li><li><a href=/archives/>Archives</a></li></ul></div><div class=footer-links-grid><div class=footer-col><h3 class=footer-col-title>Categories</h3><ul class=footer-col-list><li><a href=/categories/bash/>Bash Series</a></li><li><a href=/categories/devops/>DevOps</a></li><li><a href=/categories/docker/>Docker</a></li><li><a href=/categories/installation-guides/>Installation Guides</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Resources</h3><ul class=footer-col-list><li><a href=/about/>About Me</a></li><li><a href=/archives/>All Articles</a></li><li><a href=#search data-open-search>Search</a></li><li><a href=/links/>Useful Links</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Featured Series</h3><ul class=footer-col-list><li><a href=/posts/bash/bash-step-eight/>Cron Jobs & Bash</a></li><li><a href=/categories/devops/>DevOps Automation</a></li><li><a href=/categories/docker/>Docker Essentials</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Connect</h3><ul class=footer-col-list><li><a href=https://github.com/hoangduonng target=_blank rel=noopener>GitHub ↗</a></li><li><a href=https://www.instagram.com/ngu_uuen/ target=_blank rel=noopener>Instagram ↗</a></li><li><a href=https://www.linkedin.com/in/hoangduonng/ target=_blank rel=noopener>LinkedIn ↗</a></li><li><a href=/index.xml>RSS Feed ↗</a></li></ul></div></div></div><div class=hd-footer-bottom-bar><span class=footer-copyright>&copy; 2026 Hoang Duong. All rights reserved.</span></div></div></footer><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.ee266d8948a6a32b88423f5d374fca9833845f738717cf8061ae442a91efe347.js defer></script></body></html>
