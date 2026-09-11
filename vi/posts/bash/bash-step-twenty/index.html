@@ -1,0 +1,1079 @@
+<!doctype html><html lang=vi dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="Tổng hợp best practice trong Bash DevOps: shebang, set -euo pipefail, modular functions, logging, config management, exit codes, shellcheck, và test với bats."><title>Best Practice trong Bash: Tổng hợp kỹ thuật làm chủ script</title><link rel=canonical href=https://tech.nguuyen.io.vn/vi/posts/bash/bash-step-twenty/><link rel=stylesheet href=/scss/style.min.eb77281b84cf8848a1e7482a05d2714447f39bf42fb4243169c88940485a6c71.css><meta property='og:title' content="Best Practice trong Bash: Tổng hợp kỹ thuật làm chủ script"><meta property='og:description' content="Tổng hợp best practice trong Bash DevOps: shebang, set -euo pipefail, modular functions, logging, config management, exit codes, shellcheck, và test với bats."><meta property='og:url' content='https://tech.nguuyen.io.vn/vi/posts/bash/bash-step-twenty/'><meta property='og:site_name' content='Hoàng Dương'><meta property='og:type' content='article'><meta property='article:section' content='Posts'><meta property='article:tag' content='bash'><meta property='article:tag' content='shell-script'><meta property='article:tag' content='devops'><meta property='article:tag' content='best-practices'><meta property='article:tag' content='shellcheck'><meta property='article:tag' content='bats'><meta property='article:tag' content='testing'><meta property='article:published_time' content='2026-09-07T00:00:00+00:00'><meta property='article:modified_time' content='2026-09-07T00:00:00+00:00'><meta property='og:image' content='https://tech.nguuyen.io.vn/images/bash/bash-step-twenty.jpg'><meta name=twitter:title content="Best Practice trong Bash: Tổng hợp kỹ thuật làm chủ script"><meta name=twitter:description content="Tổng hợp best practice trong Bash DevOps: shebang, set -euo pipefail, modular functions, logging, config management, exit codes, shellcheck, và test với bats."><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://tech.nguuyen.io.vn/images/bash/bash-step-twenty.jpg'><link rel=icon type=image/x-icon href=/favicon.ico><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel=stylesheet></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><header class="hd-header is-article-header"><div class=hd-header-inner><div class=hd-brand><a href=/vi/ class=hd-logo-link><span class=hd-logo-text>Hoang Duong</span></a></div><div class=hd-header-divider aria-hidden=true></div><div class=hd-header-rail><a href=/vi/ class="header-rail-crumb header-rail-home">BÀI VIẾT
+</a><span class=header-rail-sep>//</span>
+<a href=/vi/categories/devops/ class="header-rail-crumb header-rail-cat">[DEVOPS]
+</a><span class=header-rail-title>Best Practice trong Bash: Tổng hợp kỹ thuật làm chủ script</span></div><div class=hd-header-spacer></div><nav class=hd-nav-links><button id=hd-menu-toggle class=hd-menu-trigger-fixed aria-label="Toggle Menu" title=Menu type=button>
+<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" class="chevron-icon"><polyline points="6 9 12 15 18 9"/></svg></button></nav></div></header><div id=hd-menu-dropdown class=hd-menu-popover aria-hidden=true><div class=hd-popover-inner><div class=hd-popover-nav><span class=popover-section-label>ĐIỀU HƯỚNG</span>
+<a href=/vi/ class=popover-item>Trang chủ</a>
+<a href=/vi/about/ class=popover-item>Về tôi</a>
+<a href=/vi/archives/ class=popover-item>Lưu trữ</a>
+<a href=/vi/links/ class=popover-item>Liên kết</a>
+<a href=/vi/categories/ class=popover-item>Chuyên mục</a></div><div class=hd-popover-footer><a href=/ class="popover-btn lang-btn" title=English><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>EN</span>
+</a><button class="popover-btn theme-btn dark-mode-toggle" data-toggle-theme title="Chế độ tối" type=button>
+<svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+</button>
+<button type=button class="popover-btn search-btn search-trigger-btn" data-open-search aria-label="Tìm kiếm (Cmd+K)" title="Tìm kiếm (Cmd+K)">
+<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<span class=search-kbd-badge>⌘K</span></button></div></div></div><div id=hd-menu-backdrop class=hd-menu-backdrop aria-hidden=true></div><div class=hd-site-wrapper><main class=hd-main><div class=hd-article-layout><div class=hd-hero-banner-wrap><div class=hd-hero-banner><img src=/images/bash/bash-step-twenty.jpg alt="Best Practice trong Bash: Tổng hợp kỹ thuật làm chủ script" class=hd-hero-banner-img></div></div><div class=hd-article-container><div class=hd-article-grid><div class=hd-article-main><article class=hd-article-body><header class=hd-article-header><div class=hd-article-meta-top><time class=meta-date datetime=2026-09-07T00:00:00Z>SEPTEMBER 07, 2026
+</time><span class=meta-dot>&#183;</span>
+<span class=meta-reading-time>12 PHÚT ĐỌC</span>
+<span class=meta-dot>&#183;</span>
+<span class=meta-author>HOÀNG DƯƠNG</span></div><h1 class=hd-article-title>Best Practice trong Bash: Tổng hợp kỹ thuật làm chủ script</h1><p class=hd-article-description>Tổng hợp best practice trong Bash DevOps: shebang, set -euo pipefail, modular functions, logging, config management, exit codes, shellcheck, và test với bats.</p><div class=hd-article-categories><a href=/vi/categories/devops/ class=hd-cat-pill>DEVOPS
+</a><a href=/vi/categories/bash/ class=hd-cat-pill>BASH</a></div></header><section class="article-content hd-prose"><h2 id=best-practice-tổng-hợp-trong-bash>Best Practice tổng hợp trong Bash</h2><p>Sau 19 bài trong series, chúng ta đã đi qua từ <a class=link href=/posts/bash/bash-step-one/>cơ bản</a> đến <a class=link href=/posts/bash/bash-step-nineteen/>nâng cao</a> — từ variables, loops, functions, đến security, cloud CLI. Bài viết này sẽ tổng hợp tất cả best practice để bạn viết Bash scripts chuyên nghiệp, dễ bảo trì, và an toàn trong DevOps.</p><p>Tại sao cần best practice? Script Bash chạy tự động trên server, trong pipeline, và đôi khi do nhiều người maintain. Nếu không có quy tắc, scripts sẽ trở thành &ldquo;spaghetti code&rdquo; — khó debug, dễ lỗi, và tiềm ẩn lỗ hổng bảo mật.</p><hr><h2 id=script-template-chuẩn>Script template chuẩn</h2><p>Mọi script mới nên bắt đầu với template này:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span><span class=lnt>52
+</span><span class=lnt>53
+</span><span class=lnt>54
+</span><span class=lnt>55
+</span><span class=lnt>56
+</span><span class=lnt>57
+</span><span class=lnt>58
+</span><span class=lnt>59
+</span><span class=lnt>60
+</span><span class=lnt>61
+</span><span class=lnt>62
+</span><span class=lnt>63
+</span><span class=lnt>64
+</span><span class=lnt>65
+</span><span class=lnt>66
+</span><span class=lnt>67
+</span><span class=lnt>68
+</span><span class=lnt>69
+</span><span class=lnt>70
+</span><span class=lnt>71
+</span><span class=lnt>72
+</span><span class=lnt>73
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl><span class=c1># Script : &lt;tên script&gt;</span>
+</span></span><span class=line><span class=cl><span class=c1># Mục đích: &lt;mô tả ngắn gọn&gt;</span>
+</span></span><span class=line><span class=cl><span class=c1># Usage: &lt;script.sh&gt; [options] &lt;args&gt;</span>
+</span></span><span class=line><span class=cl><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># ===== CONSTANTS =====</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>SCRIPT_NAME</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span>basename <span class=s2>&#34;</span><span class=nv>$0</span><span class=s2>&#34;</span><span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>SCRIPT_DIR</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span><span class=nb>cd</span> <span class=s2>&#34;</span><span class=k>$(</span>dirname <span class=s2>&#34;</span><span class=nv>$0</span><span class=s2>&#34;</span><span class=k>)</span><span class=s2>&#34;</span> <span class=o>&amp;&amp;</span> <span class=nb>pwd</span><span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>TIMESTAMP</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span>date <span class=s1>&#39;+%Y-%m-%d %H:%M:%S&#39;</span><span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># ===== CONFIGURATION =====</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>LOG_FILE</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>LOG_FILE</span><span class=k>:-</span><span class=p>/var/log/</span><span class=si>${</span><span class=nv>SCRIPT_NAME</span><span class=si>}</span><span class=p>.log</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>SLACK_WEBHOOK</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>SLACK_WEBHOOK</span><span class=k>:-</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># ===== FUNCTIONS =====</span>
+</span></span><span class=line><span class=cl>log<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>level</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>message</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$2</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;[</span><span class=nv>$TIMESTAMP</span><span class=s2>] [</span><span class=nv>$level</span><span class=s2>] </span><span class=nv>$message</span><span class=s2>&#34;</span> <span class=p>|</span> tee -a <span class=s2>&#34;</span><span class=nv>$LOG_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>usage<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    cat <span class=s>&lt;&lt; EOF
+</span></span></span><span class=line><span class=cl><span class=s>Usage: $SCRIPT_NAME &lt;option&gt; &lt;argument&gt;
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>Options:
+</span></span></span><span class=line><span class=cl><span class=s>    -h, --help      Show this help message
+</span></span></span><span class=line><span class=cl><span class=s>    -v, --verbose   Enable verbose output
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>Examples:
+</span></span></span><span class=line><span class=cl><span class=s>    $SCRIPT_NAME --verbose server01
+</span></span></span><span class=line><span class=cl><span class=s>EOF</span>
+</span></span><span class=line><span class=cl>    <span class=nb>exit</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=nv>0</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>cleanup<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>exit_code</span><span class=o>=</span><span class=nv>$?</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> <span class=nv>$exit_code</span> -ne <span class=m>0</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        log <span class=s2>&#34;ERROR&#34;</span> <span class=s2>&#34;Script failed with exit code </span><span class=nv>$exit_code</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    <span class=c1># Cleanup code here</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=nv>$exit_code</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># ===== MAIN =====</span>
+</span></span><span class=line><span class=cl>main<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1># Parse arguments</span>
+</span></span><span class=line><span class=cl>    <span class=k>while</span> <span class=o>[[</span> <span class=nv>$#</span> -gt <span class=m>0</span> <span class=o>]]</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>        <span class=k>case</span> <span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span> in
+</span></span><span class=line><span class=cl>            -h<span class=p>|</span>--help<span class=o>)</span> usage <span class=m>0</span> <span class=p>;;</span>
+</span></span><span class=line><span class=cl>            -v<span class=p>|</span>--verbose<span class=o>)</span> <span class=nv>VERBOSE</span><span class=o>=</span>true<span class=p>;</span> <span class=nb>shift</span> <span class=p>;;</span>
+</span></span><span class=line><span class=cl>            *<span class=o>)</span> <span class=nb>break</span> <span class=p>;;</span>
+</span></span><span class=line><span class=cl>        <span class=k>esac</span>
+</span></span><span class=line><span class=cl>    <span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Validate required arguments</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> <span class=nv>$#</span> -lt <span class=m>1</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        log <span class=s2>&#34;ERROR&#34;</span> <span class=s2>&#34;Missing required argument&#34;</span>
+</span></span><span class=line><span class=cl>        usage <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;Script started&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=c1># Main logic here</span>
+</span></span><span class=line><span class=cl>    log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;Script completed&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># ===== ENTRY POINT =====</span>
+</span></span><span class=line><span class=cl><span class=nb>trap</span> cleanup EXIT
+</span></span><span class=line><span class=cl>main <span class=s2>&#34;</span><span class=nv>$@</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=tại-sao-template-này>Tại sao template này?</h3><div class=table-wrapper><table><thead><tr><th style=text-align:left>Component</th><th style=text-align:left>Lý do</th></tr></thead><tbody><tr><td style=text-align:left><code>#!/usr/bin/env bash</code></td><td style=text-align:left>Portable, tìm bash trong PATH</td></tr><tr><td style=text-align:left><code>set -euo pipefail</code></td><td style=text-align:left>Exit on error, undefined vars, pipe failures</td></tr><tr><td style=text-align:left><code>readonly</code></td><td style=text-align:left>Tránh thay đổi constants</td></tr><tr><td style=text-align:left><code>function log()</code></td><td style=text-align:left>Logging chuẩn, dễ debug</td></tr><tr><td style=text-align:left><code>usage()</code></td><td style=text-align:left>Document script usage</td></tr><tr><td style=text-align:left><code>cleanup()</code></td><td style=text-align:left>Trap EXIT để cleanup</td></tr><tr><td style=text-align:left><code>main()</code></td><td style=text-align:left>Entry point rõ ràng</td></tr></tbody></table></div><hr><h2 id=shebang-đúng-cách>Shebang đúng cách</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># KHÔNG dùng</span>
+</span></span><span class=line><span class=cl><span class=c1>#!/bin/bash           # Có thể không đúng path</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># NÊN dùng</span>
+</span></span><span class=line><span class=cl><span class=c1>#!/usr/bin/env bash   # Portable, hoạt động trên mọi hệ thống</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Nếu script cần root</span>
+</span></span><span class=line><span class=cl><span class=c1>#!/usr/bin/env bash</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[[</span> <span class=nv>$EUID</span> -ne <span class=m>0</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;This script must be run as root&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=error-handling>Error handling</h2><h3 id=set--euo-pipefail>set -euo pipefail</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Luôn đặt ở đầu script</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># -e: Thoát ngay khi có lỗi</span>
+</span></span><span class=line><span class=cl><span class=c1># -u: Báo lỗi khi dùng biến chưa định nghĩa</span>
+</span></span><span class=line><span class=cl><span class=c1># -o pipefail: Thoát nếu bất kỳ command trong pipe fail</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=trap-errors>Trap errors</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Trap ERR</span>
+</span></span><span class=line><span class=cl><span class=nb>trap</span> <span class=s1>&#39;echo &#34;Error at line $LINENO&#34; &gt;&amp;2&#39;</span> ERR
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Trap EXIT (luôn chạy, dù thành công hay thất bại)</span>
+</span></span><span class=line><span class=cl><span class=nb>trap</span> cleanup EXIT
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Trap specific signals</span>
+</span></span><span class=line><span class=cl><span class=nb>trap</span> <span class=s1>&#39;echo &#34;Interrupted&#34;; exit 130&#39;</span> INT TERM
+</span></span></code></pre></td></tr></table></div></div><h3 id=exit-codes-có-ý-nghĩa>Exit codes có ý nghĩa</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Trả về exit code có nghĩa</span>
+</span></span><span class=line><span class=cl><span class=nb>exit</span> <span class=m>0</span>    <span class=c1># Success</span>
+</span></span><span class=line><span class=cl><span class=nb>exit</span> <span class=m>1</span>    <span class=c1># General error</span>
+</span></span><span class=line><span class=cl><span class=nb>exit</span> <span class=m>2</span>    <span class=c1># Misuse of shell command</span>
+</span></span><span class=line><span class=cl><span class=nb>exit</span> <span class=m>126</span>  <span class=c1># Permission problem</span>
+</span></span><span class=line><span class=cl><span class=nb>exit</span> <span class=m>127</span>  <span class=c1># Command not found</span>
+</span></span><span class=line><span class=cl><span class=nb>exit</span> 128+n  <span class=c1># Fatal error signal &#34;n&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Trong script</span>
+</span></span><span class=line><span class=cl>validate_input<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> -z <span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;ERROR: Missing argument&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=m>0</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=logging>Logging</h2><h3 id=log-với-levels>Log với levels</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Constants</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>RED</span><span class=o>=</span><span class=s1>&#39;\033[0;31m&#39;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>GREEN</span><span class=o>=</span><span class=s1>&#39;\033[0;32m&#39;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>YELLOW</span><span class=o>=</span><span class=s1>&#39;\033[1;33m&#39;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>NC</span><span class=o>=</span><span class=s1>&#39;\033[0m&#39;</span> <span class=c1># No Color</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>log_info<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> -e <span class=s2>&#34;</span><span class=si>${</span><span class=nv>GREEN</span><span class=si>}</span><span class=s2>[</span><span class=k>$(</span>date <span class=s1>&#39;+%H:%M:%S&#39;</span><span class=k>)</span><span class=s2>] [INFO]</span><span class=si>${</span><span class=nv>NC</span><span class=si>}</span><span class=s2> </span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>log_warn<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> -e <span class=s2>&#34;</span><span class=si>${</span><span class=nv>YELLOW</span><span class=si>}</span><span class=s2>[</span><span class=k>$(</span>date <span class=s1>&#39;+%H:%M:%S&#39;</span><span class=k>)</span><span class=s2>] [WARN]</span><span class=si>${</span><span class=nv>NC</span><span class=si>}</span><span class=s2> </span><span class=nv>$1</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>log_error<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> -e <span class=s2>&#34;</span><span class=si>${</span><span class=nv>RED</span><span class=si>}</span><span class=s2>[</span><span class=k>$(</span>date <span class=s1>&#39;+%H:%M:%S&#39;</span><span class=k>)</span><span class=s2>] [ERROR]</span><span class=si>${</span><span class=nv>NC</span><span class=si>}</span><span class=s2> </span><span class=nv>$1</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Usage</span>
+</span></span><span class=line><span class=cl>log_info <span class=s2>&#34;Starting deployment&#34;</span>
+</span></span><span class=line><span class=cl>log_warn <span class=s2>&#34;Disk usage high&#34;</span>
+</span></span><span class=line><span class=cl>log_error <span class=s2>&#34;Connection failed&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=log-to-file>Log to file</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>log<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>level</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>message</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$2</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>log_file</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>LOG_FILE</span><span class=k>:-</span><span class=p>/tmp/</span><span class=si>${</span><span class=nv>SCRIPT_NAME</span><span class=si>}</span><span class=p>.log</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;[</span><span class=k>$(</span>date <span class=s1>&#39;+%Y-%m-%d %H:%M:%S&#39;</span><span class=k>)</span><span class=s2>] [</span><span class=nv>$level</span><span class=s2>] </span><span class=nv>$message</span><span class=s2>&#34;</span> <span class=p>|</span> tee -a <span class=s2>&#34;</span><span class=nv>$log_file</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Usage</span>
+</span></span><span class=line><span class=cl>log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;Deployment started&#34;</span>
+</span></span><span class=line><span class=cl>log <span class=s2>&#34;ERROR&#34;</span> <span class=s2>&#34;Failed to connect to database&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=configuration-management>Configuration management</h2><h3 id=tách-config-khỏi-code>Tách config khỏi code</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># BAD — hardcode trong script</span>
+</span></span><span class=line><span class=cl><span class=nv>DATABASE_URL</span><span class=o>=</span><span class=s2>&#34;postgres://user:pass@localhost:5432/db&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>API_KEY</span><span class=o>=</span><span class=s2>&#34;sk-1234567890&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># GOOD — load từ config file</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>CONFIG_FILE</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>CONFIG_FILE</span><span class=k>:-</span><span class=si>${</span><span class=nv>SCRIPT_DIR</span><span class=si>}</span><span class=p>/config.env</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[[</span> -f <span class=s2>&#34;</span><span class=nv>$CONFIG_FILE</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>set</span> -a
+</span></span><span class=line><span class=cl>    <span class=nb>source</span> <span class=s2>&#34;</span><span class=nv>$CONFIG_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>set</span> +a
+</span></span><span class=line><span class=cl><span class=k>else</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;ERROR: Config file not found: </span><span class=nv>$CONFIG_FILE</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Validate required config</span>
+</span></span><span class=line><span class=cl>: <span class=s2>&#34;</span><span class=si>${</span><span class=nv>DATABASE_URL</span><span class=p>:?DATABASE_URL is required</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>: <span class=s2>&#34;</span><span class=si>${</span><span class=nv>API_KEY</span><span class=p>:?API_KEY is required</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=config-file-template>Config file template</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># config.env (chmod 600)</span>
+</span></span><span class=line><span class=cl><span class=nv>APP_NAME</span><span class=o>=</span>myapp
+</span></span><span class=line><span class=cl><span class=nv>DATABASE_URL</span><span class=o>=</span>postgres://user:pass@localhost:5432/db
+</span></span><span class=line><span class=cl><span class=nv>REDIS_URL</span><span class=o>=</span>redis://localhost:6379
+</span></span><span class=line><span class=cl><span class=nv>LOG_LEVEL</span><span class=o>=</span>info
+</span></span><span class=line><span class=cl><span class=nv>SLACK_WEBHOOK</span><span class=o>=</span>https://hooks.slack.com/services/xxx
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=functions>Functions</h2><h3 id=function-structure>Function structure</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Function với local variables</span>
+</span></span><span class=line><span class=cl>deploy_app<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>environment</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>version</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$2</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Validate inputs</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> -z <span class=s2>&#34;</span><span class=nv>$environment</span><span class=s2>&#34;</span> <span class=o>||</span> -z <span class=s2>&#34;</span><span class=nv>$version</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;Usage: deploy_app &lt;environment&gt; &lt;version&gt;&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Local scope — không conflict với global vars</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>deploy_dir</span><span class=o>=</span><span class=s2>&#34;/opt/apps/</span><span class=si>${</span><span class=nv>environment</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Logic</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Deploying </span><span class=nv>$version</span><span class=s2> to </span><span class=nv>$environment</span><span class=s2>...&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=c1># Deploy logic here</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=m>0</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Function với return value qua stdout</span>
+</span></span><span class=line><span class=cl>get_latest_version<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>app_name</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=c1># Trả value qua stdout, KHÔNG dùng return</span>
+</span></span><span class=line><span class=cl>    curl -s <span class=s2>&#34;https://api.example.com/apps/</span><span class=si>${</span><span class=nv>app_name</span><span class=si>}</span><span class=s2>/version&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Usage</span>
+</span></span><span class=line><span class=cl><span class=nv>VERSION</span><span class=o>=</span><span class=k>$(</span>get_latest_version <span class=s2>&#34;myapp&#34;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>deploy_app <span class=s2>&#34;production&#34;</span> <span class=s2>&#34;</span><span class=nv>$VERSION</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=source-external-functions>Source external functions</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># lib/logger.sh</span>
+</span></span><span class=line><span class=cl>log_info<span class=o>()</span> <span class=o>{</span> <span class=nb>echo</span> <span class=s2>&#34;[INFO] </span><span class=nv>$1</span><span class=s2>&#34;</span><span class=p>;</span> <span class=o>}</span>
+</span></span><span class=line><span class=cl>log_error<span class=o>()</span> <span class=o>{</span> <span class=nb>echo</span> <span class=s2>&#34;[ERROR] </span><span class=nv>$1</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span>2<span class=p>;</span> <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># lib/utils.sh</span>
+</span></span><span class=line><span class=cl>validate_email<span class=o>()</span> <span class=o>{</span> <span class=o>[[</span> <span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span> <span class=o>=</span>~ ^<span class=o>[</span>a-zA-Z0-9._%+-<span class=o>]</span>+@<span class=o>[</span>a-zA-Z0-9.-<span class=o>]</span>+<span class=se>\.</span><span class=o>[</span>a-zA-Z<span class=o>]{</span>2,<span class=o>}</span>$ <span class=o>]]</span><span class=p>;</span> <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Script chính</span>
+</span></span><span class=line><span class=cl><span class=nb>source</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>SCRIPT_DIR</span><span class=si>}</span><span class=s2>/lib/logger.sh&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>source</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>SCRIPT_DIR</span><span class=si>}</span><span class=s2>/lib/utils.sh&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>log_info <span class=s2>&#34;Starting script&#34;</span>
+</span></span><span class=line><span class=cl>validate_email <span class=s2>&#34;</span><span class=nv>$USER_EMAIL</span><span class=s2>&#34;</span> <span class=o>||</span> <span class=o>{</span> log_error <span class=s2>&#34;Invalid email&#34;</span><span class=p>;</span> <span class=nb>exit</span> 1<span class=p>;</span> <span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=input-validation>Input validation</h2><h3 id=validate-arguments>Validate arguments</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Check required args</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[[</span> <span class=nv>$#</span> -lt <span class=m>2</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Usage: </span><span class=nv>$0</span><span class=s2> &lt;hostname&gt; &lt;port&gt;&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>HOSTNAME</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>PORT</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$2</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Validate hostname</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[[</span> ! <span class=s2>&#34;</span><span class=nv>$HOSTNAME</span><span class=s2>&#34;</span> <span class=o>=</span>~ ^<span class=o>[</span>a-zA-Z0-9<span class=o>]([</span>a-zA-Z0-9.-<span class=o>]</span>*<span class=o>[</span>a-zA-Z0-9<span class=o>])</span>?$ <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;ERROR: Invalid hostname: </span><span class=nv>$HOSTNAME</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Validate port</span>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[[</span> ! <span class=s2>&#34;</span><span class=nv>$PORT</span><span class=s2>&#34;</span> <span class=o>=</span>~ ^<span class=o>[</span>0-9<span class=o>]</span>+$ <span class=o>]]</span> <span class=o>||</span> <span class=o>((</span> PORT &lt; <span class=m>1</span> <span class=o>||</span> PORT &gt; <span class=m>65535</span> <span class=o>))</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;ERROR: Invalid port: </span><span class=nv>$PORT</span><span class=s2> (must be 1-65535)&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=validate-files>Validate files</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>require_file<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>file</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>description</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=nv>file</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> ! -f <span class=s2>&#34;</span><span class=nv>$file</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;ERROR: </span><span class=nv>$description</span><span class=s2> not found: </span><span class=nv>$file</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=m>0</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>require_executable<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>cmd</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> ! <span class=nb>command</span> -v <span class=s2>&#34;</span><span class=nv>$cmd</span><span class=s2>&#34;</span> <span class=p>&amp;</span>&gt;/dev/null<span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        <span class=nb>echo</span> <span class=s2>&#34;ERROR: Required command not found: </span><span class=nv>$cmd</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=m>0</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Usage</span>
+</span></span><span class=line><span class=cl>require_file <span class=s2>&#34;.env&#34;</span> <span class=s2>&#34;Config file&#34;</span>
+</span></span><span class=line><span class=cl>require_executable <span class=s2>&#34;docker&#34;</span>
+</span></span><span class=line><span class=cl>require_executable <span class=s2>&#34;kubectl&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=variable-quoting>Variable quoting</h2><h3 id=luôn-quote-khi-expand>Luôn quote khi expand</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># BAD — word splitting, globbing</span>
+</span></span><span class=line><span class=cl>rm <span class=nv>$FILE</span>
+</span></span><span class=line><span class=cl>cp <span class=nv>$SOURCE</span> <span class=nv>$DEST</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=nv>$VARIABLE</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># GOOD — always quote</span>
+</span></span><span class=line><span class=cl>rm <span class=s2>&#34;</span><span class=nv>$FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>cp <span class=s2>&#34;</span><span class=nv>$SOURCE</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$DEST</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$VARIABLE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Exception: arrays và [[ ]]</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> file in <span class=s2>&#34;</span><span class=si>${</span><span class=nv>FILES</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$file</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[[</span> <span class=nv>$var</span> <span class=o>==</span> <span class=s2>&#34;pattern&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;matched&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=command-substitution>Command substitution</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># BAD</span>
+</span></span><span class=line><span class=cl><span class=nb>cd</span> <span class=k>$(</span>dirname <span class=nv>$0</span><span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=nv>files</span><span class=o>=</span><span class=k>$(</span>ls<span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># GOOD</span>
+</span></span><span class=line><span class=cl><span class=nb>cd</span> <span class=s2>&#34;</span><span class=k>$(</span>dirname <span class=s2>&#34;</span><span class=nv>$0</span><span class=s2>&#34;</span><span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>files</span><span class=o>=</span><span class=k>$(</span>ls<span class=k>)</span>  <span class=c1># ls output thường safe, nhưng vẫn nên cẩn thận</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=testing-với-bats>Testing với bats</h2><h3 id=cài-đặt>Cài đặt</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Clone và install</span>
+</span></span><span class=line><span class=cl>git clone https://github.com/bats-core/bats-core.git
+</span></span><span class=line><span class=cl><span class=nb>cd</span> bats-core
+</span></span><span class=line><span class=cl>./install.sh /usr/local
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Hoặc dùng package manager</span>
+</span></span><span class=line><span class=cl>brew install bats  <span class=c1># macOS</span>
+</span></span><span class=line><span class=cl>apt-get install bats  <span class=c1># Debian/Ubuntu</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=viết-tests>Viết tests</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bats
+</span></span></span><span class=line><span class=cl><span class=c1># tests/test_deploy.sh</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Setup — chạy trước mỗi test</span>
+</span></span><span class=line><span class=cl>setup<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>export</span> <span class=nv>SCRIPT_DIR</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span>dirname <span class=s2>&#34;</span><span class=nv>$BATS_TEST_FILENAME</span><span class=s2>&#34;</span><span class=k>)</span><span class=s2>/..&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>export</span> <span class=nv>TEST_ENV</span><span class=o>=</span><span class=s2>&#34;staging&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Teardown — chạy sau mỗi test</span>
+</span></span><span class=line><span class=cl>teardown<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=c1># Cleanup</span>
+</span></span><span class=line><span class=cl>    rm -rf /tmp/test_deploy_* 2&gt;/dev/null <span class=o>||</span> <span class=nb>true</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Test case</span>
+</span></span><span class=line><span class=cl>@test <span class=s2>&#34;deploy_app returns 0 on success&#34;</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    run bash <span class=s2>&#34;</span><span class=nv>$SCRIPT_DIR</span><span class=s2>/deploy.sh&#34;</span> <span class=s2>&#34;</span><span class=nv>$TEST_ENV</span><span class=s2>&#34;</span> <span class=s2>&#34;1.0.0&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=o>[</span> <span class=s2>&#34;</span><span class=nv>$status</span><span class=s2>&#34;</span> -eq <span class=m>0</span> <span class=o>]</span>
+</span></span><span class=line><span class=cl>    <span class=o>[[</span> <span class=s2>&#34;</span><span class=nv>$output</span><span class=s2>&#34;</span> <span class=o>==</span> *<span class=s2>&#34;Deploying&#34;</span>* <span class=o>]]</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>@test <span class=s2>&#34;deploy_app fails with invalid environment&#34;</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    run bash <span class=s2>&#34;</span><span class=nv>$SCRIPT_DIR</span><span class=s2>/deploy.sh&#34;</span> <span class=s2>&#34;invalid-env&#34;</span> <span class=s2>&#34;1.0.0&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=o>[</span> <span class=s2>&#34;</span><span class=nv>$status</span><span class=s2>&#34;</span> -eq <span class=m>1</span> <span class=o>]</span>
+</span></span><span class=line><span class=cl>    <span class=o>[[</span> <span class=s2>&#34;</span><span class=nv>$output</span><span class=s2>&#34;</span> <span class=o>==</span> *<span class=s2>&#34;Invalid environment&#34;</span>* <span class=o>]]</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>@test <span class=s2>&#34;validate_port rejects non-numeric&#34;</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>source</span> <span class=s2>&#34;</span><span class=nv>$SCRIPT_DIR</span><span class=s2>/lib/utils.sh&#34;</span>
+</span></span><span class=line><span class=cl>    run validate_port <span class=s2>&#34;abc&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=o>[</span> <span class=s2>&#34;</span><span class=nv>$status</span><span class=s2>&#34;</span> -eq <span class=m>1</span> <span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>@test <span class=s2>&#34;validate_port rejects out of range&#34;</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>source</span> <span class=s2>&#34;</span><span class=nv>$SCRIPT_DIR</span><span class=s2>/lib/utils.sh&#34;</span>
+</span></span><span class=line><span class=cl>    run validate_port <span class=s2>&#34;99999&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=o>[</span> <span class=s2>&#34;</span><span class=nv>$status</span><span class=s2>&#34;</span> -eq <span class=m>1</span> <span class=o>]</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=chạy-tests>Chạy tests</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Chạy tất cả tests</span>
+</span></span><span class=line><span class=cl>bats tests/
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Chạy một file</span>
+</span></span><span class=line><span class=cl>bats tests/test_deploy.sh
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Output</span>
+</span></span><span class=line><span class=cl> ✓ deploy_app returns <span class=m>0</span> on success
+</span></span><span class=line><span class=cl> ✓ deploy_app fails with invalid environment
+</span></span><span class=line><span class=cl> ✓ validate_port rejects non-numeric
+</span></span><span class=line><span class=cl> ✓ validate_port rejects out of range
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=m>4</span> tests, <span class=m>0</span> failures
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=shellcheck-integration>Shellcheck integration</h2><h3 id=setup>Setup</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Install</span>
+</span></span><span class=line><span class=cl>brew install shellcheck  <span class=c1># macOS</span>
+</span></span><span class=line><span class=cl>apt-get install shellcheck  <span class=c1># Debian/Ubuntu</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Check script</span>
+</span></span><span class=line><span class=cl>shellcheck script.sh
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Fix all issues</span>
+</span></span><span class=line><span class=cl>shellcheck -f diff script.sh <span class=p>|</span> patch -p1
+</span></span></code></pre></td></tr></table></div></div><h3 id=common-fixes>Common fixes</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># SC2086: Double quote variables</span>
+</span></span><span class=line><span class=cl><span class=c1># BAD</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=nv>$1</span>
+</span></span><span class=line><span class=cl><span class=c1># GOOD</span>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># SC2046: Quote command substitution</span>
+</span></span><span class=line><span class=cl><span class=c1># BAD</span>
+</span></span><span class=line><span class=cl><span class=nb>cd</span> <span class=k>$(</span>dirname <span class=nv>$0</span><span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=c1># GOOD</span>
+</span></span><span class=line><span class=cl><span class=nb>cd</span> <span class=s2>&#34;</span><span class=k>$(</span>dirname <span class=s2>&#34;</span><span class=nv>$0</span><span class=s2>&#34;</span><span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># SC2034: Remove unused variables</span>
+</span></span><span class=line><span class=cl><span class=c1># SC2155: Declare and assign separately</span>
+</span></span><span class=line><span class=cl><span class=c1># BAD</span>
+</span></span><span class=line><span class=cl><span class=nb>local</span> <span class=nv>output</span><span class=o>=</span><span class=k>$(</span><span class=nb>command</span><span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=c1># GOOD</span>
+</span></span><span class=line><span class=cl><span class=nb>local</span> output
+</span></span><span class=line><span class=cl><span class=nv>output</span><span class=o>=</span><span class=k>$(</span><span class=nb>command</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># SC2164: Use cd ... || exit in case cd fails</span>
+</span></span><span class=line><span class=cl><span class=c1># BAD</span>
+</span></span><span class=line><span class=cl><span class=nb>cd</span> /some/dir
+</span></span><span class=line><span class=cl><span class=c1># GOOD</span>
+</span></span><span class=line><span class=cl><span class=nb>cd</span> /some/dir <span class=o>||</span> <span class=nb>exit</span> <span class=m>1</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=cicd-integration>CI/CD integration</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=c># GitHub Actions</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>lint</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>runs-on</span><span class=p>:</span><span class=w> </span><span class=l>ubuntu-latest</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>steps</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>uses</span><span class=p>:</span><span class=w> </span><span class=l>actions/checkout@v4</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Install shellcheck</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>run</span><span class=p>:</span><span class=w> </span><span class=l>sudo apt-get install -y shellcheck</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Run shellcheck</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>run</span><span class=p>:</span><span class=w> </span><span class=l>shellcheck -s bash scripts/*.sh lib/*.sh</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c># pre-commit hook</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=c># .pre-commit-config.yaml</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nt>repos</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span>- <span class=nt>repo</span><span class=p>:</span><span class=w> </span><span class=l>https://github.com/koalaman/shellcheck-precommit</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>rev</span><span class=p>:</span><span class=w> </span><span class=l>v0.9.0</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>hooks</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span>- <span class=nt>id</span><span class=p>:</span><span class=w> </span><span class=l>shellcheck</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><hr><h2 id=ví-dụ-thực-hành-production-ready-script>Ví dụ thực hành: Production-ready script</h2><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>  1
+</span><span class=lnt>  2
+</span><span class=lnt>  3
+</span><span class=lnt>  4
+</span><span class=lnt>  5
+</span><span class=lnt>  6
+</span><span class=lnt>  7
+</span><span class=lnt>  8
+</span><span class=lnt>  9
+</span><span class=lnt> 10
+</span><span class=lnt> 11
+</span><span class=lnt> 12
+</span><span class=lnt> 13
+</span><span class=lnt> 14
+</span><span class=lnt> 15
+</span><span class=lnt> 16
+</span><span class=lnt> 17
+</span><span class=lnt> 18
+</span><span class=lnt> 19
+</span><span class=lnt> 20
+</span><span class=lnt> 21
+</span><span class=lnt> 22
+</span><span class=lnt> 23
+</span><span class=lnt> 24
+</span><span class=lnt> 25
+</span><span class=lnt> 26
+</span><span class=lnt> 27
+</span><span class=lnt> 28
+</span><span class=lnt> 29
+</span><span class=lnt> 30
+</span><span class=lnt> 31
+</span><span class=lnt> 32
+</span><span class=lnt> 33
+</span><span class=lnt> 34
+</span><span class=lnt> 35
+</span><span class=lnt> 36
+</span><span class=lnt> 37
+</span><span class=lnt> 38
+</span><span class=lnt> 39
+</span><span class=lnt> 40
+</span><span class=lnt> 41
+</span><span class=lnt> 42
+</span><span class=lnt> 43
+</span><span class=lnt> 44
+</span><span class=lnt> 45
+</span><span class=lnt> 46
+</span><span class=lnt> 47
+</span><span class=lnt> 48
+</span><span class=lnt> 49
+</span><span class=lnt> 50
+</span><span class=lnt> 51
+</span><span class=lnt> 52
+</span><span class=lnt> 53
+</span><span class=lnt> 54
+</span><span class=lnt> 55
+</span><span class=lnt> 56
+</span><span class=lnt> 57
+</span><span class=lnt> 58
+</span><span class=lnt> 59
+</span><span class=lnt> 60
+</span><span class=lnt> 61
+</span><span class=lnt> 62
+</span><span class=lnt> 63
+</span><span class=lnt> 64
+</span><span class=lnt> 65
+</span><span class=lnt> 66
+</span><span class=lnt> 67
+</span><span class=lnt> 68
+</span><span class=lnt> 69
+</span><span class=lnt> 70
+</span><span class=lnt> 71
+</span><span class=lnt> 72
+</span><span class=lnt> 73
+</span><span class=lnt> 74
+</span><span class=lnt> 75
+</span><span class=lnt> 76
+</span><span class=lnt> 77
+</span><span class=lnt> 78
+</span><span class=lnt> 79
+</span><span class=lnt> 80
+</span><span class=lnt> 81
+</span><span class=lnt> 82
+</span><span class=lnt> 83
+</span><span class=lnt> 84
+</span><span class=lnt> 85
+</span><span class=lnt> 86
+</span><span class=lnt> 87
+</span><span class=lnt> 88
+</span><span class=lnt> 89
+</span><span class=lnt> 90
+</span><span class=lnt> 91
+</span><span class=lnt> 92
+</span><span class=lnt> 93
+</span><span class=lnt> 94
+</span><span class=lnt> 95
+</span><span class=lnt> 96
+</span><span class=lnt> 97
+</span><span class=lnt> 98
+</span><span class=lnt> 99
+</span><span class=lnt>100
+</span><span class=lnt>101
+</span><span class=lnt>102
+</span><span class=lnt>103
+</span><span class=lnt>104
+</span><span class=lnt>105
+</span><span class=lnt>106
+</span><span class=lnt>107
+</span><span class=lnt>108
+</span><span class=lnt>109
+</span><span class=lnt>110
+</span><span class=lnt>111
+</span><span class=lnt>112
+</span><span class=lnt>113
+</span><span class=lnt>114
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl><span class=c1># Script : health-checker.sh</span>
+</span></span><span class=line><span class=cl><span class=c1># Purpose: System health check with alerting</span>
+</span></span><span class=line><span class=cl><span class=c1># Usage: health-checker.sh [--webhook URL] [--threshold PERCENT]</span>
+</span></span><span class=line><span class=cl><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># ===== CONSTANTS =====</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>SCRIPT_NAME</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span>basename <span class=s2>&#34;</span><span class=nv>$0</span><span class=s2>&#34;</span><span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>SCRIPT_DIR</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span><span class=nb>cd</span> <span class=s2>&#34;</span><span class=k>$(</span>dirname <span class=s2>&#34;</span><span class=nv>$0</span><span class=s2>&#34;</span><span class=k>)</span><span class=s2>&#34;</span> <span class=o>&amp;&amp;</span> <span class=nb>pwd</span><span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>TIMESTAMP</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span>date <span class=s1>&#39;+%Y-%m-%d %H:%M:%S&#39;</span><span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># ===== DEFAULTS =====</span>
+</span></span><span class=line><span class=cl><span class=nv>DISK_THRESHOLD</span><span class=o>=</span><span class=m>80</span>
+</span></span><span class=line><span class=cl><span class=nv>MEMORY_THRESHOLD</span><span class=o>=</span><span class=m>90</span>
+</span></span><span class=line><span class=cl><span class=nv>SLACK_WEBHOOK</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>SLACK_WEBHOOK</span><span class=k>:-</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>LOG_FILE</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>LOG_FILE</span><span class=k>:-</span><span class=p>/var/log/</span><span class=si>${</span><span class=nv>SCRIPT_NAME</span><span class=si>}</span><span class=p>.log</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># ===== FUNCTIONS =====</span>
+</span></span><span class=line><span class=cl>log<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>level</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>message</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$2</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;[</span><span class=nv>$TIMESTAMP</span><span class=s2>] [</span><span class=nv>$level</span><span class=s2>] </span><span class=nv>$message</span><span class=s2>&#34;</span> <span class=p>|</span> tee -a <span class=s2>&#34;</span><span class=nv>$LOG_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>usage<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    cat <span class=s>&lt;&lt; EOF
+</span></span></span><span class=line><span class=cl><span class=s>Usage: $SCRIPT_NAME [OPTIONS]
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>Options:
+</span></span></span><span class=line><span class=cl><span class=s>    -w, --webhook URL       Slack webhook URL
+</span></span></span><span class=line><span class=cl><span class=s>    -d, --disk PERCENT      Disk threshold (default: 80)
+</span></span></span><span class=line><span class=cl><span class=s>    -m, --memory PERCENT    Memory threshold (default: 90)
+</span></span></span><span class=line><span class=cl><span class=s>    -h, --help              Show this help
+</span></span></span><span class=line><span class=cl><span class=s>
+</span></span></span><span class=line><span class=cl><span class=s>Examples:
+</span></span></span><span class=line><span class=cl><span class=s>    $SCRIPT_NAME --webhook https://hooks.slack.com/xxx --disk 90
+</span></span></span><span class=line><span class=cl><span class=s>EOF</span>
+</span></span><span class=line><span class=cl>    <span class=nb>exit</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=nv>0</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>send_alert<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>message</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> -n <span class=s2>&#34;</span><span class=nv>$SLACK_WEBHOOK</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        curl -s -X POST -H <span class=s1>&#39;Content-type: application/json&#39;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>            --data <span class=s2>&#34;{\&#34;text\&#34;:\&#34;[</span><span class=nv>$SCRIPT_NAME</span><span class=s2>] </span><span class=nv>$message</span><span class=s2>\&#34;}&#34;</span> <span class=s2>&#34;</span><span class=nv>$SLACK_WEBHOOK</span><span class=s2>&#34;</span> &gt;/dev/null 2&gt;<span class=p>&amp;</span><span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>check_disk<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> usage
+</span></span><span class=line><span class=cl>    <span class=nv>usage</span><span class=o>=</span><span class=k>$(</span>df -h / <span class=p>|</span> awk <span class=s1>&#39;NR==2 {print $5}&#39;</span> <span class=p>|</span> tr -d <span class=s1>&#39;%&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>((</span> usage &gt; DISK_THRESHOLD <span class=o>))</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        log <span class=s2>&#34;WARN&#34;</span> <span class=s2>&#34;Disk usage </span><span class=si>${</span><span class=nv>usage</span><span class=si>}</span><span class=s2>% exceeds threshold </span><span class=si>${</span><span class=nv>DISK_THRESHOLD</span><span class=si>}</span><span class=s2>%&#34;</span>
+</span></span><span class=line><span class=cl>        send_alert <span class=s2>&#34;Disk usage </span><span class=si>${</span><span class=nv>usage</span><span class=si>}</span><span class=s2>% on </span><span class=k>$(</span>hostname<span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;Disk usage: </span><span class=si>${</span><span class=nv>usage</span><span class=si>}</span><span class=s2>%&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=m>0</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>check_memory<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> usage
+</span></span><span class=line><span class=cl>    <span class=nv>usage</span><span class=o>=</span><span class=k>$(</span>free <span class=p>|</span> awk <span class=s1>&#39;/Mem:/ {printf &#34;%.0f&#34;, $3/$2 * 100}&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>((</span> usage &gt; MEMORY_THRESHOLD <span class=o>))</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        log <span class=s2>&#34;WARN&#34;</span> <span class=s2>&#34;Memory usage </span><span class=si>${</span><span class=nv>usage</span><span class=si>}</span><span class=s2>% exceeds threshold </span><span class=si>${</span><span class=nv>MEMORY_THRESHOLD</span><span class=si>}</span><span class=s2>%&#34;</span>
+</span></span><span class=line><span class=cl>        send_alert <span class=s2>&#34;Memory usage </span><span class=si>${</span><span class=nv>usage</span><span class=si>}</span><span class=s2>% on </span><span class=k>$(</span>hostname<span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;Memory usage: </span><span class=si>${</span><span class=nv>usage</span><span class=si>}</span><span class=s2>%&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=m>0</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>cleanup<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>exit_code</span><span class=o>=</span><span class=nv>$?</span>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> <span class=nv>$exit_code</span> -ne <span class=m>0</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        log <span class=s2>&#34;ERROR&#34;</span> <span class=s2>&#34;Script failed with exit code </span><span class=nv>$exit_code</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>    <span class=k>return</span> <span class=nv>$exit_code</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># ===== MAIN =====</span>
+</span></span><span class=line><span class=cl>main<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=k>while</span> <span class=o>[[</span> <span class=nv>$#</span> -gt <span class=m>0</span> <span class=o>]]</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>        <span class=k>case</span> <span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span> in
+</span></span><span class=line><span class=cl>            -w<span class=p>|</span>--webhook<span class=o>)</span> <span class=nv>SLACK_WEBHOOK</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$2</span><span class=s2>&#34;</span><span class=p>;</span> <span class=nb>shift</span> <span class=m>2</span> <span class=p>;;</span>
+</span></span><span class=line><span class=cl>            -d<span class=p>|</span>--disk<span class=o>)</span> <span class=nv>DISK_THRESHOLD</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$2</span><span class=s2>&#34;</span><span class=p>;</span> <span class=nb>shift</span> <span class=m>2</span> <span class=p>;;</span>
+</span></span><span class=line><span class=cl>            -m<span class=p>|</span>--memory<span class=o>)</span> <span class=nv>MEMORY_THRESHOLD</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$2</span><span class=s2>&#34;</span><span class=p>;</span> <span class=nb>shift</span> <span class=m>2</span> <span class=p>;;</span>
+</span></span><span class=line><span class=cl>            -h<span class=p>|</span>--help<span class=o>)</span> usage <span class=m>0</span> <span class=p>;;</span>
+</span></span><span class=line><span class=cl>            *<span class=o>)</span> log <span class=s2>&#34;ERROR&#34;</span> <span class=s2>&#34;Unknown option: </span><span class=nv>$1</span><span class=s2>&#34;</span><span class=p>;</span> usage <span class=m>1</span> <span class=p>;;</span>
+</span></span><span class=line><span class=cl>        <span class=k>esac</span>
+</span></span><span class=line><span class=cl>    <span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;=== Health Check Started ===&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>failed</span><span class=o>=</span><span class=m>0</span>
+</span></span><span class=line><span class=cl>    check_disk <span class=o>||</span> <span class=o>((</span>failed++<span class=o>))</span>
+</span></span><span class=line><span class=cl>    check_memory <span class=o>||</span> <span class=o>((</span>failed++<span class=o>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>((</span> failed &gt; <span class=m>0</span> <span class=o>))</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        log <span class=s2>&#34;WARN&#34;</span> <span class=s2>&#34;</span><span class=nv>$failed</span><span class=s2> check(s) failed&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    log <span class=s2>&#34;INFO&#34;</span> <span class=s2>&#34;=== All checks passed ===&#34;</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># ===== ENTRY POINT =====</span>
+</span></span><span class=line><span class=cl><span class=nb>trap</span> cleanup EXIT
+</span></span><span class=line><span class=cl>main <span class=s2>&#34;</span><span class=nv>$@</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><h3 id=test-script>Test script</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Chạy test</span>
+</span></span><span class=line><span class=cl>$ bash -n health-checker.sh  <span class=c1># Check syntax</span>
+</span></span><span class=line><span class=cl>$ shellcheck health-checker.sh  <span class=c1># Lint</span>
+</span></span><span class=line><span class=cl>$ bats tests/test_health.sh  <span class=c1># Run tests</span>
+</span></span><span class=line><span class=cl>$ ./health-checker.sh --help  <span class=c1># Test help output</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=ghi-chú-triển-khai>Ghi chú triển khai</h2><ul><li><strong>Bắt đầu với template:</strong> Luôn dùng template chuẩn khi viết script mới. Tiết kiệm thời gian và đảm bảo consistency.</li><li><strong>Shellcheck trong CI:</strong> Bắt buộc shellcheck pass trước khi merge. Catch bugs sớm.</li><li><strong>Test trước khi deploy:</strong> Viết bats tests cho critical scripts. Đặc biệt cho automation chạy trên production.</li><li><strong>Document <code>--help</code>:</strong> Mọi script nên có <code>--help</code> output rõ ràng. Team members sẽ không cần hỏi.</li><li><strong>Logging nhất quán:</strong> Dùng cùng format log trên tất cả scripts. Dễ aggregate và search.</li><li><strong>Config tách riêng:</strong> Không hardcode config trong script. Dùng <code>.env</code> hoặc config files.</li><li><strong>Review process:</strong> Khi review Bash scripts, check cho: hardcoded secrets, missing validation, unused variables, loose permissions.</li></ul><hr><h2 id=lời-kết>Lời kết</h2><p>Series 20 bài đã tổng hợp từ <a class=link href=/posts/bash/bash-step-one/>cơ bản</a> đến <a class=link href=/posts/bash/bash-step-twenty/>nâng cao</a> — từ variables, loops, functions, đến security, cloud automation, và testing.</p><p>Best practice không phải là rules cứng nhắc mà là guidelines để viết scripts:</p><ul><li><strong>Dễ đọc:</strong> Comment rõ, naming convention, modular functions</li><li><strong>Dễ bảo trì:</strong> Error handling, logging, config management</li><li><strong>An toàn:</strong> Input validation, secrets management, shellcheck</li><li><strong>Dễ test:</strong> Bats tests, CI/CD integration</li></ul><p>Áp dụng những nguyên tắc này, bạn sẽ viết Bash scripts chuyên nghiệp và tự tin trong DevOps工作流.</p></section><div class=hd-article-tags-wrap><span class=tags-label>THẺ:</span><div class=hd-article-tags><a href=/vi/tags/bash/ class=hd-tag-pill>#bash
+</a><a href=/vi/tags/shell-script/ class=hd-tag-pill>#shell-script
+</a><a href=/vi/tags/devops/ class=hd-tag-pill>#devops
+</a><a href=/vi/tags/best-practices/ class=hd-tag-pill>#best-practices
+</a><a href=/vi/tags/shellcheck/ class=hd-tag-pill>#shellcheck
+</a><a href=/vi/tags/bats/ class=hd-tag-pill>#bats
+</a><a href=/vi/tags/testing/ class=hd-tag-pill>#testing</a></div></div><div class=hd-article-footer-box><div class=footer-box-item><span class=box-label>TÁC GIẢ</span>
+<span class=box-value>Hoàng Dương</span></div><div class=footer-box-item><span class=box-label>BẢN QUYỀN</span>
+<span class=box-value>CC BY-NC-SA 4.0</span></div></div><nav class=hd-post-nav><a href=/vi/posts/bash/bash-step-nineteen/ class="post-nav-card nav-prev"><span class=nav-direction>&larr; BÀI TRƯỚC</span>
+<span class=nav-post-title>Bash và Security: Bảo mật script hiệu quả trong DevOps</span></a></nav><section class=hd-comments-section><div class=comments-section-header><span class=mono-label>THẢO LUẬN & BÌNH LUẬN</span></div><div class=utterances-container><script>(function(){var t=document.documentElement.dataset.scheme||"light",n=t==="dark"?"github-dark":"github-light",e=document.createElement("script");e.src="https://utteranc.es/client.js",e.setAttribute("repo","hoangduonng/blog_comments"),e.setAttribute("issue-term","pathname"),e.setAttribute("label","comments"),e.setAttribute("theme",n),e.setAttribute("crossorigin","anonymous"),e.async=!0,document.currentScript.parentElement.appendChild(e)})()</script></div><style>.utterances-container{width:100%;margin-top:8px;position:relative}.utterances{max-width:100%!important;margin:0!important}[data-scheme=light] .utterances iframe,html:not([data-scheme=dark]) .utterances iframe{mix-blend-mode:multiply;transition:mix-blend-mode .2s ease}[data-scheme=dark] .utterances iframe{mix-blend-mode:lighten;transition:mix-blend-mode .2s ease}</style><script>let utterancesLoaded=!1;function setUtterancesTheme(e){let t=document.querySelector(".utterances iframe");if(t&&t.contentWindow){let n=e==="dark"?"github-dark":"github-light";t.contentWindow.postMessage({type:"set-theme",theme:n},"https://utteranc.es")}}addEventListener("message",e=>{if(e.origin!=="https://utteranc.es")return;utterancesLoaded=!0,setUtterancesTheme(document.documentElement.dataset.scheme||"light")}),window.addEventListener("onColorSchemeChange",e=>{if(!utterancesLoaded)return;setUtterancesTheme(e.detail)})</script></section></article></div><aside class=hd-article-sidebar><div class=hd-sticky-sidebar-inner><div class=hd-toc-card><div class=toc-header><span class=toc-title-label>MỤC LỤC</span></div><div class=toc-content id=toc-content><nav id=TableOfContents><ol><li><a href=#best-practice-tổng-hợp-trong-bash>Best Practice tổng hợp trong Bash</a></li><li><a href=#script-template-chuẩn>Script template chuẩn</a><ol><li><a href=#tại-sao-template-này>Tại sao template này?</a></li></ol></li><li><a href=#shebang-đúng-cách>Shebang đúng cách</a></li><li><a href=#error-handling>Error handling</a><ol><li><a href=#set--euo-pipefail>set -euo pipefail</a></li><li><a href=#trap-errors>Trap errors</a></li><li><a href=#exit-codes-có-ý-nghĩa>Exit codes có ý nghĩa</a></li></ol></li><li><a href=#logging>Logging</a><ol><li><a href=#log-với-levels>Log với levels</a></li><li><a href=#log-to-file>Log to file</a></li></ol></li><li><a href=#configuration-management>Configuration management</a><ol><li><a href=#tách-config-khỏi-code>Tách config khỏi code</a></li><li><a href=#config-file-template>Config file template</a></li></ol></li><li><a href=#functions>Functions</a><ol><li><a href=#function-structure>Function structure</a></li><li><a href=#source-external-functions>Source external functions</a></li></ol></li><li><a href=#input-validation>Input validation</a><ol><li><a href=#validate-arguments>Validate arguments</a></li><li><a href=#validate-files>Validate files</a></li></ol></li><li><a href=#variable-quoting>Variable quoting</a><ol><li><a href=#luôn-quote-khi-expand>Luôn quote khi expand</a></li><li><a href=#command-substitution>Command substitution</a></li></ol></li><li><a href=#testing-với-bats>Testing với bats</a><ol><li><a href=#cài-đặt>Cài đặt</a></li><li><a href=#viết-tests>Viết tests</a></li><li><a href=#chạy-tests>Chạy tests</a></li></ol></li><li><a href=#shellcheck-integration>Shellcheck integration</a><ol><li><a href=#setup>Setup</a></li><li><a href=#common-fixes>Common fixes</a></li><li><a href=#cicd-integration>CI/CD integration</a></li></ol></li><li><a href=#ví-dụ-thực-hành-production-ready-script>Ví dụ thực hành: Production-ready script</a><ol><li><a href=#test-script>Test script</a></li></ol></li><li><a href=#ghi-chú-triển-khai>Ghi chú triển khai</a></li><li><a href=#lời-kết>Lời kết</a></li></ol></nav></div><div class=toc-scroll-indicator id=toc-indicator style=display:none></div></div></div></aside></div></div><div class=hd-edge-callout-rail><aside class=hd-floating-callout aria-label="Bài viết liên quan"><a href=/vi/posts/bash/bash-step-nineteen/ class=floating-callout-art><img src=/images/bash/bash-step-nineteen.jpg alt="Bash và Security: Bảo mật script hiệu quả trong DevOps" class=floating-callout-img></a><div class=floating-callout-badge>BÀI VIẾT <span class=callout-of>liên quan</span></div><div class=floating-callout-body><h4 class=floating-callout-title><a href=/vi/posts/bash/bash-step-nineteen/>Bash và Security: Bảo mật script hiệu quả trong DevOps</a></h4><p class=floating-callout-excerpt>Bash và Security trong DevOps Trong bài viết trước, chúng ta đã tìm hiểu cách …</p><a href=/vi/posts/bash/bash-step-nineteen/ class=floating-callout-btn>ĐỌC TIẾP &rarr;</a></div></aside></div></div><script>document.addEventListener("DOMContentLoaded",function(){var e=document.getElementById("toc-content"),t=document.getElementById("toc-indicator");if(e&&t){function n(){var s,o,n=e.scrollHeight-e.clientHeight;if(n<=2){t.style.display="none";return}t.style.display="block",s=e.scrollTop/n,o=e.clientHeight-32,t.style.top=e.offsetTop+s*o+"px"}e.addEventListener("scroll",n,{passive:!0}),n(),window.addEventListener("resize",n,{passive:!0}),window.addEventListener("load",n,{passive:!0})}})</script><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><div id=hd-search-overlay class=hd-search-overlay aria-hidden=true data-index-url=/vi/search/index.json data-lang=vi data-no-results="Không tìm thấy kết quả phù hợp" data-no-results-sub="Hãy thử với từ khóa khác hoặc kiểm tra lại chính tả" data-initial-hint="Nhập từ khoá để tìm kiếm bài viết..." data-results-count="kết quả"><div class=hd-search-backdrop id=hd-search-backdrop tabindex=-1></div><div class=hd-search-dialog role=dialog aria-modal=true aria-label="Tìm kiếm bài viết"><div class=hd-search-header><div class=hd-search-input-wrapper><svg class="hd-search-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<input id=hd-search-input class=hd-search-input type=text placeholder="Tìm kiếm bài viết, chuyên mục, chủ đề..." autocomplete=off autocorrect=off autocapitalize=off spellcheck=false aria-autocomplete=list aria-controls=hd-search-results>
+<button id=hd-search-clear class=hd-search-clear type=button aria-label="Xóa từ khóa" style=display:none>
+<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div><button id=hd-search-close class=hd-search-close-btn type=button aria-label="Đóng tìm kiếm">
+<kbd class=hd-search-kbd>ESC</kbd></button></div><div class=hd-search-body><div id=hd-search-loading class="hd-search-state hd-search-loading" style=display:none><div class=hd-search-spinner aria-hidden=true></div><span>Đang tải dữ liệu tìm kiếm...</span></div><div id=hd-search-initial class="hd-search-state hd-search-initial"><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p class=state-title>Tìm kiếm nhanh</p><p class=state-desc>Nhập từ khoá hoặc chủ đề để tìm kiếm trong tất cả bài viết đã xuất bản.</p></div><div id=hd-search-empty class="hd-search-state hd-search-empty" style=display:none><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="8" x2="14" y2="14"/><line x1="14" y1="8" x2="8" y2="14"/></svg><p class=state-title id=hd-search-empty-title>Không tìm thấy kết quả phù hợp</p><p class=state-desc id=hd-search-empty-desc>Hãy thử với từ khóa khác hoặc kiểm tra lại chính tả</p></div><div id=hd-search-results class=hd-search-results role=listbox style=display:none></div></div><div class=hd-search-footer><div class=hd-search-shortcuts><span class=shortcut-item><kbd>↑</kbd><kbd>↓</kbd>
+<span class=shortcut-label>Điều hướng</span>
+</span><span class=shortcut-item><kbd>↵</kbd>
+<span class=shortcut-label>Mở bài viết</span>
+</span><span class=shortcut-item><kbd>ESC</kbd>
+<span class=shortcut-label>Đóng</span></span></div><div id=hd-search-count class=hd-search-count style=display:none></div></div></div></div><footer class=hd-site-footer><div class=hd-footer-container><div class=hd-footer-grid><div class=footer-brand-col><a href=/vi/ class=footer-logo><span class=footer-logo-title>Hoang Duong</span></a><div class=footer-status><span class=status-dot></span>
+<span class=status-text>Hệ thống hoạt động ổn định</span></div><ul class=footer-meta-links><li><a href=/vi/about/>Giới thiệu Blog</a></li><li><a href=/vi/archives/>Lưu trữ bài viết</a></li></ul></div><div class=footer-links-grid><div class=footer-col><h3 class=footer-col-title>Chuyên mục</h3><ul class=footer-col-list><li><a href=/vi/categories/bash/>Bash Series</a></li><li><a href=/vi/categories/devops/>DevOps</a></li><li><a href=/vi/categories/docker/>Docker</a></li><li><a href=/vi/categories/installation-guides/>Hướng dẫn cài đặt</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Tài nguyên</h3><ul class=footer-col-list><li><a href=/vi/about/>Về tôi</a></li><li><a href=/vi/archives/>Tất cả bài viết</a></li><li><a href=#search data-open-search>Tìm kiếm</a></li><li><a href=/vi/links/>Liên kết hữu ích</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Series Nổi Bật</h3><ul class=footer-col-list><li><a href=/vi/posts/bash/bash-step-eight/>Cron Jobs & Bash</a></li><li><a href=/vi/categories/devops/>DevOps Automation</a></li><li><a href=/vi/categories/docker/>Docker Essentials</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Kết nối</h3><ul class=footer-col-list><li><a href=https://github.com/hoangduonng target=_blank rel=noopener>GitHub ↗</a></li><li><a href=https://www.instagram.com/ngu_uuen/ target=_blank rel=noopener>Instagram ↗</a></li><li><a href=https://www.linkedin.com/in/hoangduonng/ target=_blank rel=noopener>LinkedIn ↗</a></li><li><a href=/vi/index.xml>RSS Feed ↗</a></li></ul></div></div></div><div class=hd-footer-bottom-bar><span class=footer-copyright>&copy; 2026 Hoang Duong. All rights reserved.</span></div></div></footer><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.ee266d8948a6a32b88423f5d374fca9833845f738717cf8061ae442a91efe347.js defer></script></body></html>
