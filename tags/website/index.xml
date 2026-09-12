@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Website on Hoang Duong</title><link>https://tech.nguuyen.io.vn/tags/website/</link><description>Recent content in Website on Hoang Duong</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Fri, 20 Feb 2026 00:31:32 +0700</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/website/index.xml" rel="self" type="application/rss+xml"/><item><title>How to Install Nginx on Ubuntu 24.04</title><link>https://tech.nguuyen.io.vn/posts/installation-guides/how-to-install-nginx/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/installation-guides/how-to-install-nginx/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/website/how-to-install-nginx.jpg" alt="Featured image of post How to Install Nginx on Ubuntu 24.04 " /&gt;&lt;h2 id="introduction"&gt;Introduction
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Website on Hoang Duong</title><link>https://tech.nguuyen.io.vn/tags/website/</link><description>Recent content in Website on Hoang Duong</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sat, 12 Sep 2026 17:05:00 +0700</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/website/index.xml" rel="self" type="application/rss+xml"/><item><title>How to Install Nginx on Ubuntu 24.04</title><link>https://tech.nguuyen.io.vn/posts/installation-guides/how-to-install-nginx/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/installation-guides/how-to-install-nginx/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/website/how-to-install-nginx.jpg" alt="Featured image of post How to Install Nginx on Ubuntu 24.04 " /&gt;&lt;h2 id="introduction"&gt;Introduction
 &lt;/h2&gt;&lt;p&gt;Nginx is an open-source web server that can serve static and dynamic web applications. It can run as a web server, load balancer, reverse proxy, or HTTP cache, and integrates with existing applications to build complete systems or distribute web apps via IP or domain.&lt;/p&gt;
 &lt;p&gt;This guide shows how to install Nginx on Ubuntu 24.04 and set up a sample web app on your server.&lt;/p&gt;
 &lt;h2 id="prerequisites"&gt;Prerequisites
@@ -832,7 +832,7 @@ alt="Import Site tool"
 &lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;Tip&lt;/strong&gt;: Check the provider&amp;rsquo;s migration policy before requesting support.&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;&lt;img src="https://image.vietnix.vn/wp-content/uploads/2024/09/Nho-su-ho-tro-tu-nha-cung-cap-hosting.webp"
+&lt;p&gt;&lt;img src="https://tech.nguuyen.io.vn/images/website/ask-hosting-support.svg"
 loading="lazy"
 alt="Ask hosting support"
 &gt;&lt;/p&gt;

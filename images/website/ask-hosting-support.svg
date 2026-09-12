@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 675" role="img" aria-label="Hosting migration support illustration">
+  <defs>
+    <filter id="grain" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" stitchTiles="stitch" result="n"/>
+      <feColorMatrix in="n" type="matrix" values="0 0 0 0 0.87  0 0 0 0 0.87  0 0 0 0 0.76  0 0 0 0.06 0"/>
+      <feComposite operator="over" in2="SourceGraphic"/>
+    </filter>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="9" markerHeight="9" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#dfdfc1"/>
+    </marker>
+    <radialGradient id="aura" cx="50%" cy="46%" r="55%">
+      <stop offset="0%" stop-color="#dfdfc1" stop-opacity="0.10"/>
+      <stop offset="100%" stop-color="#dfdfc1" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- matte dark-green canvas -->
+  <rect width="1200" height="675" fill="#1c2520"/>
+  <rect width="1200" height="675" fill="url(#aura)"/>
+
+  <!-- top mono label -->
+  <text x="72" y="78" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="24" font-weight="700" letter-spacing="4" fill="#dfdfc1" opacity="0.85">HOSTING · MIGRATION · SUPPORT</text>
+  <line x1="72" y1="100" x2="528" y2="100" stroke="#dfdfc1" stroke-width="2" opacity="0.35"/>
+
+  <!-- OLD HOST server -->
+  <g>
+    <rect x="130" y="220" width="210" height="260" rx="14" fill="none" stroke="#dfdfc1" stroke-width="3" opacity="0.9"/>
+    <rect x="130" y="220" width="210" height="64" rx="14" fill="#dfdfc1" opacity="0.12"/>
+    <line x1="130" y1="284" x2="340" y2="284" stroke="#dfdfc1" stroke-width="2" opacity="0.5"/>
+    <line x1="130" y1="352" x2="340" y2="352" stroke="#dfdfc1" stroke-width="2" opacity="0.5"/>
+    <line x1="130" y1="420" x2="340" y2="420" stroke="#dfdfc1" stroke-width="2" opacity="0.5"/>
+    <circle cx="162" cy="252" r="7" fill="#d9a441"/>
+    <circle cx="162" cy="320" r="7" fill="#7fb08a"/>
+    <circle cx="162" cy="388" r="7" fill="#7fb08a"/>
+    <circle cx="162" cy="450" r="7" fill="#5a6b60"/>
+    <rect x="190" y="244" width="120" height="14" rx="7" fill="#dfdfc1" opacity="0.55"/>
+    <rect x="190" y="312" width="120" height="14" rx="7" fill="#dfdfc1" opacity="0.55"/>
+    <rect x="190" y="380" width="88" height="14" rx="7" fill="#dfdfc1" opacity="0.55"/>
+    <rect x="190" y="442" width="88" height="14" rx="7" fill="#dfdfc1" opacity="0.3"/>
+    <text x="130" y="522" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="26" font-weight="700" letter-spacing="3" fill="#dfdfc1" opacity="0.8">OLD HOST</text>
+  </g>
+
+  <!-- NEW HOST server -->
+  <g>
+    <rect x="860" y="220" width="210" height="260" rx="14" fill="none" stroke="#dfdfc1" stroke-width="3" opacity="0.9"/>
+    <rect x="860" y="220" width="210" height="64" rx="14" fill="#dfdfc1" opacity="0.12"/>
+    <line x1="860" y1="284" x2="1070" y2="284" stroke="#dfdfc1" stroke-width="2" opacity="0.5"/>
+    <line x1="860" y1="352" x2="1070" y2="352" stroke="#dfdfc1" stroke-width="2" opacity="0.5"/>
+    <line x1="860" y1="420" x2="1070" y2="420" stroke="#dfdfc1" stroke-width="2" opacity="0.5"/>
+    <circle cx="892" cy="252" r="7" fill="#7fb08a"/>
+    <circle cx="892" cy="320" r="7" fill="#7fb08a"/>
+    <circle cx="892" cy="388" r="7" fill="#7fb08a"/>
+    <circle cx="892" cy="450" r="7" fill="#7fb08a"/>
+    <rect x="920" y="244" width="120" height="14" rx="7" fill="#dfdfc1" opacity="0.55"/>
+    <rect x="920" y="312" width="120" height="14" rx="7" fill="#dfdfc1" opacity="0.55"/>
+    <rect x="920" y="380" width="120" height="14" rx="7" fill="#dfdfc1" opacity="0.55"/>
+    <rect x="920" y="442" width="120" height="14" rx="7" fill="#dfdfc1" opacity="0.55"/>
+    <text x="860" y="522" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="26" font-weight="700" letter-spacing="3" fill="#dfdfc1" opacity="0.8">NEW HOST</text>
+  </g>
+
+  <!-- migration path old -> new -->
+  <path d="M 350 340 C 460 300, 520 300, 600 330 S 760 380, 850 345"
+        fill="none" stroke="#dfdfc1" stroke-width="3" stroke-dasharray="14 10" opacity="0.8" marker-end="url(#arrow)"/>
+  <!-- travelling file packets -->
+  <rect x="452" y="296" width="26" height="26" rx="5" fill="#d9a441"/>
+  <rect x="560" y="308" width="26" height="26" rx="5" fill="#dfdfc1" opacity="0.9"/>
+  <rect x="668" y="330" width="26" height="26" rx="5" fill="#7fb08a"/>
+
+  <!-- website globe node -->
+  <g>
+    <circle cx="600" cy="420" r="44" fill="#1c2520" stroke="#dfdfc1" stroke-width="3"/>
+    <ellipse cx="600" cy="420" rx="20" ry="44" fill="none" stroke="#dfdfc1" stroke-width="2" opacity="0.8"/>
+    <line x1="556" y1="420" x2="644" y2="420" stroke="#dfdfc1" stroke-width="2" opacity="0.8"/>
+    <path d="M 568 394 Q 600 410 632 394" fill="none" stroke="#dfdfc1" stroke-width="2" opacity="0.8"/>
+    <path d="M 568 446 Q 600 430 632 446" fill="none" stroke="#dfdfc1" stroke-width="2" opacity="0.8"/>
+  </g>
+
+  <!-- support chat bubble -->
+  <g>
+    <rect x="830" y="80" width="290" height="104" rx="18" fill="#dfdfc1"/>
+    <polygon points="900,184 880,214 924,184" fill="#dfdfc1"/>
+    <!-- headset glyph -->
+    <g stroke="#1c2520" stroke-width="7" fill="none" stroke-linecap="round">
+      <path d="M 872 138 a 34 34 0 0 1 68 0"/>
+      <rect x="862" y="132" width="16" height="30" rx="8" fill="#1c2520" stroke="none"/>
+      <rect x="950" y="132" width="16" height="30" rx="8" fill="#1c2520" stroke="none"/>
+      <path d="M 958 162 q 0 22 -26 22"/>
+    </g>
+    <text x="992" y="140" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="30" font-weight="700" fill="#1c2520">24/7</text>
+    <text x="992" y="168" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="19" font-weight="700" letter-spacing="2" fill="#1c2520">SUPPORT</text>
+  </g>
+
+  <!-- bottom hint -->
+  <text x="72" y="610" font-family="ui-monospace, Menlo, Consolas, monospace" font-size="22" letter-spacing="2" fill="#dfdfc1" opacity="0.55">EXPERTS MOVE YOUR SITE — YOU STAY ONLINE</text>
+
+  <!-- matte grain -->
+  <rect width="1200" height="675" fill="#ffffff" opacity="0.05" filter="url(#grain)"/>
+</svg>

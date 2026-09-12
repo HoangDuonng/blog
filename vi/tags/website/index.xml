@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Website on Hoàng Dương</title><link>https://tech.nguuyen.io.vn/vi/tags/website/</link><description>Recent content in Website on Hoàng Dương</description><generator>Hugo -- gohugo.io</generator><language>vi</language><lastBuildDate>Sun, 30 Nov 2025 23:55:00 +0700</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/vi/tags/website/index.xml" rel="self" type="application/rss+xml"/><item><title>Giới thiệu về Nginx</title><link>https://tech.nguuyen.io.vn/vi/posts/website/nginx-introduction-guide/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/website/nginx-introduction-guide/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/website/nginx-introduction-guide.jpg" alt="Featured image of post Giới thiệu về Nginx" /&gt;&lt;h2 id="nginx-là-gì"&gt;Nginx là gì?
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Website on Hoàng Dương</title><link>https://tech.nguuyen.io.vn/vi/tags/website/</link><description>Recent content in Website on Hoàng Dương</description><generator>Hugo -- gohugo.io</generator><language>vi</language><lastBuildDate>Sat, 12 Sep 2026 17:05:00 +0700</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/vi/tags/website/index.xml" rel="self" type="application/rss+xml"/><item><title>Giới thiệu về Nginx</title><link>https://tech.nguuyen.io.vn/vi/posts/website/nginx-introduction-guide/</link><pubDate>Mon, 10 Mar 2025 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/website/nginx-introduction-guide/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/website/nginx-introduction-guide.jpg" alt="Featured image of post Giới thiệu về Nginx" /&gt;&lt;h2 id="nginx-là-gì"&gt;Nginx là gì?
 &lt;/h2&gt;&lt;p align="center"&gt;
 &lt;img src="https://wiki.matbao.net/wp-content/uploads/2019/09/nginx-la-gi.jpg" alt="NGINX là một phần mềm web server mã nguồn mở đáng tin cậy"&gt;
 &lt;/p&gt;
@@ -833,7 +833,7 @@ alt="Tool nhập website"
 &lt;blockquote&gt;
 &lt;p&gt;&lt;strong&gt;Gợi ý&lt;/strong&gt;: Hãy kiểm tra chính sách hỗ trợ di chuyển website của nhà cung cấp hosting trước khi yêu cầu dịch vụ.&lt;/p&gt;
 &lt;/blockquote&gt;
-&lt;p&gt;&lt;img src="https://image.vietnix.vn/wp-content/uploads/2024/09/Nho-su-ho-tro-tu-nha-cung-cap-hosting.webp"
+&lt;p&gt;&lt;img src="https://tech.nguuyen.io.vn/images/website/ask-hosting-support.svg"
 loading="lazy"
 alt="Nhờ sự hỗ trợ từ nhà cung cấp hosting"
 &gt;&lt;/p&gt;
