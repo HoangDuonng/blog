@@ -1,0 +1,336 @@
+<!doctype html><html lang=vi dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="So sánh Bash và Ansible trong DevOps: khi nào nên dùng Bash script, khi nào nên dùng Ansible? Code mẫu deploy + restart service trên cả hai."><title>Đôi khi Bash script tốt hơn Ansible</title><link rel=canonical href=https://tech.nguuyen.io.vn/vi/posts/bash/bash-vs-ansible/><link rel=stylesheet href=/scss/style.min.eb77281b84cf8848a1e7482a05d2714447f39bf42fb4243169c88940485a6c71.css><meta property='og:title' content="Đôi khi Bash script tốt hơn Ansible"><meta property='og:description' content="So sánh Bash và Ansible trong DevOps: khi nào nên dùng Bash script, khi nào nên dùng Ansible? Code mẫu deploy + restart service trên cả hai."><meta property='og:url' content='https://tech.nguuyen.io.vn/vi/posts/bash/bash-vs-ansible/'><meta property='og:site_name' content='Hoàng Dương'><meta property='og:type' content='article'><meta property='article:section' content='Posts'><meta property='article:tag' content='bash'><meta property='article:tag' content='ansible'><meta property='article:tag' content='comparison'><meta property='article:tag' content='devops'><meta property='article:tag' content='automation'><meta property='article:tag' content='infrastructure-as-code'><meta property='article:published_time' content='2026-09-08T00:00:00+00:00'><meta property='article:modified_time' content='2026-09-08T00:00:00+00:00'><meta property='og:image' content='https://tech.nguuyen.io.vn/images/bash/bash-vs-ansible.jpg'><meta name=twitter:title content="Đôi khi Bash script tốt hơn Ansible"><meta name=twitter:description content="So sánh Bash và Ansible trong DevOps: khi nào nên dùng Bash script, khi nào nên dùng Ansible? Code mẫu deploy + restart service trên cả hai."><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://tech.nguuyen.io.vn/images/bash/bash-vs-ansible.jpg'><link rel=icon type=image/x-icon href=/favicon.ico><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel=stylesheet></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><header class="hd-header is-article-header"><div class=hd-header-inner><div class=hd-brand><a href=/vi/ class=hd-logo-link><span class=hd-logo-text>Hoang Duong</span></a></div><div class=hd-header-divider aria-hidden=true></div><div class=hd-header-rail><a href=/vi/ class="header-rail-crumb header-rail-home">BÀI VIẾT
+</a><span class=header-rail-sep>//</span>
+<a href=/vi/categories/devops/ class="header-rail-crumb header-rail-cat">[DEVOPS]
+</a><span class=header-rail-title>Đôi khi Bash script tốt hơn Ansible</span></div><div class=hd-header-spacer></div><nav class=hd-nav-links><button id=hd-menu-toggle class=hd-menu-trigger-fixed aria-label="Toggle Menu" title=Menu type=button>
+<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" class="chevron-icon"><polyline points="6 9 12 15 18 9"/></svg></button></nav></div></header><div id=hd-menu-dropdown class=hd-menu-popover aria-hidden=true><div class=hd-popover-inner><div class=hd-popover-nav><span class=popover-section-label>ĐIỀU HƯỚNG</span>
+<a href=/vi/ class=popover-item>Trang chủ</a>
+<a href=/vi/about/ class=popover-item>Về tôi</a>
+<a href=/vi/archives/ class=popover-item>Lưu trữ</a>
+<a href=/vi/links/ class=popover-item>Liên kết</a>
+<a href=/vi/categories/ class=popover-item>Chuyên mục</a></div><div class=hd-popover-footer><a href=/ class="popover-btn lang-btn" title=English><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>EN</span>
+</a><button class="popover-btn theme-btn dark-mode-toggle" data-toggle-theme title="Chế độ tối" type=button>
+<svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+</button>
+<button type=button class="popover-btn search-btn search-trigger-btn" data-open-search aria-label="Tìm kiếm (Cmd+K)" title="Tìm kiếm (Cmd+K)">
+<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<span class=search-kbd-badge>⌘K</span></button></div></div></div><div id=hd-menu-backdrop class=hd-menu-backdrop aria-hidden=true></div><div class=hd-site-wrapper><main class=hd-main><div class=hd-article-layout><div class=hd-hero-banner-wrap><div class=hd-hero-banner><img src=/images/bash/bash-vs-ansible.jpg alt="Đôi khi Bash script tốt hơn Ansible" class=hd-hero-banner-img></div></div><div class=hd-article-container><div class=hd-article-grid><div class=hd-article-main><article class=hd-article-body><header class=hd-article-header><div class=hd-article-meta-top><time class=meta-date datetime=2026-09-08T00:00:00Z>SEPTEMBER 08, 2026
+</time><span class=meta-dot>&#183;</span>
+<span class=meta-reading-time>6 PHÚT ĐỌC</span>
+<span class=meta-dot>&#183;</span>
+<span class=meta-author>HOÀNG DƯƠNG</span></div><h1 class=hd-article-title>Đôi khi Bash script tốt hơn Ansible</h1><p class=hd-article-description>So sánh Bash và Ansible trong DevOps: khi nào nên dùng Bash script, khi nào nên dùng Ansible? Code mẫu deploy + restart service trên cả hai.</p><div class=hd-article-categories><a href=/vi/categories/devops/ class=hd-cat-pill>DEVOPS
+</a><a href=/vi/categories/bash/ class=hd-cat-pill>BASH</a></div></header><section class="article-content hd-prose"><h2 id=bash-vs-ansible--khi-nào-nên-chọn-cái-nào>Bash vs Ansible — Khi nào nên chọn cái nào?</h2><p>Trong <a class=link href=/posts/bash/bash-step-one/>series Bash</a>, chúng ta đã thấy Bash cực kỳ mạnh mẽ cho automation. Nhưng trong DevOps, Ansible cũng là một lựa chọn phổ biến cho infrastructure automation. Vậy khi nào nên dùng Bash, khi nào nên dùng Ansible?</p><p>Đây không phải là câu hỏi &ldquo;cái nào tốt hơn&rdquo; mà là &ldquo;cái nào phù hợp hơn&rdquo; cho tình huống cụ thể. Bài viết này sẽ so sánh khách quan, kèm code mẫu thực tế, để bạn đưa ra lựa chọn đúng đắn.</p><hr><h2 id=so-sánh-tổng-quan>So sánh tổng quan</h2><div class=table-wrapper><table><thead><tr><th style=text-align:left>Tiêu chí</th><th style=text-align:left>Bash</th><th style=text-align:left>Ansible</th></tr></thead><tbody><tr><td style=text-align:left><strong>Learning curve</strong></td><td style=text-align:left>Thấp — ai cũng biết</td><td style=text-align:left>Trung bình — cần học YAML, modules</td></tr><tr><td style=text-align:left><strong>Đọc hiểu</strong></td><td style=text-align:left>Rất dễ — plain text</td><td style=text-align:left>Dễ — YAML rõ ràng</td></tr><tr><td style=text-align:left><strong>Idempotent</strong></td><td style=text-align:left>Không — cần viết thủ công</td><td style=text-align:left>Có — built-in</td></tr><tr><td style=text-align:left><strong>Tái sử dụng</strong></td><td style=text-align:left>Trung bình — source/function</td><td style=text-align:left>Cao — roles, modules</td></tr><tr><td style=text-align:left><strong>Inventory</strong></td><td style=text-align:left>Manual — file hoặc array</td><td style=text-align:left>Built-in — dynamic inventory</td></tr><tr><td style=text-align:left><strong>Testing</strong></td><td style=text-align:left>Khó — cần mock</td><td style=text-align:left>Dễ — molecule</td></tr><tr><td style=text-align:left><strong>Debug</strong></td><td style=text-align:left>Dễ — <code>bash -x</code></td><td style=text-align:left>Trung bình — verbose mode</td></tr><tr><td style=text-align:left><strong>Dependency</strong></td><td style=text-align:left>Không có</td><td style=text-align:left>Cần Python, SSH</td></tr><tr><td style=text-align:left><strong>Remote execution</strong></td><td style=text-align:left>SSH thủ công</td><td style=text-align:left>Built-in</td></tr><tr><td style=text-align:left><strong>Khi nào phù hợp</strong></td><td style=text-align:left>Quick scripts, small tasks</td><td style=text-align:left>Complex infrastructure, multi-server</td></tr></tbody></table></div><hr><h2 id=khi-nào-nên-dùng-bash>Khi nào nên dùng Bash?</h2><h3 id=bash-phù-hợp-khi>Bash phù hợp khi:</h3><ul><li><strong>Script đơn giản, chạy locally</strong> — backup, cleanup, health check</li><li><strong>Debug nhanh</strong> — <code>bash -x</code> giúp see từng dòng thực thi</li><li><strong>Không cần dependency</strong> — Bash có sẵn trên mọi Linux server</li><li><strong>Team nhỏ, cần sự linh hoạt</strong> — không muốn setup Ansible infrastructure</li><li><strong>On-call situation</strong> — cần fix nhanh, không có thời gian học playbook</li></ul><h3 id=code-mẫu-deploy-với-bash>Code mẫu: Deploy với Bash</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span><span class=lnt>37
+</span><span class=lnt>38
+</span><span class=lnt>39
+</span><span class=lnt>40
+</span><span class=lnt>41
+</span><span class=lnt>42
+</span><span class=lnt>43
+</span><span class=lnt>44
+</span><span class=lnt>45
+</span><span class=lnt>46
+</span><span class=lnt>47
+</span><span class=lnt>48
+</span><span class=lnt>49
+</span><span class=lnt>50
+</span><span class=lnt>51
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl><span class=c1># deploy.sh — Deploy application via Bash</span>
+</span></span><span class=line><span class=cl><span class=c1># ==============================================================================</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>APP_NAME</span><span class=o>=</span><span class=s2>&#34;myapp&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>DEPLOY_DIR</span><span class=o>=</span><span class=s2>&#34;/opt/</span><span class=si>${</span><span class=nv>APP_NAME</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>SERVICE_NAME</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>APP_NAME</span><span class=si>}</span><span class=s2>.service&#34;</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>SERVERS</span><span class=o>=(</span><span class=s2>&#34;web-01&#34;</span> <span class=s2>&#34;web-02&#34;</span> <span class=s2>&#34;web-03&#34;</span><span class=o>)</span>
+</span></span><span class=line><span class=cl><span class=nb>readonly</span> <span class=nv>SSH_KEY</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>HOME</span><span class=si>}</span><span class=s2>/.ssh/deploy_key&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>log<span class=o>()</span> <span class=o>{</span> <span class=nb>echo</span> <span class=s2>&#34;[</span><span class=k>$(</span>date <span class=s1>&#39;+%H:%M:%S&#39;</span><span class=k>)</span><span class=s2>] </span><span class=nv>$1</span><span class=s2>&#34;</span><span class=p>;</span> <span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>deploy_server<span class=o>()</span> <span class=o>{</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> <span class=nv>server</span><span class=o>=</span><span class=s2>&#34;</span><span class=nv>$1</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    log <span class=s2>&#34;Deploying to </span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2>...&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Pull code</span>
+</span></span><span class=line><span class=cl>    ssh -i <span class=s2>&#34;</span><span class=nv>$SSH_KEY</span><span class=s2>&#34;</span> <span class=s2>&#34;deploy@</span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2>&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>        <span class=s2>&#34;cd </span><span class=si>${</span><span class=nv>DEPLOY_DIR</span><span class=si>}</span><span class=s2> &amp;&amp; git pull origin main&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Restart service</span>
+</span></span><span class=line><span class=cl>    ssh -i <span class=s2>&#34;</span><span class=nv>$SSH_KEY</span><span class=s2>&#34;</span> <span class=s2>&#34;deploy@</span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2>&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>        <span class=s2>&#34;sudo systemctl restart </span><span class=si>${</span><span class=nv>SERVICE_NAME</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=c1># Health check</span>
+</span></span><span class=line><span class=cl>    <span class=nb>local</span> status
+</span></span><span class=line><span class=cl>    <span class=nv>status</span><span class=o>=</span><span class=k>$(</span>ssh -i <span class=s2>&#34;</span><span class=nv>$SSH_KEY</span><span class=s2>&#34;</span> <span class=s2>&#34;deploy@</span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2>&#34;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>        <span class=s2>&#34;curl -s -o /dev/null -w &#39;%{http_code}&#39; http://localhost:8080/health&#34;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>    <span class=k>if</span> <span class=o>[[</span> <span class=s2>&#34;</span><span class=nv>$status</span><span class=s2>&#34;</span> <span class=o>==</span> <span class=s2>&#34;200&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>        log <span class=s2>&#34;</span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2>: OK&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=k>else</span>
+</span></span><span class=line><span class=cl>        log <span class=s2>&#34;</span><span class=si>${</span><span class=nv>server</span><span class=si>}</span><span class=s2>: FAILED (status: </span><span class=si>${</span><span class=nv>status</span><span class=si>}</span><span class=s2>)&#34;</span>
+</span></span><span class=line><span class=cl>        <span class=k>return</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>    <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=o>}</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Deploy parallel (max 3)</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> server in <span class=s2>&#34;</span><span class=si>${</span><span class=nv>SERVERS</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    deploy_server <span class=s2>&#34;</span><span class=nv>$server</span><span class=s2>&#34;</span> <span class=p>&amp;</span>
+</span></span><span class=line><span class=cl>    <span class=c1># Limit concurrent deployments</span>
+</span></span><span class=line><span class=cl>    <span class=k>while</span> <span class=o>((</span> <span class=k>$(</span><span class=nb>jobs</span> -r <span class=p>|</span> wc -l<span class=k>)</span> &gt;<span class=o>=</span> <span class=m>3</span> <span class=o>))</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>        sleep 0.5
+</span></span><span class=line><span class=cl>    <span class=k>done</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>wait</span>
+</span></span><span class=line><span class=cl>log <span class=s2>&#34;Deployment completed&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=khi-nào-nên-dùng-ansible>Khi nào nên dùng Ansible?</h2><h3 id=ansible-phù-hợp-khi>Ansible phù hợp khi:</h3><ul><li><strong>Infrastructure phức tạp</strong> — nhiều servers, nhiều roles</li><li><strong>Cần idempotent</strong> — chạy lại mà không sợ thay đổi unintended</li><li><strong>Team lớn, cần convention</strong> — YAML rõ ràng, dễ review</li><li><strong>Cần audit trail</strong> — Ansible log từng task</li><li><strong>Multi-environment</strong> — dev, staging, production với inventory riêng</li></ul><h3 id=code-mẫu-deploy-với-ansible>Code mẫu: Deploy với Ansible</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span><span class=lnt>31
+</span><span class=lnt>32
+</span><span class=lnt>33
+</span><span class=lnt>34
+</span><span class=lnt>35
+</span><span class=lnt>36
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=c># deploy.yml</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=nn>---</span><span class=w>
+</span></span></span><span class=line><span class=cl>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Deploy application</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>hosts</span><span class=p>:</span><span class=w> </span><span class=l>webservers</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>become</span><span class=p>:</span><span class=w> </span><span class=kc>yes</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>vars</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>app_name</span><span class=p>:</span><span class=w> </span><span class=l>myapp</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>deploy_dir</span><span class=p>:</span><span class=w> </span><span class=l>/opt/myapp</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span><span class=nt>service_name</span><span class=p>:</span><span class=w> </span><span class=l>myapp.service</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>tasks</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Pull latest code</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>git</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>repo</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;https://github.com/org/myapp.git&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>dest</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;{{ deploy_dir }}&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>version</span><span class=p>:</span><span class=w> </span><span class=l>main</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>notify</span><span class=p>:</span><span class=w> </span><span class=l>Restart service</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Ensure service is running</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>systemd</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;{{ service_name }}&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>state</span><span class=p>:</span><span class=w> </span><span class=l>started</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>enabled</span><span class=p>:</span><span class=w> </span><span class=kc>yes</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Wait for health check</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>uri</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>url</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;http://localhost:8080/health&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>status_code</span><span class=p>:</span><span class=w> </span><span class=m>200</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>retries</span><span class=p>:</span><span class=w> </span><span class=m>10</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>delay</span><span class=p>:</span><span class=w> </span><span class=m>5</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>handlers</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Restart service</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>systemd</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=s2>&#34;{{ service_name }}&#34;</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>state</span><span class=p>:</span><span class=w> </span><span class=l>restarted</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Chạy playbook</span>
+</span></span><span class=line><span class=cl>ansible-playbook -i inventory/hosts deploy.yml
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Dry run (check mode)</span>
+</span></span><span class=line><span class=cl>ansible-playbook -i inventory/hosts deploy.yml --check
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Limit to specific server</span>
+</span></span><span class=line><span class=cl>ansible-playbook -i inventory/hosts deploy.yml --limit web-01
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=so-sánh-cùng-một-task>So sánh cùng một task</h2><h3 id=task-restart-service-nếu-config-thay-đổi>Task: Restart service nếu config thay đổi</h3><p><strong>Bash:</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=c1># Kiểm tra file thay đổi và restart service</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>CONFIG_FILE</span><span class=o>=</span><span class=s2>&#34;/etc/myapp/config.yml&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>BACKUP_FILE</span><span class=o>=</span><span class=s2>&#34;/tmp/config_backup&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>current_hash</span><span class=o>=</span><span class=k>$(</span>md5sum <span class=s2>&#34;</span><span class=nv>$CONFIG_FILE</span><span class=s2>&#34;</span> <span class=p>|</span> awk <span class=s1>&#39;{print $1}&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[[</span> -f <span class=s2>&#34;</span><span class=nv>$BACKUP_FILE</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nv>old_hash</span><span class=o>=</span><span class=k>$(</span>cat <span class=s2>&#34;</span><span class=nv>$BACKUP_FILE</span><span class=s2>&#34;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=k>else</span>
+</span></span><span class=line><span class=cl>    <span class=nv>old_hash</span><span class=o>=</span><span class=s2>&#34;&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[[</span> <span class=s2>&#34;</span><span class=nv>$current_hash</span><span class=s2>&#34;</span> !<span class=o>=</span> <span class=s2>&#34;</span><span class=nv>$old_hash</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Config changed, restarting service...&#34;</span>
+</span></span><span class=line><span class=cl>    sudo systemctl restart myapp.service
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;</span><span class=nv>$current_hash</span><span class=s2>&#34;</span> &gt; <span class=s2>&#34;</span><span class=nv>$BACKUP_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>else</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Config unchanged, skipping restart&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span></code></pre></td></tr></table></div></div><p><strong>Ansible:</strong></p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-yaml data-lang=yaml><span class=line><span class=cl><span class=nn>---</span><span class=w>
+</span></span></span><span class=line><span class=cl>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Restart service if config changed</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>hosts</span><span class=p>:</span><span class=w> </span><span class=l>webservers</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>  </span><span class=nt>tasks</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Copy config file</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>copy</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>src</span><span class=p>:</span><span class=w> </span><span class=l>files/config.yml</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>dest</span><span class=p>:</span><span class=w> </span><span class=l>/etc/myapp/config.yml</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>register</span><span class=p>:</span><span class=w> </span><span class=l>config_result</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>    </span>- <span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>Restart service</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>systemd</span><span class=p>:</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>name</span><span class=p>:</span><span class=w> </span><span class=l>myapp.service</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>        </span><span class=nt>state</span><span class=p>:</span><span class=w> </span><span class=l>restarted</span><span class=w>
+</span></span></span><span class=line><span class=cl><span class=w>      </span><span class=nt>when</span><span class=p>:</span><span class=w> </span><span class=l>config_result.changed</span><span class=w>
+</span></span></span></code></pre></td></tr></table></div></div><h3 id=phân-tích>Phân tích</h3><div class=table-wrapper><table><thead><tr><th></th><th>Bash</th><th>Ansible</th></tr></thead><tbody><tr><td><strong>Dòng code</strong></td><td>~15 dòng</td><td>~12 dòng</td></tr><tr><td><strong>Đọc hiểu</strong></td><td>Rất dễ</td><td>Dễ</td></tr><tr><td><strong>Idempotent</strong></td><td>Không — cần hash tracking</td><td>Có — <code>register</code> + <code>when</code></td></tr><tr><td><strong>Remote</strong></td><td>Cần SSH loop</td><td>Built-in</td></tr></tbody></table></div><hr><h2 id=team-maturity-là-yếu-tố-quyết-định>Team maturity là yếu tố quyết định</h2><h3 id=ansible-cần-discipline>Ansible cần discipline</h3><p>Ansible mạnh nhưng đòi hỏi:</p><ul><li><strong>Convention rõ ràng</strong> — đặt tên task, variable thống nhất</li><li><strong>Code review nghiêm túc</strong> — YAML dễ viết nhưng dễ loạn</li><li><strong>Testing</strong> — dùng molecule hoặc Terratest</li><li><strong>Documentation</strong> — mỗi role phải có README</li></ul><p>Nếu team không có những thứ này, playbook sẽ biến thành &ldquo;YAML spaghetti&rdquo; — khó debug hơn cả Bash.</p><h3 id=bash-phù-hợp-với-team-linh-hoạt>Bash phù hợp với team linh hoạt</h3><p>Bash phù hợp khi:</p><ul><li><strong>Team nhỏ (&lt; 5 người)</strong> — không cần quy trình phức tạp</li><li><strong>Cần fix nhanh</strong> — on-call situation</li><li><strong>Scripts ngắn</strong> — dưới 200 dòng</li><li><strong>Không muốn dependency</strong> — chỉ cần Bash và SSH</li></ul><hr><h2 id=kết-hợp-cả-hai>Kết hợp cả hai</h2><p>Trong thực tế, nhiều team dùng cả hai:</p><div class=table-wrapper><table><thead><tr><th style=text-align:left>Task</th><th style=text-align:left>Dùng gì</th></tr></thead><tbody><tr><td style=text-align:left>Quick fix, on-call</td><td style=text-align:left>Bash</td></tr><tr><td style=text-align:left>Deploy đơn giản</td><td style=text-align:left>Bash</td></tr><tr><td style=text-align:left>Infrastructure provisioning</td><td style=text-align:left>Ansible</td></tr><tr><td style=text-align:left>Configuration management</td><td style=text-align:left>Ansible</td></tr><tr><td style=text-align:left>Cron job đơn giản</td><td style=text-align:left>Bash</td></tr><tr><td style=text-align:left>Multi-server orchestration</td><td style=text-align:left>Ansible</td></tr></tbody></table></div><p>Ví dụ:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Bash script gọi Ansible playbook</span>
+</span></span><span class=line><span class=cl><span class=c1>#!/usr/bin/env bash</span>
+</span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Running infrastructure setup...&#34;</span>
+</span></span><span class=line><span class=cl>ansible-playbook -i inventory/prod setup.yml
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Deploying application...&#34;</span>
+</span></span><span class=line><span class=cl>ansible-playbook -i inventory/prod deploy.yml
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Running post-deploy checks...&#34;</span>
+</span></span><span class=line><span class=cl>ansible-playbook -i inventory/prod health-check.yml
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;All done!&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><hr><h2 id=ghi-chú-triển-khai>Ghi chú triển khai</h2><ul><li><strong>Đừng thần thánh hóa công cụ:</strong> Cả Bash và Ansible đều là tools. Chọn tool phù hợp với task, không phải &ldquo;trend&rdquo;.</li><li><strong>Team review:</strong> Dù dùng Bash hay Ansible, code review đều quan trọng. Bash cần check cho security, Ansible cần check cho idempotency.</li><li><strong>Documentation:</strong> Bash scripts nên có <code>--help</code> và comment. Ansible roles nên có README và variable docs.</li><li><strong>Testing:</strong> Bash khó test hơn, nhưng vẫn nên test critical scripts. Ansible có molecule cho testing.</li><li><strong>Progressive adoption:</strong> Bắt đầu với Bash khi team nhỏ. Khi team lớn hơn và cần structure, migrate dần sang Ansible.</li></ul><hr><h2 id=lời-kết>Lời kết</h2><p>Bash và Ansible không phải là đối thủ mà là complementary tools. Bash tuyệt vời cho quick scripts, debugging, và situations cần sự linh hoạt. Ansible tuyệt vời cho complex infrastructure, multi-server management, và teams cần convention.</p><p>Chọn công cụ phù hợp với task và maturity level của team. Đừng dùng Ansible cho task 5 dòng Bash có thể xử lý, và đừng dùng Bash cho infrastructure phức tạp cần idempotent.</p><p>Điều quan trọng nhất là <strong>hiểu strengths và weaknesses của mỗi tool</strong> để đưa ra quyết định đúng đắn trong DevOps workflow.</p></section><div class=hd-article-tags-wrap><span class=tags-label>THẺ:</span><div class=hd-article-tags><a href=/vi/tags/bash/ class=hd-tag-pill>#bash
+</a><a href=/vi/tags/ansible/ class=hd-tag-pill>#ansible
+</a><a href=/vi/tags/comparison/ class=hd-tag-pill>#comparison
+</a><a href=/vi/tags/devops/ class=hd-tag-pill>#devops
+</a><a href=/vi/tags/automation/ class=hd-tag-pill>#automation
+</a><a href=/vi/tags/infrastructure-as-code/ class=hd-tag-pill>#infrastructure-as-code</a></div></div><div class=hd-article-footer-box><div class=footer-box-item><span class=box-label>TÁC GIẢ</span>
+<span class=box-value>Hoàng Dương</span></div><div class=footer-box-item><span class=box-label>BẢN QUYỀN</span>
+<span class=box-value>CC BY-NC-SA 4.0</span></div></div><nav class=hd-post-nav><a href=/vi/posts/bash/bash-step-twenty/ class="post-nav-card nav-prev"><span class=nav-direction>&larr; BÀI TRƯỚC</span>
+<span class=nav-post-title>Best Practice trong Bash: Tổng hợp kỹ thuật làm chủ script</span></a></nav><section class=hd-comments-section><div class=comments-section-header><span class=mono-label>THẢO LUẬN & BÌNH LUẬN</span></div><div class=utterances-container><script>(function(){var t=document.documentElement.dataset.scheme||"light",n=t==="dark"?"github-dark":"github-light",e=document.createElement("script");e.src="https://utteranc.es/client.js",e.setAttribute("repo","hoangduonng/blog_comments"),e.setAttribute("issue-term","pathname"),e.setAttribute("label","comments"),e.setAttribute("theme",n),e.setAttribute("crossorigin","anonymous"),e.async=!0,document.currentScript.parentElement.appendChild(e)})()</script></div><style>.utterances-container{width:100%;margin-top:8px;position:relative}.utterances{max-width:100%!important;margin:0!important}[data-scheme=light] .utterances iframe,html:not([data-scheme=dark]) .utterances iframe{mix-blend-mode:multiply;transition:mix-blend-mode .2s ease}[data-scheme=dark] .utterances iframe{mix-blend-mode:lighten;transition:mix-blend-mode .2s ease}</style><script>let utterancesLoaded=!1;function setUtterancesTheme(e){let t=document.querySelector(".utterances iframe");if(t&&t.contentWindow){let n=e==="dark"?"github-dark":"github-light";t.contentWindow.postMessage({type:"set-theme",theme:n},"https://utteranc.es")}}addEventListener("message",e=>{if(e.origin!=="https://utteranc.es")return;utterancesLoaded=!0,setUtterancesTheme(document.documentElement.dataset.scheme||"light")}),window.addEventListener("onColorSchemeChange",e=>{if(!utterancesLoaded)return;setUtterancesTheme(e.detail)})</script></section></article></div><aside class=hd-article-sidebar><div class=hd-sticky-sidebar-inner><div class=hd-toc-card><div class=toc-header><span class=toc-title-label>MỤC LỤC</span></div><div class=toc-content id=toc-content><nav id=TableOfContents><ol><li><a href=#bash-vs-ansible--khi-nào-nên-chọn-cái-nào>Bash vs Ansible — Khi nào nên chọn cái nào?</a></li><li><a href=#so-sánh-tổng-quan>So sánh tổng quan</a></li><li><a href=#khi-nào-nên-dùng-bash>Khi nào nên dùng Bash?</a><ol><li><a href=#bash-phù-hợp-khi>Bash phù hợp khi:</a></li><li><a href=#code-mẫu-deploy-với-bash>Code mẫu: Deploy với Bash</a></li></ol></li><li><a href=#khi-nào-nên-dùng-ansible>Khi nào nên dùng Ansible?</a><ol><li><a href=#ansible-phù-hợp-khi>Ansible phù hợp khi:</a></li><li><a href=#code-mẫu-deploy-với-ansible>Code mẫu: Deploy với Ansible</a></li></ol></li><li><a href=#so-sánh-cùng-một-task>So sánh cùng một task</a><ol><li><a href=#task-restart-service-nếu-config-thay-đổi>Task: Restart service nếu config thay đổi</a></li><li><a href=#phân-tích>Phân tích</a></li></ol></li><li><a href=#team-maturity-là-yếu-tố-quyết-định>Team maturity là yếu tố quyết định</a><ol><li><a href=#ansible-cần-discipline>Ansible cần discipline</a></li><li><a href=#bash-phù-hợp-với-team-linh-hoạt>Bash phù hợp với team linh hoạt</a></li></ol></li><li><a href=#kết-hợp-cả-hai>Kết hợp cả hai</a></li><li><a href=#ghi-chú-triển-khai>Ghi chú triển khai</a></li><li><a href=#lời-kết>Lời kết</a></li></ol></nav></div><div class=toc-scroll-indicator id=toc-indicator style=display:none></div></div></div></aside></div></div><div class=hd-edge-callout-rail><aside class=hd-floating-callout aria-label="Bài viết liên quan"><a href=/vi/posts/bash/bash-step-fourteen/ class=floating-callout-art><img src=/images/bash/bash-step-fourteen.jpg alt="Bash và Docker trong DevOps: Quản lý container hiệu quả" class=floating-callout-img></a><div class=floating-callout-badge>BÀI VIẾT <span class=callout-of>liên quan</span></div><div class=floating-callout-body><h4 class=floating-callout-title><a href=/vi/posts/bash/bash-step-fourteen/>Bash và Docker trong DevOps: Quản lý container hiệu quả</a></h4><p class=floating-callout-excerpt>Bash và Docker trong DevOps Trong bài viết trước, chúng ta đã tìm hiểu cách tự …</p><a href=/vi/posts/bash/bash-step-fourteen/ class=floating-callout-btn>ĐỌC TIẾP &rarr;</a></div></aside></div></div><script>document.addEventListener("DOMContentLoaded",function(){var e=document.getElementById("toc-content"),t=document.getElementById("toc-indicator");if(e&&t){function n(){var s,o,n=e.scrollHeight-e.clientHeight;if(n<=2){t.style.display="none";return}t.style.display="block",s=e.scrollTop/n,o=e.clientHeight-32,t.style.top=e.offsetTop+s*o+"px"}e.addEventListener("scroll",n,{passive:!0}),n(),window.addEventListener("resize",n,{passive:!0}),window.addEventListener("load",n,{passive:!0})}})</script><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><div id=hd-search-overlay class=hd-search-overlay aria-hidden=true data-index-url=/vi/search/index.json data-lang=vi data-no-results="Không tìm thấy kết quả phù hợp" data-no-results-sub="Hãy thử với từ khóa khác hoặc kiểm tra lại chính tả" data-initial-hint="Nhập từ khoá để tìm kiếm bài viết..." data-results-count="kết quả"><div class=hd-search-backdrop id=hd-search-backdrop tabindex=-1></div><div class=hd-search-dialog role=dialog aria-modal=true aria-label="Tìm kiếm bài viết"><div class=hd-search-header><div class=hd-search-input-wrapper><svg class="hd-search-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<input id=hd-search-input class=hd-search-input type=text placeholder="Tìm kiếm bài viết, chuyên mục, chủ đề..." autocomplete=off autocorrect=off autocapitalize=off spellcheck=false aria-autocomplete=list aria-controls=hd-search-results>
+<button id=hd-search-clear class=hd-search-clear type=button aria-label="Xóa từ khóa" style=display:none>
+<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div><button id=hd-search-close class=hd-search-close-btn type=button aria-label="Đóng tìm kiếm">
+<kbd class=hd-search-kbd>ESC</kbd></button></div><div class=hd-search-body><div id=hd-search-loading class="hd-search-state hd-search-loading" style=display:none><div class=hd-search-spinner aria-hidden=true></div><span>Đang tải dữ liệu tìm kiếm...</span></div><div id=hd-search-initial class="hd-search-state hd-search-initial"><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p class=state-title>Tìm kiếm nhanh</p><p class=state-desc>Nhập từ khoá hoặc chủ đề để tìm kiếm trong tất cả bài viết đã xuất bản.</p></div><div id=hd-search-empty class="hd-search-state hd-search-empty" style=display:none><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="8" x2="14" y2="14"/><line x1="14" y1="8" x2="8" y2="14"/></svg><p class=state-title id=hd-search-empty-title>Không tìm thấy kết quả phù hợp</p><p class=state-desc id=hd-search-empty-desc>Hãy thử với từ khóa khác hoặc kiểm tra lại chính tả</p></div><div id=hd-search-results class=hd-search-results role=listbox style=display:none></div></div><div class=hd-search-footer><div class=hd-search-shortcuts><span class=shortcut-item><kbd>↑</kbd><kbd>↓</kbd>
+<span class=shortcut-label>Điều hướng</span>
+</span><span class=shortcut-item><kbd>↵</kbd>
+<span class=shortcut-label>Mở bài viết</span>
+</span><span class=shortcut-item><kbd>ESC</kbd>
+<span class=shortcut-label>Đóng</span></span></div><div id=hd-search-count class=hd-search-count style=display:none></div></div></div></div><footer class=hd-site-footer><div class=hd-footer-container><div class=hd-footer-grid><div class=footer-brand-col><a href=/vi/ class=footer-logo><span class=footer-logo-title>Hoang Duong</span></a><div class=footer-status><span class=status-dot></span>
+<span class=status-text>Hệ thống hoạt động ổn định</span></div><ul class=footer-meta-links><li><a href=/vi/about/>Giới thiệu Blog</a></li><li><a href=/vi/archives/>Lưu trữ bài viết</a></li></ul></div><div class=footer-links-grid><div class=footer-col><h3 class=footer-col-title>Chuyên mục</h3><ul class=footer-col-list><li><a href=/vi/categories/bash/>Bash Series</a></li><li><a href=/vi/categories/devops/>DevOps</a></li><li><a href=/vi/categories/docker/>Docker</a></li><li><a href=/vi/categories/installation-guides/>Hướng dẫn cài đặt</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Tài nguyên</h3><ul class=footer-col-list><li><a href=/vi/about/>Về tôi</a></li><li><a href=/vi/archives/>Tất cả bài viết</a></li><li><a href=#search data-open-search>Tìm kiếm</a></li><li><a href=/vi/links/>Liên kết hữu ích</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Series Nổi Bật</h3><ul class=footer-col-list><li><a href=/vi/posts/bash/bash-step-eight/>Cron Jobs & Bash</a></li><li><a href=/vi/categories/devops/>DevOps Automation</a></li><li><a href=/vi/categories/docker/>Docker Essentials</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Kết nối</h3><ul class=footer-col-list><li><a href=https://github.com/hoangduonng target=_blank rel=noopener>GitHub ↗</a></li><li><a href=https://www.instagram.com/ngu_uuen/ target=_blank rel=noopener>Instagram ↗</a></li><li><a href=https://www.linkedin.com/in/hoangduonng/ target=_blank rel=noopener>LinkedIn ↗</a></li><li><a href=/vi/index.xml>RSS Feed ↗</a></li></ul></div></div></div><div class=hd-footer-bottom-bar><span class=footer-copyright>&copy; 2026 Hoang Duong. All rights reserved.</span></div></div></footer><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.ee266d8948a6a32b88423f5d374fca9833845f738717cf8061ae442a91efe347.js defer></script></body></html>
