@@ -1,0 +1,474 @@
+<!doctype html><html lang=en dir=ltr><head><meta charset=utf-8><meta name=viewport content='width=device-width,initial-scale=1'><meta name=description content="A collection of 10 small yet useful Bash scripts for DevOps: backup, tmp cleanup, disk monitoring, service restart, batch rename, log rotation, archive compression, SSL checks, bulk ping, and folder sync."><title>10 Simple Bash Scripts to Automate Your DevOps Workflow</title><link rel=canonical href=https://tech.nguuyen.io.vn/posts/bash/10-handy-bash-scripts/><link rel=stylesheet href=/scss/style.min.46cb887c2aa3938a381734e33a5c3e09c1b2fe426803d203c7aff121208a849a.css><meta property='og:title' content="10 Simple Bash Scripts to Automate Your DevOps Workflow"><meta property='og:description' content="A collection of 10 small yet useful Bash scripts for DevOps: backup, tmp cleanup, disk monitoring, service restart, batch rename, log rotation, archive compression, SSL checks, bulk ping, and folder sync."><meta property='og:url' content='https://tech.nguuyen.io.vn/posts/bash/10-handy-bash-scripts/'><meta property='og:site_name' content='Hoang Duong'><meta property='og:type' content='article'><meta property='article:section' content='Posts'><meta property='article:tag' content='bash'><meta property='article:tag' content='shell-script'><meta property='article:tag' content='devops'><meta property='article:tag' content='automation'><meta property='article:tag' content='backup'><meta property='article:tag' content='monitoring'><meta property='article:tag' content='cron'><meta property='article:published_time' content='2026-09-15T00:00:00+00:00'><meta property='article:modified_time' content='2026-09-15T00:00:00+00:00'><meta property='og:image' content='https://tech.nguuyen.io.vn/images/bash/10-handy-bash-scripts.jpg'><meta name=twitter:title content="10 Simple Bash Scripts to Automate Your DevOps Workflow"><meta name=twitter:description content="A collection of 10 small yet useful Bash scripts for DevOps: backup, tmp cleanup, disk monitoring, service restart, batch rename, log rotation, archive compression, SSL checks, bulk ping, and folder sync."><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content='https://tech.nguuyen.io.vn/images/bash/10-handy-bash-scripts.jpg'><link rel=icon type=image/x-icon href=/favicon.ico><link rel=preconnect href=https://fonts.googleapis.com><link rel=preconnect href=https://fonts.gstatic.com crossorigin><link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&family=Playfair+Display:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel=stylesheet></head><body class=article-page><script>(function(){const e="StackColorScheme";localStorage.getItem(e)||localStorage.setItem(e,"auto")})()</script><script>(function(){const t="StackColorScheme",e=localStorage.getItem(t),n=window.matchMedia("(prefers-color-scheme: dark)").matches===!0;e=="dark"||e==="auto"&&n?document.documentElement.dataset.scheme="dark":document.documentElement.dataset.scheme="light"})()</script><header class="hd-header is-article-header"><div class=hd-header-inner><div class=hd-brand><a href=/ class=hd-logo-link><span class=hd-logo-text>Hoang Duong</span></a></div><div class=hd-header-divider aria-hidden=true></div><div class=hd-header-rail><a href=/ class="header-rail-crumb header-rail-home">BLOG
+</a><span class=header-rail-sep>//</span>
+<a href=/categories/devops/ class="header-rail-crumb header-rail-cat">[DEVOPS]
+</a><span class=header-rail-title>10 Simple Bash Scripts to Automate Your DevOps Workflow</span></div><div class=hd-header-spacer></div><nav class=hd-nav-links><button id=hd-menu-toggle class=hd-menu-trigger-fixed aria-label="Toggle Menu" title=Menu type=button>
+<svg viewBox="0 0 24 24" width="20" height="20" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" class="chevron-icon"><polyline points="6 9 12 15 18 9"/></svg></button></nav></div></header><div id=hd-menu-dropdown class=hd-menu-popover aria-hidden=true><div class=hd-popover-inner><div class=hd-popover-nav><span class=popover-section-label>NAVIGATION</span>
+<a href=/ class=popover-item>Home</a>
+<a href=/about/ class=popover-item>About</a>
+<a href=/archives/ class=popover-item>Archives</a>
+<a href=/links/ class=popover-item>Links</a>
+<a href=/categories/ class=popover-item>Categories</a></div><div class=hd-popover-footer><a href=/vi/posts/bash/10-handy-bash-scripts/ class="popover-btn lang-btn" title="Tiếng Việt"><svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>VI</span>
+</a><button class="popover-btn theme-btn dark-mode-toggle" data-toggle-theme title="Dark Mode" type=button>
+<svg class="icon icon-tabler icon-tabler-toggle-left" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="8" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+<svg class="icon icon-tabler icon-tabler-toggle-right" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z"/><circle cx="16" cy="12" r="2"/><rect x="2" y="6" width="20" height="12" rx="6"/></svg>
+</button>
+<button type=button class="popover-btn search-btn search-trigger-btn" data-open-search aria-label="Search (Cmd+K)" title="Search (Cmd+K)">
+<svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<span class=search-kbd-badge>⌘K</span></button></div></div></div><div id=hd-menu-backdrop class=hd-menu-backdrop aria-hidden=true></div><div class=hd-site-wrapper><main class=hd-main><div class=hd-article-layout><div class=hd-hero-banner-wrap><div class=hd-hero-banner><img src=/images/bash/10-handy-bash-scripts.jpg alt="10 Simple Bash Scripts to Automate Your DevOps Workflow" class=hd-hero-banner-img></div></div><div class=hd-article-container><div class=hd-article-grid><div class=hd-article-main><article class=hd-article-body><header class=hd-article-header><div class=hd-article-meta-top><time class=meta-date datetime=2026-09-15T00:00:00Z>SEPTEMBER 15, 2026
+</time><span class=meta-dot>&#183;</span>
+<span class=meta-reading-time>10 MIN READ</span>
+<span class=meta-dot>&#183;</span>
+<span class=meta-author>HOÀNG DƯƠNG</span>
+<span class=meta-dot>&#183;</span>
+<a href=/vi/posts/bash/10-handy-bash-scripts/ class=meta-lang-switch><svg viewBox="0 0 24 24" width="13" height="13" stroke="currentColor" stroke-width="1.75" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="vertical-align:-2px;margin-right:3px"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3.0 014 10 15.3 15.3.0 01-4 10A15.3 15.3.0 018 12a15.3 15.3.0 014-10z"/></svg>
+<span>VI</span></a></div><h1 class=hd-article-title>10 Simple Bash Scripts to Automate Your DevOps Workflow</h1><p class=hd-article-description>A collection of 10 small yet useful Bash scripts for DevOps: backup, tmp cleanup, disk monitoring, service restart, batch rename, log rotation, archive compression, SSL checks, bulk ping, and folder sync.</p><div class=hd-article-categories><a href=/categories/devops/ class=hd-cat-pill>DEVOPS
+</a><a href=/categories/bash/ class=hd-cat-pill>BASH</a></div></header><section class="article-content hd-prose"><h2 id=why-collect-small-scripts>Why collect small scripts?</h2><p>In the <a class=link href=/en/posts/bash/bash-step-one/>Bash series</a>, we went from variables, conditionals, and loops to <a class=link href=/en/posts/bash/bash-step-ten/>error handling</a>, <a class=link href=/en/posts/bash/bash-step-eight/>cron</a>, and <a class=link href=/en/posts/bash/bash-step-twenty/>best practices</a>. But the real value of Bash lies in the small scripts that run every day: nightly backups, cleaning full disks, restarting a crashed service at 2 AM.</p><p>This post collects <strong>10 lightweight scripts</strong> with a true DevOps flavor. Each script is under 30 lines, follows <code>set -euo pipefail</code>, quotes variables properly, and can be plugged into cron right away. The outline is inspired by community ideas and rewritten from scratch to match this series&rsquo; standards.</p><hr><h2 id=dated-folder-backup>Dated folder backup</h2><p>The most basic need: back up a config or data folder every night.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>SOURCE_DIR</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=p>/etc/myapp</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>BACKUP_ROOT</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=p>/var/backups/myapp</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>KEEP_DAYS</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>KEEP_DAYS</span><span class=k>:-</span><span class=nv>7</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>DATE_TAG</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span>date +%Y-%m-%d<span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>DEST_DIR</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>BACKUP_ROOT</span><span class=si>}</span><span class=s2>/</span><span class=si>${</span><span class=nv>DATE_TAG</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>mkdir -p <span class=s2>&#34;</span><span class=nv>$DEST_DIR</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>tar -czf <span class=s2>&#34;</span><span class=si>${</span><span class=nv>DEST_DIR</span><span class=si>}</span><span class=s2>/backup.tar.gz&#34;</span> -C <span class=s2>&#34;</span><span class=k>$(</span>dirname <span class=s2>&#34;</span><span class=nv>$SOURCE_DIR</span><span class=s2>&#34;</span><span class=k>)</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=k>$(</span>basename <span class=s2>&#34;</span><span class=nv>$SOURCE_DIR</span><span class=s2>&#34;</span><span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Backup completed: </span><span class=si>${</span><span class=nv>DEST_DIR</span><span class=si>}</span><span class=s2>/backup.tar.gz&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Delete backups older than KEEP_DAYS</span>
+</span></span><span class=line><span class=cl>find <span class=s2>&#34;</span><span class=nv>$BACKUP_ROOT</span><span class=s2>&#34;</span> -maxdepth <span class=m>1</span> -type d -mtime <span class=s2>&#34;+</span><span class=si>${</span><span class=nv>KEEP_DAYS</span><span class=si>}</span><span class=s2>&#34;</span> -exec rm -rf <span class=o>{}</span> +
+</span></span></code></pre></td></tr></table></div></div><p>Explanation:</p><ul><li><code>tar -czf</code> packs a whole folder into a single file that is easy to copy elsewhere.</li><li><code>-C</code> combined with <code>dirname</code> / <code>basename</code> avoids storing absolute paths inside the archive.</li><li><code>find -mtime</code> cleans up old backups automatically — the classic mistake is backing up without ever cleaning up until the disk fills.</li><li>Taking <code>SOURCE_DIR</code> as a parameter instead of hardcoding makes the script reusable for many apps.</li></ul><hr><h2 id=clean-temp-files-and-old-caches>Clean temp files and old caches</h2><p>A bloated <code>/tmp</code> folder or cache directory is a common cause of full disks.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>TARGET_DIR</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=p>/tmp</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>OLDER_THAN_DAYS</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=nv>7</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[[</span> ! -d <span class=s2>&#34;</span><span class=nv>$TARGET_DIR</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;ERROR: directory not found: </span><span class=nv>$TARGET_DIR</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>  <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Cleaning files older than </span><span class=si>${</span><span class=nv>OLDER_THAN_DAYS</span><span class=si>}</span><span class=s2> days in </span><span class=si>${</span><span class=nv>TARGET_DIR</span><span class=si>}</span><span class=s2>...&#34;</span>
+</span></span><span class=line><span class=cl>find <span class=s2>&#34;</span><span class=nv>$TARGET_DIR</span><span class=s2>&#34;</span> -type f -mtime <span class=s2>&#34;+</span><span class=si>${</span><span class=nv>OLDER_THAN_DAYS</span><span class=si>}</span><span class=s2>&#34;</span> -print -delete
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Cleanup done.&#34;</span>
+</span></span><span class=line><span class=cl>du -sh <span class=s2>&#34;</span><span class=nv>$TARGET_DIR</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>Explanation:</p><ul><li><code>find -mtime +7 -delete</code> only removes old files and leaves recently used ones alone.</li><li><code>-print</code> before <code>-delete</code> logs what was removed for easy auditing.</li><li>Checking <code>-d</code> before deleting guards against typos pointing at the wrong folder.</li><li>Dry-run with <code>-print</code> instead of <code>-delete</code> first when testing on production.</li></ul><hr><h2 id=disk-usage-monitoring>Disk usage monitoring</h2><p>A compact version of the monitoring script from the <a class=link href=/en/posts/bash/bash-step-fifteen/>monitoring post</a>: check usage and alert past a threshold.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>THRESHOLD</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=nv>80</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>MOUNT_POINT</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=p>/</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>USAGE</span><span class=o>=</span><span class=k>$(</span>df --output<span class=o>=</span>pcent <span class=s2>&#34;</span><span class=nv>$MOUNT_POINT</span><span class=s2>&#34;</span> <span class=p>|</span> tail -1 <span class=p>|</span> tr -dc <span class=s1>&#39;0-9&#39;</span><span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>((</span> USAGE &gt; THRESHOLD <span class=o>))</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;WARNING: disk usage on </span><span class=si>${</span><span class=nv>MOUNT_POINT</span><span class=si>}</span><span class=s2> is </span><span class=si>${</span><span class=nv>USAGE</span><span class=si>}</span><span class=s2>% (threshold: </span><span class=si>${</span><span class=nv>THRESHOLD</span><span class=si>}</span><span class=s2>%)&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>  <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=k>else</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;OK: disk usage on </span><span class=si>${</span><span class=nv>MOUNT_POINT</span><span class=si>}</span><span class=s2> is </span><span class=si>${</span><span class=nv>USAGE</span><span class=si>}</span><span class=s2>%&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span></code></pre></td></tr></table></div></div><p>Explanation:</p><ul><li><code>df --output=pcent</code> selects exactly the percentage column, more stable than parsing default <code>df</code> output.</li><li><code>tr -dc '0-9'</code> strips the number out of a string like <code>82%</code>.</li><li>Exit code <code>1</code> past the threshold lets cron or a pipeline detect the failure.</li><li>Run it via cron every 30 minutes, or trigger a webhook when the exit code is non-zero.</li></ul><hr><h2 id=auto-restart-a-crashed-service>Auto-restart a crashed service</h2><p>The classic on-call scenario: a service stops and nobody notices.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>SERVICE</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=nv>myapp</span><span class=p>.service</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> systemctl is-active --quiet <span class=s2>&#34;</span><span class=nv>$SERVICE</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;OK: </span><span class=si>${</span><span class=nv>SERVICE</span><span class=si>}</span><span class=s2> is running.&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>else</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;ALERT: </span><span class=si>${</span><span class=nv>SERVICE</span><span class=si>}</span><span class=s2> is down. Restarting...&#34;</span>
+</span></span><span class=line><span class=cl>  sudo systemctl restart <span class=s2>&#34;</span><span class=nv>$SERVICE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  sleep <span class=m>5</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> systemctl is-active --quiet <span class=s2>&#34;</span><span class=nv>$SERVICE</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;RECOVERED: </span><span class=si>${</span><span class=nv>SERVICE</span><span class=si>}</span><span class=s2> restarted successfully.&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=k>else</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;FAILED: </span><span class=si>${</span><span class=nv>SERVICE</span><span class=si>}</span><span class=s2> still down after restart.&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>    <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl>  <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span></code></pre></td></tr></table></div></div><p>Explanation:</p><ul><li><code>systemctl is-active --quiet</code> checks status via exit code, no text parsing needed.</li><li>Always verify again after a few seconds instead of assuming the restart worked.</li><li>Schedule it in cron every 5 minutes for critical services, with logs to a file for tracing.</li><li>For many servers, wrap it in an SSH loop as shown in the <a class=link href=/en/posts/bash/bash-step-thirteen/>SSH post</a>.</li></ul><hr><h2 id=batch-file-rename>Batch file rename</h2><p>During deploys or log rotation, you often need to rename many files by pattern.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>TARGET_DIR</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=p>.</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>PATTERN</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=p>*.log</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>SUFFIX</span><span class=o>=</span><span class=s2>&#34;</span><span class=k>$(</span>date +%Y%m%d<span class=k>)</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>shopt</span> -s nullglob
+</span></span><span class=line><span class=cl><span class=nv>files</span><span class=o>=(</span> <span class=s2>&#34;</span><span class=nv>$TARGET_DIR</span><span class=s2>&#34;</span>/<span class=nv>$PATTERN</span> <span class=o>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>((</span> <span class=si>${#</span><span class=nv>files</span><span class=p>[@]</span><span class=si>}</span> <span class=o>==</span> <span class=m>0</span> <span class=o>))</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;No files matched: </span><span class=si>${</span><span class=nv>TARGET_DIR</span><span class=si>}</span><span class=s2>/</span><span class=si>${</span><span class=nv>PATTERN</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=nb>exit</span> <span class=m>0</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>for</span> file in <span class=s2>&#34;</span><span class=si>${</span><span class=nv>files</span><span class=p>[@]</span><span class=si>}</span><span class=s2>&#34;</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>  mv -- <span class=s2>&#34;</span><span class=nv>$file</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>file</span><span class=si>}</span><span class=s2>.</span><span class=si>${</span><span class=nv>SUFFIX</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;Renamed: </span><span class=nv>$file</span><span class=s2> -&gt; </span><span class=si>${</span><span class=nv>file</span><span class=si>}</span><span class=s2>.</span><span class=si>${</span><span class=nv>SUFFIX</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span></code></pre></td></tr></table></div></div><p>Explanation:</p><ul><li><code>nullglob</code> makes an unmatched glob expand to nothing instead of the raw pattern string.</li><li>Quoting <code>"${files[@]}"</code> correctly handles filenames with spaces.</li><li><code>mv --</code> prevents filenames starting with <code>-</code> from being treated as options.</li><li>A date suffix makes sorting and searching easy.</li></ul><hr><h2 id=manual-log-rotation>Manual log rotation</h2><p>Before relying on system <code>logrotate</code>, understanding the rotation mechanism in Bash makes debugging easier.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span><span class=lnt>23
+</span><span class=lnt>24
+</span><span class=lnt>25
+</span><span class=lnt>26
+</span><span class=lnt>27
+</span><span class=lnt>28
+</span><span class=lnt>29
+</span><span class=lnt>30
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>LOG_FILE</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=p>/var/log/myapp/app.log</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>MAX_SIZE_MB</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=nv>100</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>KEEP_FILES</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>3</span><span class=k>:-</span><span class=nv>5</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[[</span> ! -f <span class=s2>&#34;</span><span class=nv>$LOG_FILE</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;Log file not found: </span><span class=nv>$LOG_FILE</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>  <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>size_mb</span><span class=o>=</span><span class=k>$(</span>du -m <span class=s2>&#34;</span><span class=nv>$LOG_FILE</span><span class=s2>&#34;</span> <span class=p>|</span> cut -f1<span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>((</span> size_mb &lt; MAX_SIZE_MB <span class=o>))</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;OK: </span><span class=si>${</span><span class=nv>LOG_FILE</span><span class=si>}</span><span class=s2> is </span><span class=si>${</span><span class=nv>size_mb</span><span class=si>}</span><span class=s2>MB, no rotation needed.&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=nb>exit</span> <span class=m>0</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Rotate: app.log.4 -&gt; app.log.5, ..., app.log -&gt; app.log.1</span>
+</span></span><span class=line><span class=cl><span class=k>for</span> <span class=o>((</span> <span class=nv>i</span><span class=o>=</span>KEEP_FILES-1<span class=p>;</span> i&gt;<span class=o>=</span>1<span class=p>;</span> i-- <span class=o>))</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> <span class=o>[[</span> -f <span class=s2>&#34;</span><span class=si>${</span><span class=nv>LOG_FILE</span><span class=si>}</span><span class=s2>.</span><span class=si>${</span><span class=nv>i</span><span class=si>}</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    mv -- <span class=s2>&#34;</span><span class=si>${</span><span class=nv>LOG_FILE</span><span class=si>}</span><span class=s2>.</span><span class=si>${</span><span class=nv>i</span><span class=si>}</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>LOG_FILE</span><span class=si>}</span><span class=s2>.</span><span class=k>$((</span>i+1<span class=k>))</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>mv -- <span class=s2>&#34;</span><span class=nv>$LOG_FILE</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=si>${</span><span class=nv>LOG_FILE</span><span class=si>}</span><span class=s2>.1&#34;</span>
+</span></span><span class=line><span class=cl>touch <span class=s2>&#34;</span><span class=nv>$LOG_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Rotated: </span><span class=si>${</span><span class=nv>LOG_FILE</span><span class=si>}</span><span class=s2> (</span><span class=si>${</span><span class=nv>size_mb</span><span class=si>}</span><span class=s2>MB)&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>Explanation:</p><ul><li><code>du -m</code> reports size in MB for threshold comparison.</li><li>The reverse loop keeps at most <code>KEEP_FILES</code> copies, the oldest one gets overwritten.</li><li><code>touch</code> recreates the log file immediately so the app does not keep writing to the moved file.</li><li>For apps that log continuously, send a reload signal after rotation.</li></ul><hr><h2 id=compress-old-log-archives>Compress old log archives</h2><p>After rotating logs, compress the old copies to save disk space.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>LOG_DIR</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=p>/var/log/myapp</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>OLDER_THAN_DAYS</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=nv>7</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>find <span class=s2>&#34;</span><span class=nv>$LOG_DIR</span><span class=s2>&#34;</span> -type f -name <span class=s2>&#34;*.log.*&#34;</span> -mtime <span class=s2>&#34;+</span><span class=si>${</span><span class=nv>OLDER_THAN_DAYS</span><span class=si>}</span><span class=s2>&#34;</span> ! -name <span class=s2>&#34;*.gz&#34;</span> -print0 <span class=p>|</span>
+</span></span><span class=line><span class=cl>  <span class=k>while</span> <span class=nv>IFS</span><span class=o>=</span> <span class=nb>read</span> -r -d <span class=s1>&#39;&#39;</span> logfile<span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>    gzip -9 <span class=s2>&#34;</span><span class=nv>$logfile</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;Compressed: </span><span class=si>${</span><span class=nv>logfile</span><span class=si>}</span><span class=s2>.gz&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=k>done</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>du -sh <span class=s2>&#34;</span><span class=nv>$LOG_DIR</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>Explanation:</p><ul><li><code>! -name "*.gz"</code> avoids compressing files twice.</li><li><code>-print0</code> with <code>read -d ''</code> safely handles filenames with spaces or special characters.</li><li><code>gzip -9</code> uses maximum compression, ideal for text logs.</li><li>Run weekly via cron, right after the rotation step.</li></ul><hr><h2 id=check-ssl-certificate-expiry>Check SSL certificate expiry</h2><p>An expired certificate you forgot to renew is one of the most avoidable incidents.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span><span class=lnt>21
+</span><span class=lnt>22
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>DOMAIN</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=p>&lt;your-domain&gt;</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>WARN_DAYS</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=nv>14</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>expiry</span><span class=o>=</span><span class=k>$(</span><span class=nb>echo</span> <span class=p>|</span> openssl s_client -servername <span class=s2>&#34;</span><span class=nv>$DOMAIN</span><span class=s2>&#34;</span> -connect <span class=s2>&#34;</span><span class=si>${</span><span class=nv>DOMAIN</span><span class=si>}</span><span class=s2>:443&#34;</span> 2&gt;/dev/null <span class=se>\
+</span></span></span><span class=line><span class=cl>  <span class=p>|</span> openssl x509 -noout -enddate <span class=p>|</span> cut -d<span class=o>=</span> -f2<span class=k>)</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>expiry_epoch</span><span class=o>=</span><span class=k>$(</span>date -d <span class=s2>&#34;</span><span class=nv>$expiry</span><span class=s2>&#34;</span> +%s<span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=nv>now_epoch</span><span class=o>=</span><span class=k>$(</span>date +%s<span class=k>)</span>
+</span></span><span class=line><span class=cl><span class=nv>days_left</span><span class=o>=</span><span class=k>$((</span> <span class=o>(</span>expiry_epoch <span class=o>-</span> now_epoch<span class=o>)</span> <span class=o>/</span> <span class=m>86400</span> <span class=k>))</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>((</span> days_left &lt; <span class=m>0</span> <span class=o>))</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;CRITICAL: certificate for </span><span class=si>${</span><span class=nv>DOMAIN</span><span class=si>}</span><span class=s2> already expired!&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>  <span class=nb>exit</span> <span class=m>2</span>
+</span></span><span class=line><span class=cl><span class=k>elif</span> <span class=o>((</span> days_left &lt;<span class=o>=</span> WARN_DAYS <span class=o>))</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;WARNING: certificate for </span><span class=si>${</span><span class=nv>DOMAIN</span><span class=si>}</span><span class=s2> expires in </span><span class=si>${</span><span class=nv>days_left</span><span class=si>}</span><span class=s2> days (</span><span class=si>${</span><span class=nv>expiry</span><span class=si>}</span><span class=s2>).&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>  <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=k>else</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;OK: certificate for </span><span class=si>${</span><span class=nv>DOMAIN</span><span class=si>}</span><span class=s2> valid for </span><span class=si>${</span><span class=nv>days_left</span><span class=si>}</span><span class=s2> more days.&#34;</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span></code></pre></td></tr></table></div></div><p>Explanation:</p><ul><li><code>openssl s_client -connect</code> fetches the real certificate chain from the running server.</li><li><code>-servername</code> (SNI) is required when one IP serves multiple domains.</li><li>Converting the expiry date to epoch time gives an exact days-remaining count.</li><li>Distinct exit codes for <code>WARNING</code> vs <code>CRITICAL</code> let the alerting system route correctly.</li></ul><hr><h2 id=bulk-host-ping-check>Bulk host ping check</h2><p>When managing many servers, you need a quick way to see which hosts are alive.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span><span class=lnt>19
+</span><span class=lnt>20
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>HOSTS_FILE</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=nv>hosts</span><span class=p>.txt</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[[</span> ! -f <span class=s2>&#34;</span><span class=nv>$HOSTS_FILE</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;ERROR: hosts file not found: </span><span class=nv>$HOSTS_FILE</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>  <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>while</span> <span class=nv>IFS</span><span class=o>=</span> <span class=nb>read</span> -r host <span class=o>||</span> <span class=o>[[</span> -n <span class=s2>&#34;</span><span class=nv>$host</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>do</span>
+</span></span><span class=line><span class=cl>  <span class=c1># Skip empty lines and comments</span>
+</span></span><span class=line><span class=cl>  <span class=o>[[</span> -z <span class=s2>&#34;</span><span class=nv>$host</span><span class=s2>&#34;</span> <span class=o>||</span> <span class=s2>&#34;</span><span class=nv>$host</span><span class=s2>&#34;</span> <span class=o>=</span>~ ^# <span class=o>]]</span> <span class=o>&amp;&amp;</span> <span class=k>continue</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>  <span class=k>if</span> ping -c <span class=m>2</span> -W <span class=m>2</span> <span class=s2>&#34;</span><span class=nv>$host</span><span class=s2>&#34;</span> <span class=p>&amp;</span>&gt;/dev/null<span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;UP:   </span><span class=nv>$host</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>  <span class=k>else</span>
+</span></span><span class=line><span class=cl>    <span class=nb>echo</span> <span class=s2>&#34;DOWN: </span><span class=nv>$host</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>  <span class=k>fi</span>
+</span></span><span class=line><span class=cl><span class=k>done</span> &lt; <span class=s2>&#34;</span><span class=nv>$HOSTS_FILE</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>Sample <code>hosts.txt</code>:</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-text data-lang=text><span class=line><span class=cl># Team server list
+</span></span><span class=line><span class=cl>webserver-01
+</span></span><span class=line><span class=cl>webserver-02
+</span></span><span class=line><span class=cl>db-primary
+</span></span></code></pre></td></tr></table></div></div><p>Explanation:</p><ul><li><code>ping -c 2 -W 2</code> sends 2 packets with a 2-second timeout each — fast enough for dozens of hosts.</li><li>Reading the file line by line with <code>while read</code> skips <code>#</code> comments so you can document inline.</li><li><code>|| [[ -n "$host" ]]</code> handles a final line missing its newline.</li><li>Next upgrade: run checks in parallel with <code>&</code> and <code>wait</code> as in the <a class=link href=/en/posts/bash/bash-step-sixteen/>parallel post</a>.</li></ul><hr><h2 id=sync-folders-with-rsync>Sync folders with rsync</h2><p>Copying folders between machines or doing incremental backups is much faster with <code>rsync</code> than <code>cp</code>.</p><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span><span class=lnt>12
+</span><span class=lnt>13
+</span><span class=lnt>14
+</span><span class=lnt>15
+</span><span class=lnt>16
+</span><span class=lnt>17
+</span><span class=lnt>18
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=cp>#!/usr/bin/env bash
+</span></span></span><span class=line><span class=cl><span class=nb>set</span> -euo pipefail
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nv>SOURCE_DIR</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>1</span><span class=k>:-</span><span class=p>/srv/data/</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>DEST</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>2</span><span class=k>:-</span><span class=nv>backup</span><span class=p>-host:/srv/backup/data/</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl><span class=nv>LOG_FILE</span><span class=o>=</span><span class=s2>&#34;</span><span class=si>${</span><span class=nv>LOG_FILE</span><span class=k>:-</span><span class=p>/var/log/sync-data.log</span><span class=si>}</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=k>if</span> <span class=o>[[</span> ! -d <span class=s2>&#34;</span><span class=si>${</span><span class=nv>SOURCE_DIR</span><span class=p>%/</span><span class=si>}</span><span class=s2>&#34;</span> <span class=o>&amp;&amp;</span> ! -e <span class=s2>&#34;</span><span class=nv>$SOURCE_DIR</span><span class=s2>&#34;</span> <span class=o>]]</span><span class=p>;</span> <span class=k>then</span>
+</span></span><span class=line><span class=cl>  <span class=nb>echo</span> <span class=s2>&#34;ERROR: source not found: </span><span class=nv>$SOURCE_DIR</span><span class=s2>&#34;</span> &gt;<span class=p>&amp;</span><span class=m>2</span>
+</span></span><span class=line><span class=cl>  <span class=nb>exit</span> <span class=m>1</span>
+</span></span><span class=line><span class=cl><span class=k>fi</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl>rsync -avz --delete <span class=se>\
+</span></span></span><span class=line><span class=cl>  --exclude<span class=o>=</span><span class=s1>&#39;.cache/&#39;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>  --exclude<span class=o>=</span><span class=s1>&#39;*.tmp&#39;</span> <span class=se>\
+</span></span></span><span class=line><span class=cl>  <span class=s2>&#34;</span><span class=nv>$SOURCE_DIR</span><span class=s2>&#34;</span> <span class=s2>&#34;</span><span class=nv>$DEST</span><span class=s2>&#34;</span> 2&gt;<span class=p>&amp;</span><span class=m>1</span> <span class=p>|</span> tee -a <span class=s2>&#34;</span><span class=nv>$LOG_FILE</span><span class=s2>&#34;</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=nb>echo</span> <span class=s2>&#34;Sync completed at </span><span class=k>$(</span>date <span class=s1>&#39;+%Y-%m-%d %H:%M:%S&#39;</span><span class=k>)</span><span class=s2>&#34;</span> <span class=p>|</span> tee -a <span class=s2>&#34;</span><span class=nv>$LOG_FILE</span><span class=s2>&#34;</span>
+</span></span></code></pre></td></tr></table></div></div><p>Explanation:</p><ul><li><code>-a</code> preserves permissions, ownership, and timestamps; <code>-z</code> compresses on the wire; <code>-v</code> gives detailed logs.</li><li><code>--delete</code> syncs deletions — files removed at the source are removed at the destination, keeping both sides identical.</li><li><code>--exclude</code> skips caches and temp files, cutting volume significantly.</li><li>The trailing <code>/</code> on <code>SOURCE_DIR</code> matters in rsync: with <code>/</code> it copies the contents, without it copies the folder itself.</li></ul><hr><h2 id=how-to-run-and-schedule>How to run and schedule</h2><h3 id=make-executable-and-test>Make executable and test</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt>1
+</span><span class=lnt>2
+</span><span class=lnt>3
+</span><span class=lnt>4
+</span><span class=lnt>5
+</span><span class=lnt>6
+</span><span class=lnt>7
+</span><span class=lnt>8
+</span><span class=lnt>9
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl>chmod +x backup.sh cleanup.sh
+</span></span><span class=line><span class=cl>./backup.sh /etc/myapp /var/backups/myapp
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Debug when something fails</span>
+</span></span><span class=line><span class=cl>bash -x backup.sh /etc/myapp /var/backups/myapp
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Syntax-check before pushing to a server</span>
+</span></span><span class=line><span class=cl>bash -n *.sh
+</span></span><span class=line><span class=cl>shellcheck *.sh
+</span></span></code></pre></td></tr></table></div></div><h3 id=plug-into-cron>Plug into cron</h3><div class=highlight><div class=chroma><table class=lntable><tr><td class=lntd><pre tabindex=0 class=chroma><code><span class=lnt> 1
+</span><span class=lnt> 2
+</span><span class=lnt> 3
+</span><span class=lnt> 4
+</span><span class=lnt> 5
+</span><span class=lnt> 6
+</span><span class=lnt> 7
+</span><span class=lnt> 8
+</span><span class=lnt> 9
+</span><span class=lnt>10
+</span><span class=lnt>11
+</span></code></pre></td><td class=lntd><pre tabindex=0 class=chroma><code class=language-bash data-lang=bash><span class=line><span class=cl><span class=c1># Open crontab</span>
+</span></span><span class=line><span class=cl>crontab -e
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Backup every night at 2 AM</span>
+</span></span><span class=line><span class=cl><span class=m>0</span> <span class=m>2</span> * * * /opt/scripts/backup.sh /etc/myapp /var/backups/myapp &gt;&gt; /var/log/backup.log 2&gt;<span class=p>&amp;</span><span class=m>1</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Check service every 5 minutes</span>
+</span></span><span class=line><span class=cl>*/5 * * * * /opt/scripts/restart-service.sh myapp.service &gt;&gt; /var/log/service-check.log 2&gt;<span class=p>&amp;</span><span class=m>1</span>
+</span></span><span class=line><span class=cl>
+</span></span><span class=line><span class=cl><span class=c1># Check SSL every morning</span>
+</span></span><span class=line><span class=cl><span class=m>0</span> <span class=m>8</span> * * * /opt/scripts/check-ssl.sh example.com <span class=m>14</span> &gt;&gt; /var/log/ssl-check.log 2&gt;<span class=p>&amp;</span><span class=m>1</span>
+</span></span></code></pre></td></tr></table></div></div><p>The cron notes analyzed in the <a class=link href=/en/posts/bash/bash-step-eight/>cron post</a> still apply: always use absolute paths, declare <code>PATH</code> and environment variables explicitly, and redirect both stdout and stderr to a log.</p><hr><h2 id=deployment-notes>Deployment notes</h2><ul><li><strong>Never hardcode secrets:</strong> Every script above takes parameters or environment variables. Do not embed passwords, tokens, or webhook URLs in files. Use a <code>chmod 600</code> <code>.env</code> file and <code>source</code> it when needed.</li><li><strong>Always quote variables:</strong> <code>"$SOURCE_DIR"</code>, <code>"${files[@]}"</code> — the rule from the <a class=link href=/en/posts/bash/bash-step-twenty/>best practices post</a>. Small scripts invite overconfidence, and unquoted variables break on filenames with spaces.</li><li><strong>Fail fast, report clearly:</strong> Use <code>set -euo pipefail</code>, validate input at the top, and return meaningful exit codes so cron and pipelines can detect failures. A script that finishes silently did not necessarily run correctly.</li><li><strong>Dry-run first on production:</strong> For destructive scripts (<code>cleanup</code>, <code>find -delete</code>) and sync (<code>rsync --delete</code>), first run with <code>-print</code> or <code>--dry-run</code>, confirm the file list, then allow real deletion.</li><li><strong>One script, one job:</strong> Each file above does exactly one task. When you need a multi-step chain, write an orchestrator that calls each child script instead of stuffing everything into one long, untestable file.</li><li><strong>Lint before committing:</strong> Run <code>shellcheck</code> and <code>bash -n</code> on all 10 scripts. Add them to pre-commit or CI so the team keeps one standard.</li></ul><hr><h2 id=conclusion>Conclusion</h2><p>None of the ten scripts above are fancy — backup, tmp cleanup, disk check, service restart, rename, log rotation, archive compression, SSL check, host ping, folder sync. Together, though, they save hours of manual work every week and directly reduce overnight incidents.</p><p>Start with a single script: pick your team&rsquo;s biggest pain point today, deploy that script via cron, observe it for a week, then add the next one. Once the small scripts are stable, you have a solid foundation to move toward <a class=link href=/en/posts/bash/bash-step-eleven/>Bash in CI/CD</a> and <a class=link href=/en/posts/bash/bash-step-fifteen/>centralized monitoring</a>.</p><p>Do not leave automation on paper — run your first script today.</p></section><div class=hd-article-tags-wrap><span class=tags-label>TAGS:</span><div class=hd-article-tags><a href=/tags/bash/ class=hd-tag-pill>#bash
+</a><a href=/tags/shell-script/ class=hd-tag-pill>#shell-script
+</a><a href=/tags/devops/ class=hd-tag-pill>#devops
+</a><a href=/tags/automation/ class=hd-tag-pill>#automation
+</a><a href=/tags/backup/ class=hd-tag-pill>#backup
+</a><a href=/tags/monitoring/ class=hd-tag-pill>#monitoring
+</a><a href=/tags/cron/ class=hd-tag-pill>#cron</a></div></div><div class=hd-article-footer-box><div class=footer-box-item><span class=box-label>AUTHOR</span>
+<span class=box-value>Hoàng Dương</span></div><div class=footer-box-item><span class=box-label>LICENSE</span>
+<span class=box-value>CC BY-NC-SA 4.0</span></div></div><nav class=hd-post-nav><a href=/posts/bash/bash-vs-ansible/ class="post-nav-card nav-prev"><span class=nav-direction>&larr; PREVIOUS POST</span>
+<span class=nav-post-title>Sometimes Bash scripts are better than Ansible</span></a></nav><section class=hd-comments-section><div class=comments-section-header><span class=mono-label>RESPONSES & DISCUSSION</span></div><div class=utterances-container><script>(function(){var t=document.documentElement.dataset.scheme||"light",n=t==="dark"?"github-dark":"github-light",e=document.createElement("script");e.src="https://utteranc.es/client.js",e.setAttribute("repo","hoangduonng/blog_comments"),e.setAttribute("issue-term","pathname"),e.setAttribute("label","comments"),e.setAttribute("theme",n),e.setAttribute("crossorigin","anonymous"),e.async=!0,document.currentScript.parentElement.appendChild(e)})()</script></div><style>.utterances-container{width:100%;margin-top:8px;position:relative}.utterances{max-width:100%!important;margin:0!important}[data-scheme=light] .utterances iframe,html:not([data-scheme=dark]) .utterances iframe{mix-blend-mode:multiply;transition:mix-blend-mode .2s ease}[data-scheme=dark] .utterances iframe{mix-blend-mode:lighten;transition:mix-blend-mode .2s ease}</style><script>let utterancesLoaded=!1;function setUtterancesTheme(e){let t=document.querySelector(".utterances iframe");if(t&&t.contentWindow){let n=e==="dark"?"github-dark":"github-light";t.contentWindow.postMessage({type:"set-theme",theme:n},"https://utteranc.es")}}addEventListener("message",e=>{if(e.origin!=="https://utteranc.es")return;utterancesLoaded=!0,setUtterancesTheme(document.documentElement.dataset.scheme||"light")}),window.addEventListener("onColorSchemeChange",e=>{if(!utterancesLoaded)return;setUtterancesTheme(e.detail)})</script></section></article></div><aside class=hd-article-sidebar><div class=hd-sticky-sidebar-inner><div class=hd-toc-card><div class=toc-header><span class=toc-title-label>ON THIS PAGE</span></div><div class=toc-content id=toc-content><nav id=TableOfContents><ol><li><a href=#why-collect-small-scripts>Why collect small scripts?</a></li><li><a href=#dated-folder-backup>Dated folder backup</a></li><li><a href=#clean-temp-files-and-old-caches>Clean temp files and old caches</a></li><li><a href=#disk-usage-monitoring>Disk usage monitoring</a></li><li><a href=#auto-restart-a-crashed-service>Auto-restart a crashed service</a></li><li><a href=#batch-file-rename>Batch file rename</a></li><li><a href=#manual-log-rotation>Manual log rotation</a></li><li><a href=#compress-old-log-archives>Compress old log archives</a></li><li><a href=#check-ssl-certificate-expiry>Check SSL certificate expiry</a></li><li><a href=#bulk-host-ping-check>Bulk host ping check</a></li><li><a href=#sync-folders-with-rsync>Sync folders with rsync</a></li><li><a href=#how-to-run-and-schedule>How to run and schedule</a><ol><li><a href=#make-executable-and-test>Make executable and test</a></li><li><a href=#plug-into-cron>Plug into cron</a></li></ol></li><li><a href=#deployment-notes>Deployment notes</a></li><li><a href=#conclusion>Conclusion</a></li></ol></nav></div><div class=toc-scroll-indicator id=toc-indicator style=display:none></div></div></div></aside></div></div><div class=hd-edge-callout-rail><aside class=hd-floating-callout aria-label="Also of interest"><a href=/posts/bash/bash-step-fifteen/ class=floating-callout-art><img src=/images/bash/bash-step-fifteen.jpg alt="Monitoring with Bash: System Reporting and Automated Alerting in DevOps" class=floating-callout-img></a><div class=floating-callout-badge>ALSO <span class=callout-of>of</span> INTEREST</div><div class=floating-callout-body><h4 class=floating-callout-title><a href=/posts/bash/bash-step-fifteen/>Monitoring with Bash: System Reporting and Automated Alerting in DevOps</a></h4><p class=floating-callout-excerpt>Monitoring with Bash in DevOps In the previous post, we explored combining Bash …</p><a href=/posts/bash/bash-step-fifteen/ class=floating-callout-btn>READ &rarr;</a></div></aside></div></div><script>document.addEventListener("DOMContentLoaded",function(){var e=document.getElementById("toc-content"),t=document.getElementById("toc-indicator");if(e&&t){function n(){var s,o,n=e.scrollHeight-e.clientHeight;if(n<=2){t.style.display="none";return}t.style.display="block",s=e.scrollTop/n,o=e.clientHeight-32,t.style.top=e.offsetTop+s*o+"px"}e.addEventListener("scroll",n,{passive:!0}),n(),window.addEventListener("resize",n,{passive:!0}),window.addEventListener("load",n,{passive:!0})}})</script><div class=pswp tabindex=-1 role=dialog aria-hidden=true><div class=pswp__bg></div><div class=pswp__scroll-wrap><div class=pswp__container><div class=pswp__item></div><div class=pswp__item></div><div class=pswp__item></div></div><div class="pswp__ui pswp__ui--hidden"><div class=pswp__top-bar><div class=pswp__counter></div><button class="pswp__button pswp__button--close" title="Close (Esc)"></button>
+<button class="pswp__button pswp__button--share" title=Share></button>
+<button class="pswp__button pswp__button--fs" title="Toggle fullscreen"></button>
+<button class="pswp__button pswp__button--zoom" title="Zoom in/out"></button><div class=pswp__preloader><div class=pswp__preloader__icn><div class=pswp__preloader__cut><div class=pswp__preloader__donut></div></div></div></div></div><div class="pswp__share-modal pswp__share-modal--hidden pswp__single-tap"><div class=pswp__share-tooltip></div></div><button class="pswp__button pswp__button--arrow--left" title="Previous (arrow left)">
+</button>
+<button class="pswp__button pswp__button--arrow--right" title="Next (arrow right)"></button><div class=pswp__caption><div class=pswp__caption__center></div></div></div></div></div><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.js integrity="sha256-ePwmChbbvXbsO02lbM3HoHbSHTHFAeChekF1xKJdleo=" crossorigin=anonymous defer></script><script src=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe-ui-default.min.js integrity="sha256-UKkzOn/w1mBxRmLLGrSeyB4e1xbrp4xylgAWb3M42pU=" crossorigin=anonymous defer></script><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/default-skin/default-skin.min.css crossorigin=anonymous><link rel=stylesheet href=https://cdn.jsdelivr.net/npm/photoswipe@4.1.3/dist/photoswipe.min.css crossorigin=anonymous></main></div><div id=hd-search-overlay class=hd-search-overlay aria-hidden=true data-index-url=/search/index.json data-lang=en data-no-results="No matching articles found" data-no-results-sub="Try searching with different keywords" data-initial-hint="Type a keyword to search articles..." data-results-count=results><div class=hd-search-backdrop id=hd-search-backdrop tabindex=-1></div><div class=hd-search-dialog role=dialog aria-modal=true aria-label="Search Articles"><div class=hd-search-header><div class=hd-search-input-wrapper><svg class="hd-search-icon" viewBox="0 0 24 24" width="18" height="18" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+<input id=hd-search-input class=hd-search-input type=text placeholder="Search articles, categories, topics..." autocomplete=off autocorrect=off autocapitalize=off spellcheck=false aria-autocomplete=list aria-controls=hd-search-results>
+<button id=hd-search-clear class=hd-search-clear type=button aria-label="Clear input" style=display:none>
+<svg viewBox="0 0 24 24" width="14" height="14" stroke="currentColor" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button></div><button id=hd-search-close class=hd-search-close-btn type=button aria-label="Close search">
+<kbd class=hd-search-kbd>ESC</kbd></button></div><div class=hd-search-body><div id=hd-search-loading class="hd-search-state hd-search-loading" style=display:none><div class=hd-search-spinner aria-hidden=true></div><span>Loading search index...</span></div><div id=hd-search-initial class="hd-search-state hd-search-initial"><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg><p class=state-title>Quick Search</p><p class=state-desc>Type a keyword or topic to search across all published articles.</p></div><div id=hd-search-empty class="hd-search-state hd-search-empty" style=display:none><svg class="state-icon" viewBox="0 0 24 24" width="28" height="28" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/><line x1="8" y1="8" x2="14" y2="14"/><line x1="14" y1="8" x2="8" y2="14"/></svg><p class=state-title id=hd-search-empty-title>No matching articles found</p><p class=state-desc id=hd-search-empty-desc>Try searching with different keywords</p></div><div id=hd-search-results class=hd-search-results role=listbox style=display:none></div></div><div class=hd-search-footer><div class=hd-search-shortcuts><span class=shortcut-item><kbd>↑</kbd><kbd>↓</kbd>
+<span class=shortcut-label>Navigate</span>
+</span><span class=shortcut-item><kbd>↵</kbd>
+<span class=shortcut-label>Open</span>
+</span><span class=shortcut-item><kbd>ESC</kbd>
+<span class=shortcut-label>Close</span></span></div><div id=hd-search-count class=hd-search-count style=display:none></div></div></div></div><footer class=hd-site-footer><div class=hd-footer-container><div class=hd-footer-grid><div class=footer-brand-col><a href=/ class=footer-logo><span class=footer-logo-title>Hoang Duong</span></a><div class=footer-status><span class=status-dot></span>
+<span class=status-text>All Systems Operational</span></div></div><div class=footer-links-grid><div class=footer-col><h3 class=footer-col-title>Categories</h3><ul class=footer-col-list><li><a href=/categories/bash/>Bash Series</a></li><li><a href=/categories/devops/>DevOps</a></li><li><a href=/categories/docker/>Docker</a></li><li><a href=/categories/installation-guides/>Installation Guides</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Resources</h3><ul class=footer-col-list><li><a href=/about/>About Me</a></li><li><a href=/archives/>All Articles</a></li><li><a href=#search data-open-search>Search</a></li><li><a href=/links/>Useful Links</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Featured Series</h3><ul class=footer-col-list><li><a href=/posts/bash/bash-step-eight/>Cron Jobs & Bash</a></li><li><a href=/categories/devops/>DevOps Automation</a></li><li><a href=/categories/docker/>Docker Essentials</a></li></ul></div><div class=footer-col><h3 class=footer-col-title>Connect</h3><ul class=footer-col-list><li><a href=https://github.com/hoangduonng target=_blank rel=noopener>GitHub ↗</a></li><li><a href=https://www.instagram.com/ngu_uuen/ target=_blank rel=noopener>Instagram ↗</a></li><li><a href=https://www.linkedin.com/in/hoangduonng/ target=_blank rel=noopener>LinkedIn ↗</a></li><li><a href=/index.xml>RSS Feed ↗</a></li></ul></div></div></div><div class=hd-footer-bottom-bar><span class=footer-copyright>&copy; 2026 Hoang Duong. All rights reserved.</span></div></div></footer><script src=https://cdn.jsdelivr.net/npm/node-vibrant@3.1.6/dist/vibrant.min.js integrity="sha256-awcR2jno4kI5X0zL8ex0vi2z+KMkF24hUW8WePSA9HM=" crossorigin=anonymous></script><script type=text/javascript src=/ts/main.ee266d8948a6a32b88423f5d374fca9833845f738717cf8061ae442a91efe347.js defer></script></body></html>
