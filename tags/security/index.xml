@@ -1,4 +1,611 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Security on Hoang Duong</title><link>https://tech.nguuyen.io.vn/tags/security/</link><description>Recent content in Security on Hoang Duong</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sun, 06 Sep 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/security/index.xml" rel="self" type="application/rss+xml"/><item><title>Bash and Security: Secure your scripts in DevOps</title><link>https://tech.nguuyen.io.vn/posts/bash/bash-step-nineteen/</link><pubDate>Sun, 06 Sep 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/bash/bash-step-nineteen/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/bash/bash-step-nineteen.webp" alt="Featured image of post Bash and Security: Secure your scripts in DevOps" /&gt;&lt;h2 id="bash-and-security-in-devops"&gt;Bash and Security in DevOps
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Security on Hoang Duong</title><link>https://tech.nguuyen.io.vn/tags/security/</link><description>Recent content in Security on Hoang Duong</description><generator>Hugo -- gohugo.io</generator><language>en</language><lastBuildDate>Sat, 17 Oct 2026 03:35:00 +0700</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/tags/security/index.xml" rel="self" type="application/rss+xml"/><item><title>SSH Key Authentication and Server Hardening</title><link>https://tech.nguuyen.io.vn/posts/security/ssh-key-authentication-hardening/</link><pubDate>Fri, 16 Oct 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/security/ssh-key-authentication-hardening/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/security/ssh-key-authentication-hardening.webp" alt="Featured image of post SSH Key Authentication and Server Hardening" /&gt;&lt;p&gt;SSH is the front door of nearly every Linux server, yet the way most people configure it still looks like it did years ago: generate a key, copy it to the server, turn off passwords. Meanwhile OpenSSH itself has moved on considerably — weak algorithms have been removed, secure defaults have been tightened, and post-quantum signatures are already enabled out of the box.&lt;/p&gt;
+&lt;p&gt;This article walks through picking the right key type, generating keys, configuring both the client and the server, and then the parts that are usually skipped: constraint-bearing &lt;code&gt;authorized_keys&lt;/code&gt;, SSH certificates, brute-force protection, key lifecycle and the post-quantum path.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="why-passwords-are-no-longer-an-option"&gt;Why passwords are no longer an option
+&lt;/h2&gt;&lt;p&gt;Passwords over SSH have two inherent problems: they can be guessed, and although they travel over an encrypted channel, they still depend entirely on their own strength. It only takes one botnet sweeping port 22 for you to see thousands of login attempts per day.&lt;/p&gt;
+&lt;p&gt;The easy-to-miss part is that &lt;strong&gt;&lt;code&gt;PasswordAuthentication&lt;/code&gt; still defaults to &lt;code&gt;yes&lt;/code&gt;&lt;/strong&gt; in sshd. A freshly installed server will keep accepting password logins even after you add a key, unless you turn it off explicitly. Key authentication inverts the model: the server holds a public key, the private key never leaves your machine, and an attacker has nothing to guess.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="what-has-changed-in-openssh-recently"&gt;What has changed in OpenSSH recently
+&lt;/h2&gt;&lt;p&gt;Before configuring anything, it helps to know which version you are running, because the defaults have shifted:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Version&lt;/th&gt;
+&lt;th&gt;Notable change&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;10.0 (04/2025)&lt;/td&gt;
+&lt;td&gt;Removed the DSA signature algorithm (&lt;code&gt;ssh-dss&lt;/code&gt;) entirely&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;10.1 (10/2025)&lt;/td&gt;
+&lt;td&gt;Warns when a connection negotiates a non-post-quantum key exchange; added client-side &lt;code&gt;WarnWeakCrypto&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;10.3 (04/2026)&lt;/td&gt;
+&lt;td&gt;Certificates with an empty principals section are no longer treated as a wildcard&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;10.4 (07/2026)&lt;/td&gt;
+&lt;td&gt;Experimental support for the hybrid post-quantum signature &lt;code&gt;mldsa44-ed25519&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;10.5 (08/2026)&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;restrict&lt;/code&gt; in &lt;code&gt;authorized_keys&lt;/code&gt; is now applied correctly to tunnel forwarding too&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;10.6 (10/2026)&lt;/td&gt;
+&lt;td&gt;Hybrid signature &lt;code&gt;ssh-mldsa44-ed25519&lt;/code&gt; enabled by default; &lt;code&gt;WarnWeakCrypto&lt;/code&gt; for the server; default KDF rounds raised to 32; default RSA size raised to 3072 bits&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Check your version and the algorithms it supports:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh -V
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh -Q kex &lt;span class="c1"&gt;# key exchange&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh -Q key &lt;span class="c1"&gt;# key types&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh -Q sig &lt;span class="c1"&gt;# signature algorithms&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="choosing-the-right-key-type"&gt;Choosing the right key type
+&lt;/h2&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Key type&lt;/th&gt;
+&lt;th&gt;When to use it&lt;/th&gt;
+&lt;th&gt;Notes&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;ed25519&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Default for almost everything&lt;/td&gt;
+&lt;td&gt;Fast, small keys, no dependency on NIST curves. The first choice&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;ed25519-sk&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;When the key must live on hardware&lt;/td&gt;
+&lt;td&gt;Private key stays inside a FIDO2 token and cannot be extracted&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;mldsa44-ed25519&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;When you want to try post-quantum signatures&lt;/td&gt;
+&lt;td&gt;New and not yet widely supported; only use it when both sides support it&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;rsa&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Only when compatibility forces you to&lt;/td&gt;
+&lt;td&gt;Must be at least 3072 bits; &lt;code&gt;ssh-keygen&lt;/code&gt; now defaults to 3072&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;ecdsa&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Acceptable, but not ideal&lt;/td&gt;
+&lt;td&gt;Depends on NIST curves; no real advantage over Ed25519&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;dsa&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Do not use&lt;/td&gt;
+&lt;td&gt;Removed from OpenSSH as of 10.0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;The surrounding ecosystem is tightening too: from &lt;strong&gt;October 14, 2026&lt;/strong&gt;, every new RSA key uploaded to GitHub must be at least 3072 bits, and &lt;code&gt;ssh-rsa&lt;/code&gt; using SHA-1 will be removed entirely on &lt;strong&gt;January 13, 2027&lt;/strong&gt; (with brownouts beforehand). If you still have old RSA keys in CI/CD, this is worth handling now.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="generating-keys-the-right-way"&gt;Generating keys the right way
+&lt;/h2&gt;&lt;p&gt;Create an Ed25519 key with more KDF rounds than the default, to slow attackers down if the private key is ever stolen:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh-keygen -t ed25519 -a &lt;span class="m"&gt;100&lt;/span&gt; -C &lt;span class="s2"&gt;&amp;#34;hoangduong@workstation-01&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-a 100&lt;/code&gt;: number of KDF rounds (bcrypt_pbkdf). The current default is 32; raising it makes each passphrase guess dramatically slower for an attacker.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-C&lt;/code&gt;: a comment in &lt;code&gt;user@machine&lt;/code&gt; form so you can tell later whose key it is. The comment has no security impact but a large operational one.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Always set a passphrase.&lt;/strong&gt; A private key without a passphrase means anyone who copies the file can log in.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Record the key fingerprint, you will need it later when verifying host keys:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh-keygen -lf ~/.ssh/id_ed25519.pub
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;If you are forced to use RSA, specify the length explicitly rather than relying on the default:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh-keygen -t rsa -b &lt;span class="m"&gt;4096&lt;/span&gt; -a &lt;span class="m"&gt;100&lt;/span&gt; -C &lt;span class="s2"&gt;&amp;#34;compat-key-01&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="hardware-backed-fido2-keys-for-sensitive-environments"&gt;Hardware-backed FIDO2 keys for sensitive environments
+&lt;/h2&gt;&lt;p&gt;For production servers or high-privilege accounts, keeping the key on a hardware device beats keeping it as a file on disk. The private key is generated inside the token and cannot be extracted:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh-keygen -t ed25519-sk -O resident -O verify-required -C &lt;span class="s2"&gt;&amp;#34;yubikey-01&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-O resident&lt;/code&gt;: stores the key handle on the token so it can be used from multiple machines.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-O verify-required&lt;/code&gt;: every signature must be verified with a PIN or biometrics.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;restrict&lt;/code&gt; and &lt;code&gt;verify-required&lt;/code&gt; can also be enforced from the &lt;code&gt;authorized_keys&lt;/code&gt; side.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Load resident keys from the token into the agent:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh-keygen -K
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh-add -P &lt;span class="c1"&gt;# skip PIN entry for tokens that do not require it&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="getting-the-public-key-onto-the-server"&gt;Getting the public key onto the server
+&lt;/h2&gt;&lt;p&gt;The simplest route is &lt;code&gt;ssh-copy-id&lt;/code&gt;, which writes the key to the right file with the right permissions:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh-copy-id -i ~/.ssh/id_ed25519.pub deploy@&amp;lt;server-host&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Then double-check permissions on the server — wrong permissions are the most common cause of &lt;code&gt;publickey&lt;/code&gt; failures:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;chmod &lt;span class="m"&gt;700&lt;/span&gt; ~/.ssh
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;chmod &lt;span class="m"&gt;600&lt;/span&gt; ~/.ssh/authorized_keys
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;chmod go-w ~ &lt;span class="c1"&gt;# the home directory must not be group/other writable&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;sshd enables &lt;code&gt;StrictModes yes&lt;/code&gt; by default: if the home directory, &lt;code&gt;~/.ssh&lt;/code&gt; or &lt;code&gt;authorized_keys&lt;/code&gt; is writable by the group or by others, sshd will &lt;strong&gt;refuse&lt;/strong&gt; to use that key. On SELinux systems, remember to relabel:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;restorecon -R -v ~/.ssh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="ssh-agent-and-the-agent-forwarding-trap"&gt;ssh-agent and the agent forwarding trap
+&lt;/h2&gt;&lt;p&gt;The agent keeps decrypted private keys in memory so you do not have to re-enter the passphrase constantly:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;eval&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;ssh-agent -s&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh-add -t 8h ~/.ssh/id_ed25519 &lt;span class="c1"&gt;# expires automatically after 8 hours&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;On macOS, add the key to the Keychain with &lt;code&gt;UseKeychain yes&lt;/code&gt; in &lt;code&gt;~/.ssh/config&lt;/code&gt; so the agent survives reboots.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Agent forwarding (&lt;code&gt;ForwardAgent&lt;/code&gt;) is something you should avoid by default.&lt;/strong&gt; When enabled, anyone with root on the destination host can use the forwarded agent socket to sign with your key — they cannot extract the private key, but they can use it. If you truly need forwarding, scope it to specific hosts rather than enabling it globally. Since OpenSSH 10.6, &lt;code&gt;AgentSocketPath&lt;/code&gt; lets you control where the forwarded agent socket lives on the server.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="clean-and-safe-client-configuration"&gt;Clean and safe client configuration
+&lt;/h2&gt;&lt;p&gt;Put everything in &lt;code&gt;~/.ssh/config&lt;/code&gt; instead of typing long flag combinations every time:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Host prod-web-01
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; HostName 203.0.113.10
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; User deploy
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; IdentityFile ~/.ssh/id_ed25519
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; IdentitiesOnly yes
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; AddKeysToAgent confirm
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Host *
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; HashKnownHosts yes
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; StrictHostKeyChecking accept-new
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; UpdateHostKeys yes
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ServerAliveInterval 60
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ServerAliveCountMax 3
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;IdentitiesOnly yes&lt;/code&gt;: use only the declared keys, so the agent does not offer a pile of unrelated keys and burn through the server&amp;rsquo;s &lt;code&gt;MaxAuthTries&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;AddKeysToAgent confirm&lt;/code&gt;: ask before loading a key into the agent, so keys are not used behind your back.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;HashKnownHosts yes&lt;/code&gt;: obscure host names in &lt;code&gt;known_hosts&lt;/code&gt; in case the file leaks. Note that the default is still &lt;code&gt;no&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;StrictHostKeyChecking accept-new&lt;/code&gt;: accept new host keys automatically but still refuse when a host key &lt;strong&gt;changes&lt;/strong&gt; — a good balance for automation. For environments that demand strict control, use &lt;code&gt;yes&lt;/code&gt; and manage &lt;code&gt;known_hosts&lt;/code&gt; centrally.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;UpdateHostKeys yes&lt;/code&gt;: lets the server advertise additional host keys after authentication, smoothing host key rotation.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ServerAliveInterval&lt;/code&gt;: detect dead connections instead of leaving sessions hanging.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;A handy trick to see which keys will be tried, in order, without actually logging in (OpenSSH 10.5 and later):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh -Z deploy@&amp;lt;server-host&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="verifying-host-keys-and-known_hosts"&gt;Verifying host keys and known_hosts
+&lt;/h2&gt;&lt;p&gt;The client must verify the server&amp;rsquo;s identity, otherwise strong encryption means nothing against a MITM. &lt;code&gt;known_hosts&lt;/code&gt; supports two useful markers:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;@cert-authority&lt;/code&gt;: a single line holding a CA key trusted for an entire domain, for example &lt;code&gt;*.example.com&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;@revoked&lt;/code&gt;: marks a key as revoked, so ssh always warns and never accepts it.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh-keygen -F prod-web-01 &lt;span class="c1"&gt;# look up a host key&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh-keygen -R prod-web-01 &lt;span class="c1"&gt;# remove a stale host key when a server rotates its keys&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh-keygen -H &lt;span class="c1"&gt;# hash the entire known_hosts file&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;On infrastructure with trustworthy DNS, you can verify through DNS with SSHFP:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;VerifyHostKeyDNS ask
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;For emergency revocation, use a Key Revocation List (KRL) wired into sshd via &lt;code&gt;RevokedKeys&lt;/code&gt;, or &lt;code&gt;RevokedHostKeys&lt;/code&gt; on the client side.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="server-side-hardening"&gt;Server-side hardening
+&lt;/h2&gt;&lt;p&gt;A safe rule: &lt;strong&gt;never edit the main configuration file directly&lt;/strong&gt;. On Debian/Ubuntu, &lt;code&gt;sshd_config&lt;/code&gt; normally already contains &lt;code&gt;Include /etc/ssh/sshd_config.d/*.conf&lt;/code&gt;, so create a separate drop-in file:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo tee /etc/ssh/sshd_config.d/00-hardening.conf &amp;gt;/dev/null &lt;span class="s"&gt;&amp;lt;&amp;lt;&amp;#39;EOF&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;PasswordAuthentication no
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;KbdInteractiveAuthentication no
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;PermitRootLogin prohibit-password
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;PubkeyAuthentication yes
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;PermitEmptyPasswords no
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;AllowGroups ssh-users
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;MaxAuthTries 3
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;LoginGraceTime 30
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;X11Forwarding no
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;AllowTcpForwarding no
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;ClientAliveInterval 300
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;ClientAliveCountMax 2
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;EOF&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;A quick explanation of the important lines:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Directive&lt;/th&gt;
+&lt;th&gt;Meaning&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;PasswordAuthentication no&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Disable password logins entirely&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;KbdInteractiveAuthentication no&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Disable the keyboard-interactive channel (which defaults to &lt;code&gt;yes&lt;/code&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;PermitRootLogin prohibit-password&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Root cannot log in with a password; a safe default, but worth stating explicitly&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;AllowGroups ssh-users&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Only the listed group may log in&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;MaxAuthTries 3&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Reduce the number of attempts before the connection is dropped&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;LoginGraceTime 30&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Shorten the window for unauthenticated connections&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;AllowTcpForwarding no&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Turn off forwarding if you do not need it&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Validate the configuration before reloading — this step is mandatory:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo sshd -t &lt;span class="c1"&gt;# syntax check&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo sshd -T &lt;span class="p"&gt;|&lt;/span&gt; grep -Ei &lt;span class="s1"&gt;&amp;#39;passwordauth|permitrootlogin|allowgroups&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl reload ssh &lt;span class="c1"&gt;# or sshd, depending on the distro&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;sshd -T&lt;/code&gt; prints the &lt;strong&gt;effective&lt;/strong&gt; configuration after every drop-in and &lt;code&gt;Match&lt;/code&gt; block has been applied. It is the only way to be certain you actually disabled what you meant to disable. On distros using systemd socket activation, use &lt;code&gt;systemctl reload ssh.socket&lt;/code&gt; if the service is triggered by the socket.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Do not lock yourself out:&lt;/strong&gt; keep an open SSH session while making changes, and open a second terminal to verify you can log in before closing the old one. For users who need an exception, use &lt;code&gt;Match&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Match User backup-bot
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; PasswordAuthentication no
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; AllowTcpForwarding no
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; PermitTTY no
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="authorized_keys-is-more-than-a-list-of-keys"&gt;authorized_keys is more than a list of keys
+&lt;/h2&gt;&lt;p&gt;Each line in &lt;code&gt;authorized_keys&lt;/code&gt; can carry constraints. This is the most underused tool in the SSH toolbox relative to its value:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Option&lt;/th&gt;
+&lt;th&gt;Effect&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;restrict&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Disables all forwarding, PTY allocation and &lt;code&gt;~/.ssh/rc&lt;/code&gt;; re-enable only what you need&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;from=&amp;quot;...&amp;quot;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Accept only from given IP/CIDR ranges or hostnames&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;command=&amp;quot;...&amp;quot;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Force a single command, ignoring whatever the client sent&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;expiry-time=&amp;quot;...&amp;quot;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;The key expires automatically at a date/time&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;permitopen&lt;/code&gt; / &lt;code&gt;permitlisten&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Limit the destinations of &lt;code&gt;-L&lt;/code&gt; / &lt;code&gt;-R&lt;/code&gt; forwarding&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;no-touch-required&lt;/code&gt; / &lt;code&gt;verify-required&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;FIDO2-specific constraints&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Here is a key dedicated to a backup job, only usable from the internal range and forced to run one script:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;restrict,from=&amp;#34;198.51.100.0/24&amp;#34;,command=&amp;#34;/usr/local/bin/backup.sh&amp;#34; ssh-ed25519 AAAA... backup-bot
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Important: &lt;code&gt;force-command&lt;/code&gt; only forces the command, it does &lt;strong&gt;not&lt;/strong&gt; disable forwarding automatically. That is why &lt;code&gt;restrict&lt;/code&gt; should be the starting point for any key that does not need an interactive shell.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="ssh-certificates-for-larger-fleets"&gt;SSH certificates for larger fleets
+&lt;/h2&gt;&lt;p&gt;Managing &lt;code&gt;authorized_keys&lt;/code&gt; by hand does not scale. SSH certificates solve this by making every server trust &lt;strong&gt;a single CA&lt;/strong&gt;, while user keys are signed by that CA with a short lifetime:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# On the CA machine&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh-keygen -t ed25519 -f ~/.ssh/ca_user_key -C &lt;span class="s2"&gt;&amp;#34;ssh-ca&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Sign a user certificate, valid for 8 hours&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh-keygen -s ~/.ssh/ca_user_key -I &lt;span class="s2"&gt;&amp;#34;hoangduong@company&amp;#34;&lt;/span&gt; &lt;span class="se"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; -n deploy -V +8h ~/.ssh/id_ed25519.pub
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;On the server side you only need to trust the CA and declare which principals are valid:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;TrustedUserCAKeys /etc/ssh/ca_user_key.pub
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;AuthorizedPrincipalsFile /etc/ssh/auth_principals/%u
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;A CA can also be trusted directly inside &lt;code&gt;authorized_keys&lt;/code&gt; with &lt;code&gt;cert-authority,principals=&amp;quot;deploy&amp;quot;&lt;/code&gt;. The biggest win is that certificates expire on their own, so you no longer leave stale keys on hundreds of servers after people change roles. Host certificates (&lt;code&gt;ssh-keygen -h&lt;/code&gt;) apply the same idea to host keys and make large-scale host key rotation manageable.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="brute-force-protection-and-2fa"&gt;Brute-force protection and 2FA
+&lt;/h2&gt;&lt;p&gt;If you ever deployed &lt;code&gt;fail2ban&lt;/code&gt; purely to block SSH brute force, there is good news: sshd now has per-source penalties, &lt;strong&gt;enabled by default&lt;/strong&gt; through &lt;code&gt;PerSourcePenalties&lt;/code&gt;:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Keyword&lt;/th&gt;
+&lt;th&gt;Default&lt;/th&gt;
+&lt;th&gt;Meaning&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;authfail&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;5s&lt;/td&gt;
+&lt;td&gt;Failed authentication followed by disconnect&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;invaliduser&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;5s&lt;/td&gt;
+&lt;td&gt;Attempt with a non-existent user&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;noauth&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;1s&lt;/td&gt;
+&lt;td&gt;Connect and disconnect without attempting authentication&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;grace-exceeded&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;10s&lt;/td&gt;
+&lt;td&gt;Exceeded &lt;code&gt;LoginGraceTime&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;max&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;10m&lt;/td&gt;
+&lt;td&gt;Maximum accumulated penalty&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;You can tighten this further with &lt;code&gt;PerSourceMaxStartups&lt;/code&gt;, which limits unauthenticated connections from a single IP. &lt;code&gt;fail2ban&lt;/code&gt; is still useful for centralised logging or blocking at the firewall layer, but it is no longer your only line of defence.&lt;/p&gt;
+&lt;p&gt;For high-privilege accounts, enable a second factor through PAM (TOTP):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;AuthenticationMethods publickey,keyboard-interactive
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Note that &lt;code&gt;AuthenticationMethods&lt;/code&gt; requires &lt;strong&gt;each listed method to be enabled accordingly&lt;/strong&gt; — if you disabled &lt;code&gt;KbdInteractiveAuthentication&lt;/code&gt;, re-enable it for the user group that needs 2FA rather than globally.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="preparing-for-post-quantum"&gt;Preparing for post-quantum
+&lt;/h2&gt;&lt;p&gt;SSH traffic today can be recorded and decrypted later. OpenSSH has already moved to hybrid post-quantum key exchange by default:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;mlkem768x25519-sha256&lt;/code&gt; is part of the default &lt;code&gt;KexAlgorithms&lt;/code&gt; list.&lt;/li&gt;
+&lt;li&gt;Since 10.6, the hybrid signature &lt;code&gt;ssh-mldsa44-ed25519&lt;/code&gt; is &lt;strong&gt;enabled by default&lt;/strong&gt;; keys created with the experimental 10.4 build must be regenerated because the algorithm name changed.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;WarnWeakCrypto&lt;/code&gt; (default &lt;code&gt;yes&lt;/code&gt;) logs when a connection uses a non-post-quantum key exchange, which helps you spot outdated clients.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Two operational notes:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh -Q kex &lt;span class="p"&gt;|&lt;/span&gt; grep -i mlkem
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh -o &lt;span class="nv"&gt;KexAlgorithms&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;mlkem768x25519-sha256,curve25519-sha256 deploy@&amp;lt;server-host&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;If you must stay compatible with older clients, use &lt;code&gt;+&lt;/code&gt; to append rather than replacing the default list. On compression: as of 10.6 OpenSSH disabled the LZ77 dictionary coder to patch a side channel in multiplexed sessions, so &lt;code&gt;Compression&lt;/code&gt; is less effective now; if you need compression, doing it at the application layer works better.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="key-lifecycle-rotation-revocation-and-backup"&gt;Key lifecycle: rotation, revocation and backup
+&lt;/h2&gt;&lt;p&gt;Keys are not a create-once-and-forget thing. A minimal process:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Inventory:&lt;/strong&gt; use &lt;code&gt;sshd -T&lt;/code&gt; to see the effective configuration, and &lt;code&gt;lastlog&lt;/code&gt;/&lt;code&gt;journalctl -u ssh&lt;/code&gt; to see who logged in and how.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Rotation:&lt;/strong&gt; create the new key, add it first, verify you can log in, and only then remove the old one. Never remove before adding.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Revocation:&lt;/strong&gt; delete the matching line in &lt;code&gt;authorized_keys&lt;/code&gt;, or use a KRL at scale; with SSH certificates you simply stop signing or add the certificate to a KRL.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Backup:&lt;/strong&gt; store the private key encrypted somewhere separate from your workstation. A lost private key cannot be recovered, only regenerated.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Audit old keys:&lt;/strong&gt; any &lt;code&gt;ssh-rsa&lt;/code&gt; key that does not use SHA-2, or is smaller than 3072 bits, should be replaced.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="deployment-notes"&gt;Deployment notes
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Safe rollout order:&lt;/strong&gt; add the key, verify key login works, and only then disable password authentication. Never the other way around.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Always keep an escape hatch:&lt;/strong&gt; hold an open SSH session, and if possible a console/IPMI channel, before touching &lt;code&gt;sshd_config&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Validate with &lt;code&gt;sshd -t&lt;/code&gt;, then &lt;code&gt;sshd -T&lt;/code&gt;&lt;/strong&gt; before reloading; a drop-in under &lt;code&gt;sshd_config.d&lt;/code&gt; only works if the main &lt;code&gt;sshd_config&lt;/code&gt; has the &lt;code&gt;Include&lt;/code&gt; directive.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Do not treat changing the SSH port as security.&lt;/strong&gt; It only reduces scanner noise; disabling passwords and hardening are the real measures.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;For automation/CI:&lt;/strong&gt; use a dedicated key, constrain it with &lt;code&gt;restrict,from=&lt;/code&gt;, and never embed a passphrase-less private key in a shared environment variable.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Avoid copying &lt;code&gt;authorized_keys&lt;/code&gt; between machines&lt;/strong&gt; when SSH certificates are available; every copy is another place you may forget to revoke.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;On SELinux systems&lt;/strong&gt;, always run &lt;code&gt;restorecon -R -v ~/.ssh&lt;/code&gt; after creating &lt;code&gt;~/.ssh&lt;/code&gt; or restoring from backup.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="common-troubleshooting"&gt;Common troubleshooting
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;&lt;code&gt;Permission denied (publickey)&lt;/code&gt;&lt;/strong&gt; — run &lt;code&gt;ssh -vvv&lt;/code&gt; to see whether the client is offering a key at all, then check the server side:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh -vvv deploy@&amp;lt;server-host&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo sshd -T &lt;span class="p"&gt;|&lt;/span&gt; grep -Ei &lt;span class="s1"&gt;&amp;#39;pubkey|authorizedkeysfile|strictmodes&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ls -ld ~ ~/.ssh&lt;span class="p"&gt;;&lt;/span&gt; ls -l ~/.ssh/authorized_keys
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo journalctl -u ssh -n &lt;span class="m"&gt;50&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Most cases come down to: wrong file permissions, a group-writable home directory, the key not being in &lt;code&gt;AuthorizedKeysFile&lt;/code&gt;, or an incorrect SELinux context.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;REMOTE HOST IDENTIFICATION HAS CHANGED&lt;/code&gt;&lt;/strong&gt; — the server&amp;rsquo;s host key changed (reinstall, or a MITM attempt). Verify the fingerprint with an administrator over a different channel, then:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh-keygen -R &amp;lt;server-host&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;&lt;code&gt;sshd -t&lt;/code&gt; fails after adding a drop-in&lt;/strong&gt; — usually an option that is not allowed inside &lt;code&gt;Match&lt;/code&gt;, or a misspelled directive. &lt;code&gt;sshd -T&lt;/code&gt; with &lt;code&gt;-C&lt;/code&gt; simulating a specific connection shows which configuration actually applies:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo sshd -T -C &lt;span class="nv"&gt;user&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;deploy,host&lt;span class="o"&gt;=&lt;/span&gt;&amp;lt;server-host&amp;gt;,addr&lt;span class="o"&gt;=&lt;/span&gt;203.0.113.10
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="final-thoughts"&gt;Final thoughts
+&lt;/h2&gt;&lt;p&gt;Secure SSH is not about one magic configuration line; it is about choosing the right key type, disabling passwords completely, constraining keys through &lt;code&gt;authorized_keys&lt;/code&gt;, and moving to certificates once the number of machines grows. The post-quantum part is already handled at the key exchange layer by OpenSSH — your job is simply not to disable it for the sake of one old client.&lt;/p&gt;
+&lt;p&gt;Start by checking your current server: run &lt;code&gt;sshd -T&lt;/code&gt; and look at what &lt;code&gt;PasswordAuthentication&lt;/code&gt; and &lt;code&gt;PermitRootLogin&lt;/code&gt; are set to. If they are still &lt;code&gt;yes&lt;/code&gt;, that is worth fixing before you even finish reading this.&lt;/p&gt;</description></item><item><title>Bash and Security: Secure your scripts in DevOps</title><link>https://tech.nguuyen.io.vn/posts/bash/bash-step-nineteen/</link><pubDate>Sun, 06 Sep 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/posts/bash/bash-step-nineteen/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/bash/bash-step-nineteen.webp" alt="Featured image of post Bash and Security: Secure your scripts in DevOps" /&gt;&lt;h2 id="bash-and-security-in-devops"&gt;Bash and Security in DevOps
 &lt;/h2&gt;&lt;p&gt;In the &lt;a class="link" href="https://tech.nguuyen.io.vn/en/posts/bash/bash-step-eighteen/" &gt;previous post&lt;/a&gt;, we learned how to manage cloud with CLI tools. Now, we&amp;rsquo;ll discuss security — a critical topic often overlooked when writing Bash scripts.&lt;/p&gt;
 &lt;p&gt;Bash scripts run automatically everywhere — from CI/CD pipelines to cron jobs on servers. But without proper security, they can become major vulnerabilities: leaking API keys, enabling injection attacks, or being exploited to gain system access.&lt;/p&gt;
 &lt;p&gt;This post will guide you through managing secrets, validating input, setting permissions correctly, and scanning scripts with shellcheck to build secure Bash scripts in DevOps.&lt;/p&gt;

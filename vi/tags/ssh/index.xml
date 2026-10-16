@@ -1,11 +1,11 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Ssh on Hoàng Dương</title><link>https://tech.nguuyen.io.vn/vi/tags/ssh/</link><description>Recent content in Ssh on Hoàng Dương</description><generator>Hugo -- gohugo.io</generator><language>vi</language><lastBuildDate>Fri, 16 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/vi/tags/ssh/index.xml" rel="self" type="application/rss+xml"/><item><title>SSH Key Authentication và Hardening Server năm 2026</title><link>https://tech.nguuyen.io.vn/vi/posts/security/ssh-key-authentication-hardening/</link><pubDate>Fri, 16 Oct 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/security/ssh-key-authentication-hardening/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/security/ssh-key-authentication-hardening.webp" alt="Featured image of post SSH Key Authentication và Hardening Server năm 2026" /&gt;&lt;p&gt;SSH là cánh cửa chính của gần như mọi server Linux, nhưng cách cấu hình SSH phổ biến trên Internet vẫn dừng ở mức của nhiều năm trước: tạo khoá, copy lên server, tắt mật khẩu. Trong khi đó, bản thân OpenSSH đã thay đổi khá nhiều — thuật toán yếu bị xoá, mặc định bảo mật được siết lại, và chữ ký hậu lượng tử đã bật sẵn từ bản 10.6.&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Ssh on Hoàng Dương</title><link>https://tech.nguuyen.io.vn/vi/tags/ssh/</link><description>Recent content in Ssh on Hoàng Dương</description><generator>Hugo -- gohugo.io</generator><language>vi</language><lastBuildDate>Fri, 16 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/vi/tags/ssh/index.xml" rel="self" type="application/rss+xml"/><item><title>SSH Key Authentication và Hardening Server</title><link>https://tech.nguuyen.io.vn/vi/posts/security/ssh-key-authentication-hardening/</link><pubDate>Fri, 16 Oct 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/security/ssh-key-authentication-hardening/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/security/ssh-key-authentication-hardening.webp" alt="Featured image of post SSH Key Authentication và Hardening Server" /&gt;&lt;p&gt;SSH là cánh cửa chính của gần như mọi server Linux, nhưng cách cấu hình SSH phổ biến trên Internet vẫn dừng ở mức của nhiều năm trước: tạo khoá, copy lên server, tắt mật khẩu. Trong khi đó, bản thân OpenSSH đã thay đổi khá nhiều — thuật toán yếu bị xoá, mặc định bảo mật được siết lại, và chữ ký hậu lượng tử đã bật sẵn từ bản 10.6.&lt;/p&gt;
 &lt;p&gt;Bài này đi từ việc chọn đúng loại khoá, tạo khoá, cấu hình cả hai phía client và server, cho tới những thứ thường bị bỏ qua: &lt;code&gt;authorized_keys&lt;/code&gt; với ràng buộc, SSH certificate, chống brute force, vòng đời khoá và lộ trình hậu lượng tử.&lt;/p&gt;
 &lt;hr&gt;
 &lt;h2 id="vì-sao-mật-khẩu-không-còn-là-lựa-chọn"&gt;Vì sao mật khẩu không còn là lựa chọn
 &lt;/h2&gt;&lt;p&gt;Mật khẩu trên SSH có hai vấn đề cố hữu: nó có thể bị đoán, và nó đi qua một kênh mã hoá nhưng vẫn phụ thuộc vào độ mạnh của chính nó. Chỉ cần một botnet quét cổng 22 là bạn sẽ thấy hàng nghìn lần thử đăng nhập mỗi ngày.&lt;/p&gt;
 &lt;p&gt;Điểm dễ bị bỏ sót là &lt;strong&gt;&lt;code&gt;PasswordAuthentication&lt;/code&gt; mặc định vẫn là &lt;code&gt;yes&lt;/code&gt;&lt;/strong&gt; trong sshd. Nghĩa là một server mới cài, dù đã thêm khoá, vẫn chấp nhận đăng nhập bằng mật khẩu nếu bạn không tắt hẳn. Xác thực bằng khoá đảo ngược mô hình: server giữ public key, private key không bao giờ rời khỏi máy bạn, và kẻ tấn công không có gì để đoán.&lt;/p&gt;
 &lt;hr&gt;
-&lt;h2 id="openssh-đã-thay-đổi-những-gì-trong-năm-nay"&gt;OpenSSH đã thay đổi những gì trong năm nay
+&lt;h2 id="những-thay-đổi-quan-trọng-của-openssh-gần-đây"&gt;Những thay đổi quan trọng của OpenSSH gần đây
 &lt;/h2&gt;&lt;p&gt;Trước khi cấu hình, cần biết phiên bản mình đang chạy vì hành vi mặc định đã đổi:&lt;/p&gt;
 &lt;table&gt;
 &lt;thead&gt;
@@ -57,7 +57,7 @@
 &lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
-&lt;h2 id="chọn-loại-khoá-phù-hợp-trong-năm-2026"&gt;Chọn loại khoá phù hợp trong năm 2026
+&lt;h2 id="chọn-loại-khoá-phù-hợp"&gt;Chọn loại khoá phù hợp
 &lt;/h2&gt;&lt;table&gt;
 &lt;thead&gt;
 &lt;tr&gt;
@@ -553,7 +553,7 @@
 &lt;li&gt;&lt;strong&gt;Xoay khoá:&lt;/strong&gt; tạo khoá mới, thêm vào trước, xác minh đăng nhập được, rồi mới xoá khoá cũ. Không xoá trước khi thêm.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Thu hồi:&lt;/strong&gt; xoá dòng tương ứng trong &lt;code&gt;authorized_keys&lt;/code&gt;, hoặc dùng KRL khi số lượng lớn; với SSH certificate chỉ cần ngừng ký hoặc đưa vào KRL.&lt;/li&gt;
 &lt;li&gt;&lt;strong&gt;Sao lưu:&lt;/strong&gt; backup private key ở nơi mã hoá, tách khỏi máy trạm. Mất private key không có cách nào phục hồi ngoài việc tạo lại.&lt;/li&gt;
-&lt;li&gt;&lt;strong&gt;Rà soát khoá cũ:&lt;/strong&gt; mọi khoá &lt;code&gt;ssh-rsa&lt;/code&gt; không dùng SHA-2 hoặc nhỏ hơn 3072 bit nên được thay thế trong năm nay.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Rà soát khoá cũ:&lt;/strong&gt; mọi khoá &lt;code&gt;ssh-rsa&lt;/code&gt; không dùng SHA-2 hoặc nhỏ hơn 3072 bit nên được thay thế.&lt;/li&gt;
 &lt;/ul&gt;
 &lt;hr&gt;
 &lt;h2 id="ghi-chú-triển-khai"&gt;Ghi chú triển khai
@@ -604,7 +604,7 @@
 &lt;/div&gt;
 &lt;/div&gt;&lt;hr&gt;
 &lt;h2 id="lời-kết"&gt;Lời kết
-&lt;/h2&gt;&lt;p&gt;SSH an toàn năm 2026 không nằm ở một dòng cấu hình thần kỳ, mà ở việc chọn đúng loại khoá, tắt hẳn mật khẩu, ràng buộc khoá bằng &lt;code&gt;authorized_keys&lt;/code&gt;, và chuyển sang certificate khi số máy bắt đầu tăng. Phần hậu lượng tử đã được OpenSSH xử lý sẵn ở tầng key exchange — việc của bạn là đừng vô hiệu hoá nó vì một client cũ.&lt;/p&gt;
+&lt;/h2&gt;&lt;p&gt;SSH an toàn không nằm ở một dòng cấu hình thần kỳ, mà ở việc chọn đúng loại khoá, tắt hẳn mật khẩu, ràng buộc khoá bằng &lt;code&gt;authorized_keys&lt;/code&gt;, và chuyển sang certificate khi số máy bắt đầu tăng. Phần hậu lượng tử đã được OpenSSH xử lý sẵn ở tầng key exchange — việc của bạn là đừng vô hiệu hoá nó vì một client cũ.&lt;/p&gt;
 &lt;p&gt;Hãy bắt đầu bằng việc kiểm tra server hiện tại: &lt;code&gt;sshd -T&lt;/code&gt; xem &lt;code&gt;PasswordAuthentication&lt;/code&gt; và &lt;code&gt;PermitRootLogin&lt;/code&gt; đang là gì. Nếu vẫn là &lt;code&gt;yes&lt;/code&gt;, đó là việc nên làm trước cả khi đọc hết bài này.&lt;/p&gt;</description></item><item><title>Tự động hóa SSH với Bash: Quản lý multi-server hiệu quả trong DevOps</title><link>https://tech.nguuyen.io.vn/vi/posts/bash/bash-step-thirteen/</link><pubDate>Sun, 30 Aug 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/bash/bash-step-thirteen/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/bash/bash-step-thirteen.webp" alt="Featured image of post Tự động hóa SSH với Bash: Quản lý multi-server hiệu quả trong DevOps" /&gt;&lt;h2 id="tự-động-hóa-ssh-với-bash-trong-devops"&gt;Tự động hóa SSH với Bash trong DevOps
 &lt;/h2&gt;&lt;p&gt;Trong &lt;a class="link" href="https://tech.nguuyen.io.vn/posts/bash/bash-step-twelve/" &gt;bài viết trước&lt;/a&gt;, chúng ta đã tìm hiểu cách giám sát tài nguyên hệ thống và can thiệp tiến trình ngay trên một server duy nhất. Nhưng trong thực tế DevOps, bạn hiếm khi chỉ quản lý một máy. Khi hạ tầng mở rộng đến 10, 50 hay thậm chí hàng trăm server, việc SSH thủ công vào từng máy để chạy lệnh là một ác mộng — chậm, dễ sai và không thể lặp lại.&lt;/p&gt;
 &lt;p&gt;Tự động hóa SSH bằng Bash giải quyết vấn đề này: bạn viết một lần, chạy trên mọi server, kết quả đồng nhất và có thể tích hợp vào pipeline CI/CD hoặc cron job. Bài viết này sẽ hướng dẫn bạn thiết lập SSH key-based authentication, cấu hình &lt;code&gt;~/.ssh/config&lt;/code&gt; để quản lý nhiều server, truyền file an toàn với &lt;code&gt;scp&lt;/code&gt; và &lt;code&gt;rsync&lt;/code&gt;, cùng một script thực hành chạy lệnh song song trên nhiều server.&lt;/p&gt;
