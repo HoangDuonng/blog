@@ -1,0 +1,608 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Security on Hoàng Dương</title><link>https://tech.nguuyen.io.vn/vi/categories/security/</link><description>Recent content in Security on Hoàng Dương</description><generator>Hugo -- gohugo.io</generator><language>vi</language><lastBuildDate>Fri, 16 Oct 2026 00:00:00 +0000</lastBuildDate><atom:link href="https://tech.nguuyen.io.vn/vi/categories/security/index.xml" rel="self" type="application/rss+xml"/><item><title>SSH Key Authentication và Hardening Server năm 2026</title><link>https://tech.nguuyen.io.vn/vi/posts/security/ssh-key-authentication-hardening/</link><pubDate>Fri, 16 Oct 2026 00:00:00 +0000</pubDate><guid>https://tech.nguuyen.io.vn/vi/posts/security/ssh-key-authentication-hardening/</guid><description>&lt;img src="https://tech.nguuyen.io.vn/images/security/ssh-key-authentication-hardening.webp" alt="Featured image of post SSH Key Authentication và Hardening Server năm 2026" /&gt;&lt;p&gt;SSH là cánh cửa chính của gần như mọi server Linux, nhưng cách cấu hình SSH phổ biến trên Internet vẫn dừng ở mức của nhiều năm trước: tạo khoá, copy lên server, tắt mật khẩu. Trong khi đó, bản thân OpenSSH đã thay đổi khá nhiều — thuật toán yếu bị xoá, mặc định bảo mật được siết lại, và chữ ký hậu lượng tử đã bật sẵn từ bản 10.6.&lt;/p&gt;
+&lt;p&gt;Bài này đi từ việc chọn đúng loại khoá, tạo khoá, cấu hình cả hai phía client và server, cho tới những thứ thường bị bỏ qua: &lt;code&gt;authorized_keys&lt;/code&gt; với ràng buộc, SSH certificate, chống brute force, vòng đời khoá và lộ trình hậu lượng tử.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="vì-sao-mật-khẩu-không-còn-là-lựa-chọn"&gt;Vì sao mật khẩu không còn là lựa chọn
+&lt;/h2&gt;&lt;p&gt;Mật khẩu trên SSH có hai vấn đề cố hữu: nó có thể bị đoán, và nó đi qua một kênh mã hoá nhưng vẫn phụ thuộc vào độ mạnh của chính nó. Chỉ cần một botnet quét cổng 22 là bạn sẽ thấy hàng nghìn lần thử đăng nhập mỗi ngày.&lt;/p&gt;
+&lt;p&gt;Điểm dễ bị bỏ sót là &lt;strong&gt;&lt;code&gt;PasswordAuthentication&lt;/code&gt; mặc định vẫn là &lt;code&gt;yes&lt;/code&gt;&lt;/strong&gt; trong sshd. Nghĩa là một server mới cài, dù đã thêm khoá, vẫn chấp nhận đăng nhập bằng mật khẩu nếu bạn không tắt hẳn. Xác thực bằng khoá đảo ngược mô hình: server giữ public key, private key không bao giờ rời khỏi máy bạn, và kẻ tấn công không có gì để đoán.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="openssh-đã-thay-đổi-những-gì-trong-năm-nay"&gt;OpenSSH đã thay đổi những gì trong năm nay
+&lt;/h2&gt;&lt;p&gt;Trước khi cấu hình, cần biết phiên bản mình đang chạy vì hành vi mặc định đã đổi:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Phiên bản&lt;/th&gt;
+&lt;th&gt;Thay đổi đáng chú ý&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;10.0 (04/2025)&lt;/td&gt;
+&lt;td&gt;Xoá hoàn toàn thuật toán chữ ký DSA (&lt;code&gt;ssh-dss&lt;/code&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;10.1 (10/2025)&lt;/td&gt;
+&lt;td&gt;Cảnh báo khi kết nối dùng key exchange không hậu lượng tử; thêm &lt;code&gt;WarnWeakCrypto&lt;/code&gt; phía client&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;10.3 (04/2026)&lt;/td&gt;
+&lt;td&gt;Certificate có principals rỗng không còn được hiểu là wildcard&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;10.4 (07/2026)&lt;/td&gt;
+&lt;td&gt;Hỗ trợ thử nghiệm chữ ký lai hậu lượng tử &lt;code&gt;mldsa44-ed25519&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;10.5 (08/2026)&lt;/td&gt;
+&lt;td&gt;&lt;code&gt;restrict&lt;/code&gt; trong &lt;code&gt;authorized_keys&lt;/code&gt; áp dụng đúng cho cả tunnel forwarding&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;10.6 (10/2026)&lt;/td&gt;
+&lt;td&gt;Bật mặc định chữ ký lai &lt;code&gt;ssh-mldsa44-ed25519&lt;/code&gt;; &lt;code&gt;WarnWeakCrypto&lt;/code&gt; cho cả server; default KDF rounds tăng lên 32; default RSA tăng lên 3072 bit&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Kiểm tra phiên bản và danh sách thuật toán đang hỗ trợ:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh -V
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh -Q kex &lt;span class="c1"&gt;# key exchange&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh -Q key &lt;span class="c1"&gt;# loại khoá&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh -Q sig &lt;span class="c1"&gt;# thuật toán chữ ký&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="chọn-loại-khoá-phù-hợp-trong-năm-2026"&gt;Chọn loại khoá phù hợp trong năm 2026
+&lt;/h2&gt;&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Loại khoá&lt;/th&gt;
+&lt;th&gt;Khi nào dùng&lt;/th&gt;
+&lt;th&gt;Ghi chú&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;ed25519&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Mặc định cho hầu hết trường hợp&lt;/td&gt;
+&lt;td&gt;Nhanh, khoá nhỏ, không phụ thuộc NIST curve. Là lựa chọn đầu tiên&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;ed25519-sk&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Khi cần khoá gắn phần cứng&lt;/td&gt;
+&lt;td&gt;Private key nằm trong FIDO2 token, không thể trích xuất&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;mldsa44-ed25519&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Khi muốn thử chữ ký hậu lượng tử&lt;/td&gt;
+&lt;td&gt;Mới và chưa phổ biến rộng; chỉ dùng khi cả hai phía đều hỗ trợ&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;rsa&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Chỉ khi bắt buộc tương thích&lt;/td&gt;
+&lt;td&gt;Phải dài tối thiểu 3072 bit; mặc định mới của &lt;code&gt;ssh-keygen&lt;/code&gt; đã là 3072&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;ecdsa&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Chấp nhận được nhưng không lý tưởng&lt;/td&gt;
+&lt;td&gt;Phụ thuộc NIST curve; không có lợi thế so với Ed25519&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;dsa&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Không dùng&lt;/td&gt;
+&lt;td&gt;Đã bị xoá khỏi OpenSSH từ bản 10.0&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Về phía hệ sinh thái, GitHub cũng siết lại: từ &lt;strong&gt;14/10/2026&lt;/strong&gt;, mọi khoá RSA mới upload phải đạt tối thiểu 3072 bit, &lt;code&gt;ssh-rsa&lt;/code&gt; dùng SHA-1 sẽ bị loại bỏ hoàn toàn vào &lt;strong&gt;13/01/2027&lt;/strong&gt; (có brownout trước đó). Nếu bạn còn khoá RSA cũ trong CI/CD, đây là thứ cần xử lý ngay.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="tạo-khoá-đúng-chuẩn"&gt;Tạo khoá đúng chuẩn
+&lt;/h2&gt;&lt;p&gt;Tạo khoá Ed25519 với số vòng KDF cao hơn mặc định để chống brute-force khi private key bị lộ:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh-keygen -t ed25519 -a &lt;span class="m"&gt;100&lt;/span&gt; -C &lt;span class="s2"&gt;&amp;#34;hoangduong@workstation-01&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-a 100&lt;/code&gt;: số vòng KDF (bcrypt_pbkdf). Mặc định hiện tại là 32; tăng lên giúp mỗi lần thử passphrase chậm hơn đáng kể với kẻ tấn công.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-C&lt;/code&gt;: comment đặt theo &lt;code&gt;user@máy&lt;/code&gt; để sau này biết khoá nào của ai. Comment không ảnh hưởng bảo mật nhưng ảnh hưởng khả năng vận hành.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Luôn đặt passphrase.&lt;/strong&gt; Private key không passphrase nghĩa là bất kỳ ai copy được file là đăng nhập được.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Đối chiếu fingerprint của khoá để dùng về sau khi xác minh host key:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh-keygen -lf ~/.ssh/id_ed25519.pub
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Nếu buộc phải dùng RSA, chỉ định rõ độ dài thay vì để mặc định:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh-keygen -t rsa -b &lt;span class="m"&gt;4096&lt;/span&gt; -a &lt;span class="m"&gt;100&lt;/span&gt; -C &lt;span class="s2"&gt;&amp;#34;compat-key-01&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="khoá-cứng-fido2-cho-môi-trường-nhạy-cảm"&gt;Khoá cứng FIDO2 cho môi trường nhạy cảm
+&lt;/h2&gt;&lt;p&gt;Với server production hoặc tài khoản có quyền cao, khoá nằm trong thiết bị phần cứng là lựa chọn tốt hơn file trên ổ đĩa. Private key được sinh bên trong token và không thể trích xuất:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh-keygen -t ed25519-sk -O resident -O verify-required -C &lt;span class="s2"&gt;&amp;#34;yubikey-01&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;-O resident&lt;/code&gt;: lưu key handle trong token, dùng được trên nhiều máy.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;-O verify-required&lt;/code&gt;: mỗi lần ký phải xác minh bằng PIN hoặc sinh trắc học.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;restrict&lt;/code&gt; và &lt;code&gt;verify-required&lt;/code&gt; cũng có thể ràng buộc ở phía &lt;code&gt;authorized_keys&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Nạp khoá resident từ token vào agent:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh-keygen -K
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh-add -P &lt;span class="c1"&gt;# bỏ qua bước nhập PIN với token không yêu cầu&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="đưa-public-key-lên-server"&gt;Đưa public key lên server
+&lt;/h2&gt;&lt;p&gt;Cách gọn nhất là &lt;code&gt;ssh-copy-id&lt;/code&gt;, nó thêm khoá vào đúng file với đúng quyền:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh-copy-id -i ~/.ssh/id_ed25519.pub deploy@&amp;lt;server-host&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Kiểm tra lại quyền trên server — sai quyền là nguyên nhân phổ biến nhất khiến &lt;code&gt;publickey&lt;/code&gt; thất bại:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;chmod &lt;span class="m"&gt;700&lt;/span&gt; ~/.ssh
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;chmod &lt;span class="m"&gt;600&lt;/span&gt; ~/.ssh/authorized_keys
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;chmod go-w ~ &lt;span class="c1"&gt;# home không được để group/other ghi&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;sshd bật &lt;code&gt;StrictModes yes&lt;/code&gt; mặc định: nếu thư mục home, &lt;code&gt;~/.ssh&lt;/code&gt; hoặc &lt;code&gt;authorized_keys&lt;/code&gt; bị nhóm/người khác ghi được, sshd sẽ &lt;strong&gt;từ chối&lt;/strong&gt; dùng khoá đó. Trên hệ thống có SELinux, nhớ gán lại nhãn:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;restorecon -R -v ~/.ssh
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="ssh-agent-và-cạm-bẫy-agent-forwarding"&gt;ssh-agent và cạm bẫy agent forwarding
+&lt;/h2&gt;&lt;p&gt;Agent giữ private key đã giải mã trong bộ nhớ, giúp bạn không phải nhập passphrase liên tục:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="nb"&gt;eval&lt;/span&gt; &lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;&lt;span class="k"&gt;$(&lt;/span&gt;ssh-agent -s&lt;span class="k"&gt;)&lt;/span&gt;&lt;span class="s2"&gt;&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh-add -t 8h ~/.ssh/id_ed25519 &lt;span class="c1"&gt;# tự hết hạn sau 8 giờ&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Trên macOS, thêm khoá vào Keychain bằng &lt;code&gt;UseKeychain yes&lt;/code&gt; trong &lt;code&gt;~/.ssh/config&lt;/code&gt; để agent sống qua các lần reboot.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Agent forwarding (&lt;code&gt;ForwardAgent&lt;/code&gt;) là thứ nên tránh mặc định.&lt;/strong&gt; Khi bật, bất kỳ ai có quyền root trên máy đích đều có thể dùng agent socket được forward để ký bằng khoá của bạn — không lấy được private key, nhưng dùng được nó. Nếu buộc phải forward, hãy giới hạn theo từng host chứ đừng bật toàn cục. Từ OpenSSH 10.6 có &lt;code&gt;AgentSocketPath&lt;/code&gt; cho phép kiểm soát vị trí socket agent trên server.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="cấu-hình-client-gọn-gàng-và-an-toàn"&gt;Cấu hình client gọn gàng và an toàn
+&lt;/h2&gt;&lt;p&gt;Đặt mọi thứ vào &lt;code&gt;~/.ssh/config&lt;/code&gt; thay vì gõ cờ dài mỗi lần:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Host prod-web-01
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; HostName 203.0.113.10
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; User deploy
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; IdentityFile ~/.ssh/id_ed25519
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; IdentitiesOnly yes
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; AddKeysToAgent confirm
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Host *
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; HashKnownHosts yes
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; StrictHostKeyChecking accept-new
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; UpdateHostKeys yes
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ServerAliveInterval 60
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; ServerAliveCountMax 3
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;IdentitiesOnly yes&lt;/code&gt;: chỉ dùng đúng khoá đã khai báo, tránh việc agent thử hàng loạt khoá và bị server đếm vào &lt;code&gt;MaxAuthTries&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;AddKeysToAgent confirm&lt;/code&gt;: hỏi trước khi nạp khoá vào agent, tránh việc khoá bị dùng ngầm.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;HashKnownHosts yes&lt;/code&gt;: che tên host trong &lt;code&gt;known_hosts&lt;/code&gt; phòng khi file bị lộ. Lưu ý mặc định vẫn là &lt;code&gt;no&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;StrictHostKeyChecking accept-new&lt;/code&gt;: tự thêm host key mới nhưng vẫn từ chối khi host key &lt;strong&gt;thay đổi&lt;/strong&gt; — điểm cân bằng tốt cho tự động hoá. Với môi trường yêu cầu kiểm soát chặt, dùng &lt;code&gt;yes&lt;/code&gt; và quản lý &lt;code&gt;known_hosts&lt;/code&gt; tập trung.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;UpdateHostKeys yes&lt;/code&gt;: cho phép server gửi host key bổ sung sau khi xác thực, hỗ trợ xoay host key mượt mà.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;ServerAliveInterval&lt;/code&gt;: phát hiện kết nối chết, tránh treo phiên.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Mẹo kiểm tra khoá nào sẽ được thử, theo đúng thứ tự, mà không cần đăng nhập thật (từ 10.5):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh -Z deploy@&amp;lt;server-host&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="xác-minh-host-key-và-known_hosts"&gt;Xác minh host key và known_hosts
+&lt;/h2&gt;&lt;p&gt;Client phải kiểm tra danh tính server, nếu không thì mã hoá mạnh đến đâu cũng vô nghĩa trước MITM. &lt;code&gt;known_hosts&lt;/code&gt; hỗ trợ hai marker hữu ích:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;@cert-authority&lt;/code&gt;: một dòng chứa khoá CA tin cậy cho cả một miền, ví dụ &lt;code&gt;*.example.com&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;@revoked&lt;/code&gt;: đánh dấu khoá đã bị thu hồi, ssh sẽ luôn cảnh báo và không chấp nhận.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh-keygen -F prod-web-01 &lt;span class="c1"&gt;# tra host key của một host&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh-keygen -R prod-web-01 &lt;span class="c1"&gt;# xoá host key cũ khi server đổi khoá&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh-keygen -H &lt;span class="c1"&gt;# hash toàn bộ known_hosts&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Với hạ tầng có DNS an toàn, có thể dùng SSHFP để xác minh qua DNS:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;VerifyHostKeyDNS ask
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Khi cần thu hồi khẩn cấp, dùng Key Revocation List (KRL) gắn vào sshd qua &lt;code&gt;RevokedKeys&lt;/code&gt;, hoặc &lt;code&gt;RevokedHostKeys&lt;/code&gt; phía client.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="hardening-phía-server"&gt;Hardening phía server
+&lt;/h2&gt;&lt;p&gt;Nguyên tắc an toàn: &lt;strong&gt;không sửa trực tiếp file cấu hình chính&lt;/strong&gt;. Trên Debian/Ubuntu, &lt;code&gt;sshd_config&lt;/code&gt; thường đã có &lt;code&gt;Include /etc/ssh/sshd_config.d/*.conf&lt;/code&gt;; hãy tạo một file drop-in riêng:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt; 1
+&lt;/span&gt;&lt;span class="lnt"&gt; 2
+&lt;/span&gt;&lt;span class="lnt"&gt; 3
+&lt;/span&gt;&lt;span class="lnt"&gt; 4
+&lt;/span&gt;&lt;span class="lnt"&gt; 5
+&lt;/span&gt;&lt;span class="lnt"&gt; 6
+&lt;/span&gt;&lt;span class="lnt"&gt; 7
+&lt;/span&gt;&lt;span class="lnt"&gt; 8
+&lt;/span&gt;&lt;span class="lnt"&gt; 9
+&lt;/span&gt;&lt;span class="lnt"&gt;10
+&lt;/span&gt;&lt;span class="lnt"&gt;11
+&lt;/span&gt;&lt;span class="lnt"&gt;12
+&lt;/span&gt;&lt;span class="lnt"&gt;13
+&lt;/span&gt;&lt;span class="lnt"&gt;14
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo tee /etc/ssh/sshd_config.d/00-hardening.conf &amp;gt;/dev/null &lt;span class="s"&gt;&amp;lt;&amp;lt;&amp;#39;EOF&amp;#39;
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;PasswordAuthentication no
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;KbdInteractiveAuthentication no
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;PermitRootLogin prohibit-password
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;PubkeyAuthentication yes
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;PermitEmptyPasswords no
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;AllowGroups ssh-users
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;MaxAuthTries 3
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;LoginGraceTime 30
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;X11Forwarding no
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;AllowTcpForwarding no
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;ClientAliveInterval 300
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;ClientAliveCountMax 2
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="s"&gt;EOF&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Giải thích nhanh các dòng quan trọng:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Directive&lt;/th&gt;
+&lt;th&gt;Ý nghĩa&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;PasswordAuthentication no&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Tắt hẳn đăng nhập bằng mật khẩu&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;KbdInteractiveAuthentication no&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Tắt kênh keyboard-interactive (mặc định đang là &lt;code&gt;yes&lt;/code&gt;)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;PermitRootLogin prohibit-password&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Root không đăng nhập bằng mật khẩu; mặc định an toàn nhưng nên khai báo rõ&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;AllowGroups ssh-users&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Chỉ nhóm được chỉ định mới đăng nhập được&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;MaxAuthTries 3&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Giảm số lần thử trước khi ngắt kết nối&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;LoginGraceTime 30&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Rút ngắn cửa sổ cho kết nối chưa xác thực&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;AllowTcpForwarding no&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Tắt forwarding nếu không cần&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Kiểm tra cấu hình trước khi nạp lại — bước này bắt buộc:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo sshd -t &lt;span class="c1"&gt;# kiểm tra cú pháp&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo sshd -T &lt;span class="p"&gt;|&lt;/span&gt; grep -Ei &lt;span class="s1"&gt;&amp;#39;passwordauth|permitrootlogin|allowgroups&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo systemctl reload ssh &lt;span class="c1"&gt;# hoặc sshd, tùy distro&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;code&gt;sshd -T&lt;/code&gt; in ra cấu hình &lt;strong&gt;hiệu lực&lt;/strong&gt; sau khi áp dụng mọi drop-in và &lt;code&gt;Match&lt;/code&gt;, đây là cách duy nhất chắc chắn biết mình đã tắt đúng thứ cần tắt. Trên các distro có systemd socket activation, hãy dùng &lt;code&gt;systemctl reload ssh.socket&lt;/code&gt; nếu service được kích hoạt theo socket.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Chống tự khoá mình ra ngoài:&lt;/strong&gt; luôn giữ một phiên SSH đang mở trong lúc thay đổi, và mở terminal thứ hai để kiểm tra đăng nhập trước khi đóng phiên cũ. Với người dùng cần ngoại lệ, dùng &lt;code&gt;Match&lt;/code&gt;:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;Match User backup-bot
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; PasswordAuthentication no
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; AllowTcpForwarding no
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; PermitTTY no
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="authorized_keys-không-chỉ-là-danh-sách-khoá"&gt;authorized_keys không chỉ là danh sách khoá
+&lt;/h2&gt;&lt;p&gt;Mỗi dòng trong &lt;code&gt;authorized_keys&lt;/code&gt; có thể mang theo ràng buộc. Đây là công cụ bị dùng ít nhất so với giá trị của nó:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Option&lt;/th&gt;
+&lt;th&gt;Tác dụng&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;restrict&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Tắt toàn bộ forwarding, PTY và &lt;code&gt;~/.ssh/rc&lt;/code&gt;; bật lại từng thứ khi cần&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;from=&amp;quot;...&amp;quot;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Chỉ chấp nhận từ dải IP/CIDR hoặc hostname nhất định&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;command=&amp;quot;...&amp;quot;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Ép chạy đúng một lệnh, bỏ qua lệnh client gửi&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;expiry-time=&amp;quot;...&amp;quot;&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Khoá tự hết hạn theo ngày/giờ&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;permitopen&lt;/code&gt; / &lt;code&gt;permitlisten&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Giới hạn đích của &lt;code&gt;-L&lt;/code&gt; / &lt;code&gt;-R&lt;/code&gt; forwarding&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;no-touch-required&lt;/code&gt; / &lt;code&gt;verify-required&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;Ràng buộc riêng cho khoá FIDO2&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Ví dụ một khoá dành riêng cho job backup, chỉ chạy từ dải IP nội bộ và buộc đúng script:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-text" data-lang="text"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;restrict,from=&amp;#34;198.51.100.0/24&amp;#34;,command=&amp;#34;/usr/local/bin/backup.sh&amp;#34; ssh-ed25519 AAAA... backup-bot
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Lưu ý: &lt;code&gt;force-command&lt;/code&gt; chỉ ép lệnh, &lt;strong&gt;không&lt;/strong&gt; tự động tắt forwarding. Vì vậy &lt;code&gt;restrict&lt;/code&gt; nên là điểm bắt đầu cho mọi khoá không cần shell tương tác.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="ssh-certificate-cho-hạ-tầng-nhiều-máy"&gt;SSH Certificate cho hạ tầng nhiều máy
+&lt;/h2&gt;&lt;p&gt;Quản lý &lt;code&gt;authorized_keys&lt;/code&gt; thủ công không mở rộng được. SSH certificate giải quyết bằng cách để mọi server chỉ tin &lt;strong&gt;một CA&lt;/strong&gt;, còn user key được CA ký với thời hạn ngắn:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;span class="lnt"&gt;5
+&lt;/span&gt;&lt;span class="lnt"&gt;6
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Trên máy CA&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh-keygen -t ed25519 -f ~/.ssh/ca_user_key -C &lt;span class="s2"&gt;&amp;#34;ssh-ca&amp;#34;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;&lt;span class="c1"&gt;# Ký certificate cho user, hiệu lực 8 giờ&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh-keygen -s ~/.ssh/ca_user_key -I &lt;span class="s2"&gt;&amp;#34;hoangduong@company&amp;#34;&lt;/span&gt; &lt;span class="se"&gt;\
+&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt; -n deploy -V +8h ~/.ssh/id_ed25519.pub
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Phía server, chỉ cần tin CA và quy định principal hợp lệ:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;TrustedUserCAKeys /etc/ssh/ca_user_key.pub
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;AuthorizedPrincipalsFile /etc/ssh/auth_principals/%u
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;CA cũng có thể được tin trực tiếp trong &lt;code&gt;authorized_keys&lt;/code&gt; bằng &lt;code&gt;cert-authority,principals=&amp;quot;deploy&amp;quot;&lt;/code&gt;. Ưu điểm lớn nhất là certificate hết hạn tự động, nên không còn tình trạng khoá cũ nằm lại trên hàng trăm server sau khi nhân sự thay đổi. Host certificate (&lt;code&gt;ssh-keygen -h&lt;/code&gt;) áp dụng cùng ý tưởng cho host key, giúp xoay host key ở quy mô lớn.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="chống-brute-force-và-bật-2fa"&gt;Chống brute force và bật 2FA
+&lt;/h2&gt;&lt;p&gt;Nếu từng dựng &lt;code&gt;fail2ban&lt;/code&gt; chỉ để chặn brute force SSH, có tin tốt: sshd hiện đã có cơ chế phạt theo nguồn, &lt;strong&gt;bật mặc định&lt;/strong&gt; qua &lt;code&gt;PerSourcePenalties&lt;/code&gt;:&lt;/p&gt;
+&lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;Keyword&lt;/th&gt;
+&lt;th&gt;Mặc định&lt;/th&gt;
+&lt;th&gt;Ý nghĩa&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;authfail&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;5s&lt;/td&gt;
+&lt;td&gt;Xác thực thất bại rồi ngắt kết nối&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;invaliduser&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;5s&lt;/td&gt;
+&lt;td&gt;Thử user không tồn tại&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;noauth&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;1s&lt;/td&gt;
+&lt;td&gt;Kết nối rồi ngắt mà không xác thực&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;grace-exceeded&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;10s&lt;/td&gt;
+&lt;td&gt;Quá hạn &lt;code&gt;LoginGraceTime&lt;/code&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr&gt;
+&lt;td&gt;&lt;code&gt;max&lt;/code&gt;&lt;/td&gt;
+&lt;td&gt;10m&lt;/td&gt;
+&lt;td&gt;Mức phạt tối đa tích luỹ&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/tbody&gt;
+&lt;/table&gt;
+&lt;p&gt;Có thể siết thêm bằng &lt;code&gt;PerSourceMaxStartups&lt;/code&gt; giới hạn số kết nối chưa xác thực từ một IP. &lt;code&gt;fail2ban&lt;/code&gt; vẫn hữu ích khi cần ghi log tập trung hoặc chặn ở tầng firewall, nhưng nó không còn là lớp phòng thủ duy nhất.&lt;/p&gt;
+&lt;p&gt;Với tài khoản quyền cao, bật hai lớp xác thực bằng PAM (TOTP):&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-fallback" data-lang="fallback"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;AuthenticationMethods publickey,keyboard-interactive
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Lưu ý &lt;code&gt;AuthenticationMethods&lt;/code&gt; yêu cầu &lt;strong&gt;từng phương thức phải được bật tương ứng&lt;/strong&gt; — nếu bạn đã tắt &lt;code&gt;KbdInteractiveAuthentication&lt;/code&gt;, hãy bật lại cho nhóm user cần 2FA thay vì bật toàn cục.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="chuẩn-bị-cho-hậu-lượng-tử"&gt;Chuẩn bị cho hậu lượng tử
+&lt;/h2&gt;&lt;p&gt;Traffic SSH hôm nay có thể bị ghi lại và giải mã sau này. OpenSSH đã chuyển sang key exchange lai hậu lượng tử mặc định:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;mlkem768x25519-sha256&lt;/code&gt; nằm trong danh sách &lt;code&gt;KexAlgorithms&lt;/code&gt; mặc định.&lt;/li&gt;
+&lt;li&gt;Từ 10.6, chữ ký lai &lt;code&gt;ssh-mldsa44-ed25519&lt;/code&gt; &lt;strong&gt;được bật mặc định&lt;/strong&gt;; khoá tạo bằng bản thử nghiệm 10.4 phải tạo lại vì tên thuật toán đã thay đổi.&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;WarnWeakCrypto&lt;/code&gt; (mặc định &lt;code&gt;yes&lt;/code&gt;) sẽ ghi log khi một kết nối dùng key exchange không hậu lượng tử, giúp bạn phát hiện client cũ.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Hai điểm cần lưu ý khi vận hành:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh -Q kex &lt;span class="p"&gt;|&lt;/span&gt; grep -i mlkem
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh -o &lt;span class="nv"&gt;KexAlgorithms&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;mlkem768x25519-sha256,curve25519-sha256 deploy@&amp;lt;server-host&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Nếu buộc phải tương thích với client cũ, dùng &lt;code&gt;+&lt;/code&gt; để thêm chứ đừng thay thế danh sách mặc định. Về nén dữ liệu: từ 10.6 OpenSSH đã tắt bộ mã hoá từ điển LZ77 để vá một kênh side-channel trong phiên multiplex, nên &lt;code&gt;Compression&lt;/code&gt; kém hiệu quả hơn; nếu cần nén, nén ở tầng ứng dụng sẽ tốt hơn.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id="vòng-đời-khoá-xoay-thu-hồi-và-sao-lưu"&gt;Vòng đời khoá: xoay, thu hồi và sao lưu
+&lt;/h2&gt;&lt;p&gt;Khoá không phải thứ tạo một lần rồi để đó. Một quy trình tối thiểu:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Kiểm kê:&lt;/strong&gt; &lt;code&gt;sshd -T&lt;/code&gt; để biết cấu hình hiệu lực, &lt;code&gt;lastlog&lt;/code&gt;/&lt;code&gt;journalctl -u ssh&lt;/code&gt; để xem ai đăng nhập bằng gì.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Xoay khoá:&lt;/strong&gt; tạo khoá mới, thêm vào trước, xác minh đăng nhập được, rồi mới xoá khoá cũ. Không xoá trước khi thêm.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Thu hồi:&lt;/strong&gt; xoá dòng tương ứng trong &lt;code&gt;authorized_keys&lt;/code&gt;, hoặc dùng KRL khi số lượng lớn; với SSH certificate chỉ cần ngừng ký hoặc đưa vào KRL.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Sao lưu:&lt;/strong&gt; backup private key ở nơi mã hoá, tách khỏi máy trạm. Mất private key không có cách nào phục hồi ngoài việc tạo lại.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Rà soát khoá cũ:&lt;/strong&gt; mọi khoá &lt;code&gt;ssh-rsa&lt;/code&gt; không dùng SHA-2 hoặc nhỏ hơn 3072 bit nên được thay thế trong năm nay.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="ghi-chú-triển-khai"&gt;Ghi chú triển khai
+&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Thứ tự triển khai an toàn:&lt;/strong&gt; thêm khoá → xác minh đăng nhập bằng khoá → mới tắt mật khẩu. Không làm ngược.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Luôn có đường thoát:&lt;/strong&gt; giữ một phiên SSH đang mở, và nếu có thể, một kênh console/IPMI trước khi động vào &lt;code&gt;sshd_config&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Kiểm tra bằng &lt;code&gt;sshd -t&lt;/code&gt; rồi &lt;code&gt;sshd -T&lt;/code&gt;&lt;/strong&gt; trước khi reload; drop-in trong &lt;code&gt;sshd_config.d&lt;/code&gt; chỉ hoạt động nếu file &lt;code&gt;sshd_config&lt;/code&gt; gốc có directive &lt;code&gt;Include&lt;/code&gt;.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Không coi đổi cổng SSH là bảo mật.&lt;/strong&gt; Nó chỉ giảm tiếng ồn từ scanner; tắt mật khẩu và hardening mới là biện pháp thật.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Với tự động hoá/CI:&lt;/strong&gt; dùng khoá riêng, ràng buộc bằng &lt;code&gt;restrict,from=&lt;/code&gt;, và tuyệt đối không nhúng private key không passphrase vào biến môi trường dùng chung.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Đừng copy &lt;code&gt;authorized_keys&lt;/code&gt; giữa các máy&lt;/strong&gt; khi có thể dùng SSH certificate; mỗi bản copy là một chỗ để quên thu hồi.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Trên môi trường dùng SELinux&lt;/strong&gt;, sau khi tạo &lt;code&gt;~/.ssh&lt;/code&gt; hoặc khôi phục từ backup, luôn chạy &lt;code&gt;restorecon -R -v ~/.ssh&lt;/code&gt;.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;hr&gt;
+&lt;h2 id="troubleshooting-thường-gặp"&gt;Troubleshooting thường gặp
+&lt;/h2&gt;&lt;p&gt;&lt;strong&gt;&lt;code&gt;Permission denied (publickey)&lt;/code&gt;&lt;/strong&gt; — chạy &lt;code&gt;ssh -vvv&lt;/code&gt; để xem client có gửi khoá hay không, sau đó kiểm tra phía server:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;span class="lnt"&gt;2
+&lt;/span&gt;&lt;span class="lnt"&gt;3
+&lt;/span&gt;&lt;span class="lnt"&gt;4
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh -vvv deploy@&amp;lt;server-host&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo sshd -T &lt;span class="p"&gt;|&lt;/span&gt; grep -Ei &lt;span class="s1"&gt;&amp;#39;pubkey|authorizedkeysfile|strictmodes&amp;#39;&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ls -ld ~ ~/.ssh&lt;span class="p"&gt;;&lt;/span&gt; ls -l ~/.ssh/authorized_keys
+&lt;/span&gt;&lt;/span&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo journalctl -u ssh -n &lt;span class="m"&gt;50&lt;/span&gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;Phần lớn trường hợp đến từ: sai quyền file, home bị group-writable, khoá không nằm trong &lt;code&gt;AuthorizedKeysFile&lt;/code&gt;, hoặc SELinux context sai.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;&lt;code&gt;REMOTE HOST IDENTIFICATION HAS CHANGED&lt;/code&gt;&lt;/strong&gt; — host key server đã đổi (cài lại, hoặc tấn công MITM). Xác minh fingerprint với quản trị viên qua kênh khác, rồi:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;ssh-keygen -R &amp;lt;server-host&amp;gt;
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;p&gt;&lt;strong&gt;&lt;code&gt;sshd -t&lt;/code&gt; báo lỗi sau khi thêm drop-in&lt;/strong&gt; — thường do option không được phép trong &lt;code&gt;Match&lt;/code&gt;, hoặc sai tên directive. &lt;code&gt;sshd -T&lt;/code&gt; với &lt;code&gt;-C&lt;/code&gt; mô phỏng kết nối cụ thể sẽ cho biết cấu hình nào thực sự được áp dụng:&lt;/p&gt;
+&lt;div class="highlight"&gt;&lt;div class="chroma"&gt;
+&lt;table class="lntable"&gt;&lt;tr&gt;&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code&gt;&lt;span class="lnt"&gt;1
+&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;
+&lt;td class="lntd"&gt;
+&lt;pre tabindex="0" class="chroma"&gt;&lt;code class="language-bash" data-lang="bash"&gt;&lt;span class="line"&gt;&lt;span class="cl"&gt;sudo sshd -T -C &lt;span class="nv"&gt;user&lt;/span&gt;&lt;span class="o"&gt;=&lt;/span&gt;deploy,host&lt;span class="o"&gt;=&lt;/span&gt;&amp;lt;server-host&amp;gt;,addr&lt;span class="o"&gt;=&lt;/span&gt;203.0.113.10
+&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/td&gt;&lt;/tr&gt;&lt;/table&gt;
+&lt;/div&gt;
+&lt;/div&gt;&lt;hr&gt;
+&lt;h2 id="lời-kết"&gt;Lời kết
+&lt;/h2&gt;&lt;p&gt;SSH an toàn năm 2026 không nằm ở một dòng cấu hình thần kỳ, mà ở việc chọn đúng loại khoá, tắt hẳn mật khẩu, ràng buộc khoá bằng &lt;code&gt;authorized_keys&lt;/code&gt;, và chuyển sang certificate khi số máy bắt đầu tăng. Phần hậu lượng tử đã được OpenSSH xử lý sẵn ở tầng key exchange — việc của bạn là đừng vô hiệu hoá nó vì một client cũ.&lt;/p&gt;
+&lt;p&gt;Hãy bắt đầu bằng việc kiểm tra server hiện tại: &lt;code&gt;sshd -T&lt;/code&gt; xem &lt;code&gt;PasswordAuthentication&lt;/code&gt; và &lt;code&gt;PermitRootLogin&lt;/code&gt; đang là gì. Nếu vẫn là &lt;code&gt;yes&lt;/code&gt;, đó là việc nên làm trước cả khi đọc hết bài này.&lt;/p&gt;</description></item></channel></rss>
